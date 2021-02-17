@@ -15,3 +15,4 @@ https://kirtikau.medium.com/how-to-add-swagger-ui-to-existing-node-js-and-expres
 https://swagger.io/docs/open-source-tools/swagger-ui/usage/installation/
 
 
+https://medium.com/wolox/documenting-a-nodejs-rest-api-with-openapi-3-swagger-5deee9f50420
