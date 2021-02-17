@@ -32,6 +32,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-openapi-validator": "^4.10.9",
+    "express-winston": "^4.0.5",
     "helmet": "^4.4.1",
     "jest": "^26.6.3",
     "jest-extended": "^0.11.5",
@@ -39,7 +40,9 @@
     "mongoose": "^5.11.16",
     "nodemailer": "^6.4.18",
     "pino": "^6.11.0",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "winston": "^3.3.3",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -50,7 +53,9 @@
     "@types/node": "^14.14.22",
     "@types/pino": "^6.3.5",
     "@types/shelljs": "^0.8.8",
+    "@types/swagger-ui-express": "^4.1.2",
     "@types/uuid": "^8.3.0",
+    "@types/yamljs": "^0.2.31",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
     "@typescript-eslint/parser": "^4.14.0",
     "concurrently": "^5.3.0",
@@ -67,6 +72,7 @@
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.4",
     "supertest": "^6.0.1",
+    "swagger-ui-express": "^4.1.6",
     "ts-jest": "^26.5.1",
     "ts-node": "^9.1.1",
     "tsc-watch": "^4.2.9",

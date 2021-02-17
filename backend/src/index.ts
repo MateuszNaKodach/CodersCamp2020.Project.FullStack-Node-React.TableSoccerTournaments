@@ -1,3 +1,3 @@
 require('dotenv').config()
 
-import './shared/infrastructure/rest/app'
+import './restapi/app'
