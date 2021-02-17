@@ -7,5 +7,6 @@
     "src",
     ".env"
   ],
-  "ext": "ts,js,json,yaml,yml"
+  "ext": "ts,js,json,yaml,yml",
+  "exec": "ts-node ./src/index.ts"
 }
