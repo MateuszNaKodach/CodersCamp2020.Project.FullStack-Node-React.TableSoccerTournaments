@@ -7,12 +7,12 @@ describe('InMemoryCommandBus', () => {
   const commandBus: CommandBus = new InMemoryCommandBus();
 
   it('test', async () => {
-    const startTournamentHandler: CommandHandler<StartTournament, any> = {
+    const startTournamentHandler: CommandHandler<StartTournament> = {
       execute(command: StartTournament): Promise<{ tournamentId: string }> {
         return Promise.resolve({tournamentId: command.tournamentId});
       }
     }
-    commandBus.registerCommandHandler(StartTournament, startTournamentHandler)
+    commandBus.registerHandler(StartTournament, startTournamentHandler)
     const startTournament = new StartTournament({tournamentId: 'SampleId'})
     const commandResult = await commandBus.execute(startTournament)
 

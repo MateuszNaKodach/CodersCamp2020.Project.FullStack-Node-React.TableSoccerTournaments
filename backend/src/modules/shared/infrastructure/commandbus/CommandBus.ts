@@ -5,8 +5,8 @@ import {Command} from "./InMemoryCommandBus";
 export interface CommandBus {
   execute<CommandType extends Command, ResultType = any>(command: CommandType): Promise<ResultType>;
 
-  registerCommandHandler<CommandType, ResultType>(
+  registerHandler<CommandType>(
       commandType: HasConstructor<CommandType>,
-      handler: CommandHandler<CommandType, ResultType>
+      handler: CommandHandler<CommandType>
   ): void;
 }

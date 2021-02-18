@@ -10,7 +10,7 @@ export class InMemoryCommandBus implements CommandBus {
   private handlers = new Map<CommandTypeName, CommandHandler>();
 
   execute<CommandType extends Command>(command: CommandType): Promise<any> {
-    const commandTypeName = InMemoryCommandBus.commandType(command);
+    const commandTypeName: CommandTypeName = Object.getPrototypeOf(command).constructor.name;
     const commandHandler = this.handlers.get(commandTypeName);
     if (!commandHandler) {
       throw new CommandHandlerNotFoundException(commandTypeName)
@@ -18,10 +18,8 @@ export class InMemoryCommandBus implements CommandBus {
     return commandHandler.execute(command)
   }
 
-  registerCommandHandler<CommandType extends Command>(commandType: HasConstructor<CommandType>,
-                                                  handler: CommandHandler<CommandType>
-  ) {
-    const commandTypeName = commandType.name;
+  registerHandler<CommandType extends Command>(commandType: HasConstructor<CommandType>, handler: CommandHandler<CommandType>) {
+    const commandTypeName: CommandTypeName = commandType.name;
     const commandHandler = this.handlers.get(commandTypeName);
     if (commandHandler) {
       throw new Error('Command handler already registered!')
@@ -29,10 +27,6 @@ export class InMemoryCommandBus implements CommandBus {
     this.handlers.set(commandTypeName, handler)
   }
 
-  private static commandType(command: Command): CommandTypeName {
-    const {constructor} = Object.getPrototypeOf(command);
-    return constructor.name as string;
-  }
 }
 
 export class CommandHandlerNotFoundException extends Error {
