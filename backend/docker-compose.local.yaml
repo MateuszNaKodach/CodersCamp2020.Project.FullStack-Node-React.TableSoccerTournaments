@@ -1,15 +1,25 @@
 version: '3.7'
 services:
-  mongodb_container:
+  coderscamp_table_soccer_database_mongodb:
     image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-      MONGO_INITDB_DATABASE: table_soccer_tournaments
+    restart: always
     ports:
       - 27017:27017
-#    volumes:
-#      - mongodb_data_container:/data/db
-
-#volumes:
-#  mongodb_data_container:
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: coderscamp_root_user_mongo
+      MONGO_INITDB_ROOT_PASSWORD: coderscamp_root_password
+      MONGO_INITDB_DATABASE: coderscamp_table_soccer_tournaments
+  #    volumes: # uncomment those lines if you want to save database data between container runs
+  #      - mongodb_data_container:/data/db
+  coderscamp_table_soccer_database_postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: coderscamp_root_user_postgres
+      POSTGRES_PASSWORD: coderscamp_root_password
+      POSTGRES_DB: coderscamp_table_soccer_tournaments
+#    volumes: # uncomment those lines if you want to save database data between container runs
+#      - /data/postgres:/data/postgres
