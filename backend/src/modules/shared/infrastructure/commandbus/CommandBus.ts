@@ -3,10 +3,8 @@ import {CommandHandler} from "./CommandHandler";
 import {Command} from "./InMemoryCommandBus";
 
 export interface CommandBus {
-  execute<CommandType extends Command, ResultType = any>(command: CommandType): Promise<ResultType>;
+  execute<ResultType = any, CommandType extends Command = Command>(resultType: HasConstructor<ResultType>, command: CommandType): Promise<ResultType>;
 
-  registerHandler<CommandType>(
-      commandType: HasConstructor<CommandType>,
-      handler: CommandHandler<CommandType>
-  ): void;
+  registerHandler<CommandType extends Command, ResultType = any>(commandType: HasConstructor<CommandType>, resultType: HasConstructor<ResultType>, handler: CommandHandler<CommandType, ResultType>): void
+
 }

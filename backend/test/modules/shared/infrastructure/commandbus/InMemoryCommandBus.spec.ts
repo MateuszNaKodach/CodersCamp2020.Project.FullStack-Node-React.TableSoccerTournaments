@@ -7,14 +7,14 @@ describe('InMemoryCommandBus', () => {
   const commandBus: CommandBus = new InMemoryCommandBus();
 
   it('test', async () => {
-    const startTournamentHandler: CommandHandler<StartTournament> = {
-      execute(command: StartTournament): Promise<{ tournamentId: string }> {
+    const startTournamentHandler: CommandHandler<StartTournament, StartTournamentResult> = {
+      execute(command: StartTournament): Promise<StartTournamentResult> {
         return Promise.resolve({tournamentId: command.tournamentId});
       }
     }
-    commandBus.registerHandler(StartTournament, startTournamentHandler)
+    commandBus.registerHandler(StartTournament, StartTournamentResult, startTournamentHandler)
     const startTournament = new StartTournament({tournamentId: 'SampleId'})
-    const commandResult = await commandBus.execute(startTournament)
+    const commandResult = await commandBus.execute(StartTournamentResult, startTournament)
 
     expect(commandResult).toStrictEqual({tournamentId: 'SampleId'})
   })
@@ -28,6 +28,16 @@ class StartTournament {
     this.tournamentId = props.tournamentId;
   }
 }
+
+
+class StartTournamentResult {
+  readonly tournamentId: string
+
+  constructor(props: { tournamentId: string }) {
+    this.tournamentId = props.tournamentId;
+  }
+}
+
 
 class RegisterPlayer {
   readonly tournamentId: string
