@@ -12,6 +12,8 @@ describe('InMemoryCommandBus', () => {
         return Promise.resolve({tournamentId: command.tournamentId});
       }
     }
+
+    //TODO: Remove, zazwyczaj result nas nie interesuje!? Dodac tylko Result - Success / Failure
     commandBus.registerHandler(StartTournament, StartTournamentResult, startTournamentHandler)
     const startTournament = new StartTournament({tournamentId: 'SampleId'})
     const commandResult = await commandBus.execute(StartTournamentResult, startTournament)
