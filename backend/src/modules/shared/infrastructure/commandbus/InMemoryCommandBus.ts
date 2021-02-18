@@ -9,7 +9,7 @@ export interface Command {
 export class InMemoryCommandBus implements CommandBus {
   private handlers = new Map<CommandTypeName, CommandHandler>();
 
-  execute<CommandType extends Command, ResultType = any>(command: CommandType): Promise<ResultType> {
+  execute<CommandType extends Command>(command: CommandType): Promise<any> {
     const commandTypeName = InMemoryCommandBus.commandType(command);
     const commandHandler = this.handlers.get(commandTypeName);
     if (!commandHandler) {
@@ -18,9 +18,8 @@ export class InMemoryCommandBus implements CommandBus {
     return commandHandler.execute(command)
   }
 
-  //TODO: Result type niepotrzebny?
-  registerCommandHandler<CommandType extends Command, ResultType>(commandType: HasConstructor<CommandType>,
-                                                  handler: CommandHandler<CommandType, ResultType>
+  registerCommandHandler<CommandType extends Command>(commandType: HasConstructor<CommandType>,
+                                                  handler: CommandHandler<CommandType>
   ) {
     const commandTypeName = commandType.name;
     const commandHandler = this.handlers.get(commandTypeName);
