@@ -7,16 +7,14 @@ describe('InMemoryCommandBus', () => {
   const commandBus: CommandBus = new InMemoryCommandBus();
 
   it('test', async () => {
-    const startTournamentHandler: CommandHandler<StartTournament, StartTournamentResult> = {
-      execute(command: StartTournament): Promise<StartTournamentResult> {
+    const startTournamentHandler: CommandHandler<StartTournament> = {
+      execute(command: StartTournament): Promise<{ tournamentId: string }> {
         return Promise.resolve({tournamentId: command.tournamentId});
       }
     }
-
-    //TODO: Remove, zazwyczaj result nas nie interesuje!? Dodac tylko Result - Success / Failure
-    commandBus.registerHandler(StartTournament, StartTournamentResult, startTournamentHandler)
+    commandBus.registerHandler(StartTournament, startTournamentHandler)
     const startTournament = new StartTournament({tournamentId: 'SampleId'})
-    const commandResult = await commandBus.execute(StartTournamentResult, startTournament)
+    const commandResult = await commandBus.execute(startTournament)
 
     expect(commandResult).toStrictEqual({tournamentId: 'SampleId'})
   })
@@ -30,16 +28,6 @@ class StartTournament {
     this.tournamentId = props.tournamentId;
   }
 }
-
-
-class StartTournamentResult {
-  readonly tournamentId: string
-
-  constructor(props: { tournamentId: string }) {
-    this.tournamentId = props.tournamentId;
-  }
-}
-
 
 class RegisterPlayer {
   readonly tournamentId: string

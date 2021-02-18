@@ -6,26 +6,25 @@ export interface Command {
 
 }
 
-//TODO: Refactor for typing!
 export class InMemoryCommandBus implements CommandBus {
-  private handlers = new Map<CommandTypeName, { handler: CommandHandler, resultType: HasConstructor }>();
+  private handlers = new Map<CommandTypeName, CommandHandler>();
 
-  execute<ResultType = any, CommandType extends Command = Command>(resultType: HasConstructor<ResultType>, command: CommandType): Promise<ResultType> {
+  execute<CommandType extends Command>(command: CommandType): Promise<any> {
     const commandTypeName: CommandTypeName = Object.getPrototypeOf(command).constructor.name;
     const commandHandler = this.handlers.get(commandTypeName);
-    if (!commandHandler || commandHandler.resultType.name !== resultType.name) {
+    if (!commandHandler) {
       throw new CommandHandlerNotFoundException(commandTypeName)
     }
-    return commandHandler.handler.execute(command)
+    return commandHandler.execute(command)
   }
 
-  registerHandler<CommandType extends Command, ResultType = any>(commandType: HasConstructor<CommandType>, resultType: HasConstructor<ResultType>, handler: CommandHandler<CommandType, ResultType>) {
+  registerHandler<CommandType extends Command>(commandType: HasConstructor<CommandType>, handler: CommandHandler<CommandType>) {
     const commandTypeName: CommandTypeName = commandType.name;
     const commandHandler = this.handlers.get(commandTypeName);
     if (commandHandler) {
       throw new Error('Command handler already registered!')
     }
-    this.handlers.set(commandTypeName, {handler, resultType})
+    this.handlers.set(commandTypeName, handler)
   }
 
 }
