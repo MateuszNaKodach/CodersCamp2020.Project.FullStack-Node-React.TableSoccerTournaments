@@ -1,4 +1,4 @@
-import {CommandResult} from "../../application/command/CommandResult";
+import {CommandResult} from "./CommandResult";
 
 export interface CommandHandler<CommandType = any> {
   execute(command: CommandType): Promise<CommandResult>

@@ -1,11 +1,14 @@
-import { DomainEvent } from '../../domain/event/DomainEvent';
+import {DomainEvent} from '../../domain/event/DomainEvent';
+import {HasConstructor} from "../../../../common/HasConstructor";
+import {EventHandler} from "./EventHandler";
 
 export interface DomainEventSource {
-  handle<EventType extends DomainEvent>(eventType: EventType['eventType'], handler: (event: EventType) => void): void;
+  registerHandler<EventType extends DomainEvent>(eventType: HasConstructor<EventType>, handler: EventHandler<EventType>): void;
 }
 
 export interface DomainEventPublisher {
-  publish(event: DomainEvent): void;
+  publish(event: DomainEvent): any;
 }
 
-export interface DomainEventBus extends DomainEventSource, DomainEventPublisher {}
+export interface DomainEventBus extends DomainEventSource, DomainEventPublisher {
+}

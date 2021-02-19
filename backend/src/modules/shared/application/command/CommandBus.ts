@@ -1,7 +1,7 @@
 import {HasConstructor} from "../../../../common/HasConstructor";
 import {CommandHandler} from "./CommandHandler";
-import {CommandResult} from "../../application/command/CommandResult";
-import {Command} from "../../application/command/Command";
+import {CommandResult} from "./CommandResult";
+import {Command} from "./Command";
 
 export interface CommandBus {
   execute<CommandType extends Command>(command: CommandType): Promise<CommandResult>;

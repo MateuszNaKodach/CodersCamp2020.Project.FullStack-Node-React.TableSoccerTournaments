@@ -1,6 +1,6 @@
 import {HasConstructor} from "../../../../common/HasConstructor";
-import {CommandBus} from "./CommandBus";
-import {CommandHandler} from "./CommandHandler";
+import {CommandBus} from "../../application/command/CommandBus";
+import {CommandHandler} from "../../application/command/CommandHandler";
 import {Command} from "../../application/command/Command";
 import {CommandResult} from "../../application/command/CommandResult";
 

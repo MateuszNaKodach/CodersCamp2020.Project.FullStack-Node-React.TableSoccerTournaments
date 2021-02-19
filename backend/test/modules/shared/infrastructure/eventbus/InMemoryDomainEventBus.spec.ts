@@ -1,24 +1,34 @@
 import {DomainEventBus} from "../../../../../src/modules/shared/application/event/DomainEventBus";
 import {InMemoryDomainEventBus} from "../../../../../src/modules/shared/infrastructure/event/InMemoryDomainEventBus";
 import {DomainEvent} from "../../../../../src/modules/shared/domain/event/DomainEvent";
+import {CommandHandler} from "../../../../../src/modules/shared/application/command/CommandHandler";
+import {CommandResult} from "../../../../../src/modules/shared/application/command/CommandResult";
+import {EventHandler} from "../../../../../src/modules/shared/application/event/EventHandler";
 
 describe('InMemoryDomainEventBus', () => {
-  const eventBus: DomainEventBus = new InMemoryDomainEventBus();
 
   it('when event is published, then all handlers of this event type should be executed', () => {
-    const sampleDomainEventHandler1 = jest.fn();
-    const sampleDomainEventHandler2 = jest.fn();
-    const anotherEventHandler = jest.fn();
-    eventBus.handle<TournamentHasStarted>(TournamentHasStarted.eventType, sampleDomainEventHandler1);
-    eventBus.handle<TournamentHasStarted>(TournamentHasStarted.eventType, sampleDomainEventHandler2);
-    eventBus.handle<MatchWasFinished>(MatchWasFinished.eventType, anotherEventHandler);
+    const eventBus: DomainEventBus = new InMemoryDomainEventBus();
 
-    const squareWasClickedEvent = new TournamentHasStarted({eventId: 'eventId', occurredAt: new Date()});
-    eventBus.publish(squareWasClickedEvent);
+    const tournamentHasStartedHandler1: EventHandler<TournamentHasStarted> = {
+      handle: jest.fn()
+    }
+    const tournamentHasStartedHandler2: EventHandler<TournamentHasStarted> = {
+      handle: jest.fn()
+    }
+    const matchWasFinishedHandler: EventHandler<MatchWasFinished> = {
+      handle: jest.fn()
+    }
+    eventBus.registerHandler(TournamentHasStarted, tournamentHasStartedHandler1);
+    eventBus.registerHandler(TournamentHasStarted, tournamentHasStartedHandler2);
+    eventBus.registerHandler(MatchWasFinished, matchWasFinishedHandler);
 
-    expect(sampleDomainEventHandler1).toBeCalledWith(squareWasClickedEvent);
-    expect(sampleDomainEventHandler2).toBeCalledWith(squareWasClickedEvent);
-    expect(anotherEventHandler).not.toBeCalled();
+    const tournamentHasStarted = new TournamentHasStarted({eventId: 'eventId', occurredAt: new Date()});
+    eventBus.publish(tournamentHasStarted);
+
+    expect(tournamentHasStartedHandler1.handle).toBeCalledWith(tournamentHasStarted);
+    expect(tournamentHasStartedHandler2.handle).toBeCalledWith(tournamentHasStarted);
+    expect(matchWasFinishedHandler.handle).not.toBeCalled();
   });
 });
 
