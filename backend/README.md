@@ -36,3 +36,5 @@ https://www.npmjs.com/package/ts-event-bus
 restapi - moze byc per moduł albo zupełnie osobno - wtedy laczy rozne moduły.
 A moze shared dac na taki poziom jak modules? 
 I restapi bedzie dla kazdego w presentation
+
+Co z infrastructure? Czy to tez nie powinno byc jak restapi - oddzielone!?!?
