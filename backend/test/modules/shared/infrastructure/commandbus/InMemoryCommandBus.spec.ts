@@ -8,6 +8,8 @@ import Failure = CommandResult.Failure;
 describe('InMemoryCommandBus', () => {
 
   it('CommandHandler with return value', async () => {
+    const onSuccess = jest.fn();
+    const onFailure = jest.fn();
     const commandBus: CommandBus = new InMemoryCommandBus();
     const startTournamentHandler: CommandHandler<StartTournament> = {
       async execute(command: StartTournament): Promise<CommandResult> {
@@ -18,12 +20,18 @@ describe('InMemoryCommandBus', () => {
 
     const startTournament = new StartTournament({tournamentId: 'SampleId'})
     const commandResult = await commandBus.execute(startTournament)
+    commandResult.process(onSuccess, onFailure);
 
     expect(commandResult.isSuccess()).toBeTruthy()
-    expect((commandResult as Success).value).toStrictEqual({tournamentId: 'SampleId'})
+    const returnValue = (commandResult as Success).value;
+    expect(returnValue).toStrictEqual({tournamentId: 'SampleId'})
+    expect(onFailure).not.toBeCalled();
+    expect(onSuccess).toBeCalledWith(returnValue);
   })
 
   it('CommandHandler with failure', async () => {
+    const onSuccess = jest.fn();
+    const onFailure = jest.fn();
     const commandBus: CommandBus = new InMemoryCommandBus();
     const startTournamentHandler: CommandHandler<StartTournament> = {
       async execute(command: StartTournament): Promise<CommandResult> {
@@ -34,9 +42,48 @@ describe('InMemoryCommandBus', () => {
 
     const startTournament = new StartTournament({tournamentId: 'SampleId'})
     const commandResult = await commandBus.execute(startTournament)
+    commandResult.process(onSuccess, onFailure);
 
     expect(commandResult.isSuccess()).toBeFalsy()
-    expect((commandResult as Failure).reason).toStrictEqual(new Error('Tournament has already started!'))
+    const failureReason = (commandResult as Failure).reason;
+    expect(failureReason).toStrictEqual(new Error('Tournament has already started!'))
+    expect(onFailure).toBeCalledWith(failureReason);
+    expect(onSuccess).not.toBeCalled();
+  })
+
+  it('CommandHandler for command not registered', async () => {
+    const onSuccess = jest.fn();
+    const onFailure = jest.fn();
+    const commandBus: CommandBus = new InMemoryCommandBus();
+    const startTournamentHandler: CommandHandler<StartTournament> = {
+      async execute(command: StartTournament): Promise<CommandResult> {
+        return CommandResult.failureDueTo(new Error('Tournament has already started!'));
+      }
+    }
+    commandBus.registerHandler(StartTournament, startTournamentHandler)
+
+    const registerPlayer = new RegisterPlayer({tournamentId: 'SampleId', playerId: 'PlayerId'})
+
+    await expect(commandBus.execute(registerPlayer)).rejects.toThrowError(`The command handler for the "RegisterPlayer" command was not found!`)
+  })
+
+  it('cannot register two command handler for the same command type',  () => {
+    const onSuccess = jest.fn();
+    const onFailure = jest.fn();
+    const commandBus: CommandBus = new InMemoryCommandBus();
+    const startTournamentHandler1: CommandHandler<StartTournament> = {
+      async execute(command: StartTournament): Promise<CommandResult> {
+        return CommandResult.success()
+      }
+    }
+    const startTournamentHandler2: CommandHandler<StartTournament> = {
+      async execute(command: StartTournament): Promise<CommandResult> {
+        return CommandResult.success()
+      }
+    }
+    commandBus.registerHandler(StartTournament, startTournamentHandler1)
+
+    expect(() => commandBus.registerHandler(StartTournament, startTournamentHandler2)).toThrowError(`The command handler for the "StartTournament" command was already registerd!`)
   })
 
 })

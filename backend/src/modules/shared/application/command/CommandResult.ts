@@ -1,10 +1,7 @@
-import Success = CommandResult.Success;
-import Failure = CommandResult.Failure;
-
 export interface CommandResult {
   isSuccess(): boolean
 
-  process(onSuccess: (success: Success) => void, onFailure: (failure: Failure) => void): void
+  process(onSuccess: (value: any) => void, onFailure: (reason: Error) => void): void
 }
 
 export namespace CommandResult {
@@ -17,12 +14,8 @@ export namespace CommandResult {
       return true;
     }
 
-    process(onSuccess: (success: CommandResult.Success) => void, onFailure: (failure: CommandResult.Failure) => void): void {
-      if (isFailure(this)) {
-        onFailure(this)
-      } else {
-        onSuccess(this)
-      }
+    process(onSuccess: (value: any) => void, onFailure: (reason: Error) => void): void {
+      onSuccess(this.value)
     }
 
   }
@@ -35,12 +28,8 @@ export namespace CommandResult {
       return false;
     }
 
-    process(onSuccess: (success: CommandResult.Success) => void, onFailure: (failure: CommandResult.Failure) => void): void {
-      if (isFailure(this)) {
-        onFailure(this)
-      } else {
-        onSuccess(this)
-      }
+    process(onSuccess: (value: any) => void, onFailure: (reason: Error) => void): void {
+      onFailure(this.reason)
     }
   }
 
