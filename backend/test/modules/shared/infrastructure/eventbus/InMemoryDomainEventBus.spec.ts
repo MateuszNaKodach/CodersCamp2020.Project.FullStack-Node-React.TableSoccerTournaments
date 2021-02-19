@@ -1,6 +1,6 @@
-import {DomainEventBus} from "../../../../../src/modules/shared/application/eventbus/DomainEventBus";
-import {InMemoryDomainEventBus} from "../../../../../src/modules/shared/infrastructure/eventbus/InMemoryDomainEventBus";
-import {DomainEvent} from "../../../../../src/modules/shared/application/eventbus/DomainEvent";
+import {DomainEventBus} from "../../../../../src/modules/shared/application/event/DomainEventBus";
+import {InMemoryDomainEventBus} from "../../../../../src/modules/shared/infrastructure/event/InMemoryDomainEventBus";
+import {DomainEvent} from "../../../../../src/modules/shared/domain/event/DomainEvent";
 
 describe('InMemoryDomainEventBus', () => {
   const eventBus: DomainEventBus = new InMemoryDomainEventBus();

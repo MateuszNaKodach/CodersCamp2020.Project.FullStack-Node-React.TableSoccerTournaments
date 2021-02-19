@@ -1,4 +1,4 @@
-import { DomainEvent } from './DomainEvent';
+import { DomainEvent } from '../../domain/event/DomainEvent';
 
 export interface DomainEventSource {
   handle<EventType extends DomainEvent>(eventType: EventType['eventType'], handler: (event: EventType) => void): void;

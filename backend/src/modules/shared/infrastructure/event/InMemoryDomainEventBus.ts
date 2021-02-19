@@ -1,5 +1,5 @@
-import {DomainEventBus} from "../../application/eventbus/DomainEventBus";
-import {DomainEvent} from "../../application/eventbus/DomainEvent";
+import {DomainEventBus} from "../../application/event/DomainEventBus";
+import {DomainEvent} from "../../domain/event/DomainEvent";
 
 type EventListener = { readonly eventType: string; readonly reaction: (event: DomainEvent) => void };
 

@@ -1,15 +1,13 @@
-import {HasConstructor} from "../../../../common/hasConstructor";
+import {HasConstructor} from "../../../../common/HasConstructor";
 import {CommandBus} from "./CommandBus";
 import {CommandHandler} from "./CommandHandler";
-
-export interface Command {
-
-}
+import {Command} from "../../application/command/Command";
+import {CommandResult} from "../../application/command/CommandResult";
 
 export class InMemoryCommandBus implements CommandBus {
   private handlers = new Map<CommandTypeName, CommandHandler>();
 
-  execute<CommandType extends Command>(command: CommandType): Promise<any> {
+  execute<CommandType extends Command>(command: CommandType): Promise<CommandResult> {
     const commandTypeName: CommandTypeName = Object.getPrototypeOf(command).constructor.name;
     const commandHandler = this.handlers.get(commandTypeName);
     if (!commandHandler) {
@@ -29,12 +27,10 @@ export class InMemoryCommandBus implements CommandBus {
 
 }
 
-export class CommandHandlerNotFoundException extends Error {
+type CommandTypeName = string;
+
+class CommandHandlerNotFoundException extends Error {
   constructor(commandName: string) {
-    super(
-        `The command handler for the "${commandName}" command was not found!`,
-    );
+    super(`The command handler for the "${commandName}" command was not found!`,);
   }
 }
-
-type CommandTypeName = string;
