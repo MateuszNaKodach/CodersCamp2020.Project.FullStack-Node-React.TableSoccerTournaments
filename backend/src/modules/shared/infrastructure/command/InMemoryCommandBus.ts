@@ -37,6 +37,6 @@ class CommandHandlerNotFoundException extends Error {
 
 class CommandHandlerAlreadyRegisteredException extends Error {
   constructor(commandName: string) {
-    super(`The command handler for the "${commandName}" command was already registerd!`);
+    super(`The command handler for the "${commandName}" command was already registered!`);
   }
 }

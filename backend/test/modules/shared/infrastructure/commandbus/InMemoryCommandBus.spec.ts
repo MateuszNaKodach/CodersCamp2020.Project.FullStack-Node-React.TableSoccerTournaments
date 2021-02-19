@@ -83,7 +83,7 @@ describe('InMemoryCommandBus', () => {
     }
     commandBus.registerHandler(StartTournament, startTournamentHandler1)
 
-    expect(() => commandBus.registerHandler(StartTournament, startTournamentHandler2)).toThrowError(`The command handler for the "StartTournament" command was already registerd!`)
+    expect(() => commandBus.registerHandler(StartTournament, startTournamentHandler2)).toThrowError(`The command handler for the "StartTournament" command was already registered!`)
   })
 
 })
