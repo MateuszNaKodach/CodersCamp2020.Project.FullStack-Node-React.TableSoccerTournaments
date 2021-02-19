@@ -1,25 +1,61 @@
 import {QueryBus} from "../../../../../src/modules/shared/application/query/QueryBus";
 import {InMemoryQueryBus} from "../../../../../src/modules/shared/infrastructure/query/InMemoryQueryBus";
-import {QueryHandler} from "../../../../../src/modules/shared/application/query/QueryHandler";
 
 describe('InMemoryQueryBus', () => {
 
-  it('QueryHandler with return value', async () => {
-    const queryBus: QueryBus = new InMemoryQueryBus();
-    const findPlayersByMatchHandler: QueryHandler<FindPlayersByMatch, Player[]> = {
-      execute(query: FindPlayersByMatch): Promise<Player[]> {
-        return Promise.resolve([new Player({name: 'Jan Kowalski'}), new Player({name: 'Jan Nowak'})]);
-      }
-    }
-    queryBus.registerHandler<Player[], FindPlayersByMatch>(FindPlayersByMatch, findPlayersByMatchHandler)
+  it('query should returns response from registered handler', async () => {
+    //Given
+    const queryReturnValue = [new Player({name: 'Jan Kowalski'}), new Player({name: 'Jan Nowak'})];
+    const queryBus: QueryBus = new InMemoryQueryBus()
+        .withHandler<Player[], FindPlayersByMatch>(FindPlayersByMatch, queryHandlerStubReturning<Player[], FindPlayersByMatch>(queryReturnValue))
 
+    //When
     const findPlayersByMatch = new FindPlayersByMatch({matchId: 'SampleId'})
     const queryResult = await queryBus.execute<Player[]>(findPlayersByMatch)
 
-    expect(queryResult).toStrictEqual([new Player({name: 'Jan Kowalski'}), new Player({name: 'Jan Nowak'})])
+    //Then
+    expect(queryResult).toStrictEqual(queryReturnValue)
+  })
+
+  it('when try to register another query handler, then registering should fail', async () => {
+    //Given
+    const queryReturnValue = [new Player({name: 'Jan Kowalski'}), new Player({name: 'Jan Nowak'})];
+    const queryBus: QueryBus = new InMemoryQueryBus()
+        .withHandler<Player[], FindPlayersByMatch>(FindPlayersByMatch, queryHandlerStubReturning<Player[], FindPlayersByMatch>(queryReturnValue))
+
+    //When
+    const registerHandler = () => queryBus.registerHandler<Player[], FindPlayersByMatch>(
+        FindPlayersByMatch,
+        queryHandlerStubReturning<Player[], FindPlayersByMatch>(queryReturnValue)
+    )
+
+    //Then
+    await expect(registerHandler)
+        .toThrowError('The query handler for the "FindPlayersByMatch" query was already registered!')
+  })
+
+  it('when handler is not registered, then query should fail', async () => {
+    //Given
+    const queryBus: QueryBus = new InMemoryQueryBus();
+
+    //When
+    const findPlayersByMatch = new FindPlayersByMatch({matchId: 'SampleId'})
+    const executeQuery = () => queryBus.execute<Player[]>(findPlayersByMatch)
+
+    //Then
+    await expect(executeQuery)
+        .rejects.toThrowError('The query handler for the "FindPlayersByMatch" query was not found!')
   })
 
 })
+
+function queryHandlerStubReturning<ResponseType, QueryType>(responseValue: ResponseType) {
+  return {
+    execute(query: QueryType): Promise<ResponseType> {
+      return Promise.resolve(responseValue);
+    }
+  };
+}
 
 class FindPlayersByMatch {
   readonly matchId: string;

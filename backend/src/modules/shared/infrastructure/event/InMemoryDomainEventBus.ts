@@ -19,4 +19,9 @@ export class InMemoryDomainEventBus implements DomainEventBus {
     const eventTypeName: string = eventType.name;
     this.listeners.push({eventType: eventTypeName, handler});
   }
+
+  withHandler<EventType extends DomainEvent>(eventType: HasConstructor<EventType>, handler: EventHandler<EventType>): InMemoryDomainEventBus {
+    this.registerHandler(eventType, handler);
+    return this;
+  }
 }

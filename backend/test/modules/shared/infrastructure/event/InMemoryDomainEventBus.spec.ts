@@ -1,63 +1,55 @@
 import {DomainEventBus} from "../../../../../src/modules/shared/application/event/DomainEventBus";
 import {InMemoryDomainEventBus} from "../../../../../src/modules/shared/infrastructure/event/InMemoryDomainEventBus";
 import {DomainEvent} from "../../../../../src/modules/shared/domain/event/DomainEvent";
-import {CommandHandler} from "../../../../../src/modules/shared/application/command/CommandHandler";
-import {CommandResult} from "../../../../../src/modules/shared/application/command/CommandResult";
 import {EventHandler} from "../../../../../src/modules/shared/application/event/EventHandler";
+import {MatchWasFinished, TournamentHasStarted} from "./EventsTestFixtures";
 
+/**
+ * //HINT
+ * Testy bez zagnieżdżania można pisać jak poniżej.
+ * Warto oddzielić sekcje GIVEN - WHEN - THEN.
+ */
 describe('InMemoryDomainEventBus', () => {
 
-  it('when event is published, then all handlers of this event type should be executed', () => {
-    const eventBus: DomainEventBus = new InMemoryDomainEventBus();
+  test('given event handlers are registered, when event is published, then all handlers of this event type should be called', () => {
+    //Given
+    const tournamentHasStartedHandler1 = eventHandlerMock<TournamentHasStarted>()
+    const tournamentHasStartedHandler2 = eventHandlerMock<TournamentHasStarted>()
+    const matchWasFinishedHandler = eventHandlerMock<MatchWasFinished>()
+    const eventBus: DomainEventBus = new InMemoryDomainEventBus()
+        .withHandler(TournamentHasStarted, tournamentHasStartedHandler1)
+        .withHandler(TournamentHasStarted, tournamentHasStartedHandler2)
+        .withHandler(MatchWasFinished, matchWasFinishedHandler);
 
-    const tournamentHasStartedHandler1: EventHandler<TournamentHasStarted> = {
-      handle: jest.fn()
-    }
-    const tournamentHasStartedHandler2: EventHandler<TournamentHasStarted> = {
-      handle: jest.fn()
-    }
-    const matchWasFinishedHandler: EventHandler<MatchWasFinished> = {
-      handle: jest.fn()
-    }
-    eventBus.registerHandler(TournamentHasStarted, tournamentHasStartedHandler1);
-    eventBus.registerHandler(TournamentHasStarted, tournamentHasStartedHandler2);
-    eventBus.registerHandler(MatchWasFinished, matchWasFinishedHandler);
-
+    //When
     const tournamentHasStarted = new TournamentHasStarted({eventId: 'eventId', occurredAt: new Date()});
     eventBus.publish(tournamentHasStarted);
 
+    //Then
     expect(tournamentHasStartedHandler1.handle).toBeCalledWith(tournamentHasStarted);
     expect(tournamentHasStartedHandler2.handle).toBeCalledWith(tournamentHasStarted);
     expect(matchWasFinishedHandler.handle).not.toBeCalled();
   });
+
+  test('given no handlers registered, when event is published, then no handlers should be called', () => {
+    //Given
+    const tournamentHasStartedHandler1 = eventHandlerMock<TournamentHasStarted>()
+    const eventBus: DomainEventBus = new InMemoryDomainEventBus();
+    const tournamentHasStarted = new TournamentHasStarted({eventId: 'eventId', occurredAt: new Date()});
+
+    //When
+    eventBus.publish(tournamentHasStarted);
+
+    //Then
+    expect(tournamentHasStartedHandler1.handle).not.toBeCalled();
+  });
+
 });
 
-class TournamentHasStarted implements DomainEvent {
-  static readonly eventType: string = 'TournamentHasStarted';
-  readonly eventId: string;
-  readonly occurredAt: Date;
-
-  constructor(props: { eventId: string, occurredAt: Date }) {
-    this.eventId = props.eventId;
-    this.occurredAt = props.occurredAt;
-  }
-
-  get eventType(): string {
-    return TournamentHasStarted.eventType;
-  }
+function eventHandlerMock<EventType extends DomainEvent>(): EventHandler<EventType> {
+  return {
+    handle: jest.fn()
+  };
 }
 
-class MatchWasFinished implements DomainEvent {
-  static readonly eventType: string = 'MatchWasFinished';
-  readonly eventId: string;
-  readonly occurredAt: Date;
 
-  constructor(props: { eventId: string, occurredAt: Date }) {
-    this.eventId = props.eventId;
-    this.occurredAt = props.occurredAt;
-  }
-
-  get eventType(): string {
-    return TournamentHasStarted.eventType;
-  }
-}
