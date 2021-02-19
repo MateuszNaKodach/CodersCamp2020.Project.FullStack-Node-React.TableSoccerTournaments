@@ -4,6 +4,7 @@ import {CommandHandler} from "../../../../../src/modules/shared/application/comm
 import {CommandResult} from "../../../../../src/modules/shared/application/command/CommandResult";
 import Success = CommandResult.Success;
 import Failure = CommandResult.Failure;
+import {Command} from "../../../../../src/modules/shared/application/command/Command";
 
 describe('InMemoryCommandBus', () => {
 
@@ -67,7 +68,7 @@ describe('InMemoryCommandBus', () => {
     await expect(commandBus.execute(registerPlayer)).rejects.toThrowError(`The command handler for the "RegisterPlayer" command was not found!`)
   })
 
-  it('cannot register two command handler for the same command type',  () => {
+  it('cannot register two command handler for the same command type', () => {
     const onSuccess = jest.fn();
     const onFailure = jest.fn();
     const commandBus: CommandBus = new InMemoryCommandBus();
@@ -88,7 +89,7 @@ describe('InMemoryCommandBus', () => {
 
 })
 
-class StartTournament {
+class StartTournament implements Command {
   readonly tournamentId: string
 
   constructor(props: { tournamentId: string }) {
@@ -96,7 +97,7 @@ class StartTournament {
   }
 }
 
-class RegisterPlayer {
+class RegisterPlayer implements Command {
   readonly tournamentId: string
   readonly playerId: string
 
