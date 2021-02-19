@@ -1,3 +1,14 @@
+Zrobic w Application
+ApplicationModule//co powinien miec.
+Te moduly brac i laczyc ze soba.
+Rejestrowac query handlers,
+command handlers,
+event handlers.
+
+Zrobic testy, ze moduly moga sie komunikowac tylko
+poprzez eventy i komendy. To jest uproszczenie!!! Ze moga zalezec od siebie tutaj.
+
+
 TODO:
 - Logging
 - Docker with MongoDB
@@ -20,3 +31,8 @@ https://medium.com/wolox/documenting-a-nodejs-rest-api-with-openapi-3-swagger-5d
 
 
 https://www.npmjs.com/package/ts-event-bus
+
+
+restapi - moze byc per moduł albo zupełnie osobno - wtedy laczy rozne moduły.
+A moze shared dac na taki poziom jak modules? 
+I restapi bedzie dla kazdego w presentation
