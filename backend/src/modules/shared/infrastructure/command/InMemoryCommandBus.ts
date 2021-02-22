@@ -14,6 +14,7 @@ export class InMemoryCommandBus implements CommandBus {
       return Promise.reject(new CommandHandlerNotFoundException(commandTypeName))
     }
     return commandHandler.execute(command)
+        .catch(error => CommandResult.failureDueTo(error))
   }
 
   registerHandler<CommandType extends Command>(commandType: HasConstructor<CommandType>, handler: CommandHandler<CommandType>) {

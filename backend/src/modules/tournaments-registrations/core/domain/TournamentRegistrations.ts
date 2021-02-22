@@ -13,7 +13,7 @@ export class TournamentRegistrations {
 
   openForTournament(props: { tournamentId: TournamentId }): DomainEvent[] {
     if (this.status !== undefined) {
-      throw new Error('Registrations was opened before!')
+      throw Error('Registrations was opened before!')
     }
     const tournamentRegistrationsWasOpened = new TournamentRegistrationsWasOpened({occurredAt: this.currentTimeProvider(), tournamentId: props.tournamentId.raw});
     this.onTournamentRegistrationsWasOpened(tournamentRegistrationsWasOpened);
@@ -23,5 +23,9 @@ export class TournamentRegistrations {
   private onTournamentRegistrationsWasOpened(tournamentRegistrationsWasOpened: TournamentRegistrationsWasOpened) {
     this.tournamentId = TournamentId.from(tournamentRegistrationsWasOpened.tournamentId)
     this.status = RegistrationsStatus.OPENED
+  }
+
+  getTournamentId(): TournamentId {
+    return this.tournamentId;
   }
 }
