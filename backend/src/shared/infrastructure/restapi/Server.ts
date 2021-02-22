@@ -1,9 +1,9 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-import { RestApiModule } from './RestApiModule';
+import { ModuleRestApi } from './ModuleRestApi';
 
-export function startRestApi(modules: RestApiModule[] = []) {
+export function startRestApi(modules: ModuleRestApi[] = []) {
   const swaggerDocument = YAML.load('rest-api-v1.yaml');
 
   const server = express();

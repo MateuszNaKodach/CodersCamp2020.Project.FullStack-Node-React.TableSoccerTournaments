@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-export type RestApiModule = {
+export type ModuleRestApi = {
   readonly path: string;
   readonly router: Router;
 };

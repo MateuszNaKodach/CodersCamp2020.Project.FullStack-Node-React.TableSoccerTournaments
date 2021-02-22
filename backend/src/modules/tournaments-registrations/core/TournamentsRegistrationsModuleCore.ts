@@ -1,4 +1,4 @@
-import { AppModule } from '../../../shared/core/AppModule';
+import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { OpenTournamentRegistrationsCommandHandler } from './application/command/OpenTournamentRegistrationsCommandHandler';
 import { DomainEventBus } from '../../../shared/core/application/event/DomainEventBus';
 import { OpenTournamentRegistrations } from './application/command/OpenTournamentRegistrations';
@@ -17,7 +17,7 @@ import { FindAllTournamentRegistrations } from './application/query/FindAllTourn
 import { FindAllTournamentRegistrationsQueryHandler } from './application/query/FindAllTournamentRegistrationsQueryHandler';
 import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 
-export const TournamentsRegistrationsModule = (
+export const TournamentsRegistrationsModuleCore = (
   eventBus: DomainEventBus,
   currentTimeProvider: CurrentTimeProvider,
   tournamentRegistrationsRepository: TournamentRegistrationsRepository,
@@ -60,5 +60,5 @@ export const TournamentsRegistrationsModule = (
         handler: new FindAllTournamentRegistrationsQueryHandler(tournamentRegistrationsRepository),
       },
     ],
-  } as AppModule;
+  } as ModuleCore;
 };
