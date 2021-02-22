@@ -1,4 +1,4 @@
-import { DomainEvent } from '../../../../../src/modules/shared/domain/event/DomainEvent';
+import { DomainEvent } from '../../../../src/shared/domain/event/DomainEvent';
 
 export class TournamentHasStarted implements DomainEvent {
   readonly occurredAt: Date;

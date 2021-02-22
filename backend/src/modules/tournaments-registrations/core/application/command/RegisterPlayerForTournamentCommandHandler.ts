@@ -1,13 +1,13 @@
-import { CommandHandler } from '../../../../shared/application/command/CommandHandler';
-import { CommandResult } from '../../../../shared/application/command/CommandResult';
-import { DomainEventBus } from '../../../../shared/application/event/DomainEventBus';
+import { CommandHandler } from '../../../../../shared/core/application/command/CommandHandler';
+import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
+import { DomainEventBus } from '../../../../../shared/core/application/event/DomainEventBus';
 import { registerTournamentPlayer, TournamentRegistrations } from '../../domain/TournamentRegistrations';
 import { TournamentId } from '../../domain/TournamentId';
 import { TournamentRegistrationsRepository } from '../TournamentRegistrationsRepository';
 import { RegisterPlayerForTournament } from './RegisterPlayerForTournament';
 import { AvailablePlayersForTournament } from './AvailablePlayersForTournament';
 import { PlayerId } from '../../domain/PlayerId';
-import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
+import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 
 export class RegisterPlayerForTournamentCommandHandler implements CommandHandler<RegisterPlayerForTournament> {
   constructor(

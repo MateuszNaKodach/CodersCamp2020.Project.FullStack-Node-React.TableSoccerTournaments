@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
-import { CommandBus } from '../../../shared/application/command/CommandBus';
-import { QueryBus } from '../../../shared/application/query/QueryBus';
-import { DomainEventBus } from '../../../shared/application/event/DomainEventBus';
+import { CommandBus } from '../../../../shared/core/application/command/CommandBus';
+import { QueryBus } from '../../../../shared/core/application/query/QueryBus';
+import { DomainEventBus } from '../../../../shared/core/application/event/DomainEventBus';
 import { PostTournamentRegistrationsRequestBody } from './request/PostTournamentRegistrationsRequestBody';
 import { OpenTournamentRegistrations } from '../../core/application/command/OpenTournamentRegistrations';
 import { StatusCodes } from 'http-status-codes';

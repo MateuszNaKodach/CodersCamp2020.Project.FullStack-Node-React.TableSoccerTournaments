@@ -1,4 +1,4 @@
-import { DomainEvent } from '../../domain/event/DomainEvent';
+import { DomainEvent } from '../../../domain/event/DomainEvent';
 import { HasConstructor } from '../../../../common/HasConstructor';
 import { EventHandler } from './EventHandler';
 

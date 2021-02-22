@@ -4,8 +4,8 @@ import { RegistrationsStatus } from './RegistrationsStatus';
 import { PlayerId } from './PlayerId';
 import { PlayerWasRegisteredForTournament } from './event/PlayerWasRegisteredForTournament';
 import { TournamentRegistrationsWasClosed } from './event/TournamentRegistrationsWasClosed';
-import { DomainCommandResult } from '../../../shared/core/domain/DomainCommandResult';
-import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
+import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
+import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
 
 //TODO: Ustalić jakie jest minimum. Może 2 graczy i po prostu grają finał?
 const MIN_TOURNAMENT_PLAYERS = 8;

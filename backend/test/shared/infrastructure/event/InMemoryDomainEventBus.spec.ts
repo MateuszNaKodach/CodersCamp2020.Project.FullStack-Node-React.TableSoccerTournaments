@@ -1,7 +1,7 @@
-import { DomainEventBus } from '../../../../../src/modules/shared/application/event/DomainEventBus';
-import { InMemoryDomainEventBus } from '../../../../../src/modules/shared/infrastructure/event/InMemoryDomainEventBus';
-import { DomainEvent } from '../../../../../src/modules/shared/domain/event/DomainEvent';
-import { EventHandler } from '../../../../../src/modules/shared/application/event/EventHandler';
+import { DomainEventBus } from '../../../../src/shared/core/application/event/DomainEventBus';
+import { InMemoryDomainEventBus } from '../../../../src/shared/infrastructure/event/InMemoryDomainEventBus';
+import { DomainEvent } from '../../../../src/shared/domain/event/DomainEvent';
+import { EventHandler } from '../../../../src/shared/core/application/event/EventHandler';
 import { MatchWasFinished, TournamentHasStarted } from './EventsTestFixtures';
 
 /**

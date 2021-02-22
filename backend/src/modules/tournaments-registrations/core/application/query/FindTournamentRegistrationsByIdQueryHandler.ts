@@ -1,6 +1,6 @@
 import { TournamentId } from '../../domain/TournamentId';
 import { TournamentRegistrationsRepository } from '../TournamentRegistrationsRepository';
-import { QueryHandler } from '../../../../shared/application/query/QueryHandler';
+import { QueryHandler } from '../../../../../shared/core/application/query/QueryHandler';
 import { FindTournamentRegistrationsById, FindTournamentRegistrationsByIdResult } from './FindTournamentRegistrationsById';
 
 export class FindTournamentRegistrationsByIdQueryHandler

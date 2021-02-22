@@ -1,12 +1,12 @@
-import { CommandHandler } from '../../../../shared/application/command/CommandHandler';
+import { CommandHandler } from '../../../../../shared/core/application/command/CommandHandler';
 import { OpenTournamentRegistrations } from './OpenTournamentRegistrations';
-import { CommandResult } from '../../../../shared/application/command/CommandResult';
-import { DomainEventBus } from '../../../../shared/application/event/DomainEventBus';
+import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
+import { DomainEventBus } from '../../../../../shared/core/application/event/DomainEventBus';
 import { closeTournamentRegistrations, openTournamentRegistrations, TournamentRegistrations } from '../../domain/TournamentRegistrations';
 import { TournamentId } from '../../domain/TournamentId';
 import { TournamentRegistrationsRepository } from '../TournamentRegistrationsRepository';
 import { CloseTournamentRegistrations } from './CloseTournamentRegistrations';
-import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
+import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 
 export class CloseTournamentRegistrationsCommandHandler implements CommandHandler<CloseTournamentRegistrations> {
   constructor(

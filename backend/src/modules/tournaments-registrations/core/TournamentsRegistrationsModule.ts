@@ -1,6 +1,6 @@
-import { AppModule } from '../../shared/AppModule';
+import { AppModule } from '../../../shared/core/AppModule';
 import { OpenTournamentRegistrationsCommandHandler } from './application/command/OpenTournamentRegistrationsCommandHandler';
-import { DomainEventBus } from '../../shared/application/event/DomainEventBus';
+import { DomainEventBus } from '../../../shared/core/application/event/DomainEventBus';
 import { OpenTournamentRegistrations } from './application/command/OpenTournamentRegistrations';
 import { TournamentRegistrationsRepository } from './application/TournamentRegistrationsRepository';
 import { PlayerProfileWasCreated } from '../../player-profiles/core/domain/event/PlayerProfileWasCreated';
@@ -15,7 +15,7 @@ import { FindTournamentRegistrationsById } from './application/query/FindTournam
 import { FindTournamentRegistrationsByIdQueryHandler } from './application/query/FindTournamentRegistrationsByIdQueryHandler';
 import { FindAllTournamentRegistrations } from './application/query/FindAllTournamentRegistrations';
 import { FindAllTournamentRegistrationsQueryHandler } from './application/query/FindAllTournamentRegistrationsQueryHandler';
-import { CurrentTimeProvider } from '../../shared/core/CurrentTimeProvider';
+import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 
 export const TournamentsRegistrationsModule = (
   eventBus: DomainEventBus,

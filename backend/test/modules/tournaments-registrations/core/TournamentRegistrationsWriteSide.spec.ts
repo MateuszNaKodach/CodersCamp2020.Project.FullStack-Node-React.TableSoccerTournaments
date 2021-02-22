@@ -1,7 +1,7 @@
 import 'jest-extended';
 import { OpenTournamentRegistrations } from '../../../../src/modules/tournaments-registrations/core/application/command/OpenTournamentRegistrations';
 import { TournamentRegistrationsWasOpened } from '../../../../src/modules/tournaments-registrations/core/domain/event/TournamentRegistrationsWasOpened';
-import { CommandResult } from '../../../../src/modules/shared/application/command/CommandResult';
+import { CommandResult } from '../../../../src/shared/core/application/command/CommandResult';
 import { RegisterPlayerForTournament } from '../../../../src/modules/tournaments-registrations/core/application/command/RegisterPlayerForTournament';
 import { PlayerProfileWasCreated } from '../../../../src/modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
 import { janKowalski } from '../../../test-support/modules/shared/core/people';

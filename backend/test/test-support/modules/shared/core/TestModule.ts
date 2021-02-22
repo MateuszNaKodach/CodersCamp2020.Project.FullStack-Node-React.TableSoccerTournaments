@@ -1,15 +1,15 @@
-import { AppModule } from '../../../../../src/modules/shared/AppModule';
-import { InMemoryDomainEventBus } from '../../../../../src/modules/shared/infrastructure/event/InMemoryDomainEventBus';
-import { InMemoryQueryBus } from '../../../../../src/modules/shared/infrastructure/query/InMemoryQueryBus';
-import { StoreAndForwardDomainEventBus } from '../../../../../src/modules/shared/infrastructure/event/StoreAndForwardDomainEventBus';
-import { DomainEvent } from '../../../../../src/modules/shared/domain/event/DomainEvent';
-import { CommandBus } from '../../../../../src/modules/shared/application/command/CommandBus';
-import { DomainEventBus } from '../../../../../src/modules/shared/application/event/DomainEventBus';
-import { QueryBus } from '../../../../../src/modules/shared/application/query/QueryBus';
-import { Command } from '../../../../../src/modules/shared/application/command/Command';
-import { CommandResult } from '../../../../../src/modules/shared/application/command/CommandResult';
-import { Query } from '../../../../../src/modules/shared/application/query/Query';
-import { InMemoryCommandBus } from '../../../../../src/modules/shared/infrastructure/command/InMemoryCommandBus';
+import { AppModule } from '../../../../../src/shared/core/AppModule';
+import { InMemoryDomainEventBus } from '../../../../../src/shared/infrastructure/event/InMemoryDomainEventBus';
+import { InMemoryQueryBus } from '../../../../../src/shared/infrastructure/query/InMemoryQueryBus';
+import { StoreAndForwardDomainEventBus } from '../../../../../src/shared/infrastructure/event/StoreAndForwardDomainEventBus';
+import { DomainEvent } from '../../../../../src/shared/domain/event/DomainEvent';
+import { CommandBus } from '../../../../../src/shared/core/application/command/CommandBus';
+import { DomainEventBus } from '../../../../../src/shared/core/application/event/DomainEventBus';
+import { QueryBus } from '../../../../../src/shared/core/application/query/QueryBus';
+import { Command } from '../../../../../src/shared/core/application/command/Command';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import { Query } from '../../../../../src/shared/core/application/query/Query';
+import { InMemoryCommandBus } from '../../../../../src/shared/infrastructure/command/InMemoryCommandBus';
 
 export type TestModule = {
   readonly appModule: AppModule;

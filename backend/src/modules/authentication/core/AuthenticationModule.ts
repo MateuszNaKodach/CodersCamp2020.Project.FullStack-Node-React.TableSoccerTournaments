@@ -1,4 +1,4 @@
-import { AppModule } from '../../shared/AppModule';
+import { AppModule } from '../../../shared/core/AppModule';
 import { CredentialsRepository } from './application/command/CredentialsRepository';
 import { CreateCredentialsCommandHandler } from './application/command/CreateCredentialsCommandHandler';
 

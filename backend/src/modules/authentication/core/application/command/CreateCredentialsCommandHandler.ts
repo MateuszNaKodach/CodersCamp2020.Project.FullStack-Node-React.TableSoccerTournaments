@@ -1,6 +1,6 @@
-import { CommandHandler } from '../../../../shared/application/command/CommandHandler';
+import { CommandHandler } from '../../../../../shared/core/application/command/CommandHandler';
 import { CreateCredentials } from './CreateCredentials';
-import { CommandResult } from '../../../../shared/application/command/CommandResult';
+import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
 import { CredentialsRepository } from './CredentialsRepository';
 import { Credentials } from '../../domain/Credentials';
 import { Login } from '../../domain/Login';

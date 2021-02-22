@@ -1,5 +1,5 @@
 import { TournamentRegistrationsRepository } from '../TournamentRegistrationsRepository';
-import { QueryHandler } from '../../../../shared/application/query/QueryHandler';
+import { QueryHandler } from '../../../../../shared/core/application/query/QueryHandler';
 import { FindTournamentRegistrationsById } from './FindTournamentRegistrationsById';
 import { FindAllTournamentRegistrations, FindAllTournamentRegistrationsResult } from './FindAllTournamentRegistrations';
 

@@ -1,7 +1,7 @@
-import { DomainEventBus } from '../../application/event/DomainEventBus';
+import { DomainEventBus } from '../../core/application/event/DomainEventBus';
 import { DomainEvent } from '../../domain/event/DomainEvent';
-import { HasConstructor } from '../../../../common/HasConstructor';
-import { EventHandler } from '../../application/event/EventHandler';
+import { HasConstructor } from '../../../common/HasConstructor';
+import { EventHandler } from '../../core/application/event/EventHandler';
 
 type EventListener = { readonly eventType: string; readonly handler: EventHandler };
 

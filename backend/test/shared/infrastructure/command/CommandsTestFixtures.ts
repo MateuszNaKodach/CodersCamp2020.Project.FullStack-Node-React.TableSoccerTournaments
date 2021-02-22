@@ -1,4 +1,4 @@
-import { Command } from '../../../../../src/modules/shared/application/command/Command';
+import { Command } from '../../../../src/shared/core/application/command/Command';
 
 export class StartTournament implements Command {
   readonly tournamentId: string;

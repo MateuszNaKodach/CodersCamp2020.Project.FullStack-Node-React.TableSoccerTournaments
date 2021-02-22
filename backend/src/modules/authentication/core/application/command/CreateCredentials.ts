@@ -1,4 +1,4 @@
-import { Command } from '../../../../shared/application/command/Command';
+import { Command } from '../../../../../shared/core/application/command/Command';
 
 export class CreateCredentials implements Command {
   readonly login: string;

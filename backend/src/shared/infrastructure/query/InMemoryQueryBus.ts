@@ -1,7 +1,7 @@
-import { HasConstructor } from '../../../../common/hasConstructor';
-import { Query } from '../../application/query/Query';
-import { QueryHandler } from '../../application/query/QueryHandler';
-import { QueryBus } from '../../application/query/QueryBus';
+import { HasConstructor } from '../../../common/HasConstructor';
+import { Query } from '../../core/application/query/Query';
+import { QueryHandler } from '../../core/application/query/QueryHandler';
+import { QueryBus } from '../../core/application/query/QueryBus';
 
 export class InMemoryQueryBus implements QueryBus {
   private handlers = new Map<QueryTypeName, QueryHandler>();
