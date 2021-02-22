@@ -8,6 +8,7 @@ export interface DomainEventSubscriber {
 
 export interface DomainEventPublisher {
   publish(event: DomainEvent): any;
+  publishAll(events: DomainEvent[]): any
 }
 
 export interface DomainEventBus extends DomainEventSubscriber, DomainEventPublisher {

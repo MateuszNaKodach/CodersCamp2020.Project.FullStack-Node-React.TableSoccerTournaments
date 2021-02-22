@@ -4,6 +4,9 @@ import {InMemoryDomainEventBus} from "../../../../../src/modules/shared/infrastr
 import {InMemoryQueryBus} from "../../../../../src/modules/shared/infrastructure/query/InMemoryQueryBus";
 import {StoreAndForwardDomainEventBus} from "../../../../../src/modules/shared/infrastructure/event/StoreAndForwardDomainEventBus";
 import {DomainEvent} from "../../../../../src/modules/shared/domain/event/DomainEvent";
+import {CommandBus} from "../../../../../src/modules/shared/application/command/CommandBus";
+import {DomainEventBus} from "../../../../../src/modules/shared/application/event/DomainEventBus";
+import {QueryBus} from "../../../../../src/modules/shared/application/query/QueryBus";
 
 export type TestModule = {
   readonly eventBus: StoreAndForwardDomainEventBus;
@@ -11,11 +14,14 @@ export type TestModule = {
   readonly queryBus: InMemoryQueryBus
 }
 
-export const testModule: (appModule: AppModule) => TestModule = (appModule: AppModule) => {
+export type AppModuleFactory = (commandBus: CommandBus, eventBus: DomainEventBus, queryBus: QueryBus) => AppModule
+
+export const testModule: (appModuleFactory: AppModuleFactory) => TestModule = (appModuleFactory: AppModuleFactory) => {
   const commandBus = new InMemoryCommandBus()
   const eventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus());
   const queryBus = new InMemoryQueryBus();
 
+  const appModule = appModuleFactory(commandBus, eventBus, queryBus)
   appModule.commandHandlers
       .forEach(commandHandler => commandBus.registerHandler(commandHandler.commandType, commandHandler.handler))
   appModule.eventHandlers
@@ -23,7 +29,6 @@ export const testModule: (appModule: AppModule) => TestModule = (appModule: AppM
   appModule.queryHandlers
       .forEach(queryHandler => queryBus.registerHandler(queryHandler.queryType, queryHandler.handler))
 
-  //TODO: Execute command, mock method etc.
   return {
     commandBus,
     eventBus,

@@ -15,6 +15,11 @@ export class StoreAndForwardDomainEventBus implements DomainEventBus {
     return this.next.publish(event)
   }
 
+  publishAll(events: DomainEvent[]): any {
+    this.storedEvents.push(...events)
+    return this.next.publishAll(events)
+  }
+
   registerHandler<EventType extends DomainEvent>(eventType: HasConstructor<EventType>, handler: EventHandler<EventType>): void {
     return this.next.registerHandler<EventType>(eventType, handler)
   }

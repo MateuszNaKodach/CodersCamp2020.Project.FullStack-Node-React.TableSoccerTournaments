@@ -15,6 +15,10 @@ export class InMemoryDomainEventBus implements DomainEventBus {
         .forEach((it) => it.handler.handle(event));
   }
 
+  publishAll(events: DomainEvent[]): any {
+    events.forEach(event => this.publish(event))
+  }
+
   registerHandler<EventType extends DomainEvent>(eventType: HasConstructor<EventType>, handler: EventHandler<EventType>): void {
     const eventTypeName: string = eventType.name;
     this.listeners.push({eventType: eventTypeName, handler});
