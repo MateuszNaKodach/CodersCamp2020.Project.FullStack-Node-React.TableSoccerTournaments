@@ -1,4 +1,5 @@
+//TODO: Add data / metadata
+
 export interface DomainEvent {
-  readonly eventId: string;
   readonly occurredAt: Date;
 }

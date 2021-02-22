@@ -22,7 +22,7 @@ describe('InMemoryDomainEventBus', () => {
         .withHandler(MatchWasFinished, matchWasFinishedHandler);
 
     //When
-    const tournamentHasStarted = new TournamentHasStarted({eventId: 'eventId', occurredAt: new Date()});
+    const tournamentHasStarted = new TournamentHasStarted({occurredAt: new Date()});
     eventBus.publish(tournamentHasStarted);
 
     //Then
@@ -35,7 +35,7 @@ describe('InMemoryDomainEventBus', () => {
     //Given
     const tournamentHasStartedHandler1 = eventHandlerMock<TournamentHasStarted>()
     const eventBus: DomainEventBus = new InMemoryDomainEventBus();
-    const tournamentHasStarted = new TournamentHasStarted({eventId: 'eventId', occurredAt: new Date()});
+    const tournamentHasStarted = new TournamentHasStarted({occurredAt: new Date()});
 
     //When
     eventBus.publish(tournamentHasStarted);
