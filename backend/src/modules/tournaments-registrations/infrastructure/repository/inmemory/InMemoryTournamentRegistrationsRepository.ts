@@ -11,7 +11,7 @@ export class InMemoryTournamentRegistrationsRepository implements TournamentRegi
   }
 
   async save(registrations: TournamentRegistrations): Promise<void> {
-    this.entities[registrations.getTournamentId().raw] = registrations;
+    this.entities[registrations.tournamentId.raw] = registrations;
   }
 
 }

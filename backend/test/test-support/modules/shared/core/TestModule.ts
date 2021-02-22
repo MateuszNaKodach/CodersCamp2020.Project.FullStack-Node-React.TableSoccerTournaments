@@ -7,11 +7,14 @@ import {DomainEvent} from "../../../../../src/modules/shared/domain/event/Domain
 import {CommandBus} from "../../../../../src/modules/shared/application/command/CommandBus";
 import {DomainEventBus} from "../../../../../src/modules/shared/application/event/DomainEventBus";
 import {QueryBus} from "../../../../../src/modules/shared/application/query/QueryBus";
+import {Command} from "../../../../../src/modules/shared/application/command/Command";
+import {CommandResult} from "../../../../../src/modules/shared/application/command/CommandResult";
 
 export type TestModule = {
-  readonly eventBus: StoreAndForwardDomainEventBus;
-  readonly commandBus: InMemoryCommandBus;
-  readonly queryBus: InMemoryQueryBus
+  readonly queryBus: InMemoryQueryBus;
+  lastPublishedEvent(): DomainEvent | undefined;
+  publishEvent(event: DomainEvent): void;
+  executeCommand<CommandType extends Command>(command: CommandType): Promise<CommandResult>;
 }
 
 export type AppModuleFactory = (commandBus: CommandBus, eventBus: DomainEventBus, queryBus: QueryBus) => AppModule
@@ -30,12 +33,15 @@ export const testModule: (appModuleFactory: AppModuleFactory) => TestModule = (a
       .forEach(queryHandler => queryBus.registerHandler(queryHandler.queryType, queryHandler.handler))
 
   return {
-    commandBus,
-    eventBus,
-    queryBus
+    queryBus,
+    publishEvent(event: DomainEvent): void {
+      eventBus.publish(event)
+    },
+    lastPublishedEvent(): DomainEvent | undefined {
+      return eventBus.storedEvents.reverse()[0]
+    },
+    executeCommand<CommandType extends Command>(command: CommandType): Promise<CommandResult> {
+      return commandBus.execute(command);
+    }
   }
-}
-
-export function lastPublishedEventFrom(testModule: TestModule): DomainEvent | undefined {
-  return testModule.eventBus.storedEvents.reverse()[0]
 }
