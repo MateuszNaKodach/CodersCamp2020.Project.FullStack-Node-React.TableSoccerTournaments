@@ -9,6 +9,8 @@ import {Players} from "./application/command/Players";
 import {AvailablePlayersForTournament} from "./application/command/AvailablePlayersForTournament";
 import {RegisterPlayerForTournament} from "./application/command/RegisterPlayerForTournament";
 import {RegisterPlayerForTournamentCommandHandler} from "./application/command/RegisterPlayerForTournamentCommandHandler";
+import {CloseTournamentRegistrations} from "./application/command/CloseTournamentRegistrations";
+import {CloseTournamentRegistrationsCommandHandler} from "./application/command/CloseTournamentRegistrationsCommandHandler";
 
 export type CurrentTimeProvider = () => Date
 export const TournamentsRegistrationsModule = (
@@ -26,6 +28,10 @@ export const TournamentsRegistrationsModule = (
       {
         commandType: RegisterPlayerForTournament,
         handler: new RegisterPlayerForTournamentCommandHandler(eventBus, currentTimeProvider, tournamentRegistrationsRepository, availablePlayersForTournament)
+      },
+      {
+        commandType: CloseTournamentRegistrations,
+        handler: new CloseTournamentRegistrationsCommandHandler(eventBus, currentTimeProvider, tournamentRegistrationsRepository)
       },
     ],
     eventHandlers: [

@@ -1,4 +1,4 @@
-export class OpenTournamentRegistrations {
+export class CloseTournamentRegistrations {
   readonly tournamentId: string
 
   constructor(props: { tournamentId: string }) {
