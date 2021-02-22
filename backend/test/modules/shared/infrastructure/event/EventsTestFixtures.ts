@@ -1,4 +1,4 @@
-import {DomainEvent} from "../../../../../src/modules/shared/domain/event/DomainEvent";
+import { DomainEvent } from '../../../../../src/modules/shared/domain/event/DomainEvent';
 
 export class TournamentHasStarted implements DomainEvent {
   readonly occurredAt: Date;
@@ -6,7 +6,6 @@ export class TournamentHasStarted implements DomainEvent {
   constructor(props: { occurredAt: Date }) {
     this.occurredAt = props.occurredAt;
   }
-
 }
 
 export class MatchWasFinished implements DomainEvent {
@@ -16,5 +15,4 @@ export class MatchWasFinished implements DomainEvent {
   constructor(props: { occurredAt: Date }) {
     this.occurredAt = props.occurredAt;
   }
-
 }

@@ -8,8 +8,8 @@ module.exports = {
   collectCoverageFrom: [
     './src/**'
   ],
-  setupFiles: [
-    './test/setupJest.ts'
+  setupFilesAfterEnv: [
+    'jest-extended'
   ],
   coverageDirectory: './coverage',
 }

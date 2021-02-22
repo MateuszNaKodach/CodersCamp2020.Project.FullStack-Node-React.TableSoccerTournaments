@@ -1,8 +1,8 @@
-import {DomainEventBus} from "../../../../../src/modules/shared/application/event/DomainEventBus";
-import {InMemoryDomainEventBus} from "../../../../../src/modules/shared/infrastructure/event/InMemoryDomainEventBus";
-import {DomainEvent} from "../../../../../src/modules/shared/domain/event/DomainEvent";
-import {EventHandler} from "../../../../../src/modules/shared/application/event/EventHandler";
-import {MatchWasFinished, TournamentHasStarted} from "./EventsTestFixtures";
+import { DomainEventBus } from '../../../../../src/modules/shared/application/event/DomainEventBus';
+import { InMemoryDomainEventBus } from '../../../../../src/modules/shared/infrastructure/event/InMemoryDomainEventBus';
+import { DomainEvent } from '../../../../../src/modules/shared/domain/event/DomainEvent';
+import { EventHandler } from '../../../../../src/modules/shared/application/event/EventHandler';
+import { MatchWasFinished, TournamentHasStarted } from './EventsTestFixtures';
 
 /**
  * //HINT
@@ -10,19 +10,18 @@ import {MatchWasFinished, TournamentHasStarted} from "./EventsTestFixtures";
  * Warto oddzielić sekcje GIVEN - WHEN - THEN.
  */
 describe('InMemoryDomainEventBus', () => {
-
   test('given event handlers are registered, when event is published, then all handlers of this event type should be called', () => {
     //Given
-    const tournamentHasStartedHandler1 = eventHandlerMock<TournamentHasStarted>()
-    const tournamentHasStartedHandler2 = eventHandlerMock<TournamentHasStarted>()
-    const matchWasFinishedHandler = eventHandlerMock<MatchWasFinished>()
+    const tournamentHasStartedHandler1 = eventHandlerMock<TournamentHasStarted>();
+    const tournamentHasStartedHandler2 = eventHandlerMock<TournamentHasStarted>();
+    const matchWasFinishedHandler = eventHandlerMock<MatchWasFinished>();
     const eventBus: DomainEventBus = new InMemoryDomainEventBus()
-        .withHandler(TournamentHasStarted, tournamentHasStartedHandler1)
-        .withHandler(TournamentHasStarted, tournamentHasStartedHandler2)
-        .withHandler(MatchWasFinished, matchWasFinishedHandler);
+      .withHandler(TournamentHasStarted, tournamentHasStartedHandler1)
+      .withHandler(TournamentHasStarted, tournamentHasStartedHandler2)
+      .withHandler(MatchWasFinished, matchWasFinishedHandler);
 
     //When
-    const tournamentHasStarted = new TournamentHasStarted({occurredAt: new Date()});
+    const tournamentHasStarted = new TournamentHasStarted({ occurredAt: new Date() });
     eventBus.publish(tournamentHasStarted);
 
     //Then
@@ -33,9 +32,9 @@ describe('InMemoryDomainEventBus', () => {
 
   test('given no handlers registered, when event is published, then no handlers should be called', () => {
     //Given
-    const tournamentHasStartedHandler1 = eventHandlerMock<TournamentHasStarted>()
+    const tournamentHasStartedHandler1 = eventHandlerMock<TournamentHasStarted>();
     const eventBus: DomainEventBus = new InMemoryDomainEventBus();
-    const tournamentHasStarted = new TournamentHasStarted({occurredAt: new Date()});
+    const tournamentHasStarted = new TournamentHasStarted({ occurredAt: new Date() });
 
     //When
     eventBus.publish(tournamentHasStarted);
@@ -43,13 +42,10 @@ describe('InMemoryDomainEventBus', () => {
     //Then
     expect(tournamentHasStartedHandler1.handle).not.toBeCalled();
   });
-
 });
 
 function eventHandlerMock<EventType extends DomainEvent>(): EventHandler<EventType> {
   return {
-    handle: jest.fn()
+    handle: jest.fn(),
   };
 }
-
-

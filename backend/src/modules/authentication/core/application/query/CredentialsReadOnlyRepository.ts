@@ -1,7 +1,5 @@
-import {Credentials} from "../../domain/Credentials";
+import { Credentials } from '../../domain/Credentials';
 
 export interface CredentialsReadOnlyRepository {
-
-  findByLogin(login: string): Promise<Credentials | undefined>
-
+  findByLogin(login: string): Promise<Credentials | undefined>;
 }

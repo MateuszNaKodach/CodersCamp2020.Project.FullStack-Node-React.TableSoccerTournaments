@@ -1,2 +1,1 @@
-export interface Command {
-}
+export interface Command {}

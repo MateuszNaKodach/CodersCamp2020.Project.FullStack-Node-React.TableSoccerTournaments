@@ -1,6 +1,6 @@
-import {DomainEvent} from "../../domain/event/DomainEvent";
+import { DomainEvent } from '../../domain/event/DomainEvent';
 
 export type DomainCommandResult<StateType> = {
-  state: StateType,
-  events: DomainEvent[]
-}
+  state: StateType;
+  events: DomainEvent[];
+};

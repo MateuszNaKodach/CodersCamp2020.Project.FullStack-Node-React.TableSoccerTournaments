@@ -1,8 +1,7 @@
 export class TournamentId {
   private readonly TYPE = 'TournamentId';
 
-  private constructor(readonly raw: string) {
-  }
+  private constructor(readonly raw: string) {}
 
   static from(tournamentId: string) {
     if (tournamentId.length <= 0) {

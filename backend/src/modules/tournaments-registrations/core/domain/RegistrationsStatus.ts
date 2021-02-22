@@ -1,4 +1,4 @@
 export enum RegistrationsStatus {
   OPENED = 'OPENED',
-  CLOSED = 'CLOSED'
+  CLOSED = 'CLOSED',
 }

@@ -1,3 +1,3 @@
-require('dotenv').config()
+require('dotenv').config();
 
-import './restapi/app'
+import './restapi/app';
