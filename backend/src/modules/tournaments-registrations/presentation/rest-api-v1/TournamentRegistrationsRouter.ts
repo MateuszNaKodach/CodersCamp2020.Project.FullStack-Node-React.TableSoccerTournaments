@@ -17,5 +17,7 @@ export const tournamentRegistrationsRouter = (commandBus: CommandBus, eventBus: 
     );
   };
 
-  return express.Router().post(':tournamentId', postTournamentRegistrations);
+  const router = express.Router();
+  router.post(':tournamentId', postTournamentRegistrations);
+  return router;
 };
