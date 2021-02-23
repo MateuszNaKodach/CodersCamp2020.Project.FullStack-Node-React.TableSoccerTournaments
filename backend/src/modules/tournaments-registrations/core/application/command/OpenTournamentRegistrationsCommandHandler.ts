@@ -1,15 +1,15 @@
-import { CommandHandler } from '../../../../../shared/core/application/command/CommandHandler';
-import { OpenTournamentRegistrations } from './OpenTournamentRegistrations';
-import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
-import { DomainEventBus } from '../../../../../shared/core/application/event/DomainEventBus';
-import { openTournamentRegistrations, TournamentRegistrations } from '../../domain/TournamentRegistrations';
-import { TournamentId } from '../../domain/TournamentId';
-import { TournamentRegistrationsRepository } from '../TournamentRegistrationsRepository';
-import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
+import { CommandHandler } from "../../../../../shared/core/application/command/CommandHandler";
+import { OpenTournamentRegistrations } from "./OpenTournamentRegistrations";
+import { CommandResult } from "../../../../../shared/core/application/command/CommandResult";
+import { DomainEventPublisher } from "../../../../../shared/core/application/event/DomainEventBus";
+import { openTournamentRegistrations } from "../../domain/TournamentRegistrations";
+import { TournamentId } from "../../domain/TournamentId";
+import { TournamentRegistrationsRepository } from "../TournamentRegistrationsRepository";
+import { CurrentTimeProvider } from "../../../../../shared/core/CurrentTimeProvider";
 
 export class OpenTournamentRegistrationsCommandHandler implements CommandHandler<OpenTournamentRegistrations> {
   constructor(
-    private readonly eventBus: DomainEventBus,
+    private readonly eventPublisher: DomainEventPublisher,
     private readonly currentTimeProvider: CurrentTimeProvider,
     private readonly repository: TournamentRegistrationsRepository,
   ) {}
@@ -21,7 +21,7 @@ export class OpenTournamentRegistrationsCommandHandler implements CommandHandler
     const { state, events } = openTournamentRegistrations(tournamentRegistrations, { tournamentId }, this.currentTimeProvider);
 
     await this.repository.save(state);
-    this.eventBus.publishAll(events);
+    this.eventPublisher.publishAll(events);
     return CommandResult.success();
   }
 }

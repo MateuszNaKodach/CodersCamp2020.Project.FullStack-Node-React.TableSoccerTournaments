@@ -1,8 +1,8 @@
-import { CommandBus } from '../../../../src/shared/core/application/command/CommandBus';
-import { InMemoryCommandBus } from '../../../../src/shared/infrastructure/command/InMemoryCommandBus';
-import { CommandHandler } from '../../../../src/shared/core/application/command/CommandHandler';
-import { CommandResult } from '../../../../src/shared/core/application/command/CommandResult';
-import { RegisterPlayer, StartTournament } from './CommandsTestFixtures';
+import { CommandBus } from "../../../../src/shared/core/application/command/CommandBus";
+import { InMemoryCommandBus } from "../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus";
+import { CommandHandler } from "../../../../src/shared/core/application/command/CommandHandler";
+import { CommandResult } from "../../../../src/shared/core/application/command/CommandResult";
+import { RegisterPlayer, StartTournament } from "./CommandsTestFixtures";
 import Success = CommandResult.Success;
 import Failure = CommandResult.Failure;
 

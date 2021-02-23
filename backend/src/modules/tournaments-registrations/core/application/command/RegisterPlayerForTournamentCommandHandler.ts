@@ -1,17 +1,17 @@
-import { CommandHandler } from '../../../../../shared/core/application/command/CommandHandler';
-import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
-import { DomainEventBus } from '../../../../../shared/core/application/event/DomainEventBus';
-import { registerTournamentPlayer, TournamentRegistrations } from '../../domain/TournamentRegistrations';
-import { TournamentId } from '../../domain/TournamentId';
-import { TournamentRegistrationsRepository } from '../TournamentRegistrationsRepository';
-import { RegisterPlayerForTournament } from './RegisterPlayerForTournament';
-import { AvailablePlayersForTournament } from './AvailablePlayersForTournament';
-import { PlayerId } from '../../domain/PlayerId';
-import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
+import { CommandHandler } from "../../../../../shared/core/application/command/CommandHandler";
+import { CommandResult } from "../../../../../shared/core/application/command/CommandResult";
+import { DomainEventPublisher } from "../../../../../shared/core/application/event/DomainEventBus";
+import { registerTournamentPlayer } from "../../domain/TournamentRegistrations";
+import { TournamentId } from "../../domain/TournamentId";
+import { TournamentRegistrationsRepository } from "../TournamentRegistrationsRepository";
+import { RegisterPlayerForTournament } from "./RegisterPlayerForTournament";
+import { AvailablePlayersForTournament } from "./AvailablePlayersForTournament";
+import { PlayerId } from "../../domain/PlayerId";
+import { CurrentTimeProvider } from "../../../../../shared/core/CurrentTimeProvider";
 
 export class RegisterPlayerForTournamentCommandHandler implements CommandHandler<RegisterPlayerForTournament> {
   constructor(
-    private readonly eventBus: DomainEventBus,
+    private readonly eventPublisher: DomainEventPublisher,
     private readonly currentTimeProvider: CurrentTimeProvider,
     private readonly repository: TournamentRegistrationsRepository,
     private readonly availablePlayersForTournament: AvailablePlayersForTournament, //Teraz implementacja np. sprawdza czy w ogóle istnieje taki gracz, ale np. może weryfikować, że turniej jest tylko dla osób płacących składkę.
@@ -31,7 +31,7 @@ export class RegisterPlayerForTournamentCommandHandler implements CommandHandler
     );
 
     await this.repository.save(state);
-    this.eventBus.publishAll(events);
+    this.eventPublisher.publishAll(events);
     return CommandResult.success();
   }
 }

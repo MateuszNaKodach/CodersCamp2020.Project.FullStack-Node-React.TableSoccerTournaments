@@ -1,7 +1,7 @@
-import { DomainEvent } from '../../domain/event/DomainEvent';
-import { DomainEventBus } from '../../core/application/event/DomainEventBus';
-import { HasConstructor } from '../../../common/HasConstructor';
-import { EventHandler } from '../../core/application/event/EventHandler';
+import { DomainEvent } from "../../../../domain/event/DomainEvent";
+import { DomainEventBus } from "../../../../core/application/event/DomainEventBus";
+import { HasConstructor } from "../../../../../common/HasConstructor";
+import { EventHandler } from "../../../../core/application/event/EventHandler";
 
 export class StoreAndForwardDomainEventBus implements DomainEventBus {
   readonly storedEvents: DomainEvent[] = [];

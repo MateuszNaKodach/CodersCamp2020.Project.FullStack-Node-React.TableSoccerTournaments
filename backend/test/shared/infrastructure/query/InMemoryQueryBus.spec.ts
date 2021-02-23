@@ -1,5 +1,5 @@
-import { QueryBus } from '../../../../src/shared/core/application/query/QueryBus';
-import { InMemoryQueryBus } from '../../../../src/shared/infrastructure/query/InMemoryQueryBus';
+import { QueryBus } from "../../../../src/shared/core/application/query/QueryBus";
+import { InMemoryQueryBus } from "../../../../src/shared/infrastructure/core/application/query/InMemoryQueryBus";
 
 describe('InMemoryQueryBus', () => {
   it('query should returns response from registered handler', async () => {
