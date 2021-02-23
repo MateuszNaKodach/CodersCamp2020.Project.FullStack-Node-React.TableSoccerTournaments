@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf .cache && rimraf coverage && rimraf dist && rimraf node_modules",
     "prebuild": "rimraf dist",
-    "build": "ts-node build.ts && tsc",
+    "build": "ts-node build.ts && tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "format:ci": "prettier -c \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix --format codeframe",
