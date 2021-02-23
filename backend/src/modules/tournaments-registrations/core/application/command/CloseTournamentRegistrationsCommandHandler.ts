@@ -1,11 +1,11 @@
-import { CommandHandler } from "../../../../../shared/core/application/command/CommandHandler";
-import { CommandResult } from "../../../../../shared/core/application/command/CommandResult";
-import { DomainEventPublisher } from "../../../../../shared/core/application/event/DomainEventBus";
-import { closeTournamentRegistrations } from "../../domain/TournamentRegistrations";
-import { TournamentId } from "../../domain/TournamentId";
-import { TournamentRegistrationsRepository } from "../TournamentRegistrationsRepository";
-import { CloseTournamentRegistrations } from "./CloseTournamentRegistrations";
-import { CurrentTimeProvider } from "../../../../../shared/core/CurrentTimeProvider";
+import { CommandHandler } from '../../../../../shared/core/application/command/CommandHandler';
+import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
+import { DomainEventPublisher } from '../../../../../shared/core/application/event/DomainEventBus';
+import { closeTournamentRegistrations } from '../../domain/TournamentRegistrations';
+import { TournamentId } from '../../domain/TournamentId';
+import { TournamentRegistrationsRepository } from '../TournamentRegistrationsRepository';
+import { CloseTournamentRegistrations } from './CloseTournamentRegistrations';
+import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 
 export class CloseTournamentRegistrationsCommandHandler implements CommandHandler<CloseTournamentRegistrations> {
   constructor(

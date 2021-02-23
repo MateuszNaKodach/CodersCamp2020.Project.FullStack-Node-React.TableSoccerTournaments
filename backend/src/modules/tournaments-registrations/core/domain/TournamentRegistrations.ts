@@ -109,7 +109,7 @@ export function closeTournamentRegistrations(
   const tournamentRegistrationsWasClosed = new TournamentRegistrationsWasClosed({
     occurredAt: currentTimeProvider(),
     tournamentId: command.tournamentId.raw,
-    participantsIds: state.registeredPlayers.map((playerId) => playerId.raw),
+    registeredPlayersIds: state.registeredPlayers.map((playerId) => playerId.raw),
   });
   const tournamentRegistrations = onTournamentRegistrationsWasClosed(state, tournamentRegistrationsWasClosed);
 

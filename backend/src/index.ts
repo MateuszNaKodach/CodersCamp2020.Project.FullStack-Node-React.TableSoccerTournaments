@@ -1,4 +1,4 @@
-import { TableSoccerTournamentsApplication } from "./app";
+import { TableSoccerTournamentsApplication } from './app';
 
 const port = process.env.REST_API_PORT || 5000;
 

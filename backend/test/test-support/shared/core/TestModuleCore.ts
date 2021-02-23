@@ -1,15 +1,15 @@
-import { ModuleCore } from "../../../../src/shared/core/ModuleCore";
-import { InMemoryDomainEventBus } from "../../../../src/shared/infrastructure/core/application/event/InMemoryDomainEventBus";
-import { InMemoryQueryBus } from "../../../../src/shared/infrastructure/core/application/query/InMemoryQueryBus";
-import { StoreAndForwardDomainEventBus } from "../../../../src/shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus";
-import { DomainEvent } from "../../../../src/shared/domain/event/DomainEvent";
-import { CommandBus } from "../../../../src/shared/core/application/command/CommandBus";
-import { DomainEventBus } from "../../../../src/shared/core/application/event/DomainEventBus";
-import { QueryBus } from "../../../../src/shared/core/application/query/QueryBus";
-import { Command } from "../../../../src/shared/core/application/command/Command";
-import { CommandResult } from "../../../../src/shared/core/application/command/CommandResult";
-import { Query } from "../../../../src/shared/core/application/query/Query";
-import { InMemoryCommandBus } from "../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus";
+import { ModuleCore } from '../../../../src/shared/core/ModuleCore';
+import { InMemoryDomainEventBus } from '../../../../src/shared/infrastructure/core/application/event/InMemoryDomainEventBus';
+import { InMemoryQueryBus } from '../../../../src/shared/infrastructure/core/application/query/InMemoryQueryBus';
+import { StoreAndForwardDomainEventBus } from '../../../../src/shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus';
+import { DomainEvent } from '../../../../src/shared/domain/event/DomainEvent';
+import { CommandBus } from '../../../../src/shared/core/application/command/CommandBus';
+import { DomainEventBus } from '../../../../src/shared/core/application/event/DomainEventBus';
+import { QueryBus } from '../../../../src/shared/core/application/query/QueryBus';
+import { Command } from '../../../../src/shared/core/application/command/Command';
+import { CommandResult } from '../../../../src/shared/core/application/command/CommandResult';
+import { Query } from '../../../../src/shared/core/application/query/Query';
+import { InMemoryCommandBus } from '../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus';
 
 export type TestModuleCore = {
   lastPublishedEvent(): DomainEvent | undefined;

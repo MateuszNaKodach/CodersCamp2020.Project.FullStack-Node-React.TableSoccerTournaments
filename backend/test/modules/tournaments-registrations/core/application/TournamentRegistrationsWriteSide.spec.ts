@@ -1,15 +1,15 @@
-import "jest-extended";
-import { OpenTournamentRegistrations } from "../../../../../src/modules/tournaments-registrations/core/application/command/OpenTournamentRegistrations";
-import { TournamentRegistrationsWasOpened } from "../../../../../src/modules/tournaments-registrations/core/domain/event/TournamentRegistrationsWasOpened";
-import { CommandResult } from "../../../../../src/shared/core/application/command/CommandResult";
-import { RegisterPlayerForTournament } from "../../../../../src/modules/tournaments-registrations/core/application/command/RegisterPlayerForTournament";
-import { PlayerProfileWasCreated } from "../../../../../src/modules/player-profiles/core/domain/event/PlayerProfileWasCreated";
-import { janKowalski } from "../../../../test-support/shared/core/people";
-import { PlayerWasRegisteredForTournament } from "../../../../../src/modules/tournaments-registrations/core/domain/event/PlayerWasRegisteredForTournament";
-import { CloseTournamentRegistrations } from "../../../../../src/modules/tournaments-registrations/core/application/command/CloseTournamentRegistrations";
-import { TournamentRegistrationsWasClosed } from "../../../../../src/modules/tournaments-registrations/core/domain/event/TournamentRegistrationsWasClosed";
-import { testTournamentsRegistrationsModule } from "./TestTournamentsRegistrationsModule";
-import { registerPlayerForTournament } from "./TestHelpers";
+import 'jest-extended';
+import { OpenTournamentRegistrations } from '../../../../../src/modules/tournaments-registrations/core/application/command/OpenTournamentRegistrations';
+import { TournamentRegistrationsWasOpened } from '../../../../../src/modules/tournaments-registrations/core/domain/event/TournamentRegistrationsWasOpened';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import { RegisterPlayerForTournament } from '../../../../../src/modules/tournaments-registrations/core/application/command/RegisterPlayerForTournament';
+import { PlayerProfileWasCreated } from '../../../../../src/modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
+import { janKowalski } from '../../../../test-support/shared/core/people';
+import { PlayerWasRegisteredForTournament } from '../../../../../src/modules/tournaments-registrations/core/domain/event/PlayerWasRegisteredForTournament';
+import { CloseTournamentRegistrations } from '../../../../../src/modules/tournaments-registrations/core/application/command/CloseTournamentRegistrations';
+import { TournamentRegistrationsWasClosed } from '../../../../../src/modules/tournaments-registrations/core/domain/event/TournamentRegistrationsWasClosed';
+import { testTournamentsRegistrationsModule } from './TestTournamentsRegistrationsModule';
+import { registerPlayerForTournament } from './TestHelpers';
 import Failure = CommandResult.Failure;
 
 describe('Tournament Registrations | Write Side', () => {
@@ -142,7 +142,7 @@ describe('Tournament Registrations | Write Side', () => {
       new TournamentRegistrationsWasClosed({
         occurredAt: currentTime,
         tournamentId,
-        participantsIds: ['PlayerId1', 'PlayerId2', 'PlayerId3', 'PlayerId4', 'PlayerId5', 'PlayerId6', 'PlayerId7', 'PlayerId8'],
+        registeredPlayersIds: ['PlayerId1', 'PlayerId2', 'PlayerId3', 'PlayerId4', 'PlayerId5', 'PlayerId6', 'PlayerId7', 'PlayerId8'],
       }),
     );
   });

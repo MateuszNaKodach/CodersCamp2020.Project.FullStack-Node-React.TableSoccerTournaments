@@ -1,21 +1,21 @@
-import { ModuleCore } from "../../../shared/core/ModuleCore";
-import { OpenTournamentRegistrationsCommandHandler } from "./application/command/OpenTournamentRegistrationsCommandHandler";
-import { DomainEventPublisher } from "../../../shared/core/application/event/DomainEventBus";
-import { OpenTournamentRegistrations } from "./application/command/OpenTournamentRegistrations";
-import { TournamentRegistrationsRepository } from "./application/TournamentRegistrationsRepository";
-import { PlayerProfileWasCreated } from "../../player-profiles/core/domain/event/PlayerProfileWasCreated";
-import { PlayerProfileWasCreatedEventHandler } from "./application/event/PlayerProfileWasCreatedEventHandler";
-import { Players } from "./application/command/Players";
-import { AvailablePlayersForTournament } from "./application/command/AvailablePlayersForTournament";
-import { RegisterPlayerForTournament } from "./application/command/RegisterPlayerForTournament";
-import { RegisterPlayerForTournamentCommandHandler } from "./application/command/RegisterPlayerForTournamentCommandHandler";
-import { CloseTournamentRegistrations } from "./application/command/CloseTournamentRegistrations";
-import { CloseTournamentRegistrationsCommandHandler } from "./application/command/CloseTournamentRegistrationsCommandHandler";
-import { FindTournamentRegistrationsById } from "./application/query/FindTournamentRegistrationsById";
-import { FindTournamentRegistrationsByIdQueryHandler } from "./application/query/FindTournamentRegistrationsByIdQueryHandler";
-import { FindAllTournamentRegistrations } from "./application/query/FindAllTournamentRegistrations";
-import { FindAllTournamentRegistrationsQueryHandler } from "./application/query/FindAllTournamentRegistrationsQueryHandler";
-import { CurrentTimeProvider } from "../../../shared/core/CurrentTimeProvider";
+import { ModuleCore } from '../../../shared/core/ModuleCore';
+import { OpenTournamentRegistrationsCommandHandler } from './application/command/OpenTournamentRegistrationsCommandHandler';
+import { DomainEventPublisher } from '../../../shared/core/application/event/DomainEventBus';
+import { OpenTournamentRegistrations } from './application/command/OpenTournamentRegistrations';
+import { TournamentRegistrationsRepository } from './application/TournamentRegistrationsRepository';
+import { PlayerProfileWasCreated } from '../../player-profiles/core/domain/event/PlayerProfileWasCreated';
+import { PlayerProfileWasCreatedEventHandler } from './application/event/PlayerProfileWasCreatedEventHandler';
+import { Players } from './application/command/Players';
+import { AvailablePlayersForTournament } from './application/command/AvailablePlayersForTournament';
+import { RegisterPlayerForTournament } from './application/command/RegisterPlayerForTournament';
+import { RegisterPlayerForTournamentCommandHandler } from './application/command/RegisterPlayerForTournamentCommandHandler';
+import { CloseTournamentRegistrations } from './application/command/CloseTournamentRegistrations';
+import { CloseTournamentRegistrationsCommandHandler } from './application/command/CloseTournamentRegistrationsCommandHandler';
+import { FindTournamentRegistrationsById } from './application/query/FindTournamentRegistrationsById';
+import { FindTournamentRegistrationsByIdQueryHandler } from './application/query/FindTournamentRegistrationsByIdQueryHandler';
+import { FindAllTournamentRegistrations } from './application/query/FindAllTournamentRegistrations';
+import { FindAllTournamentRegistrationsQueryHandler } from './application/query/FindAllTournamentRegistrationsQueryHandler';
+import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 
 export const TournamentsRegistrationsModuleCore = (
   eventPublisher: DomainEventPublisher,

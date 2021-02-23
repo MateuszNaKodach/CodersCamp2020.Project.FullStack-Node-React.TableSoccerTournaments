@@ -1,5 +1,5 @@
-import { DomainEventPublisher } from "../../../../src/shared/core/application/event/DomainEventBus";
-import { DomainEvent } from "../../../../src/shared/domain/event/DomainEvent";
+import { DomainEventPublisher } from '../../../../src/shared/core/application/event/DomainEventBus';
+import { DomainEvent } from '../../../../src/shared/domain/event/DomainEvent';
 
 export function DomainEventPublisherMock(): DomainEventPublisher {
   const publishMock = jest.fn();

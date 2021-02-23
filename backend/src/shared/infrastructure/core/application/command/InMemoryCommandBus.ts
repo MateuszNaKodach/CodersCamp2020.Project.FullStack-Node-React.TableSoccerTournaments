@@ -1,8 +1,8 @@
-import { HasConstructor } from "../../../../../common/HasConstructor";
-import { CommandBus } from "../../../../core/application/command/CommandBus";
-import { CommandHandler } from "../../../../core/application/command/CommandHandler";
-import { Command } from "../../../../core/application/command/Command";
-import { CommandResult } from "../../../../core/application/command/CommandResult";
+import { HasConstructor } from '../../../../../common/HasConstructor';
+import { CommandBus } from '../../../../core/application/command/CommandBus';
+import { CommandHandler } from '../../../../core/application/command/CommandHandler';
+import { Command } from '../../../../core/application/command/Command';
+import { CommandResult } from '../../../../core/application/command/CommandResult';
 
 export class InMemoryCommandBus implements CommandBus {
   private handlers = new Map<CommandTypeName, CommandHandler>();

@@ -1,15 +1,15 @@
-import supertest from "supertest";
-import express, { Express } from "express";
-import { CommandPublisher } from "../../../../../src/shared/core/application/command/CommandBus";
-import { DomainEventPublisher } from "../../../../../src/shared/core/application/event/DomainEventBus";
-import { QueryPublisher } from "../../../../../src/shared/core/application/query/QueryBus";
-import { ModuleRestApi } from "../../../../../src/shared/infrastructure/restapi/ModuleRestApi";
-import { CommandPublisherMock } from "../../core/CommandPublisherMock";
-import { DomainEventPublisherMock } from "../../core/DomainEventPublisherMock";
-import { QueryPublisherMock } from "../../core/QueryPublisherMock";
-import { EntityIdGenerator } from "../../../../../src/shared/core/application/EntityIdGenerator";
-import { EntityIdGeneratorStub } from "../../core/EntityIdGeneratorStub";
-import bodyParser from "body-parser";
+import supertest from 'supertest';
+import express, { Express } from 'express';
+import { CommandPublisher } from '../../../../../src/shared/core/application/command/CommandBus';
+import { DomainEventPublisher } from '../../../../../src/shared/core/application/event/DomainEventBus';
+import { QueryPublisher } from '../../../../../src/shared/core/application/query/QueryBus';
+import { ModuleRestApi } from '../../../../../src/shared/infrastructure/restapi/ModuleRestApi';
+import { CommandPublisherMock } from '../../core/CommandPublisherMock';
+import { DomainEventPublisherMock } from '../../core/DomainEventPublisherMock';
+import { QueryPublisherMock } from '../../core/QueryPublisherMock';
+import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
+import { EntityIdGeneratorStub } from '../../core/EntityIdGeneratorStub';
+import bodyParser from 'body-parser';
 
 export type ModuleRestApiFactory = (
   commandPublisher: CommandPublisher,
