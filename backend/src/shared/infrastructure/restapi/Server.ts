@@ -5,7 +5,7 @@ import { ModuleRestApi } from './ModuleRestApi';
 import bodyParser from 'body-parser';
 
 export function restApiExpressServer(modules: ModuleRestApi[] = []): Express {
-  const swaggerDocument = YAML.load('rest-api.yaml');
+  const swaggerDocument = YAML.load('./src/rest-api-docs.yaml');
   const server = express();
   server.use(bodyParser.json());
 
@@ -13,6 +13,6 @@ export function restApiExpressServer(modules: ModuleRestApi[] = []): Express {
     server.use('/rest-api' + restApiModule.path, restApiModule.router);
   });
 
-  server.use(process.env.API_DOCS_ENDPOINT_URL || '/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  server.use(process.env.API_DOCS_ENDPOINT_URL || '/rest-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   return server;
 }

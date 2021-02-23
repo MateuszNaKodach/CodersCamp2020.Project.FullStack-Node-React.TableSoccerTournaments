@@ -19,11 +19,18 @@ paths:
       description: Fetch list of all torunament registrations
       responses:
         200:
-          description: Default response
+          description: All existing tournament registrations
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExampleBody'
+                $ref: '#/components/schemas/TournamentRegistrationsListDto'
+    post:
+      tags:
+        - Tournament Registrations
+      description: Open new tournament registrations
+      responses:
+        200:
+          description: Tournament registrations successfully opened
   /tournament-registrations/{tournamentId}:
     get:
       tags:
@@ -40,78 +47,40 @@ paths:
             example: 2480fc2c-bbd7-427c-9439-02f76583aef5
       responses:
         200:
-          description: Default response
+          description: Tournament Registrations with for requested tournament
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TournamentRegistrationsDto'
+  /tournament-registrations/{tournamentId}/players:
     post:
       tags:
-        - Examples
-      description: Create a new example
-      requestBody:
-        description: an example
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExampleBody'
-        required: true
-      responses:
-        200:
-          description: Returns all examples
-          content: { }
-  /examples:
-    get:
-      tags:
-        - Examples
-      description: Fetch all examples
-      responses:
-        200:
-          description: Returns all examples
-          content: { }
-    post:
-      tags:
-        - Examples
-      description: Create a new example
-      requestBody:
-        description: an example
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ExampleBody'
-        required: true
-      responses:
-        200:
-          description: Returns all examples
-          content: { }
-  /examples/{id}:
-    get:
-      tags:
-        - Examples
+        - Tournament Registrations
+      description: Register player for participation in the tournament
       parameters:
-        - name: id
+        - name: tournamentId
           in: path
-          description: The id of the example to retrieve
+          description: Tournament ID
           required: true
           schema:
-            type: integer
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRegisterPlayerForTournamentRequestBody'
       responses:
         200:
-          description: Return the example with the specified id
-          content: { }
-        404:
-          description: Example not found
-          content: { }
-  /spec:
-    get:
-      tags:
-        - Specification
-      responses:
-        200:
-          description: Return the API specification
-          content: { }
+          description: Player successfully registered for the tournament
 components:
   schemas:
+    TournamentRegistrationsListDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/TournamentRegistrationsDto'
+      uniqueItems: true
     TournamentRegistrationsDto:
       type: object
       properties:
@@ -133,12 +102,13 @@ components:
           items:
             type: string
           uniqueItems: true
-    ExampleBody:
-      title: example
-      required:
-        - name
+    PostRegisterPlayerForTournamentRequestBody:
       type: object
       properties:
-        name:
+        playerId:
+          description: Identifier of the player
           type: string
-          example: no_stress
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      required:
+        - playerId

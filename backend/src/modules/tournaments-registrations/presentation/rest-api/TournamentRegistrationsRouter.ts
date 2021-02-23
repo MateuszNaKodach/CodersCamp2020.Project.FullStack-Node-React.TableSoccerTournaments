@@ -29,9 +29,9 @@ export const tournamentRegistrationsRouter = (
   const postOpenTournamentRegistrations = async (request: Request, response: Response) => {
     const tournamentId = entityIdGenerator.generate();
     const commandResult = await commandPublisher.execute(new OpenTournamentRegistrations({ tournamentId }));
-    commandResult.process(
+    return commandResult.process(
       () => response.status(StatusCodes.CREATED).send(),
-      (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }).send(),
+      (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
   };
 
@@ -39,27 +39,24 @@ export const tournamentRegistrationsRouter = (
     const requestBody: PostRegisterPlayerForTournamentRequestBody = request.body;
     const { tournamentId } = request.params;
     const commandResult = await commandPublisher.execute(new RegisterPlayerForTournament({ tournamentId, playerId: requestBody.playerId }));
-    commandResult.process(
+    return commandResult.process(
       () => response.status(StatusCodes.OK).send(),
-      (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }).send(),
+      (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
   };
 
   const postCloseTournamentRegistrations = async (request: Request, response: Response) => {
     const { tournamentId } = request.params;
     const commandResult = await commandPublisher.execute(new CloseTournamentRegistrations({ tournamentId }));
-    commandResult.process(
+    return commandResult.process(
       () => response.status(StatusCodes.OK).send(),
-      (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }).send(),
+      (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
   };
 
   const getAllTournamentRegistrations = async (request: Request, response: Response) => {
     const queryResult = await queryPublisher.execute<FindAllTournamentRegistrationsResult>(new FindAllTournamentRegistrations());
-    response
-      .status(StatusCodes.OK)
-      .json(new TournamentRegistrationsListDto(queryResult.map(toTournamentRegistrationsDto)))
-      .send();
+    return response.status(StatusCodes.OK).json(new TournamentRegistrationsListDto(queryResult.map(toTournamentRegistrationsDto)));
   };
 
   const getTournamentRegistrationsById = async (request: Request, response: Response) => {
@@ -68,12 +65,9 @@ export const tournamentRegistrationsRouter = (
       new FindTournamentRegistrationsById({ tournamentId }),
     );
     if (!queryResult) {
-      return response
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: `Tournament registrations with id = ${tournamentId} not found!` })
-        .send();
+      return response.status(StatusCodes.NOT_FOUND).json({ message: `Tournament registrations with id = ${tournamentId} not found!` });
     }
-    return response.status(StatusCodes.OK).json(toTournamentRegistrationsDto(queryResult)).send();
+    return response.status(StatusCodes.OK).json(toTournamentRegistrationsDto(queryResult));
   };
 
   const router = express.Router();
@@ -88,7 +82,7 @@ export const tournamentRegistrationsRouter = (
 function toTournamentRegistrationsDto(tournamentRegistrations: TournamentRegistrations): TournamentRegistrationsDto {
   return new TournamentRegistrationsDto(
     tournamentRegistrations.tournamentId.raw,
-    tournamentRegistrations.status ?? 'undefined',
+    tournamentRegistrations.status,
     tournamentRegistrations.registeredPlayers.map((playerId) => playerId.raw),
   );
 }

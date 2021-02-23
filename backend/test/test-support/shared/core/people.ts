@@ -1,5 +1,5 @@
 export const janKowalski = {
-  firstName: 'Jan Kowalski',
+  firstName: 'Jan',
   emailAddress: 'jan.kowalski@test.pl',
   lastName: 'Kowalski',
   phoneNumber: '123321333',

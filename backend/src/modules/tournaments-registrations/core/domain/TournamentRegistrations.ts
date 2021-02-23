@@ -12,12 +12,12 @@ const MIN_TOURNAMENT_PLAYERS = 8;
 
 export class TournamentRegistrations {
   readonly tournamentId: TournamentId;
-  readonly status: RegistrationsStatus | undefined;
+  readonly status: RegistrationsStatus;
   readonly registeredPlayers: PlayerId[] = [];
 
   constructor(props: { tournamentId: TournamentId; status?: RegistrationsStatus; registeredPlayers?: PlayerId[] }) {
     this.tournamentId = props.tournamentId;
-    this.status = props.status;
+    this.status = props.status ?? RegistrationsStatus.OPENED;
     this.registeredPlayers = props.registeredPlayers ?? [];
   }
 

@@ -1,7 +1,7 @@
 export interface CommandResult {
   isSuccess(): boolean;
 
-  process(onSuccess: (value: any) => void, onFailure: (reason: Error) => void): void;
+  process(onSuccess: (value: any) => any, onFailure: (reason: Error) => any): any;
 }
 
 export namespace CommandResult {
@@ -12,8 +12,8 @@ export namespace CommandResult {
       return true;
     }
 
-    process(onSuccess: (value: any) => void, onFailure: (reason: Error) => void): void {
-      onSuccess(this.value);
+    process(onSuccess: (value: any) => any, onFailure: (reason: Error) => any): any {
+      return onSuccess(this.value);
     }
   }
 
@@ -24,8 +24,8 @@ export namespace CommandResult {
       return false;
     }
 
-    process(onSuccess: (value: any) => void, onFailure: (reason: Error) => void): void {
-      onFailure(this.reason);
+    process(onSuccess: (value: any) => any, onFailure: (reason: Error) => any): any {
+      return onFailure(this.reason);
     }
   }
 
