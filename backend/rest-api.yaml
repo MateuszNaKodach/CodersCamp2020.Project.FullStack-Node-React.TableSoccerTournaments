@@ -2,27 +2,52 @@ openapi: 3.0.1
 info:
   title: Table Soccer Tournamtes REST API
   description: REST API for supporting organizators of table soccer tournaments
-  version: 1.0.0
+  version: 0.1.0
 servers:
-- url: /rest-api/v1
+  - url: /rest-api
+    description: REST API v1
 tags:
-- name: Examples
-  description: Simple example endpoints
-- name: Specification
-  description: The swagger API specification
+  - name: Tournament Registrations
+    description: Open/Closing registrations for tournament
+  - name: Specification
+    description: The Open API specification
 paths:
-  /examples:
+  /tournament-registrations:
     get:
       tags:
-      - Examples
-      description: Fetch all examples
+        - Tournament Registrations
+      description: Fetch list of all torunament registrations
       responses:
         200:
-          description: Returns all examples
-          content: {}
+          description: Default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExampleBody'
+  /tournament-registrations/{tournamentId}:
+    get:
+      tags:
+        - Tournament Registrations
+      description: Fetch list of all torunament registrations
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentRegistrationsDto'
     post:
       tags:
-      - Examples
+        - Examples
       description: Create a new example
       requestBody:
         description: an example
@@ -34,39 +59,84 @@ paths:
       responses:
         200:
           description: Returns all examples
-          content: {}
+          content: { }
+  /examples:
+    get:
+      tags:
+        - Examples
+      description: Fetch all examples
+      responses:
+        200:
+          description: Returns all examples
+          content: { }
+    post:
+      tags:
+        - Examples
+      description: Create a new example
+      requestBody:
+        description: an example
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExampleBody'
+        required: true
+      responses:
+        200:
+          description: Returns all examples
+          content: { }
   /examples/{id}:
     get:
       tags:
-      - Examples
+        - Examples
       parameters:
-      - name: id
-        in: path
-        description: The id of the example to retrieve
-        required: true
-        schema:
-          type: integer
+        - name: id
+          in: path
+          description: The id of the example to retrieve
+          required: true
+          schema:
+            type: integer
       responses:
         200:
           description: Return the example with the specified id
-          content: {}
+          content: { }
         404:
           description: Example not found
-          content: {}
+          content: { }
   /spec:
     get:
       tags:
-      - Specification
+        - Specification
       responses:
         200:
           description: Return the API specification
-          content: {}
+          content: { }
 components:
   schemas:
+    TournamentRegistrationsDto:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        status:
+          description: status of the tournament registrations
+          type: string
+          enum:
+            - OPENED
+            - CLOSED
+          example: OPENED
+        registeredPlayersIds:
+          description: ids of players which registered for the tournament
+          type: array
+          items:
+            type: string
+          uniqueItems: true
     ExampleBody:
       title: example
       required:
-      - name
+        - name
       type: object
       properties:
         name:
