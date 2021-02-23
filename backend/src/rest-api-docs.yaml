@@ -52,6 +52,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TournamentRegistrationsDto'
+  /tournament-registrations/{tournamentId}/close:
+    post:
+      tags:
+        - Tournament Registrations
+      description: Close tournament registrations
+      responses:
+        200:
+          description: Tournament registrations was successfully closed
   /tournament-registrations/{tournamentId}/players:
     post:
       tags:

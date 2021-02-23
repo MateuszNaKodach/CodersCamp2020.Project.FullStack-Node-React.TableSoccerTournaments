@@ -7,7 +7,7 @@ export class LoggingDomainEventBus implements DomainEventBus {
   constructor(private readonly next: DomainEventBus) {}
 
   publish(event: DomainEvent): any {
-    console.log(`LoggingDomainEventBus | Event published: `, Object.getPrototypeOf(event).constructor.name, JSON.stringify(event));
+    console.log(`[LoggingDomainEventBus]: Event published: `, Object.getPrototypeOf(event).constructor.name, JSON.stringify(event));
     return this.next.publish(event);
   }
 
