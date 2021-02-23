@@ -9,6 +9,7 @@ import { DomainEventPublisherMock } from "../../core/DomainEventPublisherMock";
 import { QueryPublisherMock } from "../../core/QueryPublisherMock";
 import { EntityIdGenerator } from "../../../../../src/shared/core/application/EntityIdGenerator";
 import { EntityIdGeneratorStub } from "../../core/EntityIdGeneratorStub";
+import bodyParser from "body-parser";
 
 export type ModuleRestApiFactory = (
   commandPublisher: CommandPublisher,
@@ -36,6 +37,7 @@ export function testModuleRestApi(
   config: Partial<TestModuleRestApiConfig> = restApiTestModuleDefaultConfig,
 ): { agent: supertest.SuperAgentTest } {
   const server = express();
+  server.use(bodyParser.json());
 
   const restApiModuleConfig = { ...restApiTestModuleDefaultConfig, ...config };
   const restApiModule = moduleRestApiFactory(

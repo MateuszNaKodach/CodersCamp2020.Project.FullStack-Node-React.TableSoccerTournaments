@@ -1,1 +1,3 @@
-export class PostRegisterPlayerForTournamentRequestBody {}
+export class PostRegisterPlayerForTournamentRequestBody {
+  playerId: string;
+}
