@@ -1,3 +1,10 @@
+# CodersCamp 2020 - Projekt końcowy - Piłkarzyki (TBN?)
+
+Co zostało zrobione?
+frontend - create react app (just)
+
+
+
 # CodersCamp 2020 - Projekt końcowy (FullStack — Node.js + React)
 **CodersCamp (coderscamp.edu.pl) - Największy otwarty kurs programowania webowego** 
 

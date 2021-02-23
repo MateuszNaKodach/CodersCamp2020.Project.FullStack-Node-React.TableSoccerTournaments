@@ -1,0 +1,48 @@
+name: CodersCamp2020 | ⚽️ Table Soccer Tournaments REST API - Node.js CI
+
+on:
+  push:
+    paths:
+      - '.github/workflows/backend.yml'
+      - 'backend/**'
+      - '!**/README.md'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+
+    defaults:
+      run:
+        working-directory: backend
+
+    strategy:
+      matrix:
+        node-version: [ 14.x ]
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run lint:ci
+      - run: npm run format:ci
+      - run: npm run build --if-present
+      - run: npm run test:ci

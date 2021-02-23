@@ -1,0 +1,122 @@
+openapi: 3.0.1
+info:
+  title: Table Soccer Tournamtes REST API
+  description: REST API for supporting organizators of table soccer tournaments
+  version: 0.1.0
+servers:
+  - url: /rest-api
+    description: REST API v1
+tags:
+  - name: Tournament Registrations
+    description: Open/Closing registrations for tournament
+  - name: Specification
+    description: The Open API specification
+paths:
+  /tournament-registrations:
+    get:
+      tags:
+        - Tournament Registrations
+      description: Fetch list of all torunament registrations
+      responses:
+        200:
+          description: All existing tournament registrations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentRegistrationsListDto'
+    post:
+      tags:
+        - Tournament Registrations
+      description: Open new tournament registrations
+      responses:
+        200:
+          description: Tournament registrations successfully opened
+  /tournament-registrations/{tournamentId}:
+    get:
+      tags:
+        - Tournament Registrations
+      description: Fetch list of all torunament registrations
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Tournament Registrations with for requested tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentRegistrationsDto'
+  /tournament-registrations/{tournamentId}/close:
+    post:
+      tags:
+        - Tournament Registrations
+      description: Close tournament registrations
+      responses:
+        200:
+          description: Tournament registrations was successfully closed
+  /tournament-registrations/{tournamentId}/players:
+    post:
+      tags:
+        - Tournament Registrations
+      description: Register player for participation in the tournament
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRegisterPlayerForTournamentRequestBody'
+      responses:
+        200:
+          description: Player successfully registered for the tournament
+components:
+  schemas:
+    TournamentRegistrationsListDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/TournamentRegistrationsDto'
+      uniqueItems: true
+    TournamentRegistrationsDto:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        status:
+          description: status of the tournament registrations
+          type: string
+          enum:
+            - OPENED
+            - CLOSED
+          example: OPENED
+        registeredPlayersIds:
+          description: ids of players which registered for the tournament
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    PostRegisterPlayerForTournamentRequestBody:
+      type: object
+      properties:
+        playerId:
+          description: Identifier of the player
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      required:
+        - playerId
