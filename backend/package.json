@@ -15,6 +15,9 @@
     "start": "node dist/index.js",
     "start:dev": "nodemon",
     "test": "jest",
+    "test:unit": "jest",
+    "test:all": "jest --testRegex '(spec|test|mongo-spec)[.]ts'",
+    "test:mongo": "jest --testRegex '(mongo-spec)[.]ts'",
     "test:watch": "jest --watchAll",
     "test:cov": "jest --coverage",
     "test:ci": "jest --ci --silent --coverage"

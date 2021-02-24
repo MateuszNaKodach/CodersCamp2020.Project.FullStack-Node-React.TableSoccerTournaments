@@ -19,7 +19,7 @@ export class MongoTournamentRegistrationsRepository implements TournamentRegistr
         status: registrations.status,
         registeredPlayers: registrations.registeredPlayers.map((playerId) => playerId.raw),
       },
-      { upsert: true },
+      { upsert: true, useFindAndModify: true },
     );
   }
 
@@ -57,6 +57,6 @@ function mongoDocumentToDomain(mongoDocument: MongoTournamentRegistrations): Tou
   return new TournamentRegistrations({
     tournamentId: TournamentId.from(mongoDocument._id),
     status: mongoDocument.status,
-    registeredPlayers: mongoDocument.registeredPlayers.map((playerId) => PlayerId.from(playerId)),
+    registeredPlayers: [...mongoDocument.registeredPlayers.map((playerId) => PlayerId.from(playerId))],
   });
 }
