@@ -3,7 +3,7 @@ import { TournamentRegistrationsWasOpened } from './event/TournamentRegistration
 import { RegistrationsStatus } from './RegistrationsStatus';
 import { PlayerId } from './PlayerId';
 import { PlayerWasRegisteredForTournament } from './event/PlayerWasRegisteredForTournament';
-import { TournamentRegistrationsWasClosed } from './event/TournamentRegistrationsWasClosed';
+import { TournamentRegistrationsWereClosed } from './event/TournamentRegistrationsWereClosed';
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
 
@@ -102,7 +102,7 @@ export function closeTournamentRegistrations(
     throw new Error(`Min players for tournament is ${MIN_TOURNAMENT_PLAYERS}, but only ${registeredPlayersCount} players registered!`);
   }
 
-  const tournamentRegistrationsWasClosed = new TournamentRegistrationsWasClosed({
+  const tournamentRegistrationsWasClosed = new TournamentRegistrationsWereClosed({
     occurredAt: currentTimeProvider(),
     tournamentId: command.tournamentId.raw,
     registeredPlayersIds: state.registeredPlayers.map((playerId) => playerId.raw),
@@ -117,7 +117,7 @@ export function closeTournamentRegistrations(
 
 function onTournamentRegistrationsWasClosed(
   state: TournamentRegistrations,
-  event: TournamentRegistrationsWasClosed,
+  event: TournamentRegistrationsWereClosed,
 ): TournamentRegistrations {
   return new TournamentRegistrations({
     ...state,

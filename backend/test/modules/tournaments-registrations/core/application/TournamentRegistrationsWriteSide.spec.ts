@@ -7,7 +7,7 @@ import { PlayerProfileWasCreated } from '../../../../../src/modules/player-profi
 import { janKowalski } from '../../../../test-support/shared/core/people';
 import { PlayerWasRegisteredForTournament } from '../../../../../src/modules/tournaments-registrations/core/domain/event/PlayerWasRegisteredForTournament';
 import { CloseTournamentRegistrations } from '../../../../../src/modules/tournaments-registrations/core/application/command/CloseTournamentRegistrations';
-import { TournamentRegistrationsWasClosed } from '../../../../../src/modules/tournaments-registrations/core/domain/event/TournamentRegistrationsWasClosed';
+import { TournamentRegistrationsWereClosed } from '../../../../../src/modules/tournaments-registrations/core/domain/event/TournamentRegistrationsWereClosed';
 import { testTournamentsRegistrationsModule } from './TestTournamentsRegistrationsModule';
 import { registerPlayerForTournament } from './TestHelpers';
 import Failure = CommandResult.Failure;
@@ -139,7 +139,7 @@ describe('Tournament Registrations | Write Side', () => {
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(tournamentsRegistrations.lastPublishedEvent()).toStrictEqual(
-      new TournamentRegistrationsWasClosed({
+      new TournamentRegistrationsWereClosed({
         occurredAt: currentTime,
         tournamentId,
         registeredPlayersIds: ['PlayerId1', 'PlayerId2', 'PlayerId3', 'PlayerId4', 'PlayerId5', 'PlayerId6', 'PlayerId7', 'PlayerId8'],

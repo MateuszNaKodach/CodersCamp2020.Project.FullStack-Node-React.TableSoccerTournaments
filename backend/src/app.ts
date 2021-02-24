@@ -24,6 +24,7 @@ import { LoggingDomainEventBus } from './shared/infrastructure/core/application/
 import { MongoTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/mongo/MongoTournamentRegistrationsRepository';
 import mongoose from 'mongoose';
 import { Express } from 'express';
+import { PlayersMatchingModuleCore } from './modules/players-matching/core/PlayersMatchingModuleCore';
 
 config();
 
@@ -62,8 +63,13 @@ export async function TableSoccerTournamentsApplication(
     restApi: TournamentRegistrationsRestApiModule(commandBus, eventBus, queryBus, entityIdGenerator),
   };
 
+  const playersMatchingModule: Module = {
+    core: PlayersMatchingModuleCore(eventBus, commandBus, currentTimeProvider),
+  };
+
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
+    process.env.PLAYERS_MATCHING_MODULE === 'ENABLED' ? playersMatchingModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
