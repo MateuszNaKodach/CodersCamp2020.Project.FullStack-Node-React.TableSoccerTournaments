@@ -57,6 +57,15 @@ paths:
       tags:
         - Tournament Registrations
       description: Close tournament registrations
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
       responses:
         200:
           description: Tournament registrations was successfully closed
