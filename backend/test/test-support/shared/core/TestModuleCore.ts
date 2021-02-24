@@ -25,7 +25,7 @@ export function testModuleCore(
   commandBus: CommandBus = new InMemoryCommandBus(),
   eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus()),
   queryBus: QueryBus = new InMemoryQueryBus(),
-) {
+): TestModuleCore {
   const moduleCore = moduleCoreFactory(commandBus, eventBus, queryBus);
   moduleCore.commandHandlers.forEach((commandHandler) => commandBus.registerHandler(commandHandler.commandType, commandHandler.handler));
   moduleCore.eventHandlers.forEach((eventHandler) => eventBus.registerHandler(eventHandler.eventType, eventHandler.handler));

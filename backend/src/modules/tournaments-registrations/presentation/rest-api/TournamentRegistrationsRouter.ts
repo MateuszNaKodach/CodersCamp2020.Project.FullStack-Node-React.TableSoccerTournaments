@@ -20,12 +20,12 @@ import {
   FindTournamentRegistrationsByIdResult,
 } from '../../core/application/query/FindTournamentRegistrationsById';
 
-export const tournamentRegistrationsRouter = (
+export function tournamentRegistrationsRouter(
   commandPublisher: CommandPublisher,
   eventPublisher: DomainEventPublisher,
   queryPublisher: QueryPublisher,
   entityIdGenerator: EntityIdGenerator,
-) => {
+): express.Router {
   const postOpenTournamentRegistrations = async (request: Request, response: Response) => {
     const tournamentId = entityIdGenerator.generate();
     const commandResult = await commandPublisher.execute(new OpenTournamentRegistrations({ tournamentId }));
@@ -77,7 +77,7 @@ export const tournamentRegistrationsRouter = (
   router.get('', getAllTournamentRegistrations);
   router.get('/:tournamentId', getTournamentRegistrationsById);
   return router;
-};
+}
 
 function toTournamentRegistrationsDto(tournamentRegistrations: TournamentRegistrations): TournamentRegistrationsDto {
   return new TournamentRegistrationsDto(

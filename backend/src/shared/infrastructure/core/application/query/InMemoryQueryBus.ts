@@ -19,7 +19,7 @@ export class InMemoryQueryBus implements QueryBus {
   registerHandler<ResultType = any, QueryType extends Query = Query>(
     queryType: HasConstructor<QueryType>,
     handler: QueryHandler<QueryType, ResultType>,
-  ) {
+  ): void {
     const queryTypeName: QueryTypeName = queryType.name;
     const queryHandler = this.handlers.get(queryTypeName);
     if (queryHandler) {

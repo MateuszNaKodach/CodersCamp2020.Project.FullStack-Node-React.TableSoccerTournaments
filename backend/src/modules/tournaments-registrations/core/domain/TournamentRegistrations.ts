@@ -20,10 +20,6 @@ export class TournamentRegistrations {
     this.status = props.status ?? RegistrationsStatus.OPENED;
     this.registeredPlayers = props.registeredPlayers ?? [];
   }
-
-  equals(other: TournamentRegistrations | undefined) {
-    return other?.tournamentId === this.tournamentId;
-  }
 }
 
 export function openTournamentRegistrations(

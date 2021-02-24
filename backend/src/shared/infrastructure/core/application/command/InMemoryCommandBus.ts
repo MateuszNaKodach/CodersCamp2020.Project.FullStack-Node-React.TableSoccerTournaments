@@ -16,7 +16,7 @@ export class InMemoryCommandBus implements CommandBus {
     return commandHandler.execute(command).catch((error) => CommandResult.failureDueTo(error));
   }
 
-  registerHandler<CommandType extends Command>(commandType: HasConstructor<CommandType>, handler: CommandHandler<CommandType>) {
+  registerHandler<CommandType extends Command>(commandType: HasConstructor<CommandType>, handler: CommandHandler<CommandType>): void {
     const commandTypeName: CommandTypeName = commandType.name;
     const commandHandler = this.handlers.get(commandTypeName);
     if (commandHandler) {
