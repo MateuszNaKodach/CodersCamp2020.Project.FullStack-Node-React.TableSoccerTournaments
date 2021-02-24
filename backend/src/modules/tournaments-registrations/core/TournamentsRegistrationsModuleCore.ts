@@ -17,13 +17,13 @@ import { FindAllTournamentRegistrations } from './application/query/FindAllTourn
 import { FindAllTournamentRegistrationsQueryHandler } from './application/query/FindAllTournamentRegistrationsQueryHandler';
 import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 
-export const TournamentsRegistrationsModuleCore = (
+export function TournamentsRegistrationsModuleCore(
   eventPublisher: DomainEventPublisher,
   currentTimeProvider: CurrentTimeProvider,
   tournamentRegistrationsRepository: TournamentRegistrationsRepository,
   players: Players,
   availablePlayersForTournament: AvailablePlayersForTournament,
-) => {
+): ModuleCore {
   return {
     commandHandlers: [
       {
@@ -60,5 +60,5 @@ export const TournamentsRegistrationsModuleCore = (
         handler: new FindAllTournamentRegistrationsQueryHandler(tournamentRegistrationsRepository),
       },
     ],
-  } as ModuleCore;
-};
+  };
+}

@@ -29,9 +29,10 @@ export namespace CommandResult {
     }
   }
 
-  export const success = (value: any = undefined) => new Success(value);
+  export const success: (value?: any) => CommandResult.Success = (value: any = undefined) => new Success(value);
 
-  export const failureDueTo = (reason: Error = new Error('Unknown error.')) => new Failure(reason);
+  export const failureDueTo: (reason?: Error) => CommandResult.Failure = (reason: Error = new Error('Unknown error.')) =>
+    new Failure(reason);
 
   export function isSuccess(result: CommandResult): result is Success {
     return result.isSuccess();

@@ -23,8 +23,11 @@ import { PlayerProfileWasCreated } from './modules/player-profiles/core/domain/e
 import { LoggingDomainEventBus } from './shared/infrastructure/core/application/event/LoggingDomainEventBus';
 import { MongoTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/mongo/MongoTournamentRegistrationsRepository';
 import mongoose from 'mongoose';
+import { Express } from 'express';
 
 config();
+
+export type TableSoccerTournamentsApplication = { restApi: Express };
 
 export async function TableSoccerTournamentsApplication(
   commandBus: CommandBus = new InMemoryCommandBus(),
@@ -32,7 +35,7 @@ export async function TableSoccerTournamentsApplication(
   queryBus: QueryBus = new InMemoryQueryBus(),
   currentTimeProvider: CurrentTimeProvider = () => new Date(),
   entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator(),
-) {
+): Promise<TableSoccerTournamentsApplication> {
   if (process.env.MONGO_REPOSITORIES === 'ENABLED') {
     const connectionString = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`;
     await mongoose

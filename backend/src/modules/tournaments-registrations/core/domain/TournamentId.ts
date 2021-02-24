@@ -3,7 +3,7 @@ export class TournamentId {
 
   private constructor(readonly raw: string) {}
 
-  static from(tournamentId: string) {
+  static from(tournamentId: string): TournamentId {
     if (tournamentId.length <= 0) {
       throw new Error('TournamentId cannot be empty!');
     }
