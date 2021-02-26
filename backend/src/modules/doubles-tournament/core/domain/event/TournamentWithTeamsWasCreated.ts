@@ -1,5 +1,5 @@
 import {DomainEvent} from "../../../../../shared/domain/event/DomainEvent";
-import {TournamentTeam} from "../../application/CreateTournamentWithTeams";
+import {TournamentTeam} from "../TournamentTeam";
 
 export class TournamentWithTeamsWasCreated implements DomainEvent{
     readonly occurredAt: Date;

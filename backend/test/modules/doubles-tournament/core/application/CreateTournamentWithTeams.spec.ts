@@ -1,9 +1,9 @@
 import {testCreateTournamentWithTeamsModule} from "./TestCreateTournamentWithTeamsModule";
 import {
-    CreateTournamentWithTeams,
-    TournamentTeam
+    CreateTournamentWithTeams
 } from "../../../../../src/modules/doubles-tournament/core/application/CreateTournamentWithTeams";
 import {TournamentWithTeamsWasCreated} from "../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWithTeamsWasCreated";
+import {TournamentTeam} from "../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam";
 
 describe('Create Tournament With Teams', () => {
     it('given paired players, when create tournament, then tournament was created with teams', async () => {
@@ -24,7 +24,7 @@ describe('Create Tournament With Teams', () => {
         expect(commandResult.isSuccess()).toBeTruthy();
 
         expect(tournamentCreation.lastPublishedEvent()).toStrictEqual(
-            new TournamentWithTeamsWasCreated( currentTime, tournamentId, tournamentTeams)
+            new TournamentWithTeamsWasCreated(currentTime, tournamentId, tournamentTeams)
         );
     });
 });
