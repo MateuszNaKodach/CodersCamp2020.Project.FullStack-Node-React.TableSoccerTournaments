@@ -31,6 +31,10 @@ paths:
       responses:
         200:
           description: Tournament registrations successfully opened
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostTournamentRegistrationsResponseBody'
   /tournament-registrations/{tournamentId}:
     get:
       tags:
@@ -129,3 +133,13 @@ components:
           example: 2480fc2c-bbd7-427c-9439-02f76583aef5
       required:
         - playerId
+    PostTournamentRegistrationsResponseBody:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament for which registreations where opened
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      required:
+        - tournamentId

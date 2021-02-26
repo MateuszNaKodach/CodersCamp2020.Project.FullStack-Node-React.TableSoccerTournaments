@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { restApiExpressServer } from './shared/infrastructure/restapi/Server';
+import { restApiExpressServer } from './shared/infrastructure/rest-api/Server';
 import { CommandBus } from './shared/core/application/command/CommandBus';
 import { InMemoryCommandBus } from './shared/infrastructure/core/application/command/InMemoryCommandBus';
 import { StoreAndForwardDomainEventBus } from './shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus';
@@ -15,7 +15,7 @@ import { InMemoryPlayers } from './modules/tournaments-registrations/infrastruct
 import { TournamentRegistrationsRestApiModule } from './modules/tournaments-registrations/presentation/rest-api/TournamentRegistrationsRestApiModule';
 import { Module } from './shared/Module';
 import { isDefined } from './common/Defined';
-import { ModuleRestApi } from './shared/infrastructure/restapi/ModuleRestApi';
+import { ModuleRestApi } from './shared/presentation/rest-api/ModuleRestApi';
 import { DomainEventBus } from './shared/core/application/event/DomainEventBus';
 import { EntityIdGenerator } from './shared/core/application/EntityIdGenerator';
 import { UuidEntityIdGenerator } from './shared/infrastructure/core/application/UuidEntityIdGenerator';
