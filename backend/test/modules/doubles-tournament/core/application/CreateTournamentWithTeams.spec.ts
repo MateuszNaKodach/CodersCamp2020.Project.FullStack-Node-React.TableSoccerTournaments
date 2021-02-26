@@ -13,7 +13,7 @@ describe('Create Tournament With Teams', () => {
         const tournamentId = 'TournamentId';
         const teamId = 'TeamId';
         const tournamentTeams = [
-            new TournamentTeam(tournamentId, teamId, 'player1', 'player2'),
+            new TournamentTeam(teamId, 'player1', 'player2'),
         ];
 
         //When

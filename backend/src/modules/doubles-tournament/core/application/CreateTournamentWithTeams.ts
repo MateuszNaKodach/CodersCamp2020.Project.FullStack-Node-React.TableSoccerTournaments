@@ -10,14 +10,12 @@ export class CreateTournamentWithTeams {
 }
 
 export class TournamentTeam {
-    readonly tournamentId: string;
     readonly teamId: string;
     readonly firstTeamPlayer: string;
     readonly secondTeamPlayer: string;
 
 
-    constructor(tournamentId: string, teamId: string, firstTeamPlayer: string, secondTeamPlayer: string) {
-        this.tournamentId = tournamentId;
+    constructor(teamId: string, firstTeamPlayer: string, secondTeamPlayer: string) {
         this.teamId = teamId;
         this.firstTeamPlayer = firstTeamPlayer;
         this.secondTeamPlayer = secondTeamPlayer;
