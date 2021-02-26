@@ -5,3 +5,5 @@ dist
 coverage
 css
 .history
+*.stryker-tmp
+reports
