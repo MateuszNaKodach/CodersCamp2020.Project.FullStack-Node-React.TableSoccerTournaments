@@ -10,6 +10,7 @@ export class CreateTournamentWithTeamsCommandHandler implements CommandHandler<C
 
     async execute(command: CreateTournamentWithTeams): Promise<CommandResult> {
         const { events } = createTournamentWithTeams(command, this.currentTimeProvider());
+        this.eventPublisher.publishAll(events);
         return CommandResult.success();
     }
 }
