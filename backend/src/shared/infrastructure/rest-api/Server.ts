@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-import { ModuleRestApi } from './ModuleRestApi';
+import { ModuleRestApi } from '../../presentation/rest-api/ModuleRestApi';
 import bodyParser from 'body-parser';
 
 export function restApiExpressServer(modules: ModuleRestApi[] = []): Express {
