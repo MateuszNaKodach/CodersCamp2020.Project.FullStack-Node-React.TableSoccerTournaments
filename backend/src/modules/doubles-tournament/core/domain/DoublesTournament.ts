@@ -2,6 +2,7 @@ import { TournamentTeam } from './TournamentTeam';
 import { TournamentWithTeamsWasCreated } from './event/TournamentWithTeamsWasCreated';
 import { DomainEvent } from '../../../../shared/domain/event/DomainEvent';
 import { UuidEntityIdGenerator } from '../../../../shared/infrastructure/core/application/UuidEntityIdGenerator';
+import { EntityIdGenerator } from '../../../../shared/core/application/EntityIdGenerator';
 
 export class DoublesTournament {
   readonly tournamentId: string;
@@ -16,10 +17,10 @@ export class DoublesTournament {
 export function createTournamentWithTeams(
   command: { tournamentId: string; tournamentPairs: { player1: string; player2: string }[] },
   currentTime: Date,
+  entityIdGenerator: EntityIdGenerator,
 ): { events: DomainEvent[] } {
-  const uuidGenerator = new UuidEntityIdGenerator();
   const tournamentTeams: TournamentTeam[] = command.tournamentPairs.map((tournamentPair) => {
-    const teamId = uuidGenerator.generate();
+    const teamId = entityIdGenerator.generate();
     return new TournamentTeam({
       teamId: teamId,
       firstTeamPlayer: tournamentPair.player1,

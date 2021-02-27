@@ -1,5 +1,5 @@
 import { testCreateTournamentWithTeamsModule } from './TestCreateTournamentWithTeamsModule';
-import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-tournament/core/application/CreateTournamentWithTeams';
+import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
 import { TournamentWithTeamsWasCreated } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWithTeamsWasCreated';
 import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
 
@@ -11,7 +11,7 @@ describe('Create Tournament With Teams', () => {
     const tournamentId = 'TournamentId';
     const teamId = 'TeamId';
     const tournamentPairs = [{ player1: 'player1', player2: 'player2' }];
-    const tournamentTeams: TournamentTeam[] = [{ teamId, firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }];
+    const tournamentTeams = [{ teamId, firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }];
 
     //When
     const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
@@ -19,7 +19,7 @@ describe('Create Tournament With Teams', () => {
 
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
-
+    debugger
     expect(tournamentCreation.lastPublishedEvent()).toStrictEqual(
       new TournamentWithTeamsWasCreated(currentTime, tournamentId, tournamentTeams),
     );
