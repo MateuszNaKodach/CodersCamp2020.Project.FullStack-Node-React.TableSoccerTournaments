@@ -1,8 +1,7 @@
-import { TournamentTeam } from './TournamentTeam';
-import { TournamentWithTeamsWasCreated } from './event/TournamentWithTeamsWasCreated';
-import { DomainEvent } from '../../../../shared/domain/event/DomainEvent';
-import { UuidEntityIdGenerator } from '../../../../shared/infrastructure/core/application/UuidEntityIdGenerator';
-import { EntityIdGenerator } from '../../../../shared/core/application/EntityIdGenerator';
+import {TournamentTeam} from './TournamentTeam';
+import {TournamentWithTeamsWasCreated} from './event/TournamentWithTeamsWasCreated';
+import {DomainEvent} from '../../../../shared/domain/event/DomainEvent';
+import {EntityIdGenerator} from '../../../../shared/core/application/EntityIdGenerator';
 
 export class DoublesTournament {
   readonly tournamentId: string;
@@ -28,6 +27,6 @@ export function createTournamentWithTeams(
     });
   });
   return {
-    events: [new TournamentWithTeamsWasCreated(currentTime, command.tournamentId, tournamentTeams)],
+    events: [new TournamentWithTeamsWasCreated({ occurredAt: currentTime, tournamentId: command.tournamentId, tournamentTeams })],
   };
 }

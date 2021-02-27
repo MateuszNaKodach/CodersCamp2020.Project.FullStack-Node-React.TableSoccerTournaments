@@ -6,9 +6,9 @@ export class TournamentWithTeamsWasCreated implements DomainEvent {
   readonly tournamentId: string;
   readonly tournamentTeams: TournamentTeam[];
 
-  constructor(occurredAt: Date, tournamentId: string, tournamentTeams: TournamentTeam[]) {
-    this.occurredAt = occurredAt;
-    this.tournamentId = tournamentId;
-    this.tournamentTeams = tournamentTeams;
+  constructor(props: { occurredAt: Date, tournamentId: string, tournamentTeams: TournamentTeam[] }) {
+    this.occurredAt = props.occurredAt;
+    this.tournamentId = props.tournamentId;
+    this.tournamentTeams = props.tournamentTeams;
   }
 }
