@@ -8,7 +8,7 @@ import { MongoTournamentRegistrationsRepository } from '../../../../../../src/mo
 import { TournamentId } from '../../../../../../src/modules/tournaments-registrations/core/domain/TournamentId';
 import { TournamentRegistrations } from '../../../../../../src/modules/tournaments-registrations/core/domain/TournamentRegistrations';
 import { RegistrationsStatus } from '../../../../../../src/modules/tournaments-registrations/core/domain/RegistrationsStatus';
-import { PlayerId } from '../../../../../../src/modules/tournaments-registrations/core/domain/PlayerId';
+import { PlayerId } from '../../../../../../src/shared/core/domain/PlayerId';
 
 describe('MongoTournamentRegistrationsRepository', () => {
   const repository: TournamentRegistrationsRepository = new MongoTournamentRegistrationsRepository();

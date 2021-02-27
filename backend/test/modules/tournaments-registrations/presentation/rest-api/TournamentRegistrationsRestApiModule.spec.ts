@@ -10,7 +10,7 @@ import { QueryPublisherMock } from '../../../../test-support/shared/core/QueryPu
 import { TournamentRegistrations } from '../../../../../src/modules/tournaments-registrations/core/domain/TournamentRegistrations';
 import { TournamentId } from '../../../../../src/modules/tournaments-registrations/core/domain/TournamentId';
 import { RegistrationsStatus } from '../../../../../src/modules/tournaments-registrations/core/domain/RegistrationsStatus';
-import { PlayerId } from '../../../../../src/modules/tournaments-registrations/core/domain/PlayerId';
+import { PlayerId } from '../../../../../src/shared/core/domain/PlayerId';
 import { FindAllTournamentRegistrations } from '../../../../../src/modules/tournaments-registrations/core/application/query/FindAllTournamentRegistrations';
 import { TournamentRegistrationsDto } from '../../../../../src/modules/tournaments-registrations/presentation/rest-api/response/TournamentRegistrationsDto';
 import { TournamentRegistrationsListDto } from '../../../../../src/modules/tournaments-registrations/presentation/rest-api/response/TournamentRegistrationsListDto';

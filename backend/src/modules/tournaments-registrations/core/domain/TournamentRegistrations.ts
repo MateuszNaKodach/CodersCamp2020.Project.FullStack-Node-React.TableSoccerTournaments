@@ -1,7 +1,7 @@
 import { TournamentId } from './TournamentId';
 import { TournamentRegistrationsWasOpened } from './event/TournamentRegistrationsWasOpened';
 import { RegistrationsStatus } from './RegistrationsStatus';
-import { PlayerId } from './PlayerId';
+import { PlayerId } from '../../../../shared/core/domain/PlayerId';
 import { PlayerWasRegisteredForTournament } from './event/PlayerWasRegisteredForTournament';
 import { TournamentRegistrationsWereClosed } from './event/TournamentRegistrationsWereClosed';
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';

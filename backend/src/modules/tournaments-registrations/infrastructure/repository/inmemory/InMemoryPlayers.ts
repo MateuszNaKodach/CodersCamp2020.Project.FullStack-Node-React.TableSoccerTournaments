@@ -1,6 +1,6 @@
 import { AvailablePlayersForTournament } from '../../../core/application/command/AvailablePlayersForTournament';
 import { Player, Players } from '../../../core/application/command/Players';
-import { PlayerId } from '../../../core/domain/PlayerId';
+import { PlayerId } from '../../../../../shared/core/domain/PlayerId';
 
 export class InMemoryPlayers implements AvailablePlayersForTournament, Players {
   private readonly entities: { [id: string]: Player } = {};

@@ -6,7 +6,7 @@ import { TournamentId } from '../../domain/TournamentId';
 import { TournamentRegistrationsRepository } from '../TournamentRegistrationsRepository';
 import { RegisterPlayerForTournament } from './RegisterPlayerForTournament';
 import { AvailablePlayersForTournament } from './AvailablePlayersForTournament';
-import { PlayerId } from '../../domain/PlayerId';
+import { PlayerId } from '../../../../../shared/core/domain/PlayerId';
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 
 export class RegisterPlayerForTournamentCommandHandler implements CommandHandler<RegisterPlayerForTournament> {
