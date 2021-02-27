@@ -3,7 +3,7 @@ import {DomainEventPublisher} from "../../../../shared/core/application/event/Do
 import {CurrentTimeProvider} from "../../../../shared/core/CurrentTimeProvider";
 import {CreateTournamentWithTeams} from "./CreateTournamentWithTeams";
 import {CommandResult} from "../../../../shared/core/application/command/CommandResult";
-import {createTournamentWithTeams} from "../domain/CreateTournamentWithTeams";
+import {createTournamentWithTeams} from "../domain/DoublesTournament";
 
 export class CreateTournamentWithTeamsCommandHandler implements CommandHandler<CreateTournamentWithTeams> {
     constructor(private readonly eventPublisher: DomainEventPublisher, private readonly currentTimeProvider: CurrentTimeProvider) {}

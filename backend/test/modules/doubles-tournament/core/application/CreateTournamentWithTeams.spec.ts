@@ -12,12 +12,11 @@ describe('Create Tournament With Teams', () => {
         const tournamentCreation = testCreateTournamentWithTeamsModule(currentTime);
         const tournamentId = 'TournamentId';
         const teamId = 'TeamId';
-        const tournamentTeams = [
-            new TournamentTeam(teamId, 'player1', 'player2'),
-        ];
+        const tournamentPairs = [{ player1: 'player1', player2: 'player2' }];
+        const tournamentTeams: TournamentTeam[] = [{ teamId, firstTeamPlayer: 'player1', secondTeamPlayer: 'player2'}];
 
         //When
-        const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentTeams);
+        const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
         const commandResult = await tournamentCreation.executeCommand(createTournamentWithTeams);
 
         //Then

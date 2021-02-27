@@ -1,12 +1,10 @@
-import {TournamentTeam} from "../domain/TournamentTeam";
-
 export class CreateTournamentWithTeams {
     readonly tournamentId: string;
-    readonly tournamentTeams: TournamentTeam[];
+    readonly tournamentPairs: { player1: string, player2: string }[];
 
 
-    constructor(tournamentId: string, tournamentTeams: TournamentTeam[]) {
+    constructor(tournamentId: string, tournamentPairs: { player1: string, player2: string }[]) {
         this.tournamentId = tournamentId;
-        this.tournamentTeams = tournamentTeams;
+        this.tournamentPairs = tournamentPairs;
     }
 }

@@ -1,12 +1,12 @@
 export class TournamentTeam {
     readonly teamId: string;
-    firstTeamPlayer: string;
-    secondTeamPlayer: string;
+    readonly firstTeamPlayer: string;
+    readonly secondTeamPlayer: string;
 
 
-    constructor(teamId: string, firstTeamPlayer: string, secondTeamPlayer: string) {
-        this.teamId = teamId;
-        this.firstTeamPlayer = firstTeamPlayer;
-        this.secondTeamPlayer = secondTeamPlayer;
+    constructor( props: { teamId: string, firstTeamPlayer: string, secondTeamPlayer: string }) {
+        this.teamId = props.teamId;
+        this.firstTeamPlayer = props.firstTeamPlayer;
+        this.secondTeamPlayer = props.secondTeamPlayer;
     }
 }
