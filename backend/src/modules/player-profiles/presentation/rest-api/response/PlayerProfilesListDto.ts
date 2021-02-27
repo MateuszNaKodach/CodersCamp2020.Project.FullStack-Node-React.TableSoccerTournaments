@@ -1,9 +1,9 @@
-import {PlayerProfileDto} from "./PlayerProfileDto";
+import { PlayerProfileDto } from './PlayerProfileDto';
 
 export class PlayerProfilesListDto {
-    readonly items: PlayerProfileDto[];
+  readonly items: PlayerProfileDto[];
 
-    constructor(items: PlayerProfileDto[]) {
-        this.items = items;
-    }
+  constructor(items: PlayerProfileDto[]) {
+    this.items = items;
+  }
 }
