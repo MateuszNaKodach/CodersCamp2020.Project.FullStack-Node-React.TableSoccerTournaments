@@ -48,10 +48,10 @@ export function createPlayerProfile(
         phoneNumber: command.phoneNumber
     })
 
-    const playerProfileState = onPlayerProfileWasCreated(playerProfileWasCreated);
+    const newPlayerProfile = onPlayerProfileWasCreated(playerProfileWasCreated);
 
     return {
-        state: playerProfileState,
+        state: newPlayerProfile,
         events: [playerProfileWasCreated]
     }
 }
