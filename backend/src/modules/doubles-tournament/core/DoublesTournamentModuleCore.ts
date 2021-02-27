@@ -7,18 +7,20 @@ import { CreateTournamentWithTeamsCommandHandler } from './application/command/C
 import { PlayersWereMatchedIntoTeams } from '../../players-matching/core/domain/PlayersWereMatchedIntoTeams';
 import { CreateTournamentWhenPlayersWereMatchedIntoTeams } from './application/event/CreateTournamentWhenPlayersWereMatchedIntoTeams';
 import { EntityIdGenerator } from '../../../shared/core/application/EntityIdGenerator';
+import { DoublesTournamentRepository } from './application/DoublesTournamentRepository';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
   commandPublisher: CommandPublisher,
   currentTimeProvider: CurrentTimeProvider,
   entityIdGenerator: EntityIdGenerator,
+  repository: DoublesTournamentRepository,
 ): ModuleCore {
   return {
     commandHandlers: [
       {
         commandType: CreateTournamentWithTeams,
-        handler: new CreateTournamentWithTeamsCommandHandler(eventPublisher, currentTimeProvider, entityIdGenerator),
+        handler: new CreateTournamentWithTeamsCommandHandler(eventPublisher, currentTimeProvider, entityIdGenerator, repository),
       },
     ],
     eventHandlers: [
