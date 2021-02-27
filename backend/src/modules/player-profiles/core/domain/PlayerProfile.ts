@@ -48,7 +48,7 @@ export function createPlayerProfile(
         phoneNumber: command.phoneNumber
     })
 
-    const playerProfileState = onPlayerProfileWasCreated(state, playerProfileWasCreated);
+    const playerProfileState = onPlayerProfileWasCreated(playerProfileWasCreated);
 
     return {
         state: playerProfileState,
@@ -57,7 +57,6 @@ export function createPlayerProfile(
 }
 
 function onPlayerProfileWasCreated(
-    state: PlayerProfile | undefined,
     event: PlayerProfileWasCreated
 ): PlayerProfile {
     return new PlayerProfile({
