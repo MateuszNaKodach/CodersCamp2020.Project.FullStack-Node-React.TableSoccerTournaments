@@ -2,8 +2,8 @@ import {ModuleCore} from "../../../shared/core/ModuleCore";
 import {FindAllPlayerProfiles} from "./application/query/FindAllPlayerProfiles";
 import {FindAllPlayerProfilesQueryHandler} from "./application/query/FindAllPlayerProfilesQueryHandler";
 import {PlayerProfilesRepository} from "./application/PlayerProfilesRepository";
-import {PlayerProfile} from "./application/command/PlayerProfile";
-import {PlayerProfileCommandHandler} from "./application/command/PlayerProfileCommandHandler";
+import {CreatePlayerProfile} from "./application/command/CreatePlayerProfile";
+import {CreatePlayerProfileCommandHandler} from "./application/command/CreatePlayerProfileCommandHandler";
 import {DomainEventPublisher} from "../../../shared/core/application/event/DomainEventBus";
 import {CurrentTimeProvider} from "../../../shared/core/CurrentTimeProvider";
 
@@ -15,8 +15,8 @@ export function PlayerProfilesModuleCore(
     return {
         commandHandlers: [
             {
-                commandType: PlayerProfile,
-                handler: new PlayerProfileCommandHandler(eventPublisher, currentTimeProvider, playerProfileRepository)
+                commandType: CreatePlayerProfile,
+                handler: new CreatePlayerProfileCommandHandler(eventPublisher, currentTimeProvider, playerProfileRepository)
             }
         ],
         eventHandlers: [],

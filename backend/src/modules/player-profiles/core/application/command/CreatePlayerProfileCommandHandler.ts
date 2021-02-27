@@ -1,19 +1,24 @@
 import {CommandHandler} from "../../../../../shared/core/application/command/CommandHandler";
-import {PlayerProfile} from "./PlayerProfile";
+import {CreatePlayerProfile} from "./CreatePlayerProfile";
 import {CommandResult} from "../../../../../shared/core/application/command/CommandResult";
 import {DomainEventPublisher} from "../../../../../shared/core/application/event/DomainEventBus";
 import {CurrentTimeProvider} from "../../../../../shared/core/CurrentTimeProvider";
-import {createPlayerProfile} from "../../domain/CretaePlayerProfile";
+import {createPlayerProfile} from "../../domain/PlayerProfile";
 import {PlayerProfilesRepository} from "../PlayerProfilesRepository";
 
-export class PlayerProfileCommandHandler implements CommandHandler<PlayerProfile> {
+export class CreatePlayerProfileCommandHandler implements CommandHandler<CreatePlayerProfile> {
     constructor(
         private readonly eventPublisher: DomainEventPublisher,
         private readonly currentTimeProvider: CurrentTimeProvider,
         private readonly repository: PlayerProfilesRepository) {}
 
-    async execute(command: PlayerProfile): Promise<CommandResult> {
-        const { events } = createPlayerProfile(command, this.currentTimeProvider());
+    async execute(command: CreatePlayerProfile): Promise<CommandResult> {
+        const playerId = command.playerId;
+        const playerProfile = await this.repository.findByPlayerId(playerId);
+
+        const { state, events } = createPlayerProfile(playerProfile, command, this.currentTimeProvider);
+
+        await this.repository.save(state);
         this.eventPublisher.publishAll(events);
         return CommandResult.success();
     }

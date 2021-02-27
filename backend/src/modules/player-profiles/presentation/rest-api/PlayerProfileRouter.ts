@@ -3,8 +3,8 @@ import {QueryPublisher} from "../../../../shared/core/application/query/QueryBus
 import {FindAllPlayerProfiles, FindAllPlayerProfilesResult} from "../../core/application/query/FindAllPlayerProfiles";
 import {StatusCodes} from "http-status-codes";
 import {PlayerProfilesListDto} from "./response/PlayerProfilesListDto";
-import {PlayerProfile} from "../../core/application/command/PlayerProfile";
 import {PlayerProfileDto} from "./response/PlayerProfileDto";
+import {PlayerProfile} from "../../core/domain/PlayerProfile";
 
 export function playerProfileRouter(
     queryPublisher: QueryPublisher

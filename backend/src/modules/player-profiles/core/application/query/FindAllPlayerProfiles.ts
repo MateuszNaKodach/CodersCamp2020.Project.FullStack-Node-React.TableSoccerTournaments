@@ -1,4 +1,4 @@
-import {PlayerProfile} from "../command/PlayerProfile";
+import {PlayerProfile} from "../../domain/PlayerProfile";
 
 export class FindAllPlayerProfiles{
     constructor() {

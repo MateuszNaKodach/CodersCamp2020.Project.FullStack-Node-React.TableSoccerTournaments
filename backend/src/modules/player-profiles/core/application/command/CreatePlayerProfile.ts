@@ -1,4 +1,4 @@
-export class PlayerProfile {
+export class CreatePlayerProfile {
     readonly playerId: string;
     readonly firstName: string;
     readonly lastName: string;
