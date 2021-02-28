@@ -1,4 +1,4 @@
-import { PlayerId } from '../../domain/PlayerId';
+import { PlayerId } from '../../../../../shared/core/domain/PlayerId';
 
 export type Player = { playerId: PlayerId };
 

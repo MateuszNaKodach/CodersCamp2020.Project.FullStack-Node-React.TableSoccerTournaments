@@ -2,10 +2,10 @@ import { TournamentRegistrationsRepository } from '../../../../../src/modules/to
 import { TournamentRegistrations } from '../../../../../src/modules/tournaments-registrations/core/domain/TournamentRegistrations';
 import { TournamentId } from '../../../../../src/modules/tournaments-registrations/core/domain/TournamentId';
 import { RegistrationsStatus } from '../../../../../src/modules/tournaments-registrations/core/domain/RegistrationsStatus';
-import { PlayerId } from '../../../../../src/modules/tournaments-registrations/core/domain/PlayerId';
 import { DatabaseTestSupport } from '../../../../test-support/shared/infrastructure/DatabaseTestSupport';
 import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
 import { UuidEntityIdGenerator } from '../../../../../src/shared/infrastructure/core/application/UuidEntityIdGenerator';
+import { PlayerId } from '../../../../../src/shared/core/domain/PlayerId';
 
 export function TournamentRegistrationsRepositoryTestCases(props: {
   name: string;

@@ -5,7 +5,7 @@ export class PlayerId {
 
   static from(playerId: string): PlayerId {
     if (playerId.length <= 0) {
-      throw new Error('TournamentId cannot be empty!');
+      throw new Error('Player id cannot be empty!');
     }
     return new PlayerId(playerId);
   }
