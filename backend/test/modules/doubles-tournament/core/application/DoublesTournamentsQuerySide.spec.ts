@@ -5,8 +5,9 @@ import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-to
 import { DoublesTournament } from '../../../../../src/modules/doubles-tournament/core/domain/DoublesTournament';
 import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
 import { FindDoublesTournamentById } from '../../../../../src/modules/doubles-tournament/core/application/query/FindDoublesTournamentById';
+import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
 
-describe('Create Doubles Tournament | Query Side', () => {
+describe('Doubles Tournament | Query Side', () => {
   it('FindAllDoublesTournamentsResult | No doubles tournaments', async () => {
     //Given
     const currentTime = new Date();
@@ -43,8 +44,8 @@ describe('Create Doubles Tournament | Query Side', () => {
 
     //Then
     const tournamentTeams: TournamentTeam[] = [
-      new TournamentTeam({ teamId: 'TeamId1', firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
-      new TournamentTeam({ teamId: 'TeamId2', firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId1'), firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId2'), firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
     ];
 
     expect(findAllDoublesTournamentsResult).toIncludeSameMembers([
@@ -84,13 +85,13 @@ describe('Create Doubles Tournament | Query Side', () => {
 
     //Then
     const tournamentTeams1: TournamentTeam[] = [
-      new TournamentTeam({ teamId: 'TeamId1', firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
-      new TournamentTeam({ teamId: 'TeamId2', firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId1'), firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId2'), firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
     ];
 
     const tournamentTeams2: TournamentTeam[] = [
-      new TournamentTeam({ teamId: 'TeamId3', firstTeamPlayer: 'player5', secondTeamPlayer: 'player6' }),
-      new TournamentTeam({ teamId: 'TeamId4', firstTeamPlayer: 'player7', secondTeamPlayer: 'player8' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId3'), firstTeamPlayer: 'player5', secondTeamPlayer: 'player6' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId4'), firstTeamPlayer: 'player7', secondTeamPlayer: 'player8' }),
     ];
 
     expect(findAllDoublesTournamentsResult).toIncludeSameMembers([
@@ -126,8 +127,8 @@ describe('Create Doubles Tournament | Query Side', () => {
 
     //Then
     const tournamentTeams: TournamentTeam[] = [
-      new TournamentTeam({ teamId: 'TeamId1', firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
-      new TournamentTeam({ teamId: 'TeamId2', firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId1'), firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId2'), firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
     ];
 
     expect(findDoublesTournamentByIdResult).toStrictEqual(

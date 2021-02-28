@@ -5,8 +5,9 @@ import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/co
 import { FromListIdGeneratorStub } from '../../../../test-support/shared/core/FromListIdGeneratorStub';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
 import Failure = CommandResult.Failure;
+import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
 
-describe('Create Doubles Tournament | Write Side', () => {
+describe('Doubles Tournament | Write Side', () => {
   it('given 2 pairs of players, when create tournament, then tournament was created with 2 teams', async () => {
     //Given
     const currentTime = new Date();
@@ -24,8 +25,8 @@ describe('Create Doubles Tournament | Write Side', () => {
 
     //Then
     const tournamentTeams: TournamentTeam[] = [
-      new TournamentTeam({ teamId: 'TeamId1', firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
-      new TournamentTeam({ teamId: 'TeamId2', firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId1'), firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId2'), firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
     ];
 
     expect(commandResult.isSuccess()).toBeTruthy();
@@ -55,10 +56,10 @@ describe('Create Doubles Tournament | Write Side', () => {
 
     //Then
     const tournamentTeams: TournamentTeam[] = [
-      new TournamentTeam({ teamId: 'TeamId1', firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
-      new TournamentTeam({ teamId: 'TeamId2', firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
-      new TournamentTeam({ teamId: 'TeamId3', firstTeamPlayer: 'player5', secondTeamPlayer: 'player6' }),
-      new TournamentTeam({ teamId: 'TeamId4', firstTeamPlayer: 'player7', secondTeamPlayer: 'player8' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId1'), firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId2'), firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId3'), firstTeamPlayer: 'player5', secondTeamPlayer: 'player6' }),
+      new TournamentTeam({ teamId: TeamId.from('TeamId4'), firstTeamPlayer: 'player7', secondTeamPlayer: 'player8' }),
     ];
 
     expect(commandResult.isSuccess()).toBeTruthy();
@@ -105,10 +106,13 @@ describe('Create Doubles Tournament | Write Side', () => {
   it('given tournament with certain id, when attempt to create tournament with the same id, command should fail', async () => {
     //Given
     const currentTime = new Date();
-    const entityIdGen = FromListIdGeneratorStub(['TeamId']);
+    const entityIdGen = FromListIdGeneratorStub(['TeamId1', 'TeamId2']);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
     const tournamentId = 'TournamentId';
-    const tournamentPairs = [{ player1: 'player1', player2: 'player2' }];
+    const tournamentPairs = [
+      { player1: 'player1', player2: 'player2' },
+      { player1: 'player3', player2: 'player4' },
+    ];
 
     const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
     await doublesTournament.executeCommand(createTournamentWithTeams);

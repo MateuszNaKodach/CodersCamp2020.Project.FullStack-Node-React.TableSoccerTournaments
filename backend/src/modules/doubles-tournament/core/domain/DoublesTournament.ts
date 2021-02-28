@@ -2,6 +2,7 @@ import { TournamentTeam } from './TournamentTeam';
 import { TournamentWithTeamsWasCreated } from './event/TournamentWithTeamsWasCreated';
 import { EntityIdGenerator } from '../../../../shared/core/application/EntityIdGenerator';
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
+import { TeamId } from './TeamId';
 
 export class DoublesTournament {
   readonly tournamentId: string;
@@ -29,7 +30,7 @@ export function createTournamentWithTeams(
   const tournamentTeams: TournamentTeam[] = command.tournamentPairs.map((tournamentPair) => {
     const teamId = entityIdGenerator.generate();
     return new TournamentTeam({
-      teamId: teamId,
+      teamId: TeamId.from(teamId),
       firstTeamPlayer: tournamentPair.player1,
       secondTeamPlayer: tournamentPair.player2,
     });
