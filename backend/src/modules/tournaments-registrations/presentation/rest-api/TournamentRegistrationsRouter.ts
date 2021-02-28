@@ -30,7 +30,7 @@ export function tournamentRegistrationsRouter(
     const tournamentId = entityIdGenerator.generate();
     const commandResult = await commandPublisher.execute(new OpenTournamentRegistrations({ tournamentId }));
     return commandResult.process(
-      () => response.status(StatusCodes.CREATED).send(),
+      () => response.status(StatusCodes.CREATED).json({ tournamentId }).send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
   };

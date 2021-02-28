@@ -1,5 +1,5 @@
 import { ModuleCore } from './core/ModuleCore';
-import { ModuleRestApi } from './infrastructure/restapi/ModuleRestApi';
+import { ModuleRestApi } from './presentation/rest-api/ModuleRestApi';
 
 /**
  * Module is fully-featured part of the application.

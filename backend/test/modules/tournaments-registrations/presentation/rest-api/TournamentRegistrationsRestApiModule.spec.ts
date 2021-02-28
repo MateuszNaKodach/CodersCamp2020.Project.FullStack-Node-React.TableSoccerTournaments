@@ -28,7 +28,7 @@ describe('Tournament Registrations REST API', () => {
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new OpenTournamentRegistrations({ tournamentId: 'StubEntityId' }));
     expect(status).toBe(StatusCodes.CREATED);
-    expect(body).toBeEmpty();
+    expect(body).toStrictEqual({ tournamentId: 'StubEntityId' });
   });
 
   it('POST /rest-api/tournament-registrations | when command failure', async () => {
