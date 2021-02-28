@@ -3,7 +3,7 @@ import { TournamentRegistrations } from '../../../core/domain/TournamentRegistra
 import { TournamentId } from '../../../core/domain/TournamentId';
 import mongoose, { Schema } from 'mongoose';
 import { RegistrationsStatus } from '../../../core/domain/RegistrationsStatus';
-import { PlayerId } from '../../../core/domain/PlayerId';
+import { PlayerId } from '../../../../../shared/core/domain/PlayerId';
 
 export class MongoTournamentRegistrationsRepository implements TournamentRegistrationsRepository {
   async findByTournamentId(tournamentId: TournamentId): Promise<TournamentRegistrations | undefined> {

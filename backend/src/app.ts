@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-import { restApiExpressServer } from './shared/infrastructure/restapi/Server';
+import { restApiExpressServer } from './shared/infrastructure/rest-api/Server';
 import { CommandBus } from './shared/core/application/command/CommandBus';
 import { InMemoryCommandBus } from './shared/infrastructure/core/application/command/InMemoryCommandBus';
 import { StoreAndForwardDomainEventBus } from './shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus';
@@ -15,16 +15,18 @@ import { InMemoryPlayers } from './modules/tournaments-registrations/infrastruct
 import { TournamentRegistrationsRestApiModule } from './modules/tournaments-registrations/presentation/rest-api/TournamentRegistrationsRestApiModule';
 import { Module } from './shared/Module';
 import { isDefined } from './common/Defined';
-import { ModuleRestApi } from './shared/infrastructure/restapi/ModuleRestApi';
+import { ModuleRestApi } from './shared/presentation/rest-api/ModuleRestApi';
 import { DomainEventBus } from './shared/core/application/event/DomainEventBus';
 import { EntityIdGenerator } from './shared/core/application/EntityIdGenerator';
 import { UuidEntityIdGenerator } from './shared/infrastructure/core/application/UuidEntityIdGenerator';
 import { PlayerProfileWasCreated } from './modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
 import { LoggingDomainEventBus } from './shared/infrastructure/core/application/event/LoggingDomainEventBus';
 import { MongoTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/mongo/MongoTournamentRegistrationsRepository';
-import mongoose from 'mongoose';
 import { Express } from 'express';
 import { PlayersMatchingModuleCore } from './modules/players-matching/core/PlayersMatchingModuleCore';
+import { connectToMongoDb } from './shared/infrastructure/repository/connectToMongoDb';
+import { connectToPostgreSql } from './shared/infrastructure/repository/connectToPostgreSql';
+import { PostgreSqlTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/postgresql/PostgreSqlTournamentRegistrationsRepository';
 import { PlayerProfilesModuleCore } from "./modules/player-profiles/core/PlayerProfilesModuleCore";
 import {PlayerProfileRestApiModule} from "./modules/player-profiles/presentation/rest-api/PlayerProfileRestApiModule";
 
@@ -40,29 +42,17 @@ export async function TableSoccerTournamentsApplication(
   entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator(),
 ): Promise<TableSoccerTournamentsApplication> {
   if (process.env.MONGO_REPOSITORIES === 'ENABLED') {
-    const connectionString = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`;
-    await mongoose
-      .connect(connectionString, {
-        user: process.env.MONGO_USER,
-        pass: process.env.MONGO_PASSWORD,
-        dbName: process.env.MONGO_DB,
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-      })
-      .then(() => console.log(`[TableSoccerTournamentsApplication]: Application connected to mongoDB instance at: ${connectionString}`))
-      .catch((error) =>
-        console.error(`[TableSoccerTournamentsApplication]: Error while connecting to mongo db at: ${connectionString}`, error),
-      );
+    await connectToMongoDb();
+  }
+  if (process.env.POSTGRES_REPOSITORIES === 'ENABLED') {
+    await connectToPostgreSql();
   }
 
-  const tournamentRegistrationsRepository =
-    process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO'
-      ? new MongoTournamentRegistrationsRepository()
-      : new InMemoryTournamentRegistrationsRepository();
+  const tournamentRegistrationsRepository = TournamentRegistrationsRepository();
   const players = new InMemoryPlayers();
   const tournamentsRegistrationsModule: Module = {
     core: TournamentsRegistrationsModuleCore(eventBus, currentTimeProvider, tournamentRegistrationsRepository, players, players),
-    restApi: TournamentRegistrationsRestApiModule(commandBus, eventBus, queryBus, entityIdGenerator),
+    restApi: TournamentRegistrationsRestApiModule(commandBus, eventBus, queryBus),
   };
 
   const playersMatchingModule: Module = {
@@ -110,4 +100,14 @@ function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: Entity
   };
   eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...janKowalski }));
   eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...katarzynaNowak }));
+}
+
+function TournamentRegistrationsRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO') {
+    return new MongoTournamentRegistrationsRepository();
+  }
+  if (process.env.POSTGRES_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'POSTGRES') {
+    return new PostgreSqlTournamentRegistrationsRepository();
+  }
+  return new InMemoryTournamentRegistrationsRepository();
 }

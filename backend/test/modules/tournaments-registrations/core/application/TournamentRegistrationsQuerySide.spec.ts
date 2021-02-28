@@ -9,7 +9,7 @@ import { TournamentRegistrations } from '../../../../../src/modules/tournaments-
 import { TournamentId } from '../../../../../src/modules/tournaments-registrations/core/domain/TournamentId';
 import { RegistrationsStatus } from '../../../../../src/modules/tournaments-registrations/core/domain/RegistrationsStatus';
 import { FindTournamentRegistrationsById } from '../../../../../src/modules/tournaments-registrations/core/application/query/FindTournamentRegistrationsById';
-import { PlayerId } from '../../../../../src/modules/tournaments-registrations/core/domain/PlayerId';
+import { PlayerId } from '../../../../../src/shared/core/domain/PlayerId';
 import { registerPlayerForTournament } from './TestHelpers';
 
 describe('Tournament Registrations | Query Side', () => {
