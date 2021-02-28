@@ -50,7 +50,7 @@ export async function TableSoccerTournamentsApplication(
   const players = new InMemoryPlayers();
   const tournamentsRegistrationsModule: Module = {
     core: TournamentsRegistrationsModuleCore(eventBus, currentTimeProvider, tournamentRegistrationsRepository, players, players),
-    restApi: TournamentRegistrationsRestApiModule(commandBus, eventBus, queryBus, entityIdGenerator),
+    restApi: TournamentRegistrationsRestApiModule(commandBus, eventBus, queryBus),
   };
 
   const playersMatchingModule: Module = {

@@ -4,7 +4,6 @@ import { QueryPublisher } from '../../../../shared/core/application/query/QueryB
 import { DomainEventPublisher } from '../../../../shared/core/application/event/DomainEventBus';
 import { OpenTournamentRegistrations } from '../../core/application/command/OpenTournamentRegistrations';
 import { StatusCodes } from 'http-status-codes';
-import { EntityIdGenerator } from '../../../../shared/core/application/EntityIdGenerator';
 import { PostRegisterPlayerForTournamentRequestBody } from './request/PostRegisterPlayerForTournamentRequestBody';
 import { RegisterPlayerForTournament } from '../../core/application/command/RegisterPlayerForTournament';
 import { CloseTournamentRegistrations } from '../../core/application/command/CloseTournamentRegistrations';
@@ -19,15 +18,16 @@ import {
   FindTournamentRegistrationsById,
   FindTournamentRegistrationsByIdResult,
 } from '../../core/application/query/FindTournamentRegistrationsById';
+import { PostTournamentRegistrationsRequestBody } from './request/PostTournamentRegistrationsRequestBody';
 
 export function tournamentRegistrationsRouter(
   commandPublisher: CommandPublisher,
   eventPublisher: DomainEventPublisher,
   queryPublisher: QueryPublisher,
-  entityIdGenerator: EntityIdGenerator,
 ): express.Router {
   const postOpenTournamentRegistrations = async (request: Request, response: Response) => {
-    const tournamentId = entityIdGenerator.generate();
+    const requestBody: PostTournamentRegistrationsRequestBody = request.body;
+    const tournamentId = requestBody.tournamentId;
     const commandResult = await commandPublisher.execute(new OpenTournamentRegistrations({ tournamentId }));
     return commandResult.process(
       () => response.status(StatusCodes.CREATED).json({ tournamentId }).send(),

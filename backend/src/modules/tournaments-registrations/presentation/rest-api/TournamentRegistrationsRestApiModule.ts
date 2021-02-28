@@ -9,10 +9,9 @@ export function TournamentRegistrationsRestApiModule(
   commandPublisher: CommandPublisher,
   eventPublisher: DomainEventPublisher,
   queryPublisher: QueryPublisher,
-  entityIdGenerator: EntityIdGenerator,
 ): ModuleRestApi {
   return {
-    router: tournamentRegistrationsRouter(commandPublisher, eventPublisher, queryPublisher, entityIdGenerator),
+    router: tournamentRegistrationsRouter(commandPublisher, eventPublisher, queryPublisher),
     path: '/tournament-registrations',
   };
 }

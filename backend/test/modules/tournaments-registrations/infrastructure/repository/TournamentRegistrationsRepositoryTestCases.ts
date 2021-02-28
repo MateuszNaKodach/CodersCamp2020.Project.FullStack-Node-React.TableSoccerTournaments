@@ -11,7 +11,7 @@ export function TournamentRegistrationsRepositoryTestCases(props: {
   name: string;
   repositoryFactory: () => TournamentRegistrationsRepository;
   databaseTestSupport: DatabaseTestSupport;
-}) {
+}): void {
   return describe(props.name, () => {
     const entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator();
     let repository: TournamentRegistrationsRepository;

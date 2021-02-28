@@ -1,1 +1,3 @@
-export class PostTournamentRegistrationsRequestBody {}
+export class PostTournamentRegistrationsRequestBody {
+  readonly tournamentId: string;
+}

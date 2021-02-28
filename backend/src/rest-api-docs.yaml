@@ -28,6 +28,11 @@ paths:
       tags:
         - Tournament Registrations
       description: Open new tournament registrations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostTournamentRegistrationsRequestBody'
       responses:
         200:
           description: Tournament registrations successfully opened
@@ -137,7 +142,17 @@ components:
       type: object
       properties:
         tournamentId:
-          description: Identifier of the tournament for which registreations where opened
+          description: Identifier of the tournament for which registrations where opened
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      required:
+        - tournamentId
+    PostTournamentRegistrationsRequestBody:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament for which registrations should be opened
           type: string
           format: uuid
           example: 2480fc2c-bbd7-427c-9439-02f76583aef5
