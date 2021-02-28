@@ -12,8 +12,6 @@ import { TournamentId } from '../../../../../src/modules/tournaments-registratio
 import { RegistrationsStatus } from '../../../../../src/modules/tournaments-registrations/core/domain/RegistrationsStatus';
 import { PlayerId } from '../../../../../src/shared/core/domain/PlayerId';
 import { FindAllTournamentRegistrations } from '../../../../../src/modules/tournaments-registrations/core/application/query/FindAllTournamentRegistrations';
-import { TournamentRegistrationsDto } from '../../../../../src/modules/tournaments-registrations/presentation/rest-api/response/TournamentRegistrationsDto';
-import { TournamentRegistrationsListDto } from '../../../../../src/modules/tournaments-registrations/presentation/rest-api/response/TournamentRegistrationsListDto';
 import { FindTournamentRegistrationsById } from '../../../../../src/modules/tournaments-registrations/core/application/query/FindTournamentRegistrationsById';
 
 describe('Tournament Registrations REST API', () => {
@@ -23,12 +21,12 @@ describe('Tournament Registrations REST API', () => {
     const { agent } = testModuleRestApi(TournamentRegistrationsRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent.post('/rest-api/tournament-registrations').send();
+    const { body, status } = await agent.post('/rest-api/tournament-registrations').send({ tournamentId: 'SampleTournamentId' });
 
     //Then
-    expect(commandPublisher.executeCalls).toBeCalledWith(new OpenTournamentRegistrations({ tournamentId: 'StubEntityId' }));
+    expect(commandPublisher.executeCalls).toBeCalledWith(new OpenTournamentRegistrations({ tournamentId: 'SampleTournamentId' }));
     expect(status).toBe(StatusCodes.CREATED);
-    expect(body).toStrictEqual({ tournamentId: 'StubEntityId' });
+    expect(body).toStrictEqual({ tournamentId: 'SampleTournamentId' });
   });
 
   it('POST /rest-api/tournament-registrations | when command failure', async () => {
@@ -37,10 +35,10 @@ describe('Tournament Registrations REST API', () => {
     const { agent } = testModuleRestApi(TournamentRegistrationsRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent.post('/rest-api/tournament-registrations').send();
+    const { body, status } = await agent.post('/rest-api/tournament-registrations').send({ tournamentId: 'SampleTournamentId' });
 
     //Then
-    expect(commandPublisher.executeCalls).toBeCalledWith(new OpenTournamentRegistrations({ tournamentId: 'StubEntityId' }));
+    expect(commandPublisher.executeCalls).toBeCalledWith(new OpenTournamentRegistrations({ tournamentId: 'SampleTournamentId' }));
     expect(status).toBe(StatusCodes.BAD_REQUEST);
     expect(body).toStrictEqual({ message: 'Registrations was opened before!' });
   });
