@@ -1,9 +1,9 @@
 import { TournamentRegistrationsRepository } from '../../../core/application/TournamentRegistrationsRepository';
 import { TournamentRegistrations } from '../../../core/domain/TournamentRegistrations';
 import { TournamentId } from '../../../core/domain/TournamentId';
-import { PlayerId } from '../../../core/domain/PlayerId';
 import { Connection, getConnection, Repository } from 'typeorm';
 import { TournamentRegistrationsEntity } from './TournamentRegistrationsEntity';
+import {PlayerId} from "../../../../../shared/core/domain/PlayerId";
 
 export class PostgreSqlTournamentRegistrationsRepository implements TournamentRegistrationsRepository {
   async findByTournamentId(tournamentId: TournamentId): Promise<TournamentRegistrations | undefined> {
