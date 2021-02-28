@@ -8,6 +8,10 @@ import { PlayersWereMatchedIntoTeams } from '../../players-matching/core/domain/
 import { CreateTournamentWhenPlayersWereMatchedIntoTeams } from './application/event/CreateTournamentWhenPlayersWereMatchedIntoTeams';
 import { EntityIdGenerator } from '../../../shared/core/application/EntityIdGenerator';
 import { DoublesTournamentRepository } from './application/DoublesTournamentRepository';
+import { FindAllDoublesTournaments } from './application/query/FindAllDoublesTournaments';
+import { FindAllDoublesTournamentsQueryHandler } from './application/query/FindAllDoublesTournamentsQueryHandler';
+import { FindDoublesTournamentById } from './application/query/FindDoublesTournamentById';
+import { FindDoublesTournamentByIdQueryHandler } from './application/query/FindDoublesTournamentByIdQueryHandler';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -29,6 +33,15 @@ export function DoublesTournamentModuleCore(
         handler: new CreateTournamentWhenPlayersWereMatchedIntoTeams(commandPublisher),
       },
     ],
-    queryHandlers: [],
+    queryHandlers: [
+      {
+        queryType: FindAllDoublesTournaments,
+        handler: new FindAllDoublesTournamentsQueryHandler(repository),
+      },
+      {
+        queryType: FindDoublesTournamentById,
+        handler: new FindDoublesTournamentByIdQueryHandler(repository),
+      },
+    ],
   };
 }

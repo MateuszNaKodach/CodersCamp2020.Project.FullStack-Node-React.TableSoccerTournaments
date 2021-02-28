@@ -3,7 +3,7 @@ import { DoublesTournamentModuleCore } from '../../../../../src/modules/doubles-
 import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
 import { InMemoryDoublesTournamentRepository } from '../../../../../src/modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryDoublesTournamentRepository';
 
-export function testCreateTournamentWithTeamsModule(currentTime: Date, entityIdGenerator: EntityIdGenerator): TestModuleCore {
+export function testDoublesTournamentsModule(currentTime: Date, entityIdGenerator: EntityIdGenerator): TestModuleCore {
   const doublesTournamentRepository = new InMemoryDoublesTournamentRepository();
   return testModuleCore((commandBus, eventBus, queryBus) =>
     DoublesTournamentModuleCore(eventBus, commandBus, () => currentTime, entityIdGenerator, doublesTournamentRepository),
