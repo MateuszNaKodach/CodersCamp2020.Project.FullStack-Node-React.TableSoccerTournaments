@@ -28,6 +28,11 @@ paths:
       tags:
         - Tournament Registrations
       description: Open new tournament registrations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostTournamentRegistrationsRequestBody'
       responses:
         200:
           description: Tournament registrations successfully opened
