@@ -3,20 +3,22 @@ import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-to
 import { TournamentWithTeamsWasCreated } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWithTeamsWasCreated';
 import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
 import { FromListIdGeneratorStub } from '../../../../test-support/shared/core/FromListIdGeneratorStub';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import Failure = CommandResult.Failure;
 
 describe('Create Tournament With Teams', () => {
   it('given only 1 pair of players, when create tournament, then tournament was created with 1 team', async () => {
     //Given
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub(['TeamId']);
-    const tournamentCreation = testCreateTournamentWithTeamsModule(currentTime, entityIdGen);
+    const doublesTournament = testCreateTournamentWithTeamsModule(currentTime, entityIdGen);
     const tournamentId = 'TournamentId';
     const teamId = 'TeamId';
     const tournamentPairs = [{ player1: 'player1', player2: 'player2' }];
 
     //When
     const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
-    const commandResult = await tournamentCreation.executeCommand(createTournamentWithTeams);
+    const commandResult = await doublesTournament.executeCommand(createTournamentWithTeams);
 
     //Then
     const tournamentTeams: TournamentTeam[] = [
@@ -29,7 +31,7 @@ describe('Create Tournament With Teams', () => {
 
     expect(commandResult.isSuccess()).toBeTruthy();
     debugger;
-    expect(tournamentCreation.lastPublishedEvent()).toStrictEqual(
+    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
       new TournamentWithTeamsWasCreated({ occurredAt: currentTime, tournamentId, tournamentTeams }),
     );
   });
@@ -38,8 +40,7 @@ describe('Create Tournament With Teams', () => {
     //Given
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub(['TeamId1', 'TeamId2', 'TeamId3', 'TeamId4']);
-
-    const tournamentCreation = testCreateTournamentWithTeamsModule(currentTime, entityIdGen);
+    const doublesTournament = testCreateTournamentWithTeamsModule(currentTime, entityIdGen);
     const tournamentId = 'TournamentId';
 
     const tournamentPairs = [
@@ -51,7 +52,7 @@ describe('Create Tournament With Teams', () => {
 
     //When
     const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
-    const commandResult = await tournamentCreation.executeCommand(createTournamentWithTeams);
+    const commandResult = await doublesTournament.executeCommand(createTournamentWithTeams);
 
     //Then
     const tournamentTeams: TournamentTeam[] = [
@@ -63,8 +64,44 @@ describe('Create Tournament With Teams', () => {
 
     expect(commandResult.isSuccess()).toBeTruthy();
     debugger;
-    expect(tournamentCreation.lastPublishedEvent()).toStrictEqual(
+    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
       new TournamentWithTeamsWasCreated({ occurredAt: currentTime, tournamentId, tournamentTeams }),
     );
+  });
+
+  it('given no pairs, when create tournament, then command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const entityIdGen = FromListIdGeneratorStub(['TeamId']);
+    const doublesTournament = testCreateTournamentWithTeamsModule(currentTime, entityIdGen);
+    const tournamentId = 'TournamentId';
+    const tournamentPairs: { player1: string; player2: string }[] = [];
+
+    //When
+    const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
+    const commandResult = await doublesTournament.executeCommand(createTournamentWithTeams);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Can not create tournament without players.'));
+  });
+
+  it('given tournament with certain id, when attempt to create tournament with the same id, command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const entityIdGen = FromListIdGeneratorStub(['TeamId']);
+    const doublesTournament = testCreateTournamentWithTeamsModule(currentTime, entityIdGen);
+    const tournamentId = 'TournamentId';
+    const tournamentPairs = [{ player1: 'player1', player2: 'player2' }];
+
+    const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
+    await doublesTournament.executeCommand(createTournamentWithTeams);
+
+    //When
+    const commandResult = await doublesTournament.executeCommand(createTournamentWithTeams);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('This tournament already exists.'));
   });
 });

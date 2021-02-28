@@ -22,6 +22,9 @@ export function createTournamentWithTeams(
   if (state !== undefined) {
     throw new Error('This tournament already exists.');
   }
+  if (command.tournamentPairs.length === 0) {
+    throw new Error('Can not create tournament without players.');
+  }
 
   const tournamentTeams: TournamentTeam[] = command.tournamentPairs.map((tournamentPair) => {
     const teamId = entityIdGenerator.generate();
