@@ -3,7 +3,7 @@ import { TournamentRegistrations } from '../../../core/domain/TournamentRegistra
 import { TournamentId } from '../../../core/domain/TournamentId';
 import { Connection, getConnection, Repository } from 'typeorm';
 import { TournamentRegistrationsEntity } from './TournamentRegistrationsEntity';
-import {PlayerId} from "../../../../../shared/core/domain/PlayerId";
+import { PlayerId } from '../../../../../shared/core/domain/PlayerId';
 
 export class PostgreSqlTournamentRegistrationsRepository implements TournamentRegistrationsRepository {
   async findByTournamentId(tournamentId: TournamentId): Promise<TournamentRegistrations | undefined> {
