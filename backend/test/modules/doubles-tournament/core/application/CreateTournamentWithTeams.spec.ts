@@ -2,17 +2,23 @@ import { testCreateTournamentWithTeamsModule } from './TestCreateTournamentWithT
 import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
 import { TournamentWithTeamsWasCreated } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWithTeamsWasCreated';
 import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
-import { TeamIdGeneratorStub } from '../../../../test-support/shared/core/TeamIdGeneratorStub';
+import { FromListIdGeneratorStub } from '../../../../test-support/shared/core/FromListIdGeneratorStub';
 
 describe('Create Tournament With Teams', () => {
   it('given only 1 pair of players, when create tournament, then tournament was created with 1 team', async () => {
     //Given
     const currentTime = new Date();
-    const entityIdGen = TeamIdGeneratorStub(['TeamId']);
+    const entityIdGen = FromListIdGeneratorStub(['TeamId']);
     const tournamentCreation = testCreateTournamentWithTeamsModule(currentTime, entityIdGen);
     const tournamentId = 'TournamentId';
     const teamId = 'TeamId';
     const tournamentPairs = [{ player1: 'player1', player2: 'player2' }];
+
+    //When
+    const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
+    const commandResult = await tournamentCreation.executeCommand(createTournamentWithTeams);
+
+    //Then
     const tournamentTeams: TournamentTeam[] = [
       new TournamentTeam({
         teamId,
@@ -21,11 +27,6 @@ describe('Create Tournament With Teams', () => {
       }),
     ];
 
-    //When
-    const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
-    const commandResult = await tournamentCreation.executeCommand(createTournamentWithTeams);
-
-    //Then
     expect(commandResult.isSuccess()).toBeTruthy();
     debugger;
     expect(tournamentCreation.lastPublishedEvent()).toStrictEqual(
@@ -36,7 +37,7 @@ describe('Create Tournament With Teams', () => {
   it('given 3 pairs of players, when create tournament, then tournament was created with 3 teams', async () => {
     //Given
     const currentTime = new Date();
-    const entityIdGen = TeamIdGeneratorStub(['TeamId1', 'TeamId2', 'TeamId3', 'TeamId4']);
+    const entityIdGen = FromListIdGeneratorStub(['TeamId1', 'TeamId2', 'TeamId3', 'TeamId4']);
 
     const tournamentCreation = testCreateTournamentWithTeamsModule(currentTime, entityIdGen);
     const tournamentId = 'TournamentId';
@@ -47,6 +48,12 @@ describe('Create Tournament With Teams', () => {
       { player1: 'player5', player2: 'player6' },
       { player1: 'player7', player2: 'player8' },
     ];
+
+    //When
+    const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
+    const commandResult = await tournamentCreation.executeCommand(createTournamentWithTeams);
+
+    //Then
     const tournamentTeams: TournamentTeam[] = [
       new TournamentTeam({ teamId: 'TeamId1', firstTeamPlayer: 'player1', secondTeamPlayer: 'player2' }),
       new TournamentTeam({ teamId: 'TeamId2', firstTeamPlayer: 'player3', secondTeamPlayer: 'player4' }),
@@ -54,11 +61,6 @@ describe('Create Tournament With Teams', () => {
       new TournamentTeam({ teamId: 'TeamId4', firstTeamPlayer: 'player7', secondTeamPlayer: 'player8' }),
     ];
 
-    //When
-    const createTournamentWithTeams = new CreateTournamentWithTeams(tournamentId, tournamentPairs);
-    const commandResult = await tournamentCreation.executeCommand(createTournamentWithTeams);
-
-    //Then
     expect(commandResult.isSuccess()).toBeTruthy();
     debugger;
     expect(tournamentCreation.lastPublishedEvent()).toStrictEqual(
