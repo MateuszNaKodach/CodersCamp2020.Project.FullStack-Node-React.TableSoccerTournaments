@@ -5,7 +5,7 @@ import { CommandResult } from '../../../../../src/shared/core/application/comman
 import Failure = CommandResult.Failure;
 
 describe('Player profile | Write Side', () => {
-  it('given new (no records in data base) player profile data, when create player profile, then new player profile was created', async () => {
+  it('Given data of not yet created player profile, when create player profile, then new player profile was created', async () => {
     //Given
     const currentTime = new Date();
     const playerProfileModuleCore = testPlayerProfileModule(currentTime);
