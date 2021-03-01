@@ -111,5 +111,29 @@ export function DoublesTournamentRepositoryTestCases(props: {
       const notSavedTournamentId = entityIdGenerator.generate();
       expect(await repository.findByTournamentId(notSavedTournamentId)).toBeUndefined();
     });
+
+    test('findAllTeamsByTournamentId return list of teams if doubles tournament was saved', async () => {
+      const tournamentId = entityIdGenerator.generate();
+      const tournamentTeams: TournamentTeam[] = [
+        new TournamentTeam({
+          teamId: TeamId.from('TeamId1'),
+          firstTeamPlayer: 'player1',
+          secondTeamPlayer: 'player2',
+        }),
+        new TournamentTeam({
+          teamId: TeamId.from('TeamId2'),
+          firstTeamPlayer: 'player3',
+          secondTeamPlayer: 'player4',
+        }),
+      ];
+      const doublesTournament = new DoublesTournament({
+        tournamentId: tournamentId,
+        tournamentTeams: tournamentTeams,
+      });
+
+      await repository.save(doublesTournament);
+
+      expect(await repository.findAllTeamsByTournamentId(tournamentId)).toStrictEqual(tournamentTeams);
+    });
   });
 }
