@@ -63,7 +63,7 @@ export async function TableSoccerTournamentsApplication(
   const playerProfilesRepository = PlayerProfilesRepository();
   const playerProfilesModule: Module = {
     core: PlayerProfilesModuleCore(eventBus, currentTimeProvider, playerProfilesRepository),
-    restApi: PlayerProfileRestApiModule(queryBus),
+    restApi: PlayerProfileRestApiModule(commandBus, queryBus),
   };
 
   const modules: Module[] = [
