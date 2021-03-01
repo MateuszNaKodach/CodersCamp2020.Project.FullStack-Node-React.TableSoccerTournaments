@@ -5,6 +5,7 @@ import { DomainEventPublisher } from '../../../../../shared/core/application/eve
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 import { createPlayerProfile } from '../../domain/PlayerProfile';
 import { PlayerProfilesRepository } from '../PlayerProfilesRepository';
+import { PlayerId } from '../../../../../shared/core/domain/PlayerId';
 
 export class CreatePlayerProfileCommandHandler implements CommandHandler<CreatePlayerProfile> {
   constructor(
@@ -14,10 +15,17 @@ export class CreatePlayerProfileCommandHandler implements CommandHandler<CreateP
   ) {}
 
   async execute(command: CreatePlayerProfile): Promise<CommandResult> {
-    const playerId = command.playerId;
+    const playerId = PlayerId.from(command.playerId);
     const playerProfile = await this.repository.findByPlayerId(playerId);
+    const newCommand = {
+      playerId: playerId,
+      firstName: command.firstName,
+      lastName: command.lastName,
+      emailAddress: command.emailAddress,
+      phoneNumber: command.phoneNumber,
+    };
 
-    const { state, events } = createPlayerProfile(playerProfile, command, this.currentTimeProvider);
+    const { state, events } = createPlayerProfile(playerProfile, newCommand, this.currentTimeProvider);
 
     await this.repository.save(state);
     this.eventPublisher.publishAll(events);
