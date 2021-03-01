@@ -9,6 +9,8 @@ servers:
 tags:
   - name: Tournament Registrations
     description: Open/Closing registrations for tournament
+  - name: Players profiles
+    description: Save and get players profiles
   - name: Specification
     description: The Open API specification
 paths:
@@ -100,6 +102,23 @@ paths:
       responses:
         200:
           description: Player successfully registered for the tournament
+  /players-profiles:
+    post:
+      tags:
+        - Players profiles
+      description: Create new player profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPlayerProfileRequestBody'
+      responses:
+        200:
+          description: Player profile successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostPlayerProfileResponseBody'
 components:
   schemas:
     TournamentRegistrationsListDto:
@@ -158,3 +177,38 @@ components:
           example: 2480fc2c-bbd7-427c-9439-02f76583aef5
       required:
         - tournamentId
+    PostPlayerProfileRequestBody:
+      type: object
+      properties:
+        playerId:
+          description: Identifier of the player profile which should be created
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phoneNumber:
+          type: string
+        emailAddress:
+          type: string
+    PostPlayerProfileResponseBody:
+      type: object
+      properties:
+        playerId:
+          description: Identifier of the player profile which should be created
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phoneNumber:
+          type: string
+        emailAddress:
+          type: string
+
+
+
