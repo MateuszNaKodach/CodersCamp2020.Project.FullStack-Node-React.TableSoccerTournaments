@@ -1,10 +1,10 @@
-import { DoublesTournamentRepository } from '../../../../../../src/modules/doubles-tournament/core/application/DoublesTournamentRepository';
-import { DatabaseTestSupport } from '../../../../../test-support/shared/infrastructure/DatabaseTestSupport';
-import { EntityIdGenerator } from '../../../../../../src/shared/core/application/EntityIdGenerator';
-import { UuidEntityIdGenerator } from '../../../../../../src/shared/infrastructure/core/application/UuidEntityIdGenerator';
-import { DoublesTournament } from '../../../../../../src/modules/doubles-tournament/core/domain/DoublesTournament';
-import { TournamentTeam } from '../../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
-import { TeamId } from '../../../../../../src/modules/doubles-tournament/core/domain/TeamId';
+import { DoublesTournamentRepository } from '../../../../../src/modules/doubles-tournament/core/application/DoublesTournamentRepository';
+import { DatabaseTestSupport } from '../../../../test-support/shared/infrastructure/DatabaseTestSupport';
+import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
+import { UuidEntityIdGenerator } from '../../../../../src/shared/infrastructure/core/application/UuidEntityIdGenerator';
+import { DoublesTournament } from '../../../../../src/modules/doubles-tournament/core/domain/DoublesTournament';
+import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
+import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
 
 export function DoublesTournamentRepositoryTestCases(props: {
   name: string;

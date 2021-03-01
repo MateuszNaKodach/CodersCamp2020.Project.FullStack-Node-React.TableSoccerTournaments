@@ -15,7 +15,11 @@ export class MongoDoublesTournamentRepository implements DoublesTournamentReposi
       { _id: doublesTournament.tournamentId },
       {
         _id: doublesTournament.tournamentId,
-        tournamentTeams: doublesTournament.tournamentTeams,
+        tournamentTeams: doublesTournament.tournamentTeams.map((team) => ({
+          teamId: team.teamId.raw,
+          firstTeamPlayer: team.firstTeamPlayer,
+          secondTeamPlayer: team.secondTeamPlayer,
+        })),
       },
       { upsert: true, useFindAndModify: true },
     );
@@ -29,18 +33,14 @@ export class MongoDoublesTournamentRepository implements DoublesTournamentReposi
 
 type MongoDoublesTournament = {
   readonly _id: string;
-  readonly tournamentTeams: TournamentTeam[];
+  readonly tournamentTeams: { teamId: string; firstTeamPlayer: string; secondTeamPlayer: string }[];
 } & mongoose.Document;
 
 // const Team = new Schema({ teamId: String, firstTeamPlayer: String, secondTeamPlayer: String });
 
 const DoublesTournamentSchema = new mongoose.Schema({
   _id: Schema.Types.String,
-  tournamentTeams: {
-    type: [{ teamId: String, firstTeamPlayer: String, secondTeamPlayer: String }],
-    required: true,
-    unique: false,
-  },
+  tournamentTeams: [{ teamId: String, firstTeamPlayer: String, secondTeamPlayer: String }],
 });
 
 const MongoDoublesTournament = mongoose.model<MongoDoublesTournament>('DoublesTournament', DoublesTournamentSchema);
@@ -49,14 +49,14 @@ function mongoDocumentToDomain(mongoDocument: MongoDoublesTournament): DoublesTo
   return new DoublesTournament({
     tournamentId: mongoDocument._id,
     tournamentTeams: [
-      ...mongoDocument.tournamentTeams.map((team) => {
-        new TournamentTeam({
-          teamId: TeamId.from(team.teamId.raw),
-          firstTeamPlayer: team.firstTeamPlayer,
-          secondTeamPlayer: team.secondTeamPlayer,
-        });
-        return team;
-      }),
+      ...mongoDocument.tournamentTeams.map(
+        (team) =>
+          new TournamentTeam({
+            teamId: TeamId.from(team.teamId),
+            firstTeamPlayer: team.firstTeamPlayer,
+            secondTeamPlayer: team.secondTeamPlayer,
+          }),
+      ),
     ],
   });
 }
