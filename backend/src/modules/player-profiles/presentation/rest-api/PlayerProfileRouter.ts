@@ -19,7 +19,7 @@ export function playerProfileRouter(queryPublisher: QueryPublisher): express.Rou
 
 function toPlayerProfileDto(playerProfile: PlayerProfile): PlayerProfileDto {
   return new PlayerProfileDto(
-    playerProfile.playerId,
+    playerProfile.playerId.raw,
     playerProfile.firstName,
     playerProfile.lastName,
     playerProfile.phoneNumber,
