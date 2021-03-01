@@ -27,8 +27,9 @@ import { PlayersMatchingModuleCore } from './modules/players-matching/core/Playe
 import { connectToMongoDb } from './shared/infrastructure/repository/connectToMongoDb';
 import { connectToPostgreSql } from './shared/infrastructure/repository/connectToPostgreSql';
 import { PostgreSqlTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/postgresql/PostgreSqlTournamentRegistrationsRepository';
-import { PlayerProfilesModuleCore } from "./modules/player-profiles/core/PlayerProfilesModuleCore";
-import {PlayerProfileRestApiModule} from "./modules/player-profiles/presentation/rest-api/PlayerProfileRestApiModule";
+import { PlayerProfilesModuleCore } from './modules/player-profiles/core/PlayerProfilesModuleCore';
+import { PlayerProfileRestApiModule } from './modules/player-profiles/presentation/rest-api/PlayerProfileRestApiModule';
+import { InMemoryPlayerProfileRepository } from './modules/tournaments-registrations/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
 
 config();
 
@@ -59,16 +60,16 @@ export async function TableSoccerTournamentsApplication(
     core: PlayersMatchingModuleCore(eventBus, commandBus, currentTimeProvider),
   };
 
-  const playerProfilesRepository = ....//TODO during making POST method
+  const playerProfilesRepository = PlayerProfilesRepository();
   const playerProfilesModule: Module = {
-      core: PlayerProfilesModuleCore(eventBus, currentTimeProvider, playerProfilesRepository),
-      restApi: PlayerProfileRestApiModule(queryBus)
-  }
+    core: PlayerProfilesModuleCore(eventBus, currentTimeProvider, playerProfilesRepository),
+    restApi: PlayerProfileRestApiModule(queryBus),
+  };
 
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
     process.env.PLAYERS_MATCHING_MODULE === 'ENABLED' ? playersMatchingModule : undefined,
-    process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined
+    process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
@@ -110,4 +111,16 @@ function TournamentRegistrationsRepository() {
     return new PostgreSqlTournamentRegistrationsRepository();
   }
   return new InMemoryTournamentRegistrationsRepository();
+}
+
+function PlayerProfilesRepository() {
+  //TODO add later above repositories ???
+  // if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO') {
+  //   return new MongoPlayerProfilesRepository();
+  // }
+  // if (process.env.POSTGRES_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'POSTGRES') {
+  //   return new PostgreSqlPlayerProfilesRepository();
+  // }
+
+  return new InMemoryPlayerProfileRepository();
 }
