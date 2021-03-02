@@ -158,7 +158,7 @@ components:
           format: uuid
           example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
         secondTeamPlayer:
-          description: First team player
+          description: Second team player
           type: string
           format: uuid
           example: 3c09dc91-d82c-4226-9801-4430d3aa48ce
