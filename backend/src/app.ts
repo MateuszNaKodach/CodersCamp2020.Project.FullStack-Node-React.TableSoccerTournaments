@@ -31,6 +31,10 @@ import { PlayerProfilesModuleCore } from './modules/player-profiles/core/PlayerP
 import { PlayerProfileRestApiModule } from './modules/player-profiles/presentation/rest-api/PlayerProfileRestApiModule';
 import { InMemoryPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
 import { MongoPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/mongo/MongoPlayerProfileRepository';
+import { InMemoryDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryDoublesTournamentRepository';
+import { DoublesTournamentModuleCore } from './modules/doubles-tournament/core/DoublesTournamentModuleCore';
+import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
+import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
 
 config();
 
@@ -67,10 +71,17 @@ export async function TableSoccerTournamentsApplication(
     restApi: PlayerProfileRestApiModule(commandBus, eventBus, queryBus),
   };
 
+  const doublesTournamentRepository = DoublesTournamentRepository();
+  const doublesTournamentModule: Module = {
+    core: DoublesTournamentModuleCore(eventBus, commandBus, currentTimeProvider, entityIdGenerator, doublesTournamentRepository),
+    restApi: DoublesTournamentRestApiModule(commandBus, eventBus, queryBus),
+  };
+
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
     process.env.PLAYERS_MATCHING_MODULE === 'ENABLED' ? playersMatchingModule : undefined,
     process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined,
+    process.env.DOUBLES_TOURNAMENT_MODULE === 'ENABLED' ? doublesTournamentModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
@@ -100,8 +111,24 @@ function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: Entity
     lastName: 'Nowak',
     phoneNumber: '143351333',
   };
+  const tomekDomek = {
+    playerId: entityIdGenerator.generate(),
+    firstName: 'Tomek',
+    emailAddress: 'tomek.domek@test.pl',
+    lastName: 'Domek',
+    phoneNumber: '123321335',
+  };
+  const franekPoranek = {
+    playerId: entityIdGenerator.generate(),
+    firstName: 'Franek',
+    emailAddress: 'franek.ranek@test.pl',
+    lastName: 'Ranek',
+    phoneNumber: '123321334',
+  };
   eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...janKowalski }));
   eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...katarzynaNowak }));
+  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...tomekDomek }));
+  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...franekPoranek }));
 }
 
 function TournamentRegistrationsRepository() {
@@ -119,4 +146,11 @@ function PlayerProfilesRepository() {
     return new MongoPlayerProfileRepository();
   }
   return new InMemoryPlayerProfileRepository();
+}
+
+function DoublesTournamentRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.DOUBLES_TOURNAMENT_DATABASE === 'MONGO') {
+    return new MongoDoublesTournamentRepository();
+  }
+  return new InMemoryDoublesTournamentRepository();
 }

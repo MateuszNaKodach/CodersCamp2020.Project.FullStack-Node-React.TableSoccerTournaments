@@ -11,6 +11,8 @@ tags:
     description: Open/Closing registrations for tournament
   - name: Players profiles
     description: Save and get players profiles
+  - name: Doubles Tournament
+    description: Get doubles tournament teams
   - name: Specification
     description: The Open API specification
 paths:
@@ -119,8 +121,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostPlayerProfileResponseBody'
+  /doubles-tournaments/{tournamentId}/teams:
+    get:
+      tags:
+        - Doubles Tournament
+      description: Fetch list of all torunament teams
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Tournament teams for requested tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentRegistrationsListDto'
 components:
   schemas:
+    TournamentTeamDto:
+      type: object
+      properties:
+        teamId:
+          description: Identifier of the team
+          type: string
+          format: uuid
+          example: 094469cf-6fcc-4947-a5c0-be1e94f54855
+        firstTeamPlayer:
+          description: First team player
+          type: string
+          format: uuid
+          example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
+        secondTeamPlayer:
+          description: Second team player
+          type: string
+          format: uuid
+          example: 3c09dc91-d82c-4226-9801-4430d3aa48ce
+    TournamentTeamListDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/TournamentTeamDto'
+      uniqueItems: true
     TournamentRegistrationsListDto:
       type: array
       items:
