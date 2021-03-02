@@ -19,7 +19,6 @@ import { ModuleRestApi } from './shared/presentation/rest-api/ModuleRestApi';
 import { DomainEventBus } from './shared/core/application/event/DomainEventBus';
 import { EntityIdGenerator } from './shared/core/application/EntityIdGenerator';
 import { UuidEntityIdGenerator } from './shared/infrastructure/core/application/UuidEntityIdGenerator';
-import { PlayerProfileWasCreated } from './modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
 import { LoggingDomainEventBus } from './shared/infrastructure/core/application/event/LoggingDomainEventBus';
 import { MongoTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/mongo/MongoTournamentRegistrationsRepository';
 import { Express } from 'express';
@@ -90,45 +89,7 @@ export async function TableSoccerTournamentsApplication(
   const modulesRestApis: ModuleRestApi[] = modules.map((module) => module.restApi).filter(isDefined);
   const restApi = restApiExpressServer(modulesRestApis);
 
-  initializeDummyData(eventBus, entityIdGenerator);
-
   return { restApi };
-}
-
-//TODO: Remove for production usage
-function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: EntityIdGenerator) {
-  const janKowalski = {
-    playerId: entityIdGenerator.generate(),
-    firstName: 'Jan',
-    emailAddress: 'jan.kowalski@test.pl',
-    lastName: 'Kowalski',
-    phoneNumber: '123321333',
-  };
-  const katarzynaNowak = {
-    playerId: entityIdGenerator.generate(),
-    firstName: 'Katarzyna',
-    emailAddress: 'kasia12@test.pl',
-    lastName: 'Nowak',
-    phoneNumber: '143351333',
-  };
-  const tomekDomek = {
-    playerId: entityIdGenerator.generate(),
-    firstName: 'Tomek',
-    emailAddress: 'tomek.domek@test.pl',
-    lastName: 'Domek',
-    phoneNumber: '123321335',
-  };
-  const franekPoranek = {
-    playerId: entityIdGenerator.generate(),
-    firstName: 'Franek',
-    emailAddress: 'franek.ranek@test.pl',
-    lastName: 'Ranek',
-    phoneNumber: '123321334',
-  };
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...janKowalski }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...katarzynaNowak }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...tomekDomek }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...franekPoranek }));
 }
 
 function TournamentRegistrationsRepository() {
