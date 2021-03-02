@@ -121,6 +121,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PostPlayerProfileResponseBody'
+    get:
+      tags:
+        - Players profiles
+      description: Fetch list of all players profiles
+      responses:
+        200:
+          description: All existing players profiles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerProfilesListDto'
+  /players-profiles/{playerdId}:
+    get:
+      tags:
+        - Players profiles
+      description: Get player profile under given Player ID
+      parameters:
+        - name: playerdId
+          in: path
+          description: Player ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Player profile for requested player ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerProfileDto'
   /doubles-tournaments/{tournamentId}/teams:
     get:
       tags:
