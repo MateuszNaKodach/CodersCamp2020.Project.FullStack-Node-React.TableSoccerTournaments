@@ -5,12 +5,12 @@ import { ModuleRestApi } from '../../../../../shared/presentation/rest-api/Modul
 import { doublesTournamentRouter } from './DoublesTournamentRouter';
 
 export function DoublesTournamentRestApiModule(
-    commandPublisher: CommandPublisher,
-    eventPublisher: DomainEventPublisher,
-    queryPublisher: QueryPublisher,
+  commandPublisher: CommandPublisher,
+  eventPublisher: DomainEventPublisher,
+  queryPublisher: QueryPublisher,
 ): ModuleRestApi {
-    return {
-        router: doublesTournamentRouter(commandPublisher, eventPublisher, queryPublisher),
-        path: '/doubles-tournaments',
-    };
+  return {
+    router: doublesTournamentRouter(commandPublisher, eventPublisher, queryPublisher),
+    path: '/doubles-tournaments',
+  };
 }
