@@ -1,4 +1,4 @@
-import {DoublesTournament} from '../domain/DoublesTournament';
+import { DoublesTournament } from '../domain/DoublesTournament';
 
 export interface DoublesTournamentRepository {
   save(tournament: DoublesTournament): Promise<void>;
