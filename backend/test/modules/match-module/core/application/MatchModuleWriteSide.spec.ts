@@ -1,4 +1,6 @@
 import {testMatchModule} from "./TestMatchModule";
+import {StartMatch} from "../../../../../src/modules/match-module/core/application/command/StartMatch";
+import {MatchHasStarted} from "../../../../../src/modules/match-module/core/domain/event/MatchHasStarted";
 
 describe('Match Module | Write Side', () => {
     it('given 2 teams, when start match, then match was started', async () => {
