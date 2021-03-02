@@ -29,11 +29,6 @@ export class MongoDoublesTournamentRepository implements DoublesTournamentReposi
     const mongoFindResult = await MongoDoublesTournament.find();
     return mongoFindResult.map((mongoDocument) => mongoDocumentToDomain(mongoDocument));
   }
-
-  async findAllTeamsByTournamentId(tournamentId: string): Promise<TournamentTeam[] | undefined> {
-    const mongoFindResult = await this.findByTournamentId(tournamentId);
-    return mongoFindResult ? mongoFindResult.tournamentTeams : undefined;
-  }
 }
 
 type MongoDoublesTournament = {
