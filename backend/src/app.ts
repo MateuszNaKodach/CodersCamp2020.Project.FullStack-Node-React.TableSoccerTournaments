@@ -30,6 +30,7 @@ import { PostgreSqlTournamentRegistrationsRepository } from './modules/tournamen
 import { PlayerProfilesModuleCore } from './modules/player-profiles/core/PlayerProfilesModuleCore';
 import { PlayerProfileRestApiModule } from './modules/player-profiles/presentation/rest-api/PlayerProfileRestApiModule';
 import { InMemoryPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
+import { MongoPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/mongo/MongoPlayerProfileRepository';
 
 config();
 
@@ -114,13 +115,8 @@ function TournamentRegistrationsRepository() {
 }
 
 function PlayerProfilesRepository() {
-  //TODO add later above repositories ???
-  // if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO') {
-  //   return new MongoPlayerProfilesRepository();
-  // }
-  // if (process.env.POSTGRES_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'POSTGRES') {
-  //   return new PostgreSqlPlayerProfilesRepository();
-  // }
-
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO') {
+    return new MongoPlayerProfileRepository();
+  }
   return new InMemoryPlayerProfileRepository();
 }
