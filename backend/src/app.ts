@@ -29,7 +29,7 @@ import { connectToPostgreSql } from './shared/infrastructure/repository/connectT
 import { PostgreSqlTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/postgresql/PostgreSqlTournamentRegistrationsRepository';
 import { PlayerProfilesModuleCore } from './modules/player-profiles/core/PlayerProfilesModuleCore';
 import { PlayerProfileRestApiModule } from './modules/player-profiles/presentation/rest-api/PlayerProfileRestApiModule';
-import { InMemoryPlayerProfileRepository } from './modules/tournaments-registrations/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
+import { InMemoryPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
 
 config();
 
@@ -63,7 +63,7 @@ export async function TableSoccerTournamentsApplication(
   const playerProfilesRepository = PlayerProfilesRepository();
   const playerProfilesModule: Module = {
     core: PlayerProfilesModuleCore(eventBus, currentTimeProvider, playerProfilesRepository),
-    restApi: PlayerProfileRestApiModule(commandBus, queryBus),
+    restApi: PlayerProfileRestApiModule(commandBus, eventBus, queryBus),
   };
 
   const modules: Module[] = [
