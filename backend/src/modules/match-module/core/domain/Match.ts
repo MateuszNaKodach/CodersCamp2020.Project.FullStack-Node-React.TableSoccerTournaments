@@ -19,6 +19,6 @@ export class Match {
 
 export function startMatch(command: { matchId: string; firstTeamId: string; secondTeamId: string }, currentTime: Date): { events: DomainEvent[] } {
   return {
-    events: [new MatchHasStarted({ occurredAt: currentTime, matchId: command.matchId })],
+    events: [new MatchHasStarted({ occurredAt: currentTime, matchId: command.matchId, firstTeamId: command.firstTeamId, secondTeamId: command.secondTeamId })],
   };
 }

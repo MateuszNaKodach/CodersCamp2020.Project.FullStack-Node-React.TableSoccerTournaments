@@ -18,6 +18,6 @@ describe('Match Module | Write Side', () => {
 
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
-    expect(matchModule.lastPublishedEvent()).toStrictEqual(new MatchHasStarted({ occurredAt: currentTime, matchId }));
+    expect(matchModule.lastPublishedEvent()).toStrictEqual(new MatchHasStarted({ occurredAt: currentTime, matchId, firstTeamId, secondTeamId }));
   });
 });
