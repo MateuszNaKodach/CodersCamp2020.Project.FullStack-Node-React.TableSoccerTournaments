@@ -34,7 +34,7 @@ import { InMemoryDoublesTournamentRepository } from './modules/doubles-tournamen
 import { DoublesTournamentModuleCore } from './modules/doubles-tournament/core/DoublesTournamentModuleCore';
 import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
 import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
-import { PlayerProfileWasCreated } from './modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
+import { CreatePlayerProfile } from './modules/player-profiles/core/application/command/CreatePlayerProfile';
 
 config();
 
@@ -90,13 +90,13 @@ export async function TableSoccerTournamentsApplication(
   const modulesRestApis: ModuleRestApi[] = modules.map((module) => module.restApi).filter(isDefined);
   const restApi = restApiExpressServer(modulesRestApis);
 
-  initializeDummyData(eventBus, entityIdGenerator);
+  await initializeDummyData(commandBus, entityIdGenerator);
 
   return { restApi };
 }
 
 //TODO: Remove for production usage
-function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: EntityIdGenerator) {
+async function initializeDummyData(commandBus: CommandBus, entityIdGenerator: EntityIdGenerator) {
   const janKowalski = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Jan',
@@ -125,10 +125,11 @@ function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: Entity
     lastName: 'Ranek',
     phoneNumber: '123321334',
   };
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...janKowalski }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...katarzynaNowak }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...tomekDomek }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...franekPoranek }));
+
+  await commandBus.execute(new CreatePlayerProfile({ ...janKowalski }));
+  await commandBus.execute(new CreatePlayerProfile({ ...katarzynaNowak }));
+  await commandBus.execute(new CreatePlayerProfile({ ...tomekDomek }));
+  await commandBus.execute(new CreatePlayerProfile({ ...franekPoranek }));
 }
 
 function TournamentRegistrationsRepository() {
