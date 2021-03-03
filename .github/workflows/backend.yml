@@ -50,3 +50,8 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           flags: backend, unittests
+      - name: Mutation testing
+        run: npx stryker
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+
