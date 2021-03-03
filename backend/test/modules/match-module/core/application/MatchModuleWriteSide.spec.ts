@@ -15,7 +15,7 @@ describe('Match Module | Write Side', () => {
     const secondTeamId = 'Team2';
 
     //When
-    const startMatch = new StartMatch(matchId, firstTeamId, secondTeamId);
+    const startMatch = new StartMatch({ matchId, firstTeamId, secondTeamId });
     const commandResult = await matchModule.executeCommand(startMatch);
 
     //Then
@@ -40,7 +40,7 @@ describe('Match Module | Write Side', () => {
     const secondTeamId = '';
 
     //When
-    const startMatch = new StartMatch(matchId, firstTeamId, secondTeamId);
+    const startMatch = new StartMatch({ matchId, firstTeamId, secondTeamId });
     const commandResult = await matchModule.executeCommand(startMatch);
 
     //Then
@@ -58,11 +58,30 @@ describe('Match Module | Write Side', () => {
     const secondTeamId = '';
 
     //When
-    const startMatch = new StartMatch(matchId, firstTeamId, secondTeamId);
+    const startMatch = new StartMatch({ matchId, firstTeamId, secondTeamId });
     const commandResult = await matchModule.executeCommand(startMatch);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Two teams are needed for match to start.'));
+  });
+
+  it('given started match id, when attempt to start match with this id, command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const matchModule = testMatchModule(currentTime);
+
+    const matchId = 'matchId';
+    const firstTeamId = 'Team1';
+    const secondTeamId = 'Team2';
+    const startMatch = new StartMatch({ matchId, firstTeamId, secondTeamId });
+    await matchModule.executeCommand(startMatch);
+
+    //When
+    const commandResult = await matchModule.executeCommand(startMatch);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot start a match that has already begun.'));
   });
 });
