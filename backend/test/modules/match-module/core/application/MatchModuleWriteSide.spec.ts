@@ -9,15 +9,15 @@ describe('Match Module | Write Side', () => {
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const team1 = 'Team1';
-    const team2 = 'Team2';
+    const firstTeamId = 'Team1';
+    const secondTeamId = 'Team2';
 
     //When
-    const startMatch = new StartMatch(matchId, team1, team2);
+    const startMatch = new StartMatch(matchId, firstTeamId, secondTeamId);
     const commandResult = await matchModule.executeCommand(startMatch);
 
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
-    expect(matchModule.lastPublishedEvent()).toStrictEqual(new MatchHasStarted({ occurredAt: currentTime, matchId, team1, team2 }));
+    expect(matchModule.lastPublishedEvent()).toStrictEqual(new MatchHasStarted({ occurredAt: currentTime, matchId }));
   });
 });

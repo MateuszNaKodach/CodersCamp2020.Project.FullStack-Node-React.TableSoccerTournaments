@@ -3,18 +3,22 @@ import { MatchHasStarted } from './event/MatchHasStarted';
 
 export class Match {
   readonly matchId: string;
-  readonly team1: string;
-  readonly team2: string;
+  readonly firstTeamId: string;
+  readonly secondTeamId: string;
+  readonly winner: undefined;
+  readonly hasEnded: boolean;
 
-  constructor(props: { matchId: string; team1: string; team2: string }) {
+  constructor(props: { matchId: string; firstTeamId: string; secondTeamId: string, winner: undefined, hasEnded: boolean }) {
     this.matchId = props.matchId;
-    this.team1 = props.team1;
-    this.team2 = props.team2;
+    this.firstTeamId = props.firstTeamId;
+    this.secondTeamId = props.secondTeamId;
+    this.winner = props.winner;
+    this.hasEnded = props.hasEnded;
   }
 }
 
-export function startMatch(command: { matchId: string; team1: string; team2: string }, currentTime: Date): { events: DomainEvent[] } {
+export function startMatch(command: { matchId: string; firstTeamId: string; secondTeamId: string }, currentTime: Date): { events: DomainEvent[] } {
   return {
-    events: [new MatchHasStarted({ occurredAt: currentTime, matchId: command.matchId, team1: command.team1, team2: command.team2 })],
+    events: [new MatchHasStarted({ occurredAt: currentTime, matchId: command.matchId })],
   };
 }
