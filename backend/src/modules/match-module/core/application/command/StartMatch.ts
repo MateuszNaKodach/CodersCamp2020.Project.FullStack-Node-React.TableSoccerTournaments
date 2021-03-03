@@ -3,9 +3,9 @@ export class StartMatch {
   readonly firstTeamId: string;
   readonly secondTeamId: string;
 
-  constructor(matchId: string, team1: string, team2: string) {
+  constructor(matchId: string, firstTeamId: string, secondTeamId: string) {
     this.matchId = matchId;
-    this.firstTeamId = team1;
-    this.secondTeamId = team2;
+    this.firstTeamId = firstTeamId;
+    this.secondTeamId = secondTeamId;
   }
 }

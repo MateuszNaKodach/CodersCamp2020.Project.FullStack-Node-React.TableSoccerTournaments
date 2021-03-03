@@ -3,6 +3,8 @@ import { StartMatch } from '../../../../../src/modules/match-module/core/applica
 import { MatchHasStarted } from '../../../../../src/modules/match-module/core/domain/event/MatchHasStarted';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
 import Failure = CommandResult.Failure;
+import {MatchId} from "../../../../../src/modules/match-module/core/domain/MatchId";
+import {MatchSideId} from "../../../../../src/modules/match-module/core/domain/MatchSideId";
 
 describe('Match Module | Write Side', () => {
   it('given 2 teams, when start match, then match was started', async () => {
@@ -21,7 +23,7 @@ describe('Match Module | Write Side', () => {
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(matchModule.lastPublishedEvent()).toStrictEqual(
-      new MatchHasStarted({ occurredAt: currentTime, matchId, firstTeamId, secondTeamId }),
+      new MatchHasStarted({ occurredAt: currentTime, matchId: MatchId.from(matchId), firstTeamId: MatchSideId.from(firstTeamId), secondTeamId: MatchSideId.from(secondTeamId) }),
     );
   });
 
