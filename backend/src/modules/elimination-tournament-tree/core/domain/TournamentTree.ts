@@ -2,7 +2,7 @@
 
 import {TournamentTeam} from "./TournamentTeam";
 
-export class EliminationTournamentTree {
+export class TournamentTree {
     readonly tournamentId: string;
     readonly tournamentTeams: TournamentTeam[];
 
