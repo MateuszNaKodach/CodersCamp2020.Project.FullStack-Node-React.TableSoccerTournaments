@@ -1,5 +1,5 @@
-import {MatchId} from "../MatchId";
-import {MatchSideId} from "../MatchSideId";
+import { MatchId } from '../MatchId';
+import { MatchSideId } from '../MatchSideId';
 
 export class MatchHasStarted {
   readonly occurredAt: Date;
