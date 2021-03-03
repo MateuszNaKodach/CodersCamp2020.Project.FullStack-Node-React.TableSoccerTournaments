@@ -8,7 +8,7 @@ export class Match {
   readonly winner: undefined;
   readonly hasEnded: boolean;
 
-  constructor(props: { matchId: string; firstTeamId: string; secondTeamId: string, winner: undefined, hasEnded: boolean }) {
+  constructor(props: { matchId: string; firstTeamId: string; secondTeamId: string; winner: undefined; hasEnded: boolean }) {
     this.matchId = props.matchId;
     this.firstTeamId = props.firstTeamId;
     this.secondTeamId = props.secondTeamId;
@@ -17,8 +17,21 @@ export class Match {
   }
 }
 
-export function startMatch(command: { matchId: string; firstTeamId: string; secondTeamId: string }, currentTime: Date): { events: DomainEvent[] } {
+export function startMatch(
+  command: { matchId: string; firstTeamId: string; secondTeamId: string },
+  currentTime: Date,
+): { events: DomainEvent[] } {
+  if (!command.firstTeamId || !command.secondTeamId) {
+    throw new Error('Two teams are needed for match to start.');
+  }
   return {
-    events: [new MatchHasStarted({ occurredAt: currentTime, matchId: command.matchId, firstTeamId: command.firstTeamId, secondTeamId: command.secondTeamId })],
+    events: [
+      new MatchHasStarted({
+        occurredAt: currentTime,
+        matchId: command.matchId,
+        firstTeamId: command.firstTeamId,
+        secondTeamId: command.secondTeamId,
+      }),
+    ],
   };
 }
