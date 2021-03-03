@@ -51,7 +51,7 @@ jobs:
         with:
           flags: backend, unittests
       - name: Mutation testing
-        run: npx stryker run
+        run: npx stryker run --logLevel error
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
 
