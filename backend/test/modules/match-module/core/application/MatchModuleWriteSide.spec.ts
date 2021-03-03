@@ -1,7 +1,7 @@
-import {testMatchModule} from './TestMatchModule';
-import {StartMatch} from '../../../../../src/modules/match-module/core/application/command/StartMatch';
-import {MatchHasStarted} from '../../../../../src/modules/match-module/core/domain/event/MatchHasStarted';
-import {CommandResult} from '../../../../../src/shared/core/application/command/CommandResult';
+import { testMatchModule } from './TestMatchModule';
+import { StartMatch } from '../../../../../src/modules/match-module/core/application/command/StartMatch';
+import { MatchHasStarted } from '../../../../../src/modules/match-module/core/domain/event/MatchHasStarted';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
 import Failure = CommandResult.Failure;
 
 describe('Match Module | Write Side', () => {
@@ -65,6 +65,4 @@ describe('Match Module | Write Side', () => {
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Two teams are needed for match to start.'));
   });
-
-
 });

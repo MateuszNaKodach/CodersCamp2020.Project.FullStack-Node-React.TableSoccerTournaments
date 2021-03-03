@@ -1,8 +1,7 @@
-import {Match} from "../../domain/Match";
+import { Match } from '../../domain/Match';
 
 export class FindAllMatches {
-    constructor() {
-    }
+  constructor() {}
 }
 
 export type FindAllMatchesResult = Match[];

@@ -1,10 +1,10 @@
-import {Match} from "../domain/Match";
-import {MatchId} from "../domain/MatchId";
+import { Match } from '../domain/Match';
+import { MatchId } from '../domain/MatchId';
 
 export interface MatchRepository {
-    save(match: Match): Promise<void>;
+  save(match: Match): Promise<void>;
 
-    findByMatchId(matchId: MatchId): Promise<Match | undefined>;
+  findByMatchId(matchId: MatchId): Promise<Match | undefined>;
 
-    findAll(): Promise<Match[]>;
+  findAll(): Promise<Match[]>;
 }

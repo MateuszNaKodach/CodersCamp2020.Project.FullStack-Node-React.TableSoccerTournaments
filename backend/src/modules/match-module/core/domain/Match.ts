@@ -1,7 +1,7 @@
-import {MatchHasStarted} from './event/MatchHasStarted';
-import {MatchId} from './MatchId';
-import {MatchSideId} from './MatchSideId';
-import {DomainCommandResult} from "../../../../shared/core/domain/DomainCommandResult";
+import { MatchHasStarted } from './event/MatchHasStarted';
+import { MatchId } from './MatchId';
+import { MatchSideId } from './MatchSideId';
+import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 
 export class Match {
   readonly matchId: MatchId;
@@ -34,7 +34,7 @@ export function startMatch(
   currentTime: Date,
 ): DomainCommandResult<Match> {
   if (state?.matchId !== undefined) {
-    throw new Error('Cannot start a match that has already begun.')
+    throw new Error('Cannot start a match that has already begun.');
   }
   if (!command.firstTeamId || !command.secondTeamId) {
     throw new Error('Two teams are needed for match to start.');
@@ -54,13 +54,10 @@ export function startMatch(
   };
 }
 
-function onMatchHasStarted(
-    state: Match | undefined,
-    event: MatchHasStarted,
-): Match {
+function onMatchHasStarted(state: Match | undefined, event: MatchHasStarted): Match {
   return new Match({
     matchId: MatchId.from(event.matchId),
     firstTeamId: MatchSideId.from(event.firstTeamId),
     secondTeamId: MatchSideId.from(event.secondTeamId),
-  })
+  });
 }
