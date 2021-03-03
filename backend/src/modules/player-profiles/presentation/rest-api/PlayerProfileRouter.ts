@@ -8,8 +8,13 @@ import { PlayerProfile } from '../../core/domain/PlayerProfile';
 import { PostPlayerProfileRequestBody } from './request/PostPlayerProfileRequestBody';
 import { CommandPublisher } from '../../../../shared/core/application/command/CommandBus';
 import { CreatePlayerProfile } from '../../core/application/command/CreatePlayerProfile';
+import { DomainEventPublisher } from '../../../../shared/core/application/event/DomainEventBus';
 
-export function playerProfileRouter(commandPublisher: CommandPublisher, queryPublisher: QueryPublisher): express.Router {
+export function playerProfileRouter(
+  commandPublisher: CommandPublisher,
+  eventPublisher: DomainEventPublisher,
+  queryPublisher: QueryPublisher,
+): express.Router {
   const getAllPlayersProfiles = async (request: Request, response: Response) => {
     const queryResult = await queryPublisher.execute<FindAllPlayerProfilesResult>(new FindAllPlayerProfiles());
     return response.status(StatusCodes.OK).json(new PlayerProfilesListDto(queryResult.map(toPlayerProfileDto)));

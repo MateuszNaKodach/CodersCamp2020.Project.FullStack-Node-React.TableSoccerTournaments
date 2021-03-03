@@ -1,5 +1,5 @@
-import { PlayerProfilesRepository } from '../../../../player-profiles/core/application/PlayerProfilesRepository';
-import { PlayerProfile } from '../../../../player-profiles/core/domain/PlayerProfile';
+import { PlayerProfilesRepository } from '../../../core/application/PlayerProfilesRepository';
+import { PlayerProfile } from '../../../core/domain/PlayerProfile';
 import { PlayerId } from '../../../../../shared/core/domain/PlayerId';
 
 export class InMemoryPlayerProfileRepository implements PlayerProfilesRepository {
