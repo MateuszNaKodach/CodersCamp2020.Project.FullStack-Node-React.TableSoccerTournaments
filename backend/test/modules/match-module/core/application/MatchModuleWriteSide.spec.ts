@@ -1,6 +1,9 @@
 import { testMatchModule } from './TestMatchModule';
 import { StartMatch } from '../../../../../src/modules/match-module/core/application/command/StartMatch';
 import { MatchHasStarted } from '../../../../../src/modules/match-module/core/domain/event/MatchHasStarted';
+import {CommandResult} from "../../../../../src/shared/core/application/command/CommandResult";
+import Failure = CommandResult.Failure;
+import {Error} from "mongoose";
 
 describe('Match Module | Write Side', () => {
   it('given 2 teams, when start match, then match was started', async () => {
@@ -20,4 +23,22 @@ describe('Match Module | Write Side', () => {
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(matchModule.lastPublishedEvent()).toStrictEqual(new MatchHasStarted({ occurredAt: currentTime, matchId, firstTeamId, secondTeamId }));
   });
+
+  it('given 1 team, when start match, command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const matchModule = testMatchModule(currentTime);
+
+    const matchId = 'matchId';
+    const firstTeamId = 'Team1';
+    const secondTeamId = '';
+
+    //When
+    const startMatch = new StartMatch(matchId, firstTeamId, secondTeamId);
+    const commandResult = await matchModule.executeCommand(startMatch);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Two teams are needed for match to start.'));
+  })
 });
