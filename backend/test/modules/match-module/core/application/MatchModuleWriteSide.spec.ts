@@ -11,11 +11,11 @@ describe('Match Module | Write Side', () => {
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const firstTeamId = 'Team1';
-    const secondTeamId = 'Team2';
+    const firstMatchSideId = 'Team1';
+    const secondMatchSideId = 'Team2';
 
     //When
-    const startMatch = new StartMatch({ matchId, firstTeamId, secondTeamId });
+    const startMatch = new StartMatch({ matchId, firstMatchSideId, secondMatchSideId });
     const commandResult = await matchModule.executeCommand(startMatch);
 
     //Then
@@ -24,46 +24,46 @@ describe('Match Module | Write Side', () => {
       new MatchHasStarted({
         occurredAt: currentTime,
         matchId: matchId,
-        firstTeamId: firstTeamId,
-        secondTeamId: secondTeamId,
+        firstMatchSideId,
+        secondMatchSideId,
       }),
     );
   });
 
-  it('given 1 team, when start match, command should fail', async () => {
+  it('given only 1 team id, when start match, command should fail', async () => {
     //Given
     const currentTime = new Date();
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const firstTeamId = 'Team1';
-    const secondTeamId = '';
+    const firstMatchSideId = 'Team1';
+    const secondMatchSideId = '';
 
     //When
-    const startMatch = new StartMatch({ matchId, firstTeamId, secondTeamId });
+    const startMatch = new StartMatch({ matchId, firstMatchSideId, secondMatchSideId });
     const commandResult = await matchModule.executeCommand(startMatch);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
-    expect((commandResult as Failure).reason).toStrictEqual(new Error('Two teams are needed for match to start.'));
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('MatchSideId cannot be empty!'));
   });
 
-  it('given no teams, when start match, command should fail', async () => {
+  it('given no teams ids, when start match, command should fail', async () => {
     //Given
     const currentTime = new Date();
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const firstTeamId = '';
-    const secondTeamId = '';
+    const firstMatchSideId = '';
+    const secondMatchSideId = '';
 
     //When
-    const startMatch = new StartMatch({ matchId, firstTeamId, secondTeamId });
+    const startMatch = new StartMatch({ matchId, firstMatchSideId, secondMatchSideId });
     const commandResult = await matchModule.executeCommand(startMatch);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
-    expect((commandResult as Failure).reason).toStrictEqual(new Error('Two teams are needed for match to start.'));
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('MatchSideId cannot be empty!'));
   });
 
   it('given started match id, when attempt to start match with this id, command should fail', async () => {
@@ -72,9 +72,9 @@ describe('Match Module | Write Side', () => {
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const firstTeamId = 'Team1';
-    const secondTeamId = 'Team2';
-    const startMatch = new StartMatch({ matchId, firstTeamId, secondTeamId });
+    const firstMatchSideId = 'Team1';
+    const secondMatchSideId = 'Team2';
+    const startMatch = new StartMatch({ matchId, firstMatchSideId, secondMatchSideId });
     await matchModule.executeCommand(startMatch);
 
     //When
@@ -84,4 +84,21 @@ describe('Match Module | Write Side', () => {
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot start a match that has already begun.'));
   });
+
+  it('given two teams with same id, when attempt to start match, command should fail', async () => {
+    const currentTime = new Date();
+    const matchModule = testMatchModule(currentTime);
+
+    const matchId = 'matchId';
+    const firstMatchSideId = 'Team1';
+    const secondMatchSideId = 'Team1';
+
+    //When
+    const startMatch = new StartMatch({ matchId, firstMatchSideId, secondMatchSideId });
+    const commandResult = await matchModule.executeCommand(startMatch);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot start match if opposite teams are the same team.'));
+  })
 });

@@ -32,10 +32,10 @@ describe('Match Module | Query Side', () => {
     const team3 = 'Team3';
     const team4 = 'Team4';
 
-    const startMatch1 = new StartMatch({ matchId: matchId1, firstTeamId: team1, secondTeamId: team2 });
+    const startMatch1 = new StartMatch({ matchId: matchId1, firstMatchSideId: team1, secondMatchSideId: team2 });
     await matchModule.executeCommand(startMatch1);
 
-    const startMatch2 = new StartMatch({ matchId: matchId2, firstTeamId: team3, secondTeamId: team4 });
+    const startMatch2 = new StartMatch({ matchId: matchId2, firstMatchSideId: team3, secondMatchSideId: team4 });
     await matchModule.executeCommand(startMatch2);
 
     //When
@@ -45,13 +45,13 @@ describe('Match Module | Query Side', () => {
     expect(findAllMatchesResult).toIncludeSameMembers([
       new Match({
         matchId: MatchId.from(matchId1),
-        firstTeamId: MatchSideId.from(team1),
-        secondTeamId: MatchSideId.from(team2),
+        firstMatchSideId: MatchSideId.from(team1),
+        secondMatchSideId: MatchSideId.from(team2),
       }),
       new Match({
         matchId: MatchId.from(matchId2),
-        firstTeamId: MatchSideId.from(team3),
-        secondTeamId: MatchSideId.from(team4),
+        firstMatchSideId: MatchSideId.from(team3),
+        secondMatchSideId: MatchSideId.from(team4),
       }),
     ]);
   });
@@ -65,7 +65,7 @@ describe('Match Module | Query Side', () => {
     const team1 = 'Team1';
     const team2 = 'Team2';
 
-    const startMatch = new StartMatch({ matchId: matchId, firstTeamId: team1, secondTeamId: team2 });
+    const startMatch = new StartMatch({ matchId: matchId, firstMatchSideId: team1, secondMatchSideId: team2 });
     await matchModule.executeCommand(startMatch);
 
     //When
@@ -75,8 +75,8 @@ describe('Match Module | Query Side', () => {
     expect(findMatchByIdResult).toStrictEqual(
       new Match({
         matchId: MatchId.from(matchId),
-        firstTeamId: MatchSideId.from(team1),
-        secondTeamId: MatchSideId.from(team2),
+        firstMatchSideId: MatchSideId.from(team1),
+        secondMatchSideId: MatchSideId.from(team2),
       }),
     );
   });
