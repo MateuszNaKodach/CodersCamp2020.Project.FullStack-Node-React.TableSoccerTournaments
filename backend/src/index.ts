@@ -1,20 +1,19 @@
 import { TableSoccerTournamentsApplication } from './app';
+import NodeMailer from 'nodemailer';
 
 const port = process.env.REST_API_PORT || 5000;
-const nodemailer = require("nodemailer");
-
 
 TableSoccerTournamentsApplication().then(({ restApi }) =>
   restApi.listen(port, () => {
     console.log(`[App]: REST API listening on port ${port}`);
     console.log(`[App]: You can access REST API documentation at http://localhost:${port}/rest-api-docs`);
 
-      const transporter = nodemailer.createTransport({
+      const transporter = NodeMailer.createTransport({
           host: "mailhog",
           port: 1025
       });
 
-      restApi.get("/send_email/:email", (req, res, next) => {
+      restApi.get("/send_email/:email", (req, res) => {
           try {
           const { email } = req.params;
 
