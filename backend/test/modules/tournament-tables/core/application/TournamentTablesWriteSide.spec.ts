@@ -1,31 +1,39 @@
 import { FromListIdGeneratorStub } from "../../../../test-support/shared/core/FromListIdGeneratorStub";
 import { testTournamentTablesModule } from "./TestTournamentTablesModule";
 import { AddTournamentTables } from "../../../../../src/modules/tournament-tables/core/application/command/AddTournamentTables";
-import { TablesWereAssignedToTournament } from "../../../../../src/modules/tournament-tables/core/domain/TablesWereAssignedToTournament";
+import { TournamentTablesWereAssigned } from "../../../../../src/modules/tournament-tables/core/domain/TournamentTablesWereAssigned";
 import { CommandResult } from "../../../../../src/shared/core/application/command/CommandResult";
 import Failure = CommandResult.Failure;
+import {TableNumber} from "../../../../../src/modules/tournament-tables/core/domain/TableNumber";
+import {TournamentTable} from "../../../../../src/modules/tournament-tables/core/domain/TournamentTable";
+import {TableId} from "../../../../../src/modules/tournament-tables/core/domain/TableId";
 
 describe('Table reservation', function () {
     it('When tables are added, then table reservation for the tournament is made', async () => {
         //Given
         const currentTime = new Date();
         const tournamentId = 'TournamentId';
-        const entityIdGen = FromListIdGeneratorStub(['TableId1', 'TableId2', 'TableId3']);
+        const tableIdsList = ['TableId1', 'TableId2', 'TableId3'];
+        const entityIdGen = FromListIdGeneratorStub(tableIdsList);
         const tablesList = [
-            { tableId: 'TableId1', tableName: 'Leonhart' },
-            { tableId: 'TableId2', tableName: 'Garlando' },
-            { tableId: 'TableId3', tableName: 'Leonhart' },
+            { tableNumber: TableNumber.from(1), tableName: 'Leonhart' },
+            { tableNumber: TableNumber.from(2), tableName: 'Garlando' },
+            { tableNumber: TableNumber.from(3), tableName: 'Leonhart' },
         ];
-        const tournamentTables = testTournamentTablesModule(currentTime, entityIdGen);
+        const tournamentTablesModule = testTournamentTablesModule(currentTime, entityIdGen);
 
         //When
         const addTournamentTables = new AddTournamentTables(tournamentId, tablesList);
-        const commandResult = await tournamentTables.executeCommand(addTournamentTables);
+        const commandResult = await tournamentTablesModule.executeCommand(addTournamentTables);
 
         //Then
+        const tournamentTables: TournamentTable[] = tablesList.map(
+            (table, i) =>
+                ({ tournamentId, tableId: TableId.from(tableIdsList[i]), ...tablesList[i] })
+        )
         expect(commandResult.isSuccess()).toBeTruthy();
-        expect(tournamentTables.lastPublishedEvent()).toStrictEqual(
-            new TablesWereAssignedToTournament(tablesList.map(table => ({ occurredAt: currentTime, tournamentId, ...table })))
+        expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(
+            new TournamentTablesWereAssigned(tournamentTables.map(table => ({ occurredAt: currentTime, ...table })))
         );
     });
 
@@ -35,8 +43,8 @@ describe('Table reservation', function () {
         const tournamentId = 'TournamentId';
         const entityIdGen = FromListIdGeneratorStub(['TableId1', 'TableId2']);
         const tablesList = [
-            { tableId: 'TableId1', tableName: 'Leonhart' },
-            { tableId: 'TableId2', tableName: 'Garlando' }
+            { tableNumber: TableNumber.from(1), tableName: 'Leonhart' },
+            { tableNumber: TableNumber.from(2), tableName: 'Garlando' }
             ];
         const tournamentTables = testTournamentTablesModule(currentTime, entityIdGen);
         const addTournamentTables = new AddTournamentTables(tournamentId, tablesList);
@@ -55,7 +63,7 @@ describe('Table reservation', function () {
         const currentTime = new Date();
         const tournamentId = 'TournamentId';
         const entityIdGen = FromListIdGeneratorStub(['TableId1']);
-        const tablesList: { tableId: string, tableName: string }[] = [];
+        const tablesList: { tableNumber: TableNumber, tableName: string }[] = [];
         const tournamentTables = testTournamentTablesModule(currentTime, entityIdGen);
 
         //When
