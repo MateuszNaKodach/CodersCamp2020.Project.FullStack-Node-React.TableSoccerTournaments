@@ -1,6 +1,3 @@
-import { MatchId } from '../MatchId';
-import { MatchSideId } from '../MatchSideId';
-
 export class MatchHasStarted {
   readonly occurredAt: Date;
   readonly matchId: string;

@@ -6,7 +6,7 @@ import { CommandResult } from '../../../../../shared/core/application/command/Co
 import { startMatch } from '../../domain/Match';
 import { MatchId } from '../../domain/MatchId';
 import { MatchRepository } from '../MatchRepository';
-import {MatchSideId} from "../../domain/MatchSideId";
+import { MatchSideId } from '../../domain/MatchSideId';
 
 export class StartMatchCommandHandler implements CommandHandler<StartMatch> {
   constructor(

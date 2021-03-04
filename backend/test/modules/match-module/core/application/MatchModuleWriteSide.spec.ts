@@ -100,5 +100,5 @@ describe('Match Module | Write Side', () => {
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot start match if opposite teams are the same team.'));
-  })
+  });
 });
