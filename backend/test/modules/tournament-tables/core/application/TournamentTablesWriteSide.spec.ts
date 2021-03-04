@@ -29,7 +29,7 @@ describe('Table reservation', function () {
         //Then
         const tablesAssigned: TournamentTable[] = tablesList.map(
             (table, i) =>
-                ({ tournamentId, tableId: TableId.from(tableIdsList[i]), ...tablesList[i] })
+                (new TournamentTable({ tournamentId, tableId: TableId.from(tableIdsList[i]), ...tablesList[i] }))
         )
         expect(commandResult.isSuccess()).toBeTruthy();
         expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(

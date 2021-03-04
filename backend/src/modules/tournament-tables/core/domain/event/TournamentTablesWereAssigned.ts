@@ -1,11 +1,9 @@
-import { DomainEvent } from '../../../../../shared/domain/event/DomainEvent';
-import {TableNumber} from "../TableNumber";
-import {TableId} from "../TableId";
+import {DomainEvent} from '../../../../../shared/domain/event/DomainEvent';
 import {TournamentTable} from "../TournamentTable";
 
 export class TournamentTablesWereAssigned implements DomainEvent {
     readonly occurredAt: Date;
-    readonly tablesAssigned: { tournamentId: string; tableId: TableId; tableNumber: TableNumber; tableName: string }[];
+    readonly tablesAssigned: TournamentTable[];
 
     constructor(props: { occurredAt: Date; tablesAssigned: TournamentTable[] }) {
         this.occurredAt = props.occurredAt;
