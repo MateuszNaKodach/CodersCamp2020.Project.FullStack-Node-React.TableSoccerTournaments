@@ -3,25 +3,25 @@ import { CommandPublisher } from '../../../shared/core/application/command/Comma
 import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { EntityIdGenerator } from '../../../shared/core/application/EntityIdGenerator';
-import { TournamentTablesRepository } from "./application/TournamentTablesRepository";
-import {AddTournamentTables} from "./application/command/AddTournamentTables";
-import {AddTournamentTablesCommandHandler} from "./application/command/AddTournamentTablesCommandHandler";
+import { TournamentTablesRepository } from './application/TournamentTablesRepository';
+import { AddTournamentTables } from './application/command/AddTournamentTables';
+import { AddTournamentTablesCommandHandler } from './application/command/AddTournamentTablesCommandHandler';
 
 export function TournamentTablesModuleCore(
-    eventPublisher: DomainEventPublisher,
-    commandPublisher: CommandPublisher,
-    currentTimeProvider: CurrentTimeProvider,
-    entityIdGenerator: EntityIdGenerator,
-    repository: TournamentTablesRepository,
+  eventPublisher: DomainEventPublisher,
+  commandPublisher: CommandPublisher,
+  currentTimeProvider: CurrentTimeProvider,
+  entityIdGenerator: EntityIdGenerator,
+  repository: TournamentTablesRepository,
 ): ModuleCore {
-    return {
-        commandHandlers: [
-            {
-                commandType: AddTournamentTables,
-                handler: new AddTournamentTablesCommandHandler(eventPublisher, currentTimeProvider, entityIdGenerator, repository),
-            },
-        ],
-        eventHandlers: [],
-        queryHandlers: [],
-    };
+  return {
+    commandHandlers: [
+      {
+        commandType: AddTournamentTables,
+        handler: new AddTournamentTablesCommandHandler(eventPublisher, currentTimeProvider, entityIdGenerator, repository),
+      },
+    ],
+    eventHandlers: [],
+    queryHandlers: [],
+  };
 }
