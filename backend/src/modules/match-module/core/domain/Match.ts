@@ -5,8 +5,8 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 
 export class Match {
   readonly matchId: MatchId;
-  readonly firstMatchSideId: MatchSideId | undefined;
-  readonly secondMatchSideId: MatchSideId | undefined;
+  readonly firstMatchSideId: MatchSideId;
+  readonly secondMatchSideId: MatchSideId;
   readonly winner: MatchSideId | undefined;
   readonly looser: MatchSideId | undefined;
   readonly hasEnded: boolean | undefined = false;
