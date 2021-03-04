@@ -9,4 +9,8 @@ export class MatchSideId {
     }
     return new MatchSideId(matchSideId);
   }
+
+  equals(other: MatchSideId | undefined): boolean {
+    return other?.raw === this.raw;
+  }
 }
