@@ -1,7 +1,7 @@
 import { FromListIdGeneratorStub } from "../../../../test-support/shared/core/FromListIdGeneratorStub";
 import { testTournamentTablesModule } from "./TestTournamentTablesModule";
 import { AddTournamentTables } from "../../../../../src/modules/tournament-tables/core/application/command/AddTournamentTables";
-import { TournamentTablesWereAssigned } from "../../../../../src/modules/tournament-tables/core/domain/TournamentTablesWereAssigned";
+import { TournamentTablesWereAssigned } from "../../../../../src/modules/tournament-tables/core/domain/event/TournamentTablesWereAssigned";
 import { CommandResult } from "../../../../../src/shared/core/application/command/CommandResult";
 import Failure = CommandResult.Failure;
 import {TableNumber} from "../../../../../src/modules/tournament-tables/core/domain/TableNumber";
@@ -14,7 +14,7 @@ describe('Table reservation', function () {
         const currentTime = new Date();
         const tournamentId = 'TournamentId';
         const tableIdsList = ['TableId1', 'TableId2', 'TableId3'];
-        const entityIdGen = FromListIdGeneratorStub(tableIdsList);
+        const entityIdGen = FromListIdGeneratorStub([...tableIdsList]);
         const tablesList = [
             { tableNumber: TableNumber.from(1), tableName: 'Leonhart' },
             { tableNumber: TableNumber.from(2), tableName: 'Garlando' },
@@ -27,13 +27,13 @@ describe('Table reservation', function () {
         const commandResult = await tournamentTablesModule.executeCommand(addTournamentTables);
 
         //Then
-        const tournamentTables: TournamentTable[] = tablesList.map(
+        const tablesAssigned: TournamentTable[] = tablesList.map(
             (table, i) =>
                 ({ tournamentId, tableId: TableId.from(tableIdsList[i]), ...tablesList[i] })
         )
         expect(commandResult.isSuccess()).toBeTruthy();
         expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(
-            new TournamentTablesWereAssigned(tournamentTables.map(table => ({ occurredAt: currentTime, ...table })))
+            new TournamentTablesWereAssigned({ occurredAt: currentTime, tablesAssigned })
         );
     });
 
@@ -46,12 +46,12 @@ describe('Table reservation', function () {
             { tableNumber: TableNumber.from(1), tableName: 'Leonhart' },
             { tableNumber: TableNumber.from(2), tableName: 'Garlando' }
             ];
-        const tournamentTables = testTournamentTablesModule(currentTime, entityIdGen);
+        const tournamentTablesModule = testTournamentTablesModule(currentTime, entityIdGen);
         const addTournamentTables = new AddTournamentTables(tournamentId, tablesList);
-        await tournamentTables.executeCommand(addTournamentTables);
+        await tournamentTablesModule.executeCommand(addTournamentTables);
 
         //When
-        const commandResult = await tournamentTables.executeCommand(addTournamentTables);
+        const commandResult = await tournamentTablesModule.executeCommand(addTournamentTables);
 
         //Then
         expect(commandResult.isSuccess()).toBeFalsy();
@@ -64,11 +64,11 @@ describe('Table reservation', function () {
         const tournamentId = 'TournamentId';
         const entityIdGen = FromListIdGeneratorStub(['TableId1']);
         const tablesList: { tableNumber: TableNumber, tableName: string }[] = [];
-        const tournamentTables = testTournamentTablesModule(currentTime, entityIdGen);
+        const tournamentTablesModule = testTournamentTablesModule(currentTime, entityIdGen);
 
         //When
         const addTournamentTables = new AddTournamentTables(tournamentId, tablesList);
-        const commandResult = await tournamentTables.executeCommand(addTournamentTables);
+        const commandResult = await tournamentTablesModule.executeCommand(addTournamentTables);
 
         //Then
         expect(commandResult.isSuccess()).toBeFalsy();

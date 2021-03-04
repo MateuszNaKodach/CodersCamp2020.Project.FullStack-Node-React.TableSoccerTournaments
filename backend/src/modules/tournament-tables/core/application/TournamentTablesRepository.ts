@@ -1,7 +1,7 @@
 import {TournamentTable} from "../domain/TournamentTable";
 
 export interface TournamentTablesRepository {
-    save(tournamentTable: TournamentTable): Promise<void>;
+    save(tournamentTables: TournamentTable[]): Promise<void>;
 
     findByTableId(tableId: string): Promise<TournamentTable | undefined>;
 
