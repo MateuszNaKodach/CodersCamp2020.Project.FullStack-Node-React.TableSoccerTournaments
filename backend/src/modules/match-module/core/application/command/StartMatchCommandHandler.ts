@@ -6,6 +6,7 @@ import { CommandResult } from '../../../../../shared/core/application/command/Co
 import { startMatch } from '../../domain/Match';
 import { MatchId } from '../../domain/MatchId';
 import { MatchRepository } from '../MatchRepository';
+import {MatchSideId} from "../../domain/MatchSideId";
 
 export class StartMatchCommandHandler implements CommandHandler<StartMatch> {
   constructor(
@@ -16,9 +17,11 @@ export class StartMatchCommandHandler implements CommandHandler<StartMatch> {
 
   async execute(command: StartMatch): Promise<CommandResult> {
     const matchId = MatchId.from(command.matchId);
+    const firstMatchSideId = MatchSideId.from(command.firstMatchSideId);
+    const secondMatchSideId = MatchSideId.from(command.secondMatchSideId);
     const match = await this.repository.findByMatchId(matchId);
 
-    const { state, events } = startMatch(match, command, this.currentTimeProvider());
+    const { state, events } = startMatch(match, { matchId, firstMatchSideId, secondMatchSideId }, this.currentTimeProvider());
     await this.repository.save(state);
     this.eventPublisher.publishAll(events);
     return CommandResult.success();
