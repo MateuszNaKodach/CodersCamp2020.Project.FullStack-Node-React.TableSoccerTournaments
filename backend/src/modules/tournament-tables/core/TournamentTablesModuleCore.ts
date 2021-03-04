@@ -3,8 +3,9 @@ import { CommandPublisher } from '../../../shared/core/application/command/Comma
 import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { EntityIdGenerator } from '../../../shared/core/application/EntityIdGenerator';
+import { TournamentTablesRepository } from "./application/TournamentTablesRepository";
 
-export function DoublesTournamentModuleCore(
+export function TournamentTablesModuleCore(
     eventPublisher: DomainEventPublisher,
     commandPublisher: CommandPublisher,
     currentTimeProvider: CurrentTimeProvider,

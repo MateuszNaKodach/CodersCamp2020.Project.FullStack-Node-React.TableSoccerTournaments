@@ -1,7 +1,7 @@
-import {FromListIdGeneratorStub} from "../../../../test-support/shared/core/FromListIdGeneratorStub";
-import {testTournamentTablesModule} from "./TestTournamentTablesModule";
-import {AddTournamentTables} from "../../../../../src/modules/tournament-tables/core/application/command/AddTournamentTables";
-import {TablesWereAssignedToTournament} from "../../../../../src/modules/tournament-tables/core/domain/TablesWereAssignedToTournament";
+import { FromListIdGeneratorStub } from "../../../../test-support/shared/core/FromListIdGeneratorStub";
+import { testTournamentTablesModule } from "./TestTournamentTablesModule";
+import { AddTournamentTables } from "../../../../../src/modules/tournament-tables/core/application/command/AddTournamentTables";
+import { TablesWereAssignedToTournament } from "../../../../../src/modules/tournament-tables/core/domain/TablesWereAssignedToTournament";
 
 describe('Table reservation', function () {
     it('When table is added, then table reservation for the tournament is made', async () => {
