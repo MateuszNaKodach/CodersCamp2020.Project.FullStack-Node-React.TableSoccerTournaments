@@ -5,23 +5,23 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 
 export class Match {
   readonly matchId: MatchId;
-  readonly firstTeamId: MatchSideId;
-  readonly secondTeamId: MatchSideId;
+  readonly firstMatchSideId: MatchSideId | undefined;
+  readonly secondMatchSideId: MatchSideId | undefined;
   readonly winner: MatchSideId | undefined;
   readonly looser: MatchSideId | undefined;
   readonly hasEnded: boolean | undefined = false;
 
   constructor(props: {
     matchId: MatchId;
-    firstTeamId: MatchSideId;
-    secondTeamId: MatchSideId;
+    firstMatchSideId: MatchSideId;
+    secondMatchSideId: MatchSideId;
     winner?: MatchSideId;
     looser?: MatchSideId;
     hasEnded?: boolean;
   }) {
     this.matchId = props.matchId;
-    this.firstTeamId = props.firstTeamId;
-    this.secondTeamId = props.secondTeamId;
+    this.firstMatchSideId = props.firstMatchSideId;
+    this.secondMatchSideId = props.secondMatchSideId;
     this.winner = props.winner;
     this.looser = props.looser;
     this.hasEnded = props.hasEnded;
@@ -30,21 +30,21 @@ export class Match {
 
 export function startMatch(
   state: Match | undefined,
-  command: { matchId: string; firstTeamId: string; secondTeamId: string },
+  command: { matchId: MatchId; firstMatchSideId: MatchSideId; secondMatchSideId: MatchSideId },
   currentTime: Date,
 ): DomainCommandResult<Match> {
   if (state?.matchId !== undefined) {
     throw new Error('Cannot start a match that has already begun.');
   }
-  if (!command.firstTeamId || !command.secondTeamId) {
-    throw new Error('Two teams are needed for match to start.');
+  if (command.firstMatchSideId.equals(command.secondMatchSideId)) {
+    throw new Error('Cannot start match if opposite teams are the same team.');
   }
 
   const matchHasStarted = new MatchHasStarted({
     occurredAt: currentTime,
-    matchId: command.matchId,
-    firstTeamId: command.firstTeamId,
-    secondTeamId: command.secondTeamId,
+    matchId: command.matchId.raw,
+    firstMatchSideId: command.firstMatchSideId.raw,
+    secondMatchSideId: command.secondMatchSideId.raw,
   });
   const startedMatch = onMatchHasStarted(state, matchHasStarted);
 
@@ -57,7 +57,7 @@ export function startMatch(
 function onMatchHasStarted(state: Match | undefined, event: MatchHasStarted): Match {
   return new Match({
     matchId: MatchId.from(event.matchId),
-    firstTeamId: MatchSideId.from(event.firstTeamId),
-    secondTeamId: MatchSideId.from(event.secondTeamId),
+    firstMatchSideId: MatchSideId.from(event.firstMatchSideId),
+    secondMatchSideId: MatchSideId.from(event.secondMatchSideId),
   });
 }
