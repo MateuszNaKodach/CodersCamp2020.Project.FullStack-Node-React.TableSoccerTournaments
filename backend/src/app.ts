@@ -19,7 +19,6 @@ import { ModuleRestApi } from './shared/presentation/rest-api/ModuleRestApi';
 import { DomainEventBus } from './shared/core/application/event/DomainEventBus';
 import { EntityIdGenerator } from './shared/core/application/EntityIdGenerator';
 import { UuidEntityIdGenerator } from './shared/infrastructure/core/application/UuidEntityIdGenerator';
-import { PlayerProfileWasCreated } from './modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
 import { LoggingDomainEventBus } from './shared/infrastructure/core/application/event/LoggingDomainEventBus';
 import { MongoTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/mongo/MongoTournamentRegistrationsRepository';
 import { Express } from 'express';
@@ -29,11 +28,13 @@ import { connectToPostgreSql } from './shared/infrastructure/repository/connectT
 import { PostgreSqlTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/postgresql/PostgreSqlTournamentRegistrationsRepository';
 import { PlayerProfilesModuleCore } from './modules/player-profiles/core/PlayerProfilesModuleCore';
 import { PlayerProfileRestApiModule } from './modules/player-profiles/presentation/rest-api/PlayerProfileRestApiModule';
-import { InMemoryPlayerProfileRepository } from './modules/tournaments-registrations/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
+import { InMemoryPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
+import { MongoPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/mongo/MongoPlayerProfileRepository';
 import { InMemoryDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryDoublesTournamentRepository';
 import { DoublesTournamentModuleCore } from './modules/doubles-tournament/core/DoublesTournamentModuleCore';
 import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
 import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
+import { CreatePlayerProfile } from './modules/player-profiles/core/application/command/CreatePlayerProfile';
 
 config();
 
@@ -67,7 +68,7 @@ export async function TableSoccerTournamentsApplication(
   const playerProfilesRepository = PlayerProfilesRepository();
   const playerProfilesModule: Module = {
     core: PlayerProfilesModuleCore(eventBus, currentTimeProvider, playerProfilesRepository),
-    restApi: PlayerProfileRestApiModule(commandBus, queryBus),
+    restApi: PlayerProfileRestApiModule(commandBus, eventBus, queryBus),
   };
 
   const doublesTournamentRepository = DoublesTournamentRepository();
@@ -89,13 +90,13 @@ export async function TableSoccerTournamentsApplication(
   const modulesRestApis: ModuleRestApi[] = modules.map((module) => module.restApi).filter(isDefined);
   const restApi = restApiExpressServer(modulesRestApis);
 
-  initializeDummyData(eventBus, entityIdGenerator);
+  await initializeDummyData(commandBus, entityIdGenerator);
 
   return { restApi };
 }
 
 //TODO: Remove for production usage
-function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: EntityIdGenerator) {
+async function initializeDummyData(commandBus: CommandBus, entityIdGenerator: EntityIdGenerator) {
   const janKowalski = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Jan',
@@ -124,10 +125,11 @@ function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: Entity
     lastName: 'Ranek',
     phoneNumber: '123321334',
   };
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...janKowalski }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...katarzynaNowak }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...tomekDomek }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...franekPoranek }));
+
+  await commandBus.execute(new CreatePlayerProfile({ ...janKowalski }));
+  await commandBus.execute(new CreatePlayerProfile({ ...katarzynaNowak }));
+  await commandBus.execute(new CreatePlayerProfile({ ...tomekDomek }));
+  await commandBus.execute(new CreatePlayerProfile({ ...franekPoranek }));
 }
 
 function TournamentRegistrationsRepository() {
@@ -141,14 +143,9 @@ function TournamentRegistrationsRepository() {
 }
 
 function PlayerProfilesRepository() {
-  //TODO add later above repositories ???
-  // if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO') {
-  //   return new MongoPlayerProfilesRepository();
-  // }
-  // if (process.env.POSTGRES_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'POSTGRES') {
-  //   return new PostgreSqlPlayerProfilesRepository();
-  // }
-
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO') {
+    return new MongoPlayerProfileRepository();
+  }
   return new InMemoryPlayerProfileRepository();
 }
 
