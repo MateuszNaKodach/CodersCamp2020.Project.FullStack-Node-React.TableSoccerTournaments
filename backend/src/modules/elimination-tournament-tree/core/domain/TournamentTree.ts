@@ -12,7 +12,7 @@ export class TournamentTree {
 
 }
 
-export function createEmptyTournamentTree(
+export function createTournamentTree(
     props: {
         tournamentTeams: TournamentTeam[],
         entityIdGenerator: EntityIdGenerator,
