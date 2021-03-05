@@ -29,16 +29,17 @@ export function createTournamentTree(
 }
 
 function createWinnerTree(tournamentTeams: TournamentTeam[], fightingTeamsGroupsNumber: number, entityIdGenerator: EntityIdGenerator,): FightingTeamsGroup[] {
-    const returnedTree: FightingTeamsGroup[] = [];
+    let returnedTree: FightingTeamsGroup[] = [];
     const maxLevel = maxTreeLevel(fightingTeamsGroupsNumber);
 
 // biegnę od największego drzewka
-    for (let currentLevel = maxLevel; currentLevel >= 0; currentLevel--) {
-
-
+    for (let currentLevel = maxLevel-1, parentLevel: FightingTeamsGroup[] = []; currentLevel >= 0; currentLevel--) {
+        const createdLevel = createEmptyLevel(currentLevel, parentLevel, entityIdGenerator);
+        parentLevel = createdLevel;
+        returnedTree = returnedTree.concat(createdLevel);
     }
 
-    return "x" as unknown as FightingTeamsGroup[];
+    return returnedTree;
 
 }
 
@@ -47,14 +48,16 @@ function createEmptyLevel(fightingTeamsGroupLevel: number, parentLevel: Fighting
     const returnedLevel: FightingTeamsGroup[] = [];
     const matchesOnLevel = parentLevel.length ? parentLevel.length * 2 : 1;
 
-    for (let index = 0; index < matchesOnLevel; index++) {
+    for (let indexOfMatch = 0; indexOfMatch < matchesOnLevel; indexOfMatch++) {
+        const nextMatchId = matchesOnLevel == 1 ? undefined : parentLevel[Math.floor(indexOfMatch / 2)].fightingTeamsGroupId;
+        const generatedId = entityIdGenerator.generate()
         returnedLevel.push(
             FightingTeamsGroup.fromObj({
-                "fightingTeamsGroupId": FightingTeamsGroupId.from(entityIdGenerator.generate()),
+                "fightingTeamsGroupId": FightingTeamsGroupId.from(generatedId),
                 "fightingTeamsGroupLevel": fightingTeamsGroupLevel,
                 "firstTeam": undefined,
                 "secondTeam": undefined,
-                "nextMatchId": undefined,
+                "nextMatchId": nextMatchId,
             })
         )
     }

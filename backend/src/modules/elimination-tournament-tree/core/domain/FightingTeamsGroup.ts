@@ -6,7 +6,7 @@ export class FightingTeamsGroup {
     readonly firstTeam: TournamentTeam | undefined;
     readonly secondTeam: TournamentTeam | undefined;
     readonly fightingTeamsGroupLevel: number;
-    readonly nextMatchId: FightingTeamsGroupId;
+    readonly nextMatchId: FightingTeamsGroupId | undefined;
 
     private constructor(props: { fightingTeamsGroupId: FightingTeamsGroupId, firstTeam: TournamentTeam | undefined, secondTeam: TournamentTeam | undefined, fightingTeamsGroupLevel: number, nextMatchId: FightingTeamsGroupId  | undefined}) {
         this.fightingTeamsGroupId = props.fightingTeamsGroupId;
@@ -45,7 +45,7 @@ export class FightingTeamsGroup {
             "firstTeam": array[1],
             "secondTeam": array[2],
             "fightingTeamsGroupLevel": array[3],
-            "nextMatchId": array[3]
+            "nextMatchId": array[4]
         }
         return new FightingTeamsGroup(props);
     }

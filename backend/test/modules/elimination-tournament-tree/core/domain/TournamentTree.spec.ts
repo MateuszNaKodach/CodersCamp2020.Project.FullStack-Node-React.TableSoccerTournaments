@@ -18,10 +18,10 @@ import {TournamentTeamId} from "../../../../../src/modules/elimination-tournamen
 
 describe('TournamentTree', () => {
 
-    const teamEntityIdGen = NumberIdGeneratorStub(1000, "team");
-    const matchEntityIdGen = NumberIdGeneratorStub(1000, "match");
 
     it('CreateTournamentTree | Create correct 4 teams empty tree', async () => {
+        const teamEntityIdGen = NumberIdGeneratorStub(1000, "team");
+        const matchEntityIdGen = NumberIdGeneratorStub(1000, "match");
         //Given
         const currentTime = new Date();
         const tournamentTeams = TournamentTeamsListGenerator(teamEntityIdGen, 4);
@@ -29,16 +29,68 @@ describe('TournamentTree', () => {
         // //When
         const winnerTree = createTournamentTree(
             {
-                tournamentTeams:  tournamentTeams,
+                tournamentTeams: tournamentTeams,
                 entityIdGenerator: matchEntityIdGen,
             });
+
+        // Then
+        const expectedWinnerTree: FightingTeamsGroup[] = [
+            {
+                "fightingTeamsGroupId": FightingTeamsGroupId.from("match_1"),
+                "firstTeam": undefined,
+                "secondTeam": undefined,
+                "fightingTeamsGroupLevel": 1,
+                "nextMatchId": undefined,
+            },
+            {
+                "fightingTeamsGroupId": FightingTeamsGroupId.from("match_2"),
+                "firstTeam": undefined,
+                "secondTeam": undefined,
+                "fightingTeamsGroupLevel": 0,
+                "nextMatchId": FightingTeamsGroupId.from("match_1"),
+            },
+            {
+                "fightingTeamsGroupId": FightingTeamsGroupId.from("match_3"),
+                "firstTeam": undefined,
+                "secondTeam": undefined,
+                "fightingTeamsGroupLevel": 0,
+                "nextMatchId": FightingTeamsGroupId.from("match_1"),
+
+            },
+        ].map((item) => FightingTeamsGroup.fromObj(item));
+
+        expect(winnerTree).toIncludeSameMembers(expectedWinnerTree);
+
+    });
+
+
+    it('CreateTournamentTree | Create correct 4 teams tree', async () => {
+        const teamEntityIdGen = NumberIdGeneratorStub(1000, "team");
+        const matchEntityIdGen = NumberIdGeneratorStub(1000, "match");
+        //Given
+        const currentTime = new Date();
+        const tournamentTeams = TournamentTeamsListGenerator(teamEntityIdGen, 4);
+        // //When
+        const winnerTree = createTournamentTree(
+            {
+                tournamentTeams: tournamentTeams,
+                entityIdGenerator: matchEntityIdGen,
+            });
+
 
         // //Then
         const propsForExpectedFightingTeamsGroups = [
             // ["match_1", tournamentTeam[0],  tournamentTeam[1], 0],
-            ["match_1",tournamentTeams[0] , tournamentTeams[3], 0, "match_3"],
-            ["match_2", tournamentTeams[1], tournamentTeams[2], 0, "match_3"],
-            ["match_3", undefined, undefined],
+            [{"TYPE": "FightingTeamsGroup", "raw": "match_1"},
+                undefined, undefined, 1, undefined],
+            [{
+                "TYPE": "FightingTeamsGroup",
+                "raw": "match_2"
+            }, tournamentTeams[0], tournamentTeams[3], 0, {"TYPE": "FightingTeamsGroup", "raw": "match_3"}],
+            [{
+                "TYPE": "FightingTeamsGroup",
+                "raw": "match_3"
+            }, tournamentTeams[1], tournamentTeams[2], 0, {"TYPE": "FightingTeamsGroup", "raw": "match_3"}],
         ];
         const expectedWinnerTree = [
             FightingTeamsGroup.fromArray(propsForExpectedFightingTeamsGroups[0]),
@@ -47,26 +99,6 @@ describe('TournamentTree', () => {
         ];
         expect(winnerTree).toIncludeSameMembers(expectedWinnerTree);
     });
-    //
-    // it('CreateEmptyTournamentTree | Create correct 4 teams empty tree', async () => {
-    //     //Given
-    //     const currentTime = new Date();
-    //     const tournamentTeam = TournamentTeamsListGenerator(teamEntityIdGen, 4);
-    //     const expectedWinnerTree  = Array.from(Array(7))    .map(item => emptyFightingTeamsGroup);
-    //
-    //
-    //     // //When
-    //     createEmptyTournamentTree();
-    //     // const findAllDoublesTournamentsResult = await doublesTournaments.executeQuery<FindAllDoublesTournaments>(
-    //     //     new FindAllDoublesTournaments(),
-    //     // );
-    //     //
-    //     // //Then
-    //     const expectedWinnerTree  = Array.from(Array(7))    .map(item => emptyFightingTeamsGroup);
-    //     const expectedLoserTree = Array.from(Array(3))    .map(item => emptyFightingTeamsGroup);
-    //     const expectedFinalTree = Array.from(Array(3))    .map(item => emptyFightingTeamsGroup);
-    //     expect(true).toBeEmpty();
-    //     // expect(findAllDoublesTournamentsResult).toBeEmpty();
-    // });
+
 
 });
