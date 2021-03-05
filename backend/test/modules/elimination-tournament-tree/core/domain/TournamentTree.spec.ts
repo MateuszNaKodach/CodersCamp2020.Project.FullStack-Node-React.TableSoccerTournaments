@@ -45,7 +45,7 @@ describe('TournamentTree', () => {
             FightingTeamsGroup.fromArray(propsForExpectedFightingTeamsGroups[1]),
             FightingTeamsGroup.fromArray(propsForExpectedFightingTeamsGroups[2])
         ];
-        expect(winnerTree).toBe(expectedWinnerTree);
+        expect(winnerTree).toIncludeSameMembers(expectedWinnerTree);
     });
     //
     // it('CreateEmptyTournamentTree | Create correct 4 teams empty tree', async () => {
