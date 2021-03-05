@@ -3,10 +3,10 @@ import {TournamentTeam} from './TournamentTeam';
 
 export class FightingTeamsGroup {
     readonly fightingTeamsGroupId: FightingTeamsGroupId;
-    readonly firstTeam: TournamentTeam | undefined;
-    readonly secondTeam: TournamentTeam | undefined;
+     firstTeam: TournamentTeam | undefined;
+    secondTeam: TournamentTeam | undefined;
     readonly fightingTeamsGroupLevel: number;
-    readonly nextMatchId: FightingTeamsGroupId | undefined;
+     nextMatchId: FightingTeamsGroupId | undefined;
 
     private constructor(props: { fightingTeamsGroupId: FightingTeamsGroupId, firstTeam: TournamentTeam | undefined, secondTeam: TournamentTeam | undefined, fightingTeamsGroupLevel: number, nextMatchId: FightingTeamsGroupId  | undefined}) {
         this.fightingTeamsGroupId = props.fightingTeamsGroupId;

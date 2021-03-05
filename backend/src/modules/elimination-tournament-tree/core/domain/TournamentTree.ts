@@ -11,7 +11,6 @@ export class TournamentTree {
     ) {
         this.tournamentTeams = props.tournamentTeams;
     }
-
 }
 
 export function createTournamentTree(
@@ -21,29 +20,25 @@ export function createTournamentTree(
     }
 ): FightingTeamsGroup[] {
 
-    const fightingTeamsGroupsNumber = nearestBiggerPow2Integer(props.tournamentTeams.length);
+    const numberOfFightingTeamsGroups = fightingTeamsGroupsNumber(props.tournamentTeams.length);
+    const winnerTree = createWinnerTree(props.tournamentTeams, numberOfFightingTeamsGroups, props.entityIdGenerator);
+    return winnerTree;
 
-    const winnerTree = createWinnerTree(props.tournamentTeams, fightingTeamsGroupsNumber, props.entityIdGenerator);
-
-    return winnerTree as unknown as FightingTeamsGroup[];
 }
 
 function createWinnerTree(tournamentTeams: TournamentTeam[], fightingTeamsGroupsNumber: number, entityIdGenerator: EntityIdGenerator,): FightingTeamsGroup[] {
     let returnedTree: FightingTeamsGroup[] = [];
     const maxLevel = maxTreeLevel(fightingTeamsGroupsNumber);
-
 // biegnę od największego drzewka
-    for (let currentLevel = maxLevel-1, parentLevel: FightingTeamsGroup[] = []; currentLevel >= 0; currentLevel--) {
+    for (let currentLevel = maxLevel - 1, parentLevel: FightingTeamsGroup[] = []; currentLevel >= 0; currentLevel--) {
         const createdLevel = createEmptyLevel(currentLevel, parentLevel, entityIdGenerator);
         parentLevel = createdLevel;
-        returnedTree = returnedTree.concat(createdLevel);
+        returnedTree = returnedTree.concat(currentLevel != 0 ? createdLevel : setStarterValueOnLevel(createdLevel, tournamentTeams));
     }
-
+    // returnedTree = setStarterLevel(returnedTree, tournamentTeams);
     return returnedTree;
-
 }
 
-// function createEmptyLevel(fightingTeamsGroupLevel: number, matchesOnLevel: number, entityIdGenerator: EntityIdGenerator): FightingTeamsGroup[] {
 function createEmptyLevel(fightingTeamsGroupLevel: number, parentLevel: FightingTeamsGroup[], entityIdGenerator: EntityIdGenerator): FightingTeamsGroup[] {
     const returnedLevel: FightingTeamsGroup[] = [];
     const matchesOnLevel = parentLevel.length ? parentLevel.length * 2 : 1;
@@ -61,12 +56,44 @@ function createEmptyLevel(fightingTeamsGroupLevel: number, parentLevel: Fighting
             })
         )
     }
+    return returnedLevel.reverse();
+}
+
+function setStarterValueOnLevel(emptyStartLevel: FightingTeamsGroup[], teamsList: TournamentTeam[]): FightingTeamsGroup[] {
+    const numberOfFightingTeamsGroups = fightingTeamsGroupsNumber(teamsList.length);
+    // const returnedLevel: (TournamentTeam | undefined)[ ] = new Array(numberOfFightingTeamsGroups);
+    const teamsListWithEmptyPlace: (TournamentTeam | undefined)[ ] = teamsList.concat(new Array(numberOfFightingTeamsGroups - teamsList.length));
+
+    const returnedLevel: FightingTeamsGroup[] = emptyStartLevel;
+    returnedLevel.map((item, index) => {
+        const theBestTeam = teamsListWithEmptyPlace.shift();
+        const theWorstTeam = teamsListWithEmptyPlace.pop();
+        console.log(teamsListWithEmptyPlace.reverse().pop());
+        console.log(teamsListWithEmptyPlace);
+
+    })
+    // TODO:  tablica z przygotowanymi w kolejności drużynami
+    // const returnedLevel: (TournamentTeam | undefined)[ ] = new Array(numberOfFightingTeamsGroups);
+    // console.log(returnedLevel);
+    // returnedLevel.map(item => {
+    //
+    // })
+
+
+    // teamsListWithEmptyPlace.
+
+
+// returnedTree.map((item)=>{
+//     if(item.fightingTeamsGroupLevel ==0){
+//         item.firstTeam =
+//     }
+// })
 
     return returnedLevel;
 }
 
-function nearestBiggerPow2Integer(aSize: number) {
-    return Math.pow(2, Math.ceil(Math.log(aSize) / Math.log(2)));
+function fightingTeamsGroupsNumber(tournamentTeamsLength: number): number {
+    return Math.pow(2, Math.ceil(Math.log(tournamentTeamsLength) / Math.log(2)));
 }
 
 function maxTreeLevel(fightingTeamsGroupsNumber: number) {
