@@ -28,9 +28,9 @@ describe('Table reservation', function () {
 
     //Then
     const tablesAssigned: TournamentTable[] = [
-        new TournamentTable({ tournamentId, tableId: TableId.from('TableId1'), tableNumber: TableNumber.from(1), tableName: 'Leonhart' }),
-        new TournamentTable({ tournamentId, tableId: TableId.from('TableId2'), tableNumber: TableNumber.from(2), tableName: 'Garlando' }),
-        new TournamentTable({ tournamentId, tableId: TableId.from('TableId3'), tableNumber: TableNumber.from(3), tableName: 'Leonhart' })
+      new TournamentTable({ tournamentId, tableId: TableId.from('TableId1'), tableNumber: TableNumber.from(1), tableName: 'Leonhart' }),
+      new TournamentTable({ tournamentId, tableId: TableId.from('TableId2'), tableNumber: TableNumber.from(2), tableName: 'Garlando' }),
+      new TournamentTable({ tournamentId, tableId: TableId.from('TableId3'), tableNumber: TableNumber.from(3), tableName: 'Leonhart' })
     ];
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(
