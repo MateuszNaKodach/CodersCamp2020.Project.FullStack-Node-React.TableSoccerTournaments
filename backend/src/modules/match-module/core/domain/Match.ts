@@ -9,12 +9,7 @@ export class Match {
   readonly secondMatchSideId: MatchSideId;
   readonly winner: MatchSideId | undefined;
 
-  constructor(props: {
-    matchId: MatchId;
-    firstMatchSideId: MatchSideId;
-    secondMatchSideId: MatchSideId;
-    winner?: MatchSideId;
-  }) {
+  constructor(props: { matchId: MatchId; firstMatchSideId: MatchSideId; secondMatchSideId: MatchSideId; winner?: MatchSideId }) {
     this.matchId = props.matchId;
     this.firstMatchSideId = props.firstMatchSideId;
     this.secondMatchSideId = props.secondMatchSideId;
