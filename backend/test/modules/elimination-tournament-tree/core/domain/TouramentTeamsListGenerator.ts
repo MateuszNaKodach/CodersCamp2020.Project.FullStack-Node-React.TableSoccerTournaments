@@ -6,3 +6,4 @@ export function TournamentTeamsListGenerator(entityIdGen: EntityIdGenerator, num
     return Array.from(Array(numberOfTeams))
         .map(() => new TournamentTeam({teamId: TournamentTeamId.from(entityIdGen.generate())}));
 }
+ 
