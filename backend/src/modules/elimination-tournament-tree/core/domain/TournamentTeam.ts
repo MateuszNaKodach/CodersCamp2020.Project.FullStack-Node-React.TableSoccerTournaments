@@ -5,6 +5,5 @@ export class TournamentTeam {
 
     constructor(props: { teamId: TournamentTeamId;  }) {
         this.teamId = props.teamId;
-
     }
 }
