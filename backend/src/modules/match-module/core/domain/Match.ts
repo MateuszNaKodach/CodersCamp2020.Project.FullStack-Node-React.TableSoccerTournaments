@@ -8,23 +8,17 @@ export class Match {
   readonly firstMatchSideId: MatchSideId;
   readonly secondMatchSideId: MatchSideId;
   readonly winner: MatchSideId | undefined;
-  readonly looser: MatchSideId | undefined;
-  readonly hasEnded: boolean | undefined = false;
 
   constructor(props: {
     matchId: MatchId;
     firstMatchSideId: MatchSideId;
     secondMatchSideId: MatchSideId;
     winner?: MatchSideId;
-    looser?: MatchSideId;
-    hasEnded?: boolean;
   }) {
     this.matchId = props.matchId;
     this.firstMatchSideId = props.firstMatchSideId;
     this.secondMatchSideId = props.secondMatchSideId;
     this.winner = props.winner;
-    this.looser = props.looser;
-    this.hasEnded = props.hasEnded;
   }
 }
 

@@ -33,8 +33,6 @@ type MongoMatch = {
   readonly firstMatchSideId: string;
   readonly secondMatchSideId: string;
   readonly winner: string;
-  readonly looser: string;
-  readonly hasEnded: boolean;
 } & mongoose.Document;
 
 const MatchSchema = new mongoose.Schema({
