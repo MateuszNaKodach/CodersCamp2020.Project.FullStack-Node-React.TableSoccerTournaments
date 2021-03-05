@@ -20,7 +20,7 @@ export class TournamentTable {
 
 export function assignTablesToTournament(
   state: TournamentTable[] | undefined,
-  command: { tournamentId: string; tablesList: { tableNumber: TableNumber; tableName: string }[] },
+  command: { tournamentId: string; tablesList: { tableNumber: number; tableName: string }[] },
   currentTime: Date,
   entityIdGenerator: EntityIdGenerator,
 ): DomainCommandResult<TournamentTable[]> {
@@ -36,7 +36,7 @@ export function assignTablesToTournament(
     return new TournamentTable({
       tournamentId: command.tournamentId,
       tableId: TableId.from(tableId),
-      tableNumber: table.tableNumber,
+      tableNumber: TableNumber.from(table.tableNumber),
       tableName: table.tableName,
     });
   });

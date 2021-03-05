@@ -3,11 +3,11 @@ import { DomainEventPublisher } from '../../../../../shared/core/application/eve
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
 import { EntityIdGenerator } from '../../../../../shared/core/application/EntityIdGenerator';
-import { AddTournamentTables } from './AddTournamentTables';
+import { AssignTournamentTables } from './AssignTournamentTables';
 import { TournamentTablesRepository } from '../TournamentTablesRepository';
 import { assignTablesToTournament } from '../../domain/TournamentTable';
 
-export class AddTournamentTablesCommandHandler implements CommandHandler<AddTournamentTables> {
+export class AssignTournamentTablesCommandHandler implements CommandHandler<AssignTournamentTables> {
   constructor(
     private readonly eventPublisher: DomainEventPublisher,
     private readonly currentTimeProvider: CurrentTimeProvider,
@@ -15,7 +15,7 @@ export class AddTournamentTablesCommandHandler implements CommandHandler<AddTour
     private readonly repository: TournamentTablesRepository,
   ) {}
 
-  async execute(command: AddTournamentTables): Promise<CommandResult> {
+  async execute(command: AssignTournamentTables): Promise<CommandResult> {
     const tournamentId = command.tournamentId;
     const tournamentTables = await this.repository.findByTournamentId(tournamentId);
 

@@ -4,8 +4,8 @@ import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { EntityIdGenerator } from '../../../shared/core/application/EntityIdGenerator';
 import { TournamentTablesRepository } from './application/TournamentTablesRepository';
-import { AddTournamentTables } from './application/command/AddTournamentTables';
-import { AddTournamentTablesCommandHandler } from './application/command/AddTournamentTablesCommandHandler';
+import { AssignTournamentTables } from './application/command/AssignTournamentTables';
+import { AssignTournamentTablesCommandHandler } from './application/command/AssignTournamentTablesCommandHandler';
 
 export function TournamentTablesModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -17,8 +17,8 @@ export function TournamentTablesModuleCore(
   return {
     commandHandlers: [
       {
-        commandType: AddTournamentTables,
-        handler: new AddTournamentTablesCommandHandler(eventPublisher, currentTimeProvider, entityIdGenerator, repository),
+        commandType: AssignTournamentTables,
+        handler: new AssignTournamentTablesCommandHandler(eventPublisher, currentTimeProvider, entityIdGenerator, repository),
       },
     ],
     eventHandlers: [],
