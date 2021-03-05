@@ -8,7 +8,7 @@ export class FightingTeamsGroup {
     readonly fightingTeamsGroupLevel: number;
     readonly nextMatchId: FightingTeamsGroupId;
 
-    private constructor(props: { fightingTeamsGroupId: FightingTeamsGroupId, firstTeam: TournamentTeam | undefined, secondTeam: TournamentTeam | undefined, fightingTeamsGroupLevel: number, nextMatchId: FightingTeamsGroupId }) {
+    private constructor(props: { fightingTeamsGroupId: FightingTeamsGroupId, firstTeam: TournamentTeam | undefined, secondTeam: TournamentTeam | undefined, fightingTeamsGroupLevel: number, nextMatchId: FightingTeamsGroupId  | undefined}) {
         this.fightingTeamsGroupId = props.fightingTeamsGroupId;
         this.firstTeam = props.firstTeam;
         this.secondTeam = props.secondTeam;
@@ -34,7 +34,7 @@ export class FightingTeamsGroup {
     // }
 
 
-    static fromArgs(fightingTeamsGroupId: FightingTeamsGroupId, firstTeam: TournamentTeam | undefined, secondTeam: TournamentTeam | undefined, fightingTeamsGroupLevel: number, nextMatchId: FightingTeamsGroupId): FightingTeamsGroup {
+    static fromArgs(fightingTeamsGroupId: FightingTeamsGroupId, firstTeam: TournamentTeam | undefined, secondTeam: TournamentTeam | undefined, fightingTeamsGroupLevel: number, nextMatchId: FightingTeamsGroupId | undefined): FightingTeamsGroup {
         const props = {fightingTeamsGroupId, firstTeam, secondTeam, fightingTeamsGroupLevel, nextMatchId: nextMatchId}
         return new FightingTeamsGroup(props);
     }
@@ -50,7 +50,7 @@ export class FightingTeamsGroup {
         return new FightingTeamsGroup(props);
     }
 
-    static fromObj(props: { fightingTeamsGroupId: FightingTeamsGroupId, firstTeam: TournamentTeam | undefined, secondTeam: TournamentTeam | undefined, fightingTeamsGroupLevel: number, nextMatchId: FightingTeamsGroupId }): FightingTeamsGroup {
+    static fromObj(props: { fightingTeamsGroupId: FightingTeamsGroupId, firstTeam: TournamentTeam | undefined, secondTeam: TournamentTeam | undefined, fightingTeamsGroupLevel: number, nextMatchId: FightingTeamsGroupId | undefined }): FightingTeamsGroup {
         return new FightingTeamsGroup(props);
     }
 }

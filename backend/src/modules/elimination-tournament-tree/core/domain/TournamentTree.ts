@@ -1,6 +1,7 @@
 import {TournamentTeam} from "./TournamentTeam";
 import {EntityIdGenerator} from "../../../../shared/core/application/EntityIdGenerator";
 import {FightingTeamsGroup} from "./FightingTeamsGroup";
+import {FightingTeamsGroupId} from "./FightingTeamsGroupId";
 
 export class TournamentTree {
     readonly tournamentTeams: TournamentTeam[];
@@ -31,21 +32,34 @@ function createWinnerTree(tournamentTeams: TournamentTeam[], fightingTeamsGroups
     const returnedTree: FightingTeamsGroup[] = [];
     const maxLevel = maxTreeLevel(fightingTeamsGroupsNumber);
 
-
+// biegnę od największego drzewka
     for (let currentLevel = maxLevel; currentLevel >= 0; currentLevel--) {
-        returnedTree.push(
-            FightingTeamsGroup.fromObj({
-                fightingTeamsGroupId: entityIdGenerator,
-                fightingTeamsGroupLevel: 0,
-                firstTeam: undefined,
-                nextMatchId: undefined,
-                secondTeam: undefined
-            })
-        );
+
+
     }
 
     return "x" as unknown as FightingTeamsGroup[];
 
+}
+
+// function createEmptyLevel(fightingTeamsGroupLevel: number, matchesOnLevel: number, entityIdGenerator: EntityIdGenerator): FightingTeamsGroup[] {
+function createEmptyLevel(fightingTeamsGroupLevel: number, parentLevel: FightingTeamsGroup[], entityIdGenerator: EntityIdGenerator): FightingTeamsGroup[] {
+    const returnedLevel: FightingTeamsGroup[] = [];
+    const matchesOnLevel = parentLevel.length ? parentLevel.length * 2 : 1;
+
+    for (let index = 0; index < matchesOnLevel; index++) {
+        returnedLevel.push(
+            FightingTeamsGroup.fromObj({
+                "fightingTeamsGroupId": FightingTeamsGroupId.from(entityIdGenerator.generate()),
+                "fightingTeamsGroupLevel": fightingTeamsGroupLevel,
+                "firstTeam": undefined,
+                "secondTeam": undefined,
+                "nextMatchId": undefined,
+            })
+        )
+    }
+
+    return returnedLevel;
 }
 
 function nearestBiggerPow2Integer(aSize: number) {
