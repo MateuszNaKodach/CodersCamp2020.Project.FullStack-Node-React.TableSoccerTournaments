@@ -5,26 +5,15 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 
 export class Match {
   readonly matchId: MatchId;
-  readonly firstMatchSideId: MatchSideId | undefined;
-  readonly secondMatchSideId: MatchSideId | undefined;
+  readonly firstMatchSideId: MatchSideId;
+  readonly secondMatchSideId: MatchSideId;
   readonly winner: MatchSideId | undefined;
-  readonly looser: MatchSideId | undefined;
-  readonly hasEnded: boolean | undefined = false;
 
-  constructor(props: {
-    matchId: MatchId;
-    firstMatchSideId: MatchSideId;
-    secondMatchSideId: MatchSideId;
-    winner?: MatchSideId;
-    looser?: MatchSideId;
-    hasEnded?: boolean;
-  }) {
+  constructor(props: { matchId: MatchId; firstMatchSideId: MatchSideId; secondMatchSideId: MatchSideId; winner?: MatchSideId }) {
     this.matchId = props.matchId;
     this.firstMatchSideId = props.firstMatchSideId;
     this.secondMatchSideId = props.secondMatchSideId;
     this.winner = props.winner;
-    this.looser = props.looser;
-    this.hasEnded = props.hasEnded;
   }
 }
 
