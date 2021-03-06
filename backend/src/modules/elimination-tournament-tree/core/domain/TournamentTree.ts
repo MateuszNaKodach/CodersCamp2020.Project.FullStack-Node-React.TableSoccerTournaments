@@ -2,7 +2,10 @@ import {TournamentTeam} from "./TournamentTeam";
 import {EntityIdGenerator} from "../../../../shared/core/application/EntityIdGenerator";
 import {FightingTeamsGroup} from "./FightingTeamsGroup";
 import {FightingTeamsGroupId} from "./FightingTeamsGroupId";
+import { Status } from 'brackets-model';
+
 import {toUnicode} from "punycode";
+import {BracketsManager} from "brackets-manager";
 
 export class TournamentTree {
     readonly tournamentTeams: TournamentTeam[];
@@ -20,6 +23,11 @@ export function createTournamentTree(
         entityIdGenerator: EntityIdGenerator,
     }
 ): FightingTeamsGroup[] {
+
+    const manager = new BracketsManager(storage);
+
+
+
 
     const numberOfFightingTeamsGroups = fightingTeamsGroupsNumber(props.tournamentTeams.length);
     const winnerTree = createWinnerTree(props.tournamentTeams, numberOfFightingTeamsGroups, props.entityIdGenerator);
