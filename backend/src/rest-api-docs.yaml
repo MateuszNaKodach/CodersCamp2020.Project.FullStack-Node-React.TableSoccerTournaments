@@ -375,7 +375,7 @@ components:
       type: object
       properties:
         matchId:
-          description: Identifier of the match that is supposed to start
+          description: Identifier of the match
           type: string
           format: uuid
           example: 2480fc2c-bbd7-427c-9439-02f76583aef5
