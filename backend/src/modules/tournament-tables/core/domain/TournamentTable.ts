@@ -26,7 +26,7 @@ export function assignTablesToTournament(
     throw new Error('Tournament must have at least 1 table assigned.');
   }
   if (isTableNumberDuplicated(command.tablesList)) {
-    throw new Error('Tables numbers must be different.')
+    throw new Error('Tables numbers must be different.');
   }
 
   const tournamentTables: TournamentTable[] = command.tablesList.map((table) => {
@@ -51,7 +51,7 @@ export function assignTablesToTournament(
 }
 
 function isTableNumberDuplicated(tableList: { tableNumber: number; tableName: string }[]) {
-  const uniqueValues = new Set(tableList.map(table => table.tableNumber));
+  const uniqueValues = new Set(tableList.map((table) => table.tableNumber));
   return uniqueValues.size < tableList.length;
 }
 

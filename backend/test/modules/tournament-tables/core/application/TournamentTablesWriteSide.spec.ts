@@ -75,8 +75,8 @@ describe('Table reservation', function () {
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
     const tablesList = [
-      {tableNumber: 1, tableName: 'Leonhart'},
-      {tableNumber: 1, tableName: 'Garlando'},
+      { tableNumber: 1, tableName: 'Leonhart' },
+      { tableNumber: 1, tableName: 'Garlando' },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
