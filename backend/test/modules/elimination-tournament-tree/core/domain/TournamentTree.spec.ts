@@ -8,9 +8,7 @@ import {FindDoublesTournamentById} from '../../../../../src/modules/doubles-tour
 import {TeamId} from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
 import {NumberIdGeneratorStub} from "../../../../test-support/shared/core/NumberIdGeneratorStub";
 import {EntityIdGenerator} from "../../../../../src/shared/core/application/EntityIdGenerator";
-import {
-    createTournamentTree
-} from "../../../../../src/modules/elimination-tournament-tree/core/domain/TournamentTree";
+import {   TournamentTree} from "../../../../../src/modules/elimination-tournament-tree/core/domain/TournamentTree";
 import {generateTournamentTeamsList} from "./TouramentTeamsListGenerator";
 import {FightingTeamsGroup} from "../../../../../src/modules/elimination-tournament-tree/core/domain/FightingTeamsGroup";
 import {FightingTeamsGroupId} from "../../../../../src/modules/elimination-tournament-tree/core/domain/FightingTeamsGroupId";
@@ -25,7 +23,7 @@ describe('TournamentTree', () => {
         const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
 
         // //When
-        const winnerTree = createTournamentTree(
+        const tournamentTree : TournamentTree = TournamentTree.createSingleTournamentTree(
             {
                 tournamentTeams: tournamentTeamsList,
                 entityIdGenerator: matchEntityIdGen,
@@ -54,7 +52,7 @@ describe('TournamentTree', () => {
             },
         ].map((item) => FightingTeamsGroup.fromObj(item));
 
-        expect(winnerTree).toIncludeSameMembers(expectedWinnerTree);
+        expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
 
 
@@ -65,7 +63,7 @@ describe('TournamentTree', () => {
         const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 6);
 
         // //When
-        const winnerTree = createTournamentTree(
+        const tournamentTree : TournamentTree = TournamentTree.createSingleTournamentTree(
             {
                 tournamentTeams: tournamentTeamsList,
                 entityIdGenerator: matchEntityIdGen,
@@ -118,6 +116,6 @@ describe('TournamentTree', () => {
             },
         ].map((item) => FightingTeamsGroup.fromObj(item));
 
-        expect(winnerTree).toIncludeSameMembers(expectedWinnerTree);
+        expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
 });

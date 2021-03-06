@@ -6,24 +6,33 @@ import {toUnicode} from "punycode";
 
 export class TournamentTree {
     readonly tournamentTeams: TournamentTeam[];
+    readonly tournamentTreeArray: FightingTeamsGroup[];
 
-    constructor(
-        props: { tournamentTeams: TournamentTeam[] }
+    private constructor(
+        props: { tournamentTreeArray: FightingTeamsGroup[], tournamentTeams: TournamentTeam[] }
     ) {
         this.tournamentTeams = props.tournamentTeams;
+        this.tournamentTreeArray = props.tournamentTreeArray;
     }
-}
 
-export function createTournamentTree(
-    props: {
-        tournamentTeams: TournamentTeam[],
-        entityIdGenerator: EntityIdGenerator,
+    static createSingleTournamentTree(
+        props: {
+            tournamentTeams: TournamentTeam[],
+            entityIdGenerator: EntityIdGenerator,
+        }
+    ): TournamentTree {
+        const numberOfFightingTeamsGroups = fightingTeamsGroupsNumber(props.tournamentTeams.length);
+        const winnerTree = createWinnerTree(props.tournamentTeams, numberOfFightingTeamsGroups, props.entityIdGenerator);
+        const tournamentTreeProps = {
+            tournamentTreeArray: winnerTree,
+            tournamentTeams: props.tournamentTeams
+        };
+        return new TournamentTree(tournamentTreeProps);
     }
-): FightingTeamsGroup[] {
 
-    const numberOfFightingTeamsGroups = fightingTeamsGroupsNumber(props.tournamentTeams.length);
-    const winnerTree = createWinnerTree(props.tournamentTeams, numberOfFightingTeamsGroups, props.entityIdGenerator);
-    return winnerTree;
+   public  getTournamentTreeArray() : FightingTeamsGroup[]{
+        return this.tournamentTreeArray;
+    }
 }
 
 function createWinnerTree(tournamentTeams: TournamentTeam[], fightingTeamsGroupsNumber: number, entityIdGenerator: EntityIdGenerator,): FightingTeamsGroup[] {
