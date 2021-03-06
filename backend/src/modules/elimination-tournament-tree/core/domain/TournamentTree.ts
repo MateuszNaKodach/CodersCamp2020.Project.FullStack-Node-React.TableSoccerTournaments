@@ -40,6 +40,11 @@ function createWinnerTree(tournamentTeams: TournamentTeam[], fightingTeamsGroups
     return returnedTree.reverse();
 }
 
+function createLoserTree(tournamentTeams: TournamentTeam[], fightingTeamsGroupsNumber: number, entityIdGenerator: EntityIdGenerator,): FightingTeamsGroup[] {
+    let returnedTree: FightingTeamsGroup[] = [];
+    return returnedTree.reverse();
+}
+
 function createEmptyLevel(fightingTeamsGroupLevel: number, parentLevel: FightingTeamsGroup[], entityIdGenerator: EntityIdGenerator): FightingTeamsGroup[] {
     const returnedLevel: FightingTeamsGroup[] = [];
     const matchesOnLevel = parentLevel.length ? parentLevel.length * 2 : 1;
