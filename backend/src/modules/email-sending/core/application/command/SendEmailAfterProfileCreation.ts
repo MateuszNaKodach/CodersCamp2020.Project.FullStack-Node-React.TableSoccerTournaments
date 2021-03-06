@@ -1,4 +1,4 @@
-export class SendEmail {
+export class SendEmailAfterProfileCreation {
     readonly firstName: string;
     readonly lastName: string;
     readonly emailAddress: string;

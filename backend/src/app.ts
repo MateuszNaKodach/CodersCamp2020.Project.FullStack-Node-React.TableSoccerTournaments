@@ -35,6 +35,7 @@ import { DoublesTournamentModuleCore } from './modules/doubles-tournament/core/D
 import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
 import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
 import { CreatePlayerProfile } from './modules/player-profiles/core/application/command/CreatePlayerProfile';
+import {SendEmailModuleCore} from "./modules/email-sending/core/application/SendEmailModuleCore";
 
 config();
 
@@ -67,7 +68,7 @@ export async function TableSoccerTournamentsApplication(
 
   const playerProfilesRepository = PlayerProfilesRepository();
   const playerProfilesModule: Module = {
-    core: PlayerProfilesModuleCore(eventBus, currentTimeProvider, playerProfilesRepository),
+    core: PlayerProfilesModuleCore(eventBus, commandBus, currentTimeProvider, playerProfilesRepository),
     restApi: PlayerProfileRestApiModule(commandBus, eventBus, queryBus),
   };
 
@@ -77,11 +78,16 @@ export async function TableSoccerTournamentsApplication(
     restApi: DoublesTournamentRestApiModule(commandBus, eventBus, queryBus),
   };
 
+  const sendingEmailModule: Module = {
+    core: SendEmailModuleCore()
+  };
+
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
     process.env.PLAYERS_MATCHING_MODULE === 'ENABLED' ? playersMatchingModule : undefined,
     process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined,
     process.env.DOUBLES_TOURNAMENT_MODULE === 'ENABLED' ? doublesTournamentModule : undefined,
+    process.env.EMAILS_SENDING_MODULE === 'ENABLED' ? sendingEmailModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
