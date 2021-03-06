@@ -1,8 +1,8 @@
-import { MatchRepository } from '../../../../../src/modules/match-module/core/application/MatchRepository';
-import { DatabaseTestSupport } from '../../../../test-support/shared/infrastructure/DatabaseTestSupport';
-import { Match } from '../../../../../src/modules/match-module/core/domain/Match';
-import { MatchId } from '../../../../../src/modules/match-module/core/domain/MatchId';
-import { MatchSideId } from '../../../../../src/modules/match-module/core/domain/MatchSideId';
+import { MatchRepository } from '../../../../src/modules/match-module/core/application/MatchRepository';
+import { DatabaseTestSupport } from '../../../test-support/shared/infrastructure/DatabaseTestSupport';
+import { Match } from '../../../../src/modules/match-module/core/domain/Match';
+import { MatchId } from '../../../../src/modules/match-module/core/domain/MatchId';
+import { MatchSideId } from '../../../../src/modules/match-module/core/domain/MatchSideId';
 
 export function MatchRepositoryTestCases(props: {
   name: string;
