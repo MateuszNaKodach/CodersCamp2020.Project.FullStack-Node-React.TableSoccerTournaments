@@ -1,9 +1,9 @@
 import { TournamentTable } from '../domain/TournamentTable';
 
 export interface TournamentTablesRepository {
-  save(tournamentTables: TournamentTable[]): Promise<void>;
+  save(tournamentTable: TournamentTable): Promise<void>;
 
-  findByTableId(tableId: string): Promise<TournamentTable | undefined>;
+  saveAll(tournamentTables: TournamentTable[]): Promise<void>;
 
   findByTournamentId(tournamentId: string): Promise<TournamentTable[] | undefined>;
 

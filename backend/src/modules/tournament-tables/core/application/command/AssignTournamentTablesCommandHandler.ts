@@ -2,7 +2,6 @@ import { CommandHandler } from '../../../../../shared/core/application/command/C
 import { DomainEventPublisher } from '../../../../../shared/core/application/event/DomainEventBus';
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
-import { EntityIdGenerator } from '../../../../../shared/core/application/EntityIdGenerator';
 import { AssignTournamentTables } from './AssignTournamentTables';
 import { TournamentTablesRepository } from '../TournamentTablesRepository';
 import { assignTablesToTournament } from '../../domain/TournamentTable';
@@ -11,7 +10,6 @@ export class AssignTournamentTablesCommandHandler implements CommandHandler<Assi
   constructor(
     private readonly eventPublisher: DomainEventPublisher,
     private readonly currentTimeProvider: CurrentTimeProvider,
-    private readonly entityIdGenerator: EntityIdGenerator,
     private readonly repository: TournamentTablesRepository,
   ) {}
 
@@ -19,8 +17,8 @@ export class AssignTournamentTablesCommandHandler implements CommandHandler<Assi
     const tournamentId = command.tournamentId;
     const tournamentTables = await this.repository.findByTournamentId(tournamentId);
 
-    const { state, events } = assignTablesToTournament(tournamentTables, command, this.currentTimeProvider(), this.entityIdGenerator);
-    await this.repository.save(state);
+    const { state, events } = assignTablesToTournament(tournamentTables, command, this.currentTimeProvider());
+    await this.repository.saveAll(state);
     this.eventPublisher.publishAll(events);
     return CommandResult.success();
   }

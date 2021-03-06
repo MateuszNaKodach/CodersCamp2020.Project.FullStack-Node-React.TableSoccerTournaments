@@ -4,12 +4,13 @@ import { TournamentTable } from '../../../domain/TournamentTable';
 export class InMemoryTournamentTablesRepository implements TournamentTablesRepository {
   private readonly entities: { [tableId: string]: TournamentTable } = {};
 
-  async save(tournamentTables: TournamentTable[]): Promise<void> {
-    tournamentTables.forEach((table) => (this.entities[table.tableId.raw] = table));
+  async save(tournamentTable: TournamentTable): Promise<void> {
+    const tableId = `${tournamentTable.tournamentId}_${tournamentTable.tableNumber}`;
+    this.entities[tableId] = tournamentTable;
   }
 
-  findByTableId(tableId: string): Promise<TournamentTable> {
-    return Promise.resolve(this.entities[tableId]);
+  async saveAll(tournamentTables: TournamentTable[]): Promise<void> {
+    tournamentTables.forEach((table) => this.save(table));
   }
 
   findByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
