@@ -30,7 +30,6 @@ describe('Doubles Tournament | Write Side', () => {
     ];
 
     expect(commandResult.isSuccess()).toBeTruthy();
-    debugger;
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
       new TournamentWithTeamsWasCreated({ occurredAt: currentTime, tournamentId, tournamentTeams }),
     );
@@ -63,7 +62,6 @@ describe('Doubles Tournament | Write Side', () => {
     ];
 
     expect(commandResult.isSuccess()).toBeTruthy();
-    debugger;
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
       new TournamentWithTeamsWasCreated({ occurredAt: currentTime, tournamentId, tournamentTeams }),
     );

@@ -36,6 +36,10 @@ import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/c
 import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
 import { CreatePlayerProfile } from './modules/player-profiles/core/application/command/CreatePlayerProfile';
 import {SendEmailModuleCore} from "./modules/email-sending/core/application/SendEmailModuleCore";
+import { MongoMatchRepository } from './modules/match-module/infrastructure/repository/mongo/MongoMatchRepository';
+import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
+import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
+import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
 
 config();
 
@@ -78,6 +82,12 @@ export async function TableSoccerTournamentsApplication(
     restApi: DoublesTournamentRestApiModule(commandBus, eventBus, queryBus),
   };
 
+  const matchRepository = MatchRepository();
+  const matchModule: Module = {
+    core: MatchModuleCore(eventBus, commandBus, currentTimeProvider, matchRepository),
+    restApi: MatchRestApiModule(commandBus, eventBus, queryBus),
+  };
+
   const sendingEmailModule: Module = {
     core: SendEmailModuleCore()
   };
@@ -87,6 +97,7 @@ export async function TableSoccerTournamentsApplication(
     process.env.PLAYERS_MATCHING_MODULE === 'ENABLED' ? playersMatchingModule : undefined,
     process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined,
     process.env.DOUBLES_TOURNAMENT_MODULE === 'ENABLED' ? doublesTournamentModule : undefined,
+    process.env.MATCH_MODULE === 'ENABLED' ? matchModule : undefined,
     process.env.EMAILS_SENDING_MODULE === 'ENABLED' ? sendingEmailModule : undefined,
   ].filter(isDefined);
 
@@ -160,4 +171,11 @@ function DoublesTournamentRepository() {
     return new MongoDoublesTournamentRepository();
   }
   return new InMemoryDoublesTournamentRepository();
+}
+
+function MatchRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.MATCH_DATABASE === 'MONGO') {
+    return new MongoMatchRepository();
+  }
+  return new InMemoryMatchRepository();
 }
