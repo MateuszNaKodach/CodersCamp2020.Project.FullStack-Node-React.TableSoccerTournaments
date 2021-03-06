@@ -1,18 +1,9 @@
-// import { testDoublesTournamentsModule } from './TestDoublesTournamentsModule';
-import {FromListIdGeneratorStub} from '../../../../test-support/shared/core/FromListIdGeneratorStub';
-import {FindAllDoublesTournaments} from '../../../../../src/modules/doubles-tournament/core/application/query/FindAllDoublesTournaments';
-import {CreateTournamentWithTeams} from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
-import {DoublesTournament} from '../../../../../src/modules/doubles-tournament/core/domain/DoublesTournament';
-import {TournamentTeam} from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
-import {FindDoublesTournamentById} from '../../../../../src/modules/doubles-tournament/core/application/query/FindDoublesTournamentById';
-import {TeamId} from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
+
 import {NumberIdGeneratorStub} from "../../../../test-support/shared/core/NumberIdGeneratorStub";
-import {EntityIdGenerator} from "../../../../../src/shared/core/application/EntityIdGenerator";
 import {   TournamentTree} from "../../../../../src/modules/elimination-tournament-tree/core/domain/TournamentTree";
 import {generateTournamentTeamsList} from "./TouramentTeamsListGenerator";
 import {FightingTeamsGroup} from "../../../../../src/modules/elimination-tournament-tree/core/domain/FightingTeamsGroup";
 import {FightingTeamsGroupId} from "../../../../../src/modules/elimination-tournament-tree/core/domain/FightingTeamsGroupId";
-import {TournamentTeamId} from "../../../../../src/modules/elimination-tournament-tree/core/domain/TournamentTeamId";
 
 describe('TournamentTree', () => {
 
