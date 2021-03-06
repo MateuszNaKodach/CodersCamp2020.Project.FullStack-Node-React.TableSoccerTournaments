@@ -18,49 +18,6 @@ import {TournamentTeamId} from "../../../../../src/modules/elimination-tournamen
 
 describe('TournamentTree', () => {
 
-
-    it('CreateTournamentTree | Create correct 4 teams empty tree', async () => {
-        //Given
-        const teamEntityIdGen = NumberIdGeneratorStub(1000, "team");
-        const matchEntityIdGen = NumberIdGeneratorStub(1000, "match");
-        const currentTime = new Date();
-        const tournamentTeams = generateTournamentTeamsList(teamEntityIdGen, 4);
-
-        // //When
-        const winnerTree = createTournamentTree(
-            {
-                tournamentTeams: tournamentTeams,
-                entityIdGenerator: matchEntityIdGen,
-            });
-
-        // Then
-        const expectedWinnerTree: FightingTeamsGroup[] = [
-            {
-                "fightingTeamsGroupId": FightingTeamsGroupId.from("match_3"),
-                "firstTeam": undefined,
-                "secondTeam": undefined,
-                "fightingTeamsGroupLevel": 0,
-                "nextMatchId": FightingTeamsGroupId.from("match_1"),
-            }, {
-                "fightingTeamsGroupId": FightingTeamsGroupId.from("match_2"),
-                "firstTeam": undefined,
-                "secondTeam": undefined,
-                "fightingTeamsGroupLevel": 0,
-                "nextMatchId": FightingTeamsGroupId.from("match_1"),
-            }, {
-                "fightingTeamsGroupId": FightingTeamsGroupId.from("match_1"),
-                "firstTeam": undefined,
-                "secondTeam": undefined,
-                "fightingTeamsGroupLevel": 1,
-                "nextMatchId": undefined,
-            },
-        ].map((item) => FightingTeamsGroup.fromObj(item));
-
-        expect(winnerTree).toIncludeSameMembers(expectedWinnerTree);
-
-    });
-
-
     it('CreateTournamentTree | Create correct 4 teams tree', async () => {
         //Given
         const teamEntityIdGen = NumberIdGeneratorStub(1000, "team");
@@ -84,8 +41,8 @@ describe('TournamentTree', () => {
                 "nextMatchId": FightingTeamsGroupId.from("match_1"),
             },{
                 "fightingTeamsGroupId": FightingTeamsGroupId.from("match_2"),
-                "firstTeam": tournamentTeamsList[1],
-                "secondTeam": tournamentTeamsList[2],
+                "firstTeam": tournamentTeamsList[2],
+                "secondTeam": tournamentTeamsList[1],
                 "fightingTeamsGroupLevel": 0,
                 "nextMatchId": FightingTeamsGroupId.from("match_1"),
             }, {
@@ -121,37 +78,37 @@ describe('TournamentTree', () => {
                 "firstTeam": tournamentTeamsList[0],
                 "secondTeam": undefined,
                 "fightingTeamsGroupLevel": 0,
-                "nextMatchId": FightingTeamsGroupId.from("match_1"),
+                "nextMatchId": FightingTeamsGroupId.from("match_3"),
             },{
                 "fightingTeamsGroupId": FightingTeamsGroupId.from("match_6"),
-                "firstTeam": tournamentTeamsList[3],
-                "secondTeam": tournamentTeamsList[4],
+                "firstTeam": tournamentTeamsList[4],
+                "secondTeam": tournamentTeamsList[3],
                 "fightingTeamsGroupLevel": 0,
-                "nextMatchId": FightingTeamsGroupId.from("match_1"),
+                "nextMatchId": FightingTeamsGroupId.from("match_3"),
             },{
                 "fightingTeamsGroupId": FightingTeamsGroupId.from("match_5"),
                 "firstTeam": tournamentTeamsList[2],
                 "secondTeam": tournamentTeamsList[5],
                 "fightingTeamsGroupLevel": 0,
-                "nextMatchId": undefined,
+                "nextMatchId": FightingTeamsGroupId.from("match_2"),
             },{
                 "fightingTeamsGroupId": FightingTeamsGroupId.from("match_4"),
-                "firstTeam": tournamentTeamsList[1],
-                "secondTeam": undefined,
+                "firstTeam": undefined ,
+                "secondTeam": tournamentTeamsList[1],
                 "fightingTeamsGroupLevel": 0,
-                "nextMatchId": undefined,
+                "nextMatchId":FightingTeamsGroupId.from("match_2"),
             },{
                 "fightingTeamsGroupId": FightingTeamsGroupId.from("match_3"),
                 "firstTeam": undefined,
                 "secondTeam": undefined,
                 "fightingTeamsGroupLevel": 1,
-                "nextMatchId": undefined,
+                "nextMatchId": FightingTeamsGroupId.from("match_1"),
             },{
                 "fightingTeamsGroupId": FightingTeamsGroupId.from("match_2"),
                 "firstTeam": undefined,
                 "secondTeam": undefined,
                 "fightingTeamsGroupLevel": 1,
-                "nextMatchId": undefined,
+                "nextMatchId": FightingTeamsGroupId.from("match_1"),
             },{
                 "fightingTeamsGroupId": FightingTeamsGroupId.from("match_1"),
                 "firstTeam": undefined,
