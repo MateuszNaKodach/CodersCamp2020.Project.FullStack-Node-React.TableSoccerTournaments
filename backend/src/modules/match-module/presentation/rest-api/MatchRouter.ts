@@ -5,6 +5,9 @@ import express, { Request, Response } from 'express';
 import { PostMatchBody } from './request/PostMatchBody';
 import { StartMatch } from '../../core/application/command/StartMatch';
 import { StatusCodes } from 'http-status-codes';
+import { FindMatchById, FindMatchByIdResult } from '../../core/application/query/FindMatchById';
+import { Match } from '../../core/domain/Match';
+import { MatchDto } from './response/MatchDto';
 
 export function matchRouter(
   commandPublisher: CommandPublisher,
@@ -34,7 +37,25 @@ export function matchRouter(
     );
   };
 
+  const getMatchById = async (request: Request, response: Response) => {
+    const { matchId } = request.params;
+    const queryResult = await queryPublisher.execute<FindMatchByIdResult>(new FindMatchById({ matchId }));
+    if (!queryResult) {
+      return response.status(StatusCodes.NOT_FOUND).json({ message: `Match with id = ${matchId} was not found!` });
+    }
+    return response.status(StatusCodes.OK).json(toMatchDto(queryResult));
+  };
+
   const router = express.Router();
   router.post('', postStartMatch);
+  router.get('/:matchId', getMatchById);
   return router;
+}
+
+function toMatchDto(match: Match): MatchDto {
+  return new MatchDto({
+    matchId: match.matchId.raw,
+    firstMatchSideId: match.firstMatchSideId.raw,
+    secondMatchSideId: match.secondMatchSideId.raw,
+  });
 }
