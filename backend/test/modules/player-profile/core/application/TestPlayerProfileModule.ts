@@ -5,6 +5,6 @@ import { InMemoryPlayerProfileRepository } from '../../../../../src/modules/play
 export function testPlayerProfileModule(currentTime: Date): TestModuleCore {
   const playerProfilesRepository = new InMemoryPlayerProfileRepository();
   return testModuleCore((commandBus, eventBus, queryBus) =>
-    PlayerProfilesModuleCore(eventBus, () => currentTime, playerProfilesRepository),
+    PlayerProfilesModuleCore(eventBus,  commandBus,() => currentTime, playerProfilesRepository),
   );
 }
