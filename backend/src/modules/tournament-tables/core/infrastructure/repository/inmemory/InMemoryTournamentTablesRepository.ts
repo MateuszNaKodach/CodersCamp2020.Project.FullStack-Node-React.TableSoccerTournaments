@@ -20,8 +20,4 @@ export class InMemoryTournamentTablesRepository implements TournamentTablesRepos
         .map((id) => this.entities[id]),
     );
   }
-
-  findAll(): Promise<TournamentTable[]> {
-    return Promise.resolve(Object.keys(this.entities).map((id) => this.entities[id]));
-  }
 }
