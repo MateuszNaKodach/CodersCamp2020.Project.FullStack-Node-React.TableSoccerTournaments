@@ -7,7 +7,7 @@ import { TableNumber } from '../../../../../src/modules/tournament-tables/core/d
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 
 describe('Table reservation', function () {
-  it('When tables are added, then table reservation for the tournament is made', async () => {
+  it('When assign tables, then tables reservation for the tournament is made', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
@@ -19,8 +19,8 @@ describe('Table reservation', function () {
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const addTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
-    const commandResult = await tournamentTablesModule.executeCommand(addTournamentTables);
+    const assignTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
+    const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //Then
     const tablesAssigned: TournamentTable[] = [
@@ -34,7 +34,7 @@ describe('Table reservation', function () {
     );
   });
 
-  it('Given tournament with tables assigned, when attempt to add tables again, command should fail', async () => {
+  it('Given tournament with tables assigned, when attempt to assign tables again, command should fail', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
@@ -43,18 +43,18 @@ describe('Table reservation', function () {
       { tableNumber: 2, tableName: 'Garlando' },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    const addTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
-    await tournamentTablesModule.executeCommand(addTournamentTables);
+    const assignTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
+    await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //When
-    const commandResult = await tournamentTablesModule.executeCommand(addTournamentTables);
+    const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Some tables are already assigned to that tournament.'));
   });
 
-  it('When attempt to add empty table list, then command should fail', async () => {
+  it('When attempt to assign empty table list, then command should fail', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
@@ -62,11 +62,30 @@ describe('Table reservation', function () {
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const addTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
-    const commandResult = await tournamentTablesModule.executeCommand(addTournamentTables);
+    const assignTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
+    const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Tournament must have at least 1 table assigned.'));
+  });
+
+  it('When attempt to assign tables with the same number, then command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const tournamentId = 'TournamentId';
+    const tablesList = [
+      {tableNumber: 1, tableName: 'Leonhart'},
+      {tableNumber: 1, tableName: 'Garlando'},
+    ];
+    const tournamentTablesModule = testTournamentTablesModule(currentTime);
+
+    //When
+    const assignTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
+    const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Tables numbers must be different.'));
   });
 });
