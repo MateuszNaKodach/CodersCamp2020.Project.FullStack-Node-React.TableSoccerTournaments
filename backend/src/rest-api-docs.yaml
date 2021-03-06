@@ -31,10 +31,6 @@ paths:
       responses:
         200:
           description: Match successfully started
-          content:
-            application/json:
-              schema:
-                $ref: '#components/schemas/PostMatchResponseBody'
   /tournament-registrations:
     get:
       tags:
@@ -328,28 +324,7 @@ components:
         - tournamentId
         - firstMatchSideId
         - secondMatchSideId
-    PostMatchResponseBody:
-      type: object
-      properties:
-        matchId:
-          description: Identifier of the match that was started
-          type: string
-          format: uuid
-          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
-        firstMatchSideId:
-          description: Identifier of the match first team that is participating
-          type: string
-          format: uuid
-          example: 3510fc2c-bbd7-427c-9439-02f76583aef5
-        secondMatchSideId:
-          description: Identifier of the match second team that is participating
-          type: string
-          format: uuid
-          example: 8321fc2c-bbd7-427c-9439-02f76583aef7
-      required:
-        - tournamentId
-        - firstMatchSideId
-        - secondMatchSideId
+
 
 
 
