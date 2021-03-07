@@ -68,5 +68,16 @@ export function MatchRepositoryTestCases(props: {
       const notStartedMatchId = MatchId.from('NotStarted');
       expect(await repository.findByMatchId(notStartedMatchId)).toBeUndefined();
     });
+
+    test('findByMatchId returns ended match if match id exists', async () => {
+      const matchId1 = MatchId.from('matchId1');
+      const firstMatchSideId1 = MatchSideId.from('Team1');
+      const secondMatchSideId1 = MatchSideId.from('Team2');
+      const matchWithWinner = new Match({ matchId: matchId1, firstMatchSideId: firstMatchSideId1, secondMatchSideId: secondMatchSideId1, winner: firstMatchSideId1 });
+
+      await repository.save(matchWithWinner);
+
+      expect(await repository.findByMatchId(matchId1)).toStrictEqual(matchWithWinner);
+    });
   });
 }
