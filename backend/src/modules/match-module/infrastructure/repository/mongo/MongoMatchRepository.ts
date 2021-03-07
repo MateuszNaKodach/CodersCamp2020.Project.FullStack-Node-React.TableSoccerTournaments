@@ -22,6 +22,7 @@ export class MongoMatchRepository implements MatchRepository {
         _id: match.matchId.raw,
         firstMatchSideId: match.firstMatchSideId.raw,
         secondMatchSideId: match.secondMatchSideId.raw,
+        winner: match.winner?.raw
       },
       { upsert: true, useFindAndModify: true },
     );
@@ -45,6 +46,9 @@ const MatchSchema = new mongoose.Schema({
     type: Schema.Types.String,
     required: true,
   },
+  winner: {
+    type: Schema.Types.String,
+  }
 });
 
 const MongoMatch = mongoose.model<MongoMatch>('Match', MatchSchema);
@@ -54,5 +58,6 @@ function mongoDocumentToDomain(mongoDocument: MongoMatch): Match {
     matchId: MatchId.from(mongoDocument._id),
     firstMatchSideId: MatchSideId.from(mongoDocument.firstMatchSideId),
     secondMatchSideId: MatchSideId.from(mongoDocument.secondMatchSideId),
+    winner: mongoDocument.winner ? MatchSideId.from(mongoDocument.winner) : undefined
   });
 }
