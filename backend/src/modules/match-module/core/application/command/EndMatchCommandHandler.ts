@@ -17,10 +17,10 @@ export class EndMatchCommandHandler implements CommandHandler<EndMatch> {
 
   async execute(command: EndMatch): Promise<CommandResult> {
     const matchId = MatchId.from(command.matchId);
-    const winner = MatchSideId.from(command.winner);
+    const winnerId = MatchSideId.from(command.winnerId);
     const match = await this.repository.findByMatchId(matchId);
 
-    const { state, events } = endMatch(match, { matchId, winner }, this.currentTimeProvider());
+    const { state, events } = endMatch(match, { matchId, winnerId }, this.currentTimeProvider());
     await this.repository.save(state);
     this.eventPublisher.publishAll(events);
     return CommandResult.success();
