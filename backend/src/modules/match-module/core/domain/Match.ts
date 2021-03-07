@@ -18,7 +18,12 @@ export class Match {
   }
 
   wonBy(winner: MatchSideId): Match {
-    return new Match( { matchId: this.matchId, firstMatchSideId: this.firstMatchSideId, secondMatchSideId: this.secondMatchSideId, winner: winner })
+    return new Match({
+      matchId: this.matchId,
+      firstMatchSideId: this.firstMatchSideId,
+      secondMatchSideId: this.secondMatchSideId,
+      winner: winner,
+    });
   }
 
   get looser(): MatchSideId {
