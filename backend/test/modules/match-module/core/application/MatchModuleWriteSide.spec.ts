@@ -104,12 +104,18 @@ describe('Match Module | Write Side', () => {
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot start match if opposite teams are the same team.'));
   });
 
-  it('given match id and its winner, when end match, then the match was ended', async () => {
+  it('given started match id and its winner, when end match, then the match was ended', async () => {
+    //Given
     const currentTime = new Date();
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const winner = 'Team1Id';
+    const winner = 'Team1';
+
+    const firstMatchSideId = 'Team1';
+    const secondMatchSideId = 'Team2';
+    const startMatch = new StartMatch({ matchId, firstMatchSideId, secondMatchSideId });
+    await matchModule.executeCommand(startMatch);
 
     //When
     const endMatch = new EndMatch({ matchId, winner });
@@ -122,7 +128,47 @@ describe('Match Module | Write Side', () => {
         occurredAt: currentTime,
         matchId,
         winner,
+        looser: 'Team2',
       }),
     );
+  });
+
+  it('given started match id and wrong winner id, when attempt to end match, command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const matchModule = testMatchModule(currentTime);
+
+    const matchId = 'matchId';
+    const winner = 'OtherTeam';
+
+    const firstMatchSideId = 'Team1';
+    const secondMatchSideId = 'Team2';
+    const startMatch = new StartMatch({ matchId, firstMatchSideId, secondMatchSideId });
+    await matchModule.executeCommand(startMatch);
+
+    //When
+    const endMatch = new EndMatch({ matchId, winner });
+    const commandResult = await matchModule.executeCommand(endMatch);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('One of the participating teams must be a winner.'));
+  });
+
+  it('given no started match, when end match, then command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const matchModule = testMatchModule(currentTime);
+
+    const matchId = 'matchId';
+    const winner = 'Team';
+
+    //When
+    const endMatch = new EndMatch({ matchId, winner });
+    const commandResult = await matchModule.executeCommand(endMatch);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot end match that hasn\'t started.'));
   });
 });
