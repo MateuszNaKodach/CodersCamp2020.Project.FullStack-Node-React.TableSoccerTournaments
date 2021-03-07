@@ -3,8 +3,8 @@ import { StartMatch } from '../../../../../src/modules/match-module/core/applica
 import { MatchHasStarted } from '../../../../../src/modules/match-module/core/domain/event/MatchHasStarted';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
 import Failure = CommandResult.Failure;
-import {EndMatch} from "../../../../../src/modules/match-module/core/application/command/EndMatch";
-import {MatchHasEnded} from "../../../../../src/modules/match-module/core/domain/event/MatchHasEnded";
+import { EndMatch } from '../../../../../src/modules/match-module/core/application/command/EndMatch';
+import { MatchHasEnded } from '../../../../../src/modules/match-module/core/domain/event/MatchHasEnded';
 
 describe('Match Module | Write Side', () => {
   it('given 2 teams, when start match, then match was started', async () => {
@@ -169,6 +169,6 @@ describe('Match Module | Write Side', () => {
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
-    expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot end match that hasn\'t started.'));
+    expect((commandResult as Failure).reason).toStrictEqual(new Error("Cannot end match that hasn't started."));
   });
 });

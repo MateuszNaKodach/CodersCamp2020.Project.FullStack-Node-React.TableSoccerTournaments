@@ -2,7 +2,7 @@ import { MatchHasStarted } from './event/MatchHasStarted';
 import { MatchId } from './MatchId';
 import { MatchSideId } from './MatchSideId';
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
-import {MatchHasEnded} from "./event/MatchHasEnded";
+import { MatchHasEnded } from './event/MatchHasEnded';
 
 export class Match {
   readonly matchId: MatchId;
@@ -17,8 +17,8 @@ export class Match {
     this.winner = props.winner;
   }
 
-  getLooser(winner: MatchSideId):MatchSideId | undefined {
-    return winner.equals(this.firstMatchSideId) ? this.secondMatchSideId : this.firstMatchSideId
+  getLooser(winner: MatchSideId): MatchSideId | undefined {
+    return winner.equals(this.firstMatchSideId) ? this.secondMatchSideId : this.firstMatchSideId;
   }
 }
 
@@ -49,15 +49,15 @@ export function startMatch(
 }
 
 export function endMatch(
-    state: Match | undefined,
-    command: { matchId: MatchId; winner: MatchSideId; },
-    currentTime: Date,
+  state: Match | undefined,
+  command: { matchId: MatchId; winner: MatchSideId },
+  currentTime: Date,
 ): DomainCommandResult<Match> {
   if (!state?.matchId) {
-    throw new Error('Cannot end match that hasn\'t started.')
+    throw new Error("Cannot end match that hasn't started.");
   }
   if (!state.firstMatchSideId.equals(command.winner) && !state.secondMatchSideId.equals(command.winner)) {
-    throw new Error('One of the participating teams must be a winner.')
+    throw new Error('One of the participating teams must be a winner.');
   }
 
   const matchHasEnded = new MatchHasEnded({
@@ -75,7 +75,6 @@ export function endMatch(
   };
 }
 
-
 function onMatchHasStarted(state: Match | undefined, event: MatchHasStarted): Match {
   return new Match({
     matchId: MatchId.from(event.matchId),
@@ -90,5 +89,5 @@ function onMatchHasEnded(state: Match, event: MatchHasEnded): Match {
     firstMatchSideId: state.firstMatchSideId,
     secondMatchSideId: state.secondMatchSideId,
     winner: MatchSideId.from(event.winner),
-  })
+  });
 }
