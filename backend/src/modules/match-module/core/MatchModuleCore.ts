@@ -9,6 +9,8 @@ import { FindMatchByIdQueryHandler } from './application/query/FindMatchByIdQuer
 import { MatchRepository } from './application/MatchRepository';
 import { FindAllMatches } from './application/query/FindAllMatches';
 import { FindAllMatchesQueryHandler } from './application/query/FindAllMatchesQueryHandler';
+import {EndMatch} from "./application/command/EndMatch";
+import {EndMatchCommandHandler} from "./application/command/EndMatchCommandHandler";
 
 export function MatchModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -21,6 +23,10 @@ export function MatchModuleCore(
       {
         commandType: StartMatch,
         handler: new StartMatchCommandHandler(eventPublisher, currentTimeProvider, repository),
+      },
+      {
+        commandType: EndMatch,
+        handler: new EndMatchCommandHandler(eventPublisher, currentTimeProvider, repository),
       },
     ],
     eventHandlers: [],
