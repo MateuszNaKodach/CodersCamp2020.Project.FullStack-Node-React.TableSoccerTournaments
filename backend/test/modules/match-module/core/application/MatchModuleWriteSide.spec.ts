@@ -169,6 +169,6 @@ describe('Match Module | Write Side', () => {
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
-    expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot end match that hasn\'t started.'));
+    expect((commandResult as Failure).reason).toStrictEqual(new Error("Cannot end match that hasn't started."));
   });
 });
