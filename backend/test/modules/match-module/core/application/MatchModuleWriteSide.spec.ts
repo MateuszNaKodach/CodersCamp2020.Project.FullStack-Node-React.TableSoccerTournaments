@@ -3,6 +3,8 @@ import { StartMatch } from '../../../../../src/modules/match-module/core/applica
 import { MatchHasStarted } from '../../../../../src/modules/match-module/core/domain/event/MatchHasStarted';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
 import Failure = CommandResult.Failure;
+import {EndMatch} from "../../../../../src/modules/match-module/core/application/command/EndMatch";
+import {MatchHasEnded} from "../../../../../src/modules/match-module/core/domain/event/MatchHasEnded";
 
 describe('Match Module | Write Side', () => {
   it('given 2 teams, when start match, then match was started', async () => {
@@ -100,5 +102,27 @@ describe('Match Module | Write Side', () => {
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot start match if opposite teams are the same team.'));
+  });
+
+  it('given match id and its winner, when end match, then the match was ended', async () => {
+    const currentTime = new Date();
+    const matchModule = testMatchModule(currentTime);
+
+    const matchId = 'matchId';
+    const winner = 'Team1Id';
+
+    //When
+    const endMatch = new EndMatch({ matchId, winner });
+    const commandResult = await matchModule.executeCommand(endMatch);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeTruthy();
+    expect(matchModule.lastPublishedEvent()).toStrictEqual(
+      new MatchHasEnded({
+        occurredAt: currentTime,
+        matchId,
+        winner,
+      }),
+    );
   });
 });
