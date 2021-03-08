@@ -5,9 +5,10 @@ import { Match } from '../../../../../src/modules/match-module/core/domain/Match
 import { MatchSideId } from '../../../../../src/modules/match-module/core/domain/MatchSideId';
 import { MatchId } from '../../../../../src/modules/match-module/core/domain/MatchId';
 import { FindMatchById, FindMatchByIdResult } from '../../../../../src/modules/match-module/core/application/query/FindMatchById';
+import { EndMatch } from '../../../../../src/modules/match-module/core/application/command/EndMatch';
 
 describe('Match Module | Query Side', () => {
-  it('FindAllMatchesResult | No matches was started', async () => {
+  it('FindAllMatchesResult | No matches were started', async () => {
     //Given
     const currentTime = new Date();
     const matchModule = testMatchModule(currentTime);
@@ -19,7 +20,7 @@ describe('Match Module | Query Side', () => {
     expect(findAllMatchesResult).toBeEmpty();
   });
 
-  it('FindAllMatchesResult | Two matches has started', async () => {
+  it('FindAllMatchesResult | Two matches were started', async () => {
     //Given
     const currentTime = new Date();
     const matchModule = testMatchModule(currentTime);
@@ -56,7 +57,7 @@ describe('Match Module | Query Side', () => {
     ]);
   });
 
-  it('FindMatchById | Match id exists', async () => {
+  it('FindMatchById | Started match id exists', async () => {
     //Given
     const currentTime = new Date();
     const matchModule = testMatchModule(currentTime);
@@ -93,5 +94,35 @@ describe('Match Module | Query Side', () => {
 
     //Then
     expect(findMatchByIdResult).toBeUndefined();
+  });
+
+  it('FindMatchById | Match was started and then ended', async () => {
+    //Given
+    const currentTime = new Date();
+    const matchModule = testMatchModule(currentTime);
+
+    const matchId = 'MatchId';
+    const team1 = 'Team1';
+    const team2 = 'Team2';
+    const winnerId = 'Team1';
+
+    const startMatch = new StartMatch({ matchId: matchId, firstMatchSideId: team1, secondMatchSideId: team2 });
+    await matchModule.executeCommand(startMatch);
+
+    const endMatch = new EndMatch({ matchId: matchId, winnerId });
+    await matchModule.executeCommand(endMatch);
+
+    //When
+    const findMatchByIdResult = await matchModule.executeQuery<FindMatchByIdResult>(new FindMatchById({ matchId }));
+
+    //Then
+    expect(findMatchByIdResult).toStrictEqual(
+      new Match({
+        matchId: MatchId.from(matchId),
+        firstMatchSideId: MatchSideId.from(team1),
+        secondMatchSideId: MatchSideId.from(team2),
+        winner: MatchSideId.from(winnerId),
+      }),
+    );
   });
 });
