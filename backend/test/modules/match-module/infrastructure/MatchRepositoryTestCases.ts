@@ -73,7 +73,12 @@ export function MatchRepositoryTestCases(props: {
       const matchId1 = MatchId.from('matchId1');
       const firstMatchSideId1 = MatchSideId.from('Team1');
       const secondMatchSideId1 = MatchSideId.from('Team2');
-      const matchWithWinner = new Match({ matchId: matchId1, firstMatchSideId: firstMatchSideId1, secondMatchSideId: secondMatchSideId1, winner: firstMatchSideId1 });
+      const matchWithWinner = new Match({
+        matchId: matchId1,
+        firstMatchSideId: firstMatchSideId1,
+        secondMatchSideId: secondMatchSideId1,
+        winner: firstMatchSideId1,
+      });
 
       await repository.save(matchWithWinner);
 

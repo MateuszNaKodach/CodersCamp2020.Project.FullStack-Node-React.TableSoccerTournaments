@@ -5,7 +5,7 @@ import { Match } from '../../../../../src/modules/match-module/core/domain/Match
 import { MatchSideId } from '../../../../../src/modules/match-module/core/domain/MatchSideId';
 import { MatchId } from '../../../../../src/modules/match-module/core/domain/MatchId';
 import { FindMatchById, FindMatchByIdResult } from '../../../../../src/modules/match-module/core/application/query/FindMatchById';
-import {EndMatch} from "../../../../../src/modules/match-module/core/application/command/EndMatch";
+import { EndMatch } from '../../../../../src/modules/match-module/core/application/command/EndMatch';
 
 describe('Match Module | Query Side', () => {
   it('FindAllMatchesResult | No matches were started', async () => {
@@ -117,12 +117,12 @@ describe('Match Module | Query Side', () => {
 
     //Then
     expect(findMatchByIdResult).toStrictEqual(
-        new Match({
-          matchId: MatchId.from(matchId),
-          firstMatchSideId: MatchSideId.from(team1),
-          secondMatchSideId: MatchSideId.from(team2),
-          winner: MatchSideId.from(winnerId),
-        }),
+      new Match({
+        matchId: MatchId.from(matchId),
+        firstMatchSideId: MatchSideId.from(team1),
+        secondMatchSideId: MatchSideId.from(team2),
+        winner: MatchSideId.from(winnerId),
+      }),
     );
   });
 });
