@@ -9,7 +9,7 @@ import { MatchId } from '../../../../../src/modules/match-module/core/domain/Mat
 import { MatchSideId } from '../../../../../src/modules/match-module/core/domain/MatchSideId';
 import { Match } from '../../../../../src/modules/match-module/core/domain/Match';
 import { FindMatchById } from '../../../../../src/modules/match-module/core/application/query/FindMatchById';
-import {EndMatch} from "../../../../../src/modules/match-module/core/application/command/EndMatch";
+import { EndMatch } from '../../../../../src/modules/match-module/core/application/command/EndMatch';
 
 describe('Match REST API', () => {
   it('POST /rest-api/matches | when command success', async () => {
@@ -126,7 +126,9 @@ describe('Match REST API', () => {
     const { agent } = testModuleRestApi(MatchRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent.post('/rest-api/matches/sampleMatchId/result').send({ matchId: 'sampleMatchId', winnerId: 'team1Id' });
+    const { body, status } = await agent
+      .post('/rest-api/matches/sampleMatchId/result')
+      .send({ matchId: 'sampleMatchId', winnerId: 'team1Id' });
 
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new EndMatch({ matchId: 'sampleMatchId', winnerId: 'team1Id' }));
@@ -140,7 +142,7 @@ describe('Match REST API', () => {
     const { agent } = testModuleRestApi(MatchRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent.post('/rest-api/matches/NotStartedMatchId/result').send( { winnerId: 'team1Id' });
+    const { body, status } = await agent.post('/rest-api/matches/NotStartedMatchId/result').send({ winnerId: 'team1Id' });
 
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new EndMatch({ matchId: 'NotStartedMatchId', winnerId: 'team1Id' }));
@@ -150,11 +152,13 @@ describe('Match REST API', () => {
 
   it('POST /rest-api/matches/:matchId/result | when command end match fails due to wrong winnerId given', async () => {
     //Given
-    const commandPublisher = CommandPublisherMock(CommandResult.failureDueTo(new Error('One of the participating teams must be a winner.')));
+    const commandPublisher = CommandPublisherMock(
+      CommandResult.failureDueTo(new Error('One of the participating teams must be a winner.')),
+    );
     const { agent } = testModuleRestApi(MatchRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent.post('/rest-api/matches/sampleMatchId/result').send( { winnerId: 'IdThatIsNeitherOfTeamsId' });
+    const { body, status } = await agent.post('/rest-api/matches/sampleMatchId/result').send({ winnerId: 'IdThatIsNeitherOfTeamsId' });
 
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new EndMatch({ matchId: 'sampleMatchId', winnerId: 'IdThatIsNeitherOfTeamsId' }));

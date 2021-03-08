@@ -1,3 +1,3 @@
 export class PostEndMatchBody {
-    readonly winnerId: string;
+  readonly winnerId: string;
 }
