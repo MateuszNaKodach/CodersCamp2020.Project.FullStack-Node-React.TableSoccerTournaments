@@ -104,12 +104,12 @@ describe('Match Module | Query Side', () => {
     const matchId = 'MatchId';
     const team1 = 'Team1';
     const team2 = 'Team2';
-    const winner = 'Team1';
+    const winnerId = 'Team1';
 
     const startMatch = new StartMatch({ matchId: matchId, firstMatchSideId: team1, secondMatchSideId: team2 });
     await matchModule.executeCommand(startMatch);
 
-    const endMatch = new EndMatch({ matchId: matchId, winner });
+    const endMatch = new EndMatch({ matchId: matchId, winnerId });
     await matchModule.executeCommand(endMatch);
 
     //When
@@ -121,7 +121,7 @@ describe('Match Module | Query Side', () => {
           matchId: MatchId.from(matchId),
           firstMatchSideId: MatchSideId.from(team1),
           secondMatchSideId: MatchSideId.from(team2),
-          winner: MatchSideId.from(winner),
+          winner: MatchSideId.from(winnerId),
         }),
     );
   });
