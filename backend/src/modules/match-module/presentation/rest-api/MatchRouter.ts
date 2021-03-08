@@ -2,13 +2,13 @@ import { CommandPublisher } from '../../../../shared/core/application/command/Co
 import { DomainEventPublisher } from '../../../../shared/core/application/event/DomainEventBus';
 import { QueryPublisher } from '../../../../shared/core/application/query/QueryBus';
 import express, { Request, Response } from 'express';
-import { PostStartMatchBody } from './request/PostStartMatchBody';
+import { PostStartMatchRequestBody } from './request/PostStartMatchRequestBody';
 import { StartMatch } from '../../core/application/command/StartMatch';
 import { StatusCodes } from 'http-status-codes';
 import { FindMatchById, FindMatchByIdResult } from '../../core/application/query/FindMatchById';
 import { Match } from '../../core/domain/Match';
 import { MatchDto } from './response/MatchDto';
-import { PostEndMatchBody } from './request/PostEndMatchBody';
+import { PostEndMatchRequestBody } from './request/PostEndMatchRequestBody';
 import { EndMatch } from '../../core/application/command/EndMatch';
 
 export function matchRouter(
@@ -17,7 +17,7 @@ export function matchRouter(
   queryPublisher: QueryPublisher,
 ): express.Router {
   const postStartMatch = async (request: Request, response: Response) => {
-    const requestBody: PostStartMatchBody = request.body;
+    const requestBody: PostStartMatchRequestBody = request.body;
     const commandResult = await commandPublisher.execute(
       new StartMatch({
         matchId: requestBody.matchId,
@@ -30,10 +30,8 @@ export function matchRouter(
         response
           .status(StatusCodes.CREATED)
           .json({
-            matchId: requestBody.matchId,
-            firstMatchSideId: requestBody.firstMatchSideId,
-            secondMatchSideId: requestBody.secondMatchSideId,
-          })
+                  matchId: requestBody.matchId
+              })
           .send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
@@ -41,7 +39,7 @@ export function matchRouter(
 
   const postEndMatch = async (request: Request, response: Response) => {
     const { matchId } = request.params;
-    const requestBody: PostEndMatchBody = request.body;
+    const requestBody: PostEndMatchRequestBody = request.body;
     const commandResult = await commandPublisher.execute(
       new EndMatch({
         matchId: matchId,
@@ -52,10 +50,6 @@ export function matchRouter(
       () =>
         response
           .status(StatusCodes.OK)
-          .json({
-            matchId: matchId,
-            winnerId: requestBody.winnerId,
-          })
           .send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
