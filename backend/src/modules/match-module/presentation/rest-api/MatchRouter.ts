@@ -30,8 +30,8 @@ export function matchRouter(
         response
           .status(StatusCodes.CREATED)
           .json({
-                  matchId: requestBody.matchId
-              })
+            matchId: requestBody.matchId,
+          })
           .send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
@@ -47,10 +47,7 @@ export function matchRouter(
       }),
     );
     return commandResult.process(
-      () =>
-        response
-          .status(StatusCodes.OK)
-          .send(),
+      () => response.status(StatusCodes.OK).send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
   };
