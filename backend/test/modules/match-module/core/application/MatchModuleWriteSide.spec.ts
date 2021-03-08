@@ -171,4 +171,29 @@ describe('Match Module | Write Side', () => {
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error("Cannot end match that hasn't started."));
   });
+
+  it('given ended match id, when attempt to end match with given id, then command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const matchModule = testMatchModule(currentTime);
+
+    const matchId = 'matchId';
+    const winnerId = 'Team1';
+    const firstMatchSideId = 'Team1';
+    const secondMatchSideId = 'Team2';
+
+    const startMatch = new StartMatch({ matchId, firstMatchSideId, secondMatchSideId });
+    await matchModule.executeCommand(startMatch);
+
+    const endMatchFirstTime = new EndMatch({ matchId, winnerId });
+    await matchModule.executeCommand(endMatchFirstTime);
+
+    //When
+    const endMatchSecondTime = new EndMatch({ matchId, winnerId });
+    const commandResult = await matchModule.executeCommand(endMatchSecondTime);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Cannot end match that has already ended.'));
+  });
 });
