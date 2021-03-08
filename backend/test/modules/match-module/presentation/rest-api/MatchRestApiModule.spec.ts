@@ -27,7 +27,7 @@ describe('Match REST API', () => {
       new StartMatch({ matchId: 'SampleMatchId', firstMatchSideId: 'Team1Id', secondMatchSideId: 'Team2Id' }),
     );
     expect(status).toBe(StatusCodes.CREATED);
-    expect(body).toStrictEqual({ matchId: 'SampleMatchId', firstMatchSideId: 'Team1Id', secondMatchSideId: 'Team2Id' });
+    expect(body).toStrictEqual({ matchId: 'SampleMatchId' });
   });
 
   it('POST /rest-api/matches | when command fails on attempt to start already started match', async () => {
@@ -133,7 +133,7 @@ describe('Match REST API', () => {
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new EndMatch({ matchId: 'sampleMatchId', winnerId: 'team1Id' }));
     expect(status).toBe(StatusCodes.OK);
-    expect(body).toStrictEqual({ matchId: 'sampleMatchId', winnerId: 'team1Id' });
+    expect(body).toBeEmpty();
   });
 
   it('POST /rest-api/matches/:matchId/result | when command end match fails due to wrong id given', async () => {
