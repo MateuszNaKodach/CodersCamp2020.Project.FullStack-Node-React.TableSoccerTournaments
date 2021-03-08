@@ -130,7 +130,35 @@ describe('Match REST API', () => {
 
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new EndMatch({ matchId: 'sampleMatchId', winnerId: 'team1Id' }));
-    expect(status).toBe(StatusCodes.CREATED);
+    expect(status).toBe(StatusCodes.OK);
     expect(body).toStrictEqual({ matchId: 'sampleMatchId', winnerId: 'team1Id' });
+  });
+
+  it('POST /rest-api/matches/:matchId/result | when command end match fails due to wrong id given', async () => {
+    //Given
+    const commandPublisher = CommandPublisherMock(CommandResult.failureDueTo(new Error("Cannot end match that hasn't started.")));
+    const { agent } = testModuleRestApi(MatchRestApiModule, { commandPublisher });
+
+    //When
+    const { body, status } = await agent.post('/rest-api/matches/NotStartedMatchId/result').send( { winnerId: 'team1Id' });
+
+    //Then
+    expect(commandPublisher.executeCalls).toBeCalledWith(new EndMatch({ matchId: 'NotStartedMatchId', winnerId: 'team1Id' }));
+    expect(status).toBe(StatusCodes.BAD_REQUEST);
+    expect(body).toStrictEqual({ message: "Cannot end match that hasn't started." });
+  });
+
+  it('POST /rest-api/matches/:matchId/result | when command end match fails due to wrong winnerId given', async () => {
+    //Given
+    const commandPublisher = CommandPublisherMock(CommandResult.failureDueTo(new Error('One of the participating teams must be a winner.')));
+    const { agent } = testModuleRestApi(MatchRestApiModule, { commandPublisher });
+
+    //When
+    const { body, status } = await agent.post('/rest-api/matches/sampleMatchId/result').send( { winnerId: 'IdThatIsNeitherOfTeamsId' });
+
+    //Then
+    expect(commandPublisher.executeCalls).toBeCalledWith(new EndMatch({ matchId: 'sampleMatchId', winnerId: 'IdThatIsNeitherOfTeamsId' }));
+    expect(status).toBe(StatusCodes.BAD_REQUEST);
+    expect(body).toStrictEqual({ message: 'One of the participating teams must be a winner.' });
   });
 });
