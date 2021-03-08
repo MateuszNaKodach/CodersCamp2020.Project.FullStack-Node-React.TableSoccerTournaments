@@ -8,9 +8,9 @@ import { DomainEventPublisher } from '../../../shared/core/application/event/Dom
 import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 import { FindPlayerProfileById } from './application/query/FindPlayerProfileById';
 import { FindPlayerProfileByIdQueryHandler } from './application/query/FindPlayerProfileByIdQueryHandler';
-import {PlayerProfileWasCreated} from "./domain/event/PlayerProfileWasCreated";
-import {SendEmailAfterPlayerProfileWasCreatedEventHandler} from "./application/event/SendEmailAfterPlayerProfileWasCreatedEventHandler";
-import {CommandPublisher} from "../../../shared/core/application/command/CommandBus";
+import { PlayerProfileWasCreated } from './domain/event/PlayerProfileWasCreated';
+import { SendEmailAfterPlayerProfileWasCreatedEventHandler } from './application/event/SendEmailAfterPlayerProfileWasCreatedEventHandler';
+import { CommandPublisher } from '../../../shared/core/application/command/CommandBus';
 
 export function PlayerProfilesModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -28,8 +28,8 @@ export function PlayerProfilesModuleCore(
     eventHandlers: [
       {
         eventType: PlayerProfileWasCreated,
-        handler: new SendEmailAfterPlayerProfileWasCreatedEventHandler(commandPublisher)
-      }
+        handler: new SendEmailAfterPlayerProfileWasCreatedEventHandler(commandPublisher),
+      },
     ],
     queryHandlers: [
       {

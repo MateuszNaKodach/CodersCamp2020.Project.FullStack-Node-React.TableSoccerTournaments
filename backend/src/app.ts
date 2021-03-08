@@ -35,7 +35,7 @@ import { DoublesTournamentModuleCore } from './modules/doubles-tournament/core/D
 import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
 import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
 import { CreatePlayerProfile } from './modules/player-profiles/core/application/command/CreatePlayerProfile';
-import {SendEmailModuleCore} from "./modules/email-sending/core/application/SendEmailModuleCore";
+import { SendEmailModuleCore } from './modules/email-sending/core/application/SendEmailModuleCore';
 import { MongoMatchRepository } from './modules/match-module/infrastructure/repository/mongo/MongoMatchRepository';
 import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
 import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
@@ -89,7 +89,7 @@ export async function TableSoccerTournamentsApplication(
   };
 
   const sendingEmailModule: Module = {
-    core: SendEmailModuleCore()
+    core: SendEmailModuleCore(),
   };
 
   const modules: Module[] = [
