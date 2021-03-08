@@ -110,7 +110,7 @@ describe('Match Module | Write Side', () => {
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const winner = 'Team1';
+    const winnerId = 'Team1';
 
     const firstMatchSideId = 'Team1';
     const secondMatchSideId = 'Team2';
@@ -118,7 +118,7 @@ describe('Match Module | Write Side', () => {
     await matchModule.executeCommand(startMatch);
 
     //When
-    const endMatch = new EndMatch({ matchId, winner });
+    const endMatch = new EndMatch({ matchId, winnerId });
     const commandResult = await matchModule.executeCommand(endMatch);
 
     //Then
@@ -127,8 +127,8 @@ describe('Match Module | Write Side', () => {
       new MatchHasEnded({
         occurredAt: currentTime,
         matchId,
-        winner,
-        looser: 'Team2',
+        winnerId: winnerId,
+        looserId: 'Team2',
       }),
     );
   });
@@ -139,7 +139,7 @@ describe('Match Module | Write Side', () => {
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const winner = 'OtherTeam';
+    const winnerId = 'OtherTeam';
 
     const firstMatchSideId = 'Team1';
     const secondMatchSideId = 'Team2';
@@ -147,7 +147,7 @@ describe('Match Module | Write Side', () => {
     await matchModule.executeCommand(startMatch);
 
     //When
-    const endMatch = new EndMatch({ matchId, winner });
+    const endMatch = new EndMatch({ matchId, winnerId });
     const commandResult = await matchModule.executeCommand(endMatch);
 
     //Then
@@ -161,10 +161,10 @@ describe('Match Module | Write Side', () => {
     const matchModule = testMatchModule(currentTime);
 
     const matchId = 'matchId';
-    const winner = 'Team';
+    const winnerId = 'Team';
 
     //When
-    const endMatch = new EndMatch({ matchId, winner });
+    const endMatch = new EndMatch({ matchId, winnerId });
     const commandResult = await matchModule.executeCommand(endMatch);
 
     //Then

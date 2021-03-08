@@ -17,8 +17,21 @@ export class Match {
     this.winner = props.winner;
   }
 
-  getLooser(winner: MatchSideId): MatchSideId | undefined {
-    return winner.equals(this.firstMatchSideId) ? this.secondMatchSideId : this.firstMatchSideId;
+  wonBy(winner: MatchSideId): Match {
+    return new Match({
+      matchId: this.matchId,
+      firstMatchSideId: this.firstMatchSideId,
+      secondMatchSideId: this.secondMatchSideId,
+      winner: winner,
+    });
+  }
+
+  get looser(): MatchSideId {
+    return this.winner?.equals(this.firstMatchSideId) ? this.secondMatchSideId : this.firstMatchSideId;
+  }
+
+  isParticipating(matchSide: MatchSideId): boolean {
+    return matchSide.equals(this.firstMatchSideId) || matchSide.equals(this.secondMatchSideId);
   }
 }
 
@@ -50,21 +63,21 @@ export function startMatch(
 
 export function endMatch(
   state: Match | undefined,
-  command: { matchId: MatchId; winner: MatchSideId },
+  command: { matchId: MatchId; winnerId: MatchSideId },
   currentTime: Date,
 ): DomainCommandResult<Match> {
   if (!state?.matchId) {
     throw new Error("Cannot end match that hasn't started.");
   }
-  if (!state.firstMatchSideId.equals(command.winner) && !state.secondMatchSideId.equals(command.winner)) {
+  if (!state.isParticipating(command.winnerId)) {
     throw new Error('One of the participating teams must be a winner.');
   }
 
   const matchHasEnded = new MatchHasEnded({
     occurredAt: currentTime,
     matchId: command.matchId.raw,
-    winner: command.winner.raw,
-    looser: state.getLooser(command.winner)?.raw,
+    winnerId: command.winnerId.raw,
+    looserId: state.wonBy(command.winnerId).looser.raw,
   });
 
   const endedMatch = onMatchHasEnded(state, matchHasEnded);
@@ -88,6 +101,6 @@ function onMatchHasEnded(state: Match, event: MatchHasEnded): Match {
     matchId: MatchId.from(event.matchId),
     firstMatchSideId: state.firstMatchSideId,
     secondMatchSideId: state.secondMatchSideId,
-    winner: MatchSideId.from(event.winner),
+    winner: MatchSideId.from(event.winnerId),
   });
 }

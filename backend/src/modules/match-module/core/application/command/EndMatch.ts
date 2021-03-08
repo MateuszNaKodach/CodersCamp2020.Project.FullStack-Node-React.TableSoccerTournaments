@@ -1,9 +1,9 @@
 export class EndMatch {
   readonly matchId: string;
-  readonly winner: string;
+  readonly winnerId: string;
 
-  constructor(props: { matchId: string; winner: string }) {
+  constructor(props: { matchId: string; winnerId: string }) {
     this.matchId = props.matchId;
-    this.winner = props.winner;
+    this.winnerId = props.winnerId;
   }
 }
