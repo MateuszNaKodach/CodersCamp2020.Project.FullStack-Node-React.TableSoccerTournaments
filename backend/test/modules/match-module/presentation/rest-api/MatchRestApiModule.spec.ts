@@ -9,6 +9,7 @@ import { MatchId } from '../../../../../src/modules/match-module/core/domain/Mat
 import { MatchSideId } from '../../../../../src/modules/match-module/core/domain/MatchSideId';
 import { Match } from '../../../../../src/modules/match-module/core/domain/Match';
 import { FindMatchById } from '../../../../../src/modules/match-module/core/application/query/FindMatchById';
+import {EndMatch} from "../../../../../src/modules/match-module/core/application/command/EndMatch";
 
 describe('Match REST API', () => {
   it('POST /rest-api/matches | when command success', async () => {
@@ -117,5 +118,19 @@ describe('Match REST API', () => {
     expect(queryPublisher.executeCalls).toBeCalledWith(new FindMatchById({ matchId: 'sampleMatchId' }));
     expect(status).toBe(StatusCodes.NOT_FOUND);
     expect(body).toStrictEqual({ message: 'Match with id = sampleMatchId was not found!' });
+  });
+
+  it('POST /rest-api/matches/:matchId/result | when command end match success', async () => {
+    //Given
+    const commandPublisher = CommandPublisherMock(CommandResult.success());
+    const { agent } = testModuleRestApi(MatchRestApiModule, { commandPublisher });
+
+    //When
+    const { body, status } = await agent.post('/rest-api/matches/sampleMatchId/result').send({ matchId: 'sampleMatchId', winnerId: 'team1Id' });
+
+    //Then
+    expect(commandPublisher.executeCalls).toBeCalledWith(new EndMatch({ matchId: 'sampleMatchId', winnerId: 'team1Id' }));
+    expect(status).toBe(StatusCodes.CREATED);
+    expect(body).toStrictEqual({ matchId: 'sampleMatchId', winnerId: 'team1Id' });
   });
 });
