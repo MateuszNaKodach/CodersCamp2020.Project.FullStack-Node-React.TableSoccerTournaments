@@ -393,5 +393,10 @@ components:
           type: string
           format: uuid
           example: 8321fc2c-bbd7-427c-9439-02f76583aef7
+        winnerId:
+          description: Identifier of the winner team, returned only when match was ended
+          type: string
+          format: uuid
+          example: 3510fc2c-bbd7-427c-9439-02f76583aef5
 
 
