@@ -1,13 +1,13 @@
 import {CommandHandler} from "../../../../../shared/core/application/command/CommandHandler";
-import {SendEmailAfterProfileCreation} from "./SendEmailAfterProfileCreation";
+import {SendEmail} from "./SendEmail";
 import {CommandResult} from "../../../../../shared/core/application/command/CommandResult";
 import NodeMailer from "nodemailer";
 
-export class SendEmailAfterProfileCreationCommandHandler implements CommandHandler<SendEmailAfterProfileCreation> {
+export class SendEmailCommandHandler implements CommandHandler<SendEmail> {
     constructor() {
     }
 
-    async execute(commnad: SendEmailAfterProfileCreation): Promise<CommandResult> {
+    async execute(command: SendEmail): Promise<CommandResult> {
 
         const transporter = NodeMailer.createTransport({
             host: "localhost",
@@ -16,10 +16,9 @@ export class SendEmailAfterProfileCreationCommandHandler implements CommandHandl
 
         await transporter.sendMail({
             from: "My Company <company@companydomain.org>",
-            to: commnad.emailAddress,
-            subject: `Hi ${commnad.firstName} ${commnad.lastName}`,
-            text: "Your player profile was successfully created! \n " +
-                "We wish you good luck on oncoming tournament!",
+            to: command.emailAddress,
+            subject: command.subject,
+            text: command.content,
         });
 
         return CommandResult.success();

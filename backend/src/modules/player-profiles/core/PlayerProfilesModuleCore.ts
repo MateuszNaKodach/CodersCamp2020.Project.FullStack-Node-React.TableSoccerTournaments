@@ -9,7 +9,7 @@ import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 import { FindPlayerProfileById } from './application/query/FindPlayerProfileById';
 import { FindPlayerProfileByIdQueryHandler } from './application/query/FindPlayerProfileByIdQueryHandler';
 import {PlayerProfileWasCreated} from "./domain/event/PlayerProfileWasCreated";
-import {PlayerProfileWasCreatedEventHandler} from "./application/event/PlayerProfileWasCreatedEventHandler";
+import {SendEmailAfterPlayerProfileWasCreatedEventHandler} from "./application/event/SendEmailAfterPlayerProfileWasCreatedEventHandler";
 import {CommandPublisher} from "../../../shared/core/application/command/CommandBus";
 
 export function PlayerProfilesModuleCore(
@@ -28,7 +28,7 @@ export function PlayerProfilesModuleCore(
     eventHandlers: [
       {
         eventType: PlayerProfileWasCreated,
-        handler: new PlayerProfileWasCreatedEventHandler(commandPublisher)
+        handler: new SendEmailAfterPlayerProfileWasCreatedEventHandler(commandPublisher)
       }
     ],
     queryHandlers: [
