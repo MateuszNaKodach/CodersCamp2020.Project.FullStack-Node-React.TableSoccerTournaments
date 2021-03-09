@@ -7,13 +7,6 @@ export class NodeMailerEmailSender implements EmailSender {
 
   constructor(transport: { host: string; port: number; secure: boolean; auth?: { user?: string; pass?: string } }) {
     this.transporter = NodeMailer.createTransport({
-      // host: 'smtp.gmail.com',
-      // port: 465,
-      // secure: true,
-      // auth: {
-      //   user: process.env.NODEMAILER_USER,
-      //   pass: process.env.NODEMAILER_PASSWORD,
-      // },
       host: transport.host,
       port: transport.port,
       secure: transport.secure,
