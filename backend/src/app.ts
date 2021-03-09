@@ -90,7 +90,17 @@ export async function TableSoccerTournamentsApplication(
   };
 
   const sendingEmailModule: Module = {
-    core: SendEmailModuleCore(new NodeMailerEmailSender()),
+    core: SendEmailModuleCore(
+      new NodeMailerEmailSender({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.NODEMAILER_USER,
+          pass: process.env.NODEMAILER_PASSWORD,
+        },
+      }),
+    ),
   };
 
   const modules: Module[] = [
