@@ -51,6 +51,7 @@ jobs:
         with:
           flags: backend, unittests
       - name: Mutation testing
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
         run: npx stryker run --logLevel error
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
