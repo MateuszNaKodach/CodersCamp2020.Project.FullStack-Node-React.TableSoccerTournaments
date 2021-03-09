@@ -43,7 +43,7 @@ function createTree(tournamentTeams: TournamentTeam[], fightingTeamsGroupsNumber
         parentLevel = createdLevel;
         const isStartLevel = currentLevel != 0;
 
-        returnedTree = returnedTree.concat(isStartLevel ? createdLevel.reverse() : setStartValueOnLevel(createdLevel, tournamentTeams, entityIdGenerator).reverse());
+        returnedTree = returnedTree.concat(isStartLevel ? createdLevel.reverse() : putStartingTeamsOnEmptyStartingLevel(createdLevel, tournamentTeams, entityIdGenerator).reverse());
     }
 
     return returnedTree.reverse();
@@ -69,7 +69,7 @@ function createEmptyLevel(fightingTeamsGroupLevel: number, parentLevel: Fighting
     return returnedLevel.reverse();
 }
 
-function sortTeamArrayInOrderFromTopToBottomPositionInTheOrderOfMatchesInTree(teamsListWithEmptyPlace: (TournamentTeam | undefined)[ ], isRight = true,) {
+function sortTeamArrayInStartingOrderFromTopToBottomPositionInTheOrderOfMatchesInNewEmptyStartingTree(teamsListWithEmptyPlace: (TournamentTeam | undefined)[ ], isRight = true,) {
     let changeSideCounter = -1;
     const rightList: (TournamentTeam | undefined)[ ] = [];
     const leftList: (TournamentTeam | undefined)[ ] = [];
@@ -85,20 +85,20 @@ function sortTeamArrayInOrderFromTopToBottomPositionInTheOrderOfMatchesInTree(te
         }
     }
 
-    if (rightList.length > 1) returnedList = returnedList.concat(sortTeamArrayInOrderFromTopToBottomPositionInTheOrderOfMatchesInTree(rightList, true));
+    if (rightList.length > 1) returnedList = returnedList.concat(sortTeamArrayInStartingOrderFromTopToBottomPositionInTheOrderOfMatchesInNewEmptyStartingTree(rightList, true));
     else returnedList = returnedList.concat(rightList);
 
-    if (leftList.length > 1) returnedList = returnedList.concat(sortTeamArrayInOrderFromTopToBottomPositionInTheOrderOfMatchesInTree(leftList, false));
+    if (leftList.length > 1) returnedList = returnedList.concat(sortTeamArrayInStartingOrderFromTopToBottomPositionInTheOrderOfMatchesInNewEmptyStartingTree(leftList, false));
     else returnedList = returnedList.concat(leftList);
 
     return returnedList;
 }
 
-function setStartValueOnLevel(emptyStartLevel: FightingTeamsGroup[], teamsList: TournamentTeam[], entityIdGenerator: EntityIdGenerator): FightingTeamsGroup[] {
+function putStartingTeamsOnEmptyStartingLevel(emptyStartLevel: FightingTeamsGroup[], teamsList: TournamentTeam[], entityIdGenerator: EntityIdGenerator): FightingTeamsGroup[] {
     const numberOfFightingTeamsGroups = fightingTeamsGroupsNumber(teamsList.length);
     const returnedLevel: FightingTeamsGroup[] = emptyStartLevel;
     const teamsListWithEmptyPlace: (TournamentTeam | undefined)[ ] = teamsList.concat(new Array(numberOfFightingTeamsGroups - teamsList.length));
-    const segregatedTeamList: (TournamentTeam | undefined)[ ] = sortTeamArrayInOrderFromTopToBottomPositionInTheOrderOfMatchesInTree(teamsListWithEmptyPlace);
+    const segregatedTeamList: (TournamentTeam | undefined)[ ] = sortTeamArrayInStartingOrderFromTopToBottomPositionInTheOrderOfMatchesInNewEmptyStartingTree(teamsListWithEmptyPlace);
 
     returnedLevel.map((item, index) => {
             item.firstTeam = segregatedTeamList[index * 2];
