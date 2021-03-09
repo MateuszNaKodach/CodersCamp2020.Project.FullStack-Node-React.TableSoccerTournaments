@@ -19,7 +19,6 @@ import { ModuleRestApi } from './shared/presentation/rest-api/ModuleRestApi';
 import { DomainEventBus } from './shared/core/application/event/DomainEventBus';
 import { EntityIdGenerator } from './shared/core/application/EntityIdGenerator';
 import { UuidEntityIdGenerator } from './shared/infrastructure/core/application/UuidEntityIdGenerator';
-import { PlayerProfileWasCreated } from './modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
 import { LoggingDomainEventBus } from './shared/infrastructure/core/application/event/LoggingDomainEventBus';
 import { MongoTournamentRegistrationsRepository } from './modules/tournaments-registrations/infrastructure/repository/mongo/MongoTournamentRegistrationsRepository';
 import { Express } from 'express';
@@ -35,6 +34,11 @@ import { InMemoryDoublesTournamentRepository } from './modules/doubles-tournamen
 import { DoublesTournamentModuleCore } from './modules/doubles-tournament/core/DoublesTournamentModuleCore';
 import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
 import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
+import { CreatePlayerProfile } from './modules/player-profiles/core/application/command/CreatePlayerProfile';
+import { MongoMatchRepository } from './modules/match-module/infrastructure/repository/mongo/MongoMatchRepository';
+import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
+import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
+import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
 
 config();
 
@@ -77,11 +81,18 @@ export async function TableSoccerTournamentsApplication(
     restApi: DoublesTournamentRestApiModule(commandBus, eventBus, queryBus),
   };
 
+  const matchRepository = MatchRepository();
+  const matchModule: Module = {
+    core: MatchModuleCore(eventBus, commandBus, currentTimeProvider, matchRepository),
+    restApi: MatchRestApiModule(commandBus, eventBus, queryBus),
+  };
+
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
     process.env.PLAYERS_MATCHING_MODULE === 'ENABLED' ? playersMatchingModule : undefined,
     process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined,
     process.env.DOUBLES_TOURNAMENT_MODULE === 'ENABLED' ? doublesTournamentModule : undefined,
+    process.env.MATCH_MODULE === 'ENABLED' ? matchModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
@@ -90,13 +101,13 @@ export async function TableSoccerTournamentsApplication(
   const modulesRestApis: ModuleRestApi[] = modules.map((module) => module.restApi).filter(isDefined);
   const restApi = restApiExpressServer(modulesRestApis);
 
-  initializeDummyData(eventBus, entityIdGenerator);
+  await initializeDummyData(commandBus, entityIdGenerator);
 
   return { restApi };
 }
 
 //TODO: Remove for production usage
-function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: EntityIdGenerator) {
+async function initializeDummyData(commandBus: CommandBus, entityIdGenerator: EntityIdGenerator) {
   const janKowalski = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Jan',
@@ -125,10 +136,11 @@ function initializeDummyData(eventBus: DomainEventBus, entityIdGenerator: Entity
     lastName: 'Ranek',
     phoneNumber: '123321334',
   };
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...janKowalski }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...katarzynaNowak }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...tomekDomek }));
-  eventBus.publish(new PlayerProfileWasCreated({ occurredAt: new Date(), ...franekPoranek }));
+
+  await commandBus.execute(new CreatePlayerProfile({ ...janKowalski }));
+  await commandBus.execute(new CreatePlayerProfile({ ...katarzynaNowak }));
+  await commandBus.execute(new CreatePlayerProfile({ ...tomekDomek }));
+  await commandBus.execute(new CreatePlayerProfile({ ...franekPoranek }));
 }
 
 function TournamentRegistrationsRepository() {
@@ -153,4 +165,11 @@ function DoublesTournamentRepository() {
     return new MongoDoublesTournamentRepository();
   }
   return new InMemoryDoublesTournamentRepository();
+}
+
+function MatchRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.MATCH_DATABASE === 'MONGO') {
+    return new MongoMatchRepository();
+  }
+  return new InMemoryMatchRepository();
 }

@@ -55,4 +55,3 @@ jobs:
         run: npx stryker run --logLevel error
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-

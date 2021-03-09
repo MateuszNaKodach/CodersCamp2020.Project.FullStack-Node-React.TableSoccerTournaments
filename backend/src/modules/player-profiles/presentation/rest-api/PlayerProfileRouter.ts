@@ -9,6 +9,7 @@ import { PostPlayerProfileRequestBody } from './request/PostPlayerProfileRequest
 import { CommandPublisher } from '../../../../shared/core/application/command/CommandBus';
 import { CreatePlayerProfile } from '../../core/application/command/CreatePlayerProfile';
 import { DomainEventPublisher } from '../../../../shared/core/application/event/DomainEventBus';
+import { FindPlayerProfileById, FindPlayerProfileByIdResult } from '../../core/application/query/FindPlayerProfileById';
 
 export function playerProfileRouter(
   commandPublisher: CommandPublisher,
@@ -29,9 +30,19 @@ export function playerProfileRouter(
     );
   };
 
+  const getPlayerProfileById = async (request: Request, response: Response) => {
+    const { playerId } = request.params;
+    const queryResult = await queryPublisher.execute<FindPlayerProfileByIdResult>(new FindPlayerProfileById({ playerId }));
+    if (!queryResult) {
+      return response.status(StatusCodes.NOT_FOUND).json({ message: `Player profile with id = ${playerId} not found!` });
+    }
+    return response.status(StatusCodes.OK).json(toPlayerProfileDto(queryResult));
+  };
+
   const router = express.Router();
   router.post('', createPlayerProfile);
   router.get('', getAllPlayersProfiles);
+  router.get('/:playerId', getPlayerProfileById);
   return router;
 }
 

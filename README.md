@@ -1,5 +1,6 @@
 # CodersCamp 2020 - Projekt końcowy - Piłkarzyki (TBN?)
 
+
 ### Backend Test Coverage
 [![codecov](https://codecov.io/gh/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/branch/develop/graph/badge.svg?token=CZ2VUMUK29)](https://codecov.io/gh/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments)
 
@@ -7,7 +8,6 @@
 
 
 ### Frontend Test Coverage
-TODO
 
 Co zostało zrobione?
 frontend - create react app (just)
