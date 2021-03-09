@@ -14,14 +14,14 @@
     "prestart": "ts-node build.ts && tsc",
     "start": "node dist/index.js",
     "start:dev": "nodemon",
-    "test": "jest --testRegex '[.](spec|test)[.]ts'",
-    "test:unit": "jest --testRegex '[.](spec|test)[.]ts'",
-    "test:all": "jest --testRegex '[.](spec|test|mongo-spec|postgres-spec)[.]ts'",
-    "test:mongo": "jest --testRegex '[.](mongo-spec)[.]ts'",
-    "test:postgres": "jest --testRegex '[.](postgres-spec)[.]ts'",
+    "test": "jest --testRegex \"[.](spec|test)[.]ts\"",
+    "test:unit": "jest --testRegex \"[.](spec|test)[.]ts\"",
+    "test:all": "jest --testRegex \"[.](spec|test|mongo-spec|postgres-spec)[.]ts\"",
+    "test:mongo": "jest --testRegex \"[.](mongo-spec)[.]ts\"",
+    "test:postgres": "jest --testRegex \"[.](postgres-spec)[.]ts\"",
     "test:watch": "jest --watchAll",
     "test:cov": "jest --coverage",
-    "test:ci": "jest --testRegex '[.](spec|test)[.]ts' --ci --silent --coverage"
+    "test:ci": "jest --testRegex \"[.](spec|test)[.]ts\" --ci --silent --coverage"
   },
   "dependencies": {
     "axios": "^0.21.1",

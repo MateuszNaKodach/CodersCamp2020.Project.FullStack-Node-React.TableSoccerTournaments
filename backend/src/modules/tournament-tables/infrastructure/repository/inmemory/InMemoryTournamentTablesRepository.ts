@@ -1,5 +1,5 @@
-import { TournamentTablesRepository } from '../../../application/TournamentTablesRepository';
-import { TournamentTable } from '../../../domain/TournamentTable';
+import { TournamentTablesRepository } from '../../../core/application/TournamentTablesRepository';
+import { TournamentTable } from '../../../core/domain/TournamentTable';
 
 export class InMemoryTournamentTablesRepository implements TournamentTablesRepository {
   private readonly entities: { [tableId: string]: TournamentTable } = {};
