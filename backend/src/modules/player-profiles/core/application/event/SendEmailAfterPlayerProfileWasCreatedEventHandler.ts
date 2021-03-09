@@ -11,8 +11,12 @@ export class SendEmailAfterPlayerProfileWasCreatedEventHandler implements EventH
       new SendEmail({
         emailAddress: event.emailAddress,
         subject: `Welcome on board ${event.firstName}!`,
-        content: `Your player profile was successfully created! \n
-                We wish you good luck on oncoming tournament!,`,
+        htmlContent: `
+        <div style="text-align: center">
+            <h3>Your player profile was successfully created!</h3>
+            <h1>We wish you good luck on oncoming tournament!</h1>
+        </div>
+        `,
       }),
     );
   }

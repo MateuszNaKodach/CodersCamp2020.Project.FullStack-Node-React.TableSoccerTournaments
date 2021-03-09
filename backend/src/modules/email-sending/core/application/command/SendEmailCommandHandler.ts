@@ -2,12 +2,10 @@ import { CommandHandler } from '../../../../../shared/core/application/command/C
 import { SendEmail } from './SendEmail';
 import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
 import NodeMailer from 'nodemailer';
-import {ISendEmail} from "../ISendEmail";
+import { ISendEmail } from '../ISendEmail';
 
 export class SendEmailCommandHandler implements CommandHandler<SendEmail> {
-  constructor(
-      private readonly emailSender: ISendEmail
-  ) {}
+  constructor(private readonly emailSender: ISendEmail) {}
 
   async execute(command: SendEmail): Promise<CommandResult> {
     // const transporter = NodeMailer.createTransport({
@@ -29,7 +27,7 @@ export class SendEmailCommandHandler implements CommandHandler<SendEmail> {
       from: 'TourDeFoos <TourDeFoos@gmail.com>',
       to: command.emailAddress,
       subject: command.subject,
-      text: command.content,
+      html: command.htmlContent,
     });
 
     return CommandResult.success();

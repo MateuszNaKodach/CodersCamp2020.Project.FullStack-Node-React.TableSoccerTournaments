@@ -1,11 +1,11 @@
 export class SendEmail {
   readonly emailAddress: string;
   readonly subject: string;
-  readonly content: string;
+  readonly htmlContent: string;
 
-  constructor(props: { emailAddress: string; subject: string; content: string }) {
+  constructor(props: { emailAddress: string; subject: string; htmlContent: string }) {
     this.emailAddress = props.emailAddress;
     this.subject = props.subject;
-    this.content = props.content;
+    this.htmlContent = props.htmlContent;
   }
 }
