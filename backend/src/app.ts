@@ -40,6 +40,7 @@ import { MongoMatchRepository } from './modules/match-module/infrastructure/repo
 import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
 import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
+import { NodeMailerEmailSender } from './modules/email-sending/infrastructure/mailer/NodeMailerEmailSender';
 
 config();
 
@@ -89,7 +90,7 @@ export async function TableSoccerTournamentsApplication(
   };
 
   const sendingEmailModule: Module = {
-    core: SendEmailModuleCore(),
+    core: SendEmailModuleCore(new NodeMailerEmailSender()),
   };
 
   const modules: Module[] = [
