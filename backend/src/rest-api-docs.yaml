@@ -18,6 +18,28 @@ tags:
   - name: Specification
     description: The Open API specification
 paths:
+  /matches/{matchId}/result:
+    post:
+      tags:
+        - Match
+      description: End match
+      parameters:
+        - name: matchId
+          in: path
+          description: Match Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/PostEndMatchRequestBody'
+      responses:
+        200:
+          description: Match successfully ended
   /matches/{matchId}:
     get:
       tags:
@@ -48,14 +70,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/schemas/PostMatchRequestBody'
+              $ref: '#components/schemas/PostStartMatchRequestBody'
       responses:
         200:
           description: Match successfully started
-          content:
-            application/json:
-              schema:
-                $ref: '#components/schemas/PostMatchResponseBody'
   /tournament-registrations:
     get:
       tags:
@@ -327,7 +345,7 @@ components:
           type: string
         emailAddress:
           type: string
-    PostMatchRequestBody:
+    PostStartMatchRequestBody:
       type: object
       properties:
         matchId:
@@ -349,28 +367,14 @@ components:
         - tournamentId
         - firstMatchSideId
         - secondMatchSideId
-    PostMatchResponseBody:
+    PostEndMatchRequestBody:
       type: object
       properties:
-        matchId:
-          description: Identifier of the match that was started
-          type: string
-          format: uuid
-          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
-        firstMatchSideId:
-          description: Identifier of the match first team that is participating
+        winnerId:
+          description: Identifier of the winner team
           type: string
           format: uuid
           example: 3510fc2c-bbd7-427c-9439-02f76583aef5
-        secondMatchSideId:
-          description: Identifier of the match second team that is participating
-          type: string
-          format: uuid
-          example: 8321fc2c-bbd7-427c-9439-02f76583aef7
-      required:
-        - tournamentId
-        - firstMatchSideId
-        - secondMatchSideId
     MatchDto:
       type: object
       properties:
@@ -389,5 +393,10 @@ components:
           type: string
           format: uuid
           example: 8321fc2c-bbd7-427c-9439-02f76583aef7
+        winnerId:
+          description: Identifier of the winner team, returned only when match was ended
+          type: string
+          format: uuid
+          example: 3510fc2c-bbd7-427c-9439-02f76583aef5
 
 

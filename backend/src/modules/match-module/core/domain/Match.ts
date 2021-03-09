@@ -72,6 +72,9 @@ export function endMatch(
   if (!state.isParticipating(command.winnerId)) {
     throw new Error('One of the participating teams must be a winner.');
   }
+  if (state.winner) {
+    throw new Error('Cannot end match that has already ended.');
+  }
 
   const matchHasEnded = new MatchHasEnded({
     occurredAt: currentTime,
