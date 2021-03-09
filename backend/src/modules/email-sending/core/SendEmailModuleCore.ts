@@ -1,6 +1,6 @@
-import { ModuleCore } from '../../../../shared/core/ModuleCore';
-import { SendEmail } from './command/SendEmail';
-import { SendEmailCommandHandler } from './command/SendEmailCommandHandler';
+import { ModuleCore } from '../../../shared/core/ModuleCore';
+import { SendEmail } from './application/command/SendEmail';
+import { SendEmailCommandHandler } from './application/command/SendEmailCommandHandler';
 
 export function SendEmailModuleCore(): ModuleCore {
   return {

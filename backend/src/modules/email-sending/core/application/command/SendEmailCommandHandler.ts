@@ -2,9 +2,12 @@ import { CommandHandler } from '../../../../../shared/core/application/command/C
 import { SendEmail } from './SendEmail';
 import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
 import NodeMailer from 'nodemailer';
+import {ISendEmail} from "../ISendEmail";
 
 export class SendEmailCommandHandler implements CommandHandler<SendEmail> {
-  constructor() {}
+  constructor(
+      private readonly emailSender: ISendEmail
+  ) {}
 
   async execute(command: SendEmail): Promise<CommandResult> {
     // const transporter = NodeMailer.createTransport({
