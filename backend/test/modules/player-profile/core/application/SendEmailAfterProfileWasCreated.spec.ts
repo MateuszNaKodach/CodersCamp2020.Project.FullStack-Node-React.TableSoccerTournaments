@@ -1,6 +1,6 @@
 import { testPlayerProfileModule } from './TestPlayerProfileModule';
 import { PlayerProfileWasCreated } from '../../../../../src/modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
-import {CommandPublisherMock} from "../../../../test-support/shared/core/CommandPublisherMock";
+import { CommandPublisherMock } from '../../../../test-support/shared/core/CommandPublisherMock';
 
 describe('Send an email to player', () => {
   it('When player profile is created, then execute command for email sending', async () => {
@@ -26,7 +26,5 @@ describe('Send an email to player', () => {
 
     //Then
     expect(commandPublisher.executeCalls()); //????
-
-
   });
 });
