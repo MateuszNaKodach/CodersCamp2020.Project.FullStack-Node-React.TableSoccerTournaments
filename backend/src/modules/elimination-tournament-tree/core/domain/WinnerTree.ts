@@ -20,8 +20,7 @@ export class WinnerTree {
             entityIdGenerator: EntityIdGenerator,
         }
     ): WinnerTree {
-        const numberOfFightingTeamsGroups = fightingTeamsGroupsNumber(props.tournamentTeams.length);
-        const winnerTree = createTree(props.tournamentTeams, numberOfFightingTeamsGroups, props.entityIdGenerator);
+        const winnerTree = createTree(props.tournamentTeams,  props.entityIdGenerator);
         const tournamentTreeProps = {
             tournamentTreeArray: winnerTree,
             tournamentTeams: props.tournamentTeams
@@ -35,9 +34,10 @@ export class WinnerTree {
 }
 
 
-function createTree(tournamentTeams: TournamentTeam[], fightingTeamsGroupsNumber: number, entityIdGenerator: EntityIdGenerator,): FightingTeamsGroup[] {
+function createTree(tournamentTeams: TournamentTeam[],  entityIdGenerator: EntityIdGenerator,): FightingTeamsGroup[] {
+    const numberOfFightingTeamsGroups = fightingTeamsGroupsNumber(tournamentTeams.length);
     let returnedTree: FightingTeamsGroup[] = [];
-    const maxLevel = maxTreeLevel(fightingTeamsGroupsNumber);
+    const maxLevel = maxTreeLevel(numberOfFightingTeamsGroups);
     for (let currentLevel = maxLevel - 1, parentLevel: FightingTeamsGroup[] = []; currentLevel >= 0; currentLevel--) {
         const createdLevel = createEmptyLevel(currentLevel, parentLevel, entityIdGenerator);
         parentLevel = createdLevel;
