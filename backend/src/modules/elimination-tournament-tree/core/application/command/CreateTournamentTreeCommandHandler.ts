@@ -43,9 +43,9 @@ export class CreateTournamentTreeCommandHandler implements CommandHandler<Create
 
         // const { state, events } = createTournamentTreeWithTeams(doublesTournament, command, this.currentTimeProvider(), this.entityIdGenerator);
 
-        // await this.repository.save(state);
+        await this.repository.save(state);
 
-        // this.eventPublisher.publishAll(events);
+        this.eventPublisher.publishAll(events);
 
         return CommandResult.success();
     }

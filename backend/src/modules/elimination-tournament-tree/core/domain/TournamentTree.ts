@@ -5,9 +5,7 @@ import {EntityIdGenerator} from "../../../../shared/core/application/EntityIdGen
 import {CreateTournamentTree} from "../application/command/CreateTournamentTree";
 import {DomainCommandResult} from "../../../../shared/core/domain/DomainCommandResult";
 import {CurrentTimeProvider} from "../../../../shared/core/CurrentTimeProvider";
-
-class NumberIdGeneratorStub {
-}
+import {TournamentTreeWasCreated} from "./event/TournamentTreeWasCreated";
 
 export class TournamentTree {
     readonly tournamentTeams: TournamentTeam[];
@@ -69,7 +67,10 @@ export function createTournamentTree(
     }
 
     const tournamentTree = TournamentTree.createSingleTournamentTree(props);
-
-
+    const tournamentTreeWasCreatedEvent = new TournamentTreeWasCreated(command.tournamentId, tournamentTree, currentTime());
+    // const state = {tournamentId: command.tournamentId , tournamentTree: TournamentTree, }
+    return {
+        state: tournamentTree, events: [tournamentTreeWasCreatedEvent]
+    }
 }
 
