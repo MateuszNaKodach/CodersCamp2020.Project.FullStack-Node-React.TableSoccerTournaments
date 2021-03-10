@@ -67,8 +67,11 @@ export function createTournamentTree(
     }
 
     const tournamentTree = TournamentTree.createSingleTournamentTree(props);
-    const tournamentTreeWasCreatedEvent = new TournamentTreeWasCreated(command.tournamentId, tournamentTree, currentTime());
+    const tournamentTreeWasCreatedEvent = new TournamentTreeWasCreated(command.tournamentId,  currentTime());
     // const state = {tournamentId: command.tournamentId , tournamentTree: TournamentTree, }
+    // return {
+    //     state: tournamentTree, events: [tournamentTreeWasCreatedEvent]
+    // }
     return {
         state: tournamentTree, events: [tournamentTreeWasCreatedEvent]
     }

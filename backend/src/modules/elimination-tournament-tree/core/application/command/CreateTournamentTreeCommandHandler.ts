@@ -7,12 +7,15 @@ import {EntityIdGenerator} from "../../../../../shared/core/application/EntityId
 import {TournamentTeam} from "../../domain/TournamentTeam";
 import {TournamentTeamId} from "../../domain/TournamentTeamId";
 import {createTournamentTree, TournamentTree} from "../../domain/TournamentTree";
+import {TournamentTreeRepository} from "../TournamentTreeRepository";
 
 export class CreateTournamentTreeCommandHandler implements CommandHandler<CreateTournamentTree> {
     constructor(
         private readonly eventPublisher: DomainEventPublisher,
         private readonly currentTimeProvider: CurrentTimeProvider,
         private readonly entityIdGenerator: EntityIdGenerator,
+        private readonly repository: TournamentTreeRepository,
+
     ) {
     }
 
@@ -32,7 +35,10 @@ export class CreateTournamentTreeCommandHandler implements CommandHandler<Create
         // const newCommand = {tournamentId: tournamentId, tournamentTeams: tournamentTeams,}
 
         // TODO: To co poniżej!
-        const tournamentTree: TournamentTree = {} as TournamentTree;
+        // const tournamentTree: TournamentTree = {} as TournamentTree;
+        const tournamentTree= await this.repository.findByTournamentTreeId(tournamentId);
+
+
 
         const {state, events} = createTournamentTree(tournamentTree, commandForCreateTournamentTree, this.currentTimeProvider,  this.entityIdGenerator);
 
