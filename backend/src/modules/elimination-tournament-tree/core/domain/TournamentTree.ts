@@ -2,6 +2,9 @@ import {TournamentTeam} from "./TournamentTeam";
 import {FightingTeamsGroup} from "./FightingTeamsGroup";
 import {WinnerTree} from "./WinnerTree";
 import {EntityIdGenerator} from "../../../../shared/core/application/EntityIdGenerator";
+import {CreateTournamentTree} from "../application/command/CreateTournamentTree";
+import {DomainCommandResult} from "../../../../shared/core/domain/DomainCommandResult";
+import {CurrentTimeProvider} from "../../../../shared/core/CurrentTimeProvider";
 
 class NumberIdGeneratorStub {
 }
@@ -9,20 +12,20 @@ class NumberIdGeneratorStub {
 export class TournamentTree {
     readonly tournamentTeams: TournamentTeam[];
     readonly tournamentTreeArray: FightingTeamsGroup[];
-    readonly testTournamentId: string;
+    readonly tournamentId: string;
 
 
     private constructor(
-        props: { testTournamentId: string, tournamentTreeArray: FightingTeamsGroup[], tournamentTeams: TournamentTeam[] }
+        props: { tournamentId: string, tournamentTreeArray: FightingTeamsGroup[], tournamentTeams: TournamentTeam[] }
     ) {
         this.tournamentTeams = props.tournamentTeams;
         this.tournamentTreeArray = props.tournamentTreeArray;
-        this.testTournamentId = props.testTournamentId
+        this.tournamentId = props.tournamentId
     }
 
     static createSingleTournamentTree(
         props: {
-            testTournamentId: string,
+            tournamentId: string,
             tournamentTeams: TournamentTeam[],
             entityIdGenerator: EntityIdGenerator,
         }
@@ -32,7 +35,7 @@ export class TournamentTree {
             entityIdGenerator: props.entityIdGenerator
         });
         const tournamentTreeProps = {
-            testTournamentId: props.testTournamentId,
+            tournamentId: props.tournamentId,
             tournamentTreeArray: winnerTree.getTournamentTreeArray(),
             tournamentTeams: props.tournamentTeams
         };
@@ -43,3 +46,30 @@ export class TournamentTree {
         return this.tournamentTreeArray;
     }
 }
+
+
+export function createTournamentTree(
+    state: TournamentTree | undefined,
+    command: { tournamentId: string, tournamentTeams: TournamentTeam[] },
+    currentTime: CurrentTimeProvider,
+    entityIdGenerator: EntityIdGenerator,
+): DomainCommandResult<TournamentTree> {
+
+    if (state !== undefined) {
+        throw new Error('This tournament already exists.');
+    }
+    if (command.tournamentTeams.length < 2) {
+        throw new Error('Tournament must have at least 2 fighting teams.');
+    }
+
+    const props = {
+        tournamentId: command.tournamentId,
+        tournamentTeams: command.tournamentTeams,
+        entityIdGenerator: entityIdGenerator,
+    }
+
+    const tournamentTree = TournamentTree.createSingleTournamentTree(props);
+
+
+}
+

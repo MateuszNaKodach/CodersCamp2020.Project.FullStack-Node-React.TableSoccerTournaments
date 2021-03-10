@@ -16,7 +16,7 @@ describe('TournamentTree', () => {
         // //When
         const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree(
             {
-                testTournamentId: testTournamentId.generate(),
+                tournamentId: testTournamentId.generate(),
                 tournamentTeams: tournamentTeamsList,
                 entityIdGenerator: matchEntityIdGen,
             });
@@ -57,7 +57,7 @@ describe('TournamentTree', () => {
         // //When
         const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree(
             {
-                testTournamentId:   testTournamentId.generate(),
+                tournamentId:   testTournamentId.generate(),
                 tournamentTeams: tournamentTeamsList,
                 entityIdGenerator: matchEntityIdGen,
             });

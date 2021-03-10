@@ -1,6 +1,6 @@
 import {ModuleCore} from "../../../shared/core/ModuleCore";
 
-export function DoublesTournamentModuleCore(
+export function TournamentModuleCore(
     // eventPublisher: DomainEventPublisher,
     // commandPublisher: CommandPublisher,
     // currentTimeProvider: CurrentTimeProvider,
