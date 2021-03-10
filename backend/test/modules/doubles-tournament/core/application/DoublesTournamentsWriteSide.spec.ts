@@ -1,9 +1,9 @@
-import {testDoublesTournamentsModule} from './TestDoublesTournamentsModule';
-import {CreateTournamentWithTeams} from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
-import {TournamentWithTeamsWasCreated} from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWithTeamsWasCreated';
-import {FromListIdGeneratorStub} from '../../../../test-support/shared/core/FromListIdGeneratorStub';
-import {CommandResult} from '../../../../../src/shared/core/application/command/CommandResult';
-import {TeamId} from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
+import { testDoublesTournamentsModule } from './TestDoublesTournamentsModule';
+import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
+import { TournamentWithTeamsWasCreated } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWithTeamsWasCreated';
+import { FromListIdGeneratorStub } from '../../../../test-support/shared/core/FromListIdGeneratorStub';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
 import Failure = CommandResult.Failure;
 
 describe('Doubles Tournament | Write Side', () => {
@@ -25,7 +25,14 @@ describe('Doubles Tournament | Write Side', () => {
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
-      new TournamentWithTeamsWasCreated({ occurredAt: currentTime, tournamentId, tournamentTeams: [{ teamId: 'TeamId1', firstTeamPlayerId: 'player1', secondTeamPlayerId: 'player2' },{ teamId: 'TeamId2', firstTeamPlayerId: 'player3', secondTeamPlayerId: 'player4' }] }),
+      new TournamentWithTeamsWasCreated({
+        occurredAt: currentTime,
+        tournamentId,
+        tournamentTeams: [
+          { teamId: 'TeamId1', firstTeamPlayerId: 'player1', secondTeamPlayerId: 'player2' },
+          { teamId: 'TeamId2', firstTeamPlayerId: 'player3', secondTeamPlayerId: 'player4' },
+        ],
+      }),
     );
   });
 
@@ -50,7 +57,16 @@ describe('Doubles Tournament | Write Side', () => {
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
-      new TournamentWithTeamsWasCreated({ occurredAt: currentTime, tournamentId, tournamentTeams: [{ teamId: 'TeamId1', firstTeamPlayerId: 'player1', secondTeamPlayerId: 'player2' }, { teamId: 'TeamId2', firstTeamPlayerId: 'player3', secondTeamPlayerId: 'player4' }, { teamId: 'TeamId3', firstTeamPlayerId: 'player5', secondTeamPlayerId: 'player6' }, { teamId: 'TeamId4', firstTeamPlayerId: 'player7', secondTeamPlayerId: 'player8' }] }),
+      new TournamentWithTeamsWasCreated({
+        occurredAt: currentTime,
+        tournamentId,
+        tournamentTeams: [
+          { teamId: 'TeamId1', firstTeamPlayerId: 'player1', secondTeamPlayerId: 'player2' },
+          { teamId: 'TeamId2', firstTeamPlayerId: 'player3', secondTeamPlayerId: 'player4' },
+          { teamId: 'TeamId3', firstTeamPlayerId: 'player5', secondTeamPlayerId: 'player6' },
+          { teamId: 'TeamId4', firstTeamPlayerId: 'player7', secondTeamPlayerId: 'player8' },
+        ],
+      }),
     );
   });
 

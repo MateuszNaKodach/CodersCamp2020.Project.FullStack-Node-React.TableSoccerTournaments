@@ -39,7 +39,7 @@ export function createTournamentWithTeams(
   const tournamentWithTeamsWasCreated = new TournamentWithTeamsWasCreated({
     occurredAt: currentTime,
     tournamentId: command.tournamentId,
-    tournamentTeams: tournamentTeams.map(team => fromTournamentTeam(team)),
+    tournamentTeams: tournamentTeams.map((team) => fromTournamentTeam(team)),
   });
 
   const createdTournamentWithTeams = onTournamentWithTeamsWasCreated(state, tournamentWithTeamsWasCreated);
@@ -53,10 +53,21 @@ export function createTournamentWithTeams(
 function onTournamentWithTeamsWasCreated(state: DoublesTournament | undefined, event: TournamentWithTeamsWasCreated): DoublesTournament {
   return new DoublesTournament({
     tournamentId: event.tournamentId,
-    tournamentTeams: event.tournamentTeams.map(team => new TournamentTeam({ teamId: TeamId.from(team.teamId), firstTeamPlayer: team.firstTeamPlayerId, secondTeamPlayer: team.secondTeamPlayerId })),
+    tournamentTeams: event.tournamentTeams.map(
+      (team) =>
+        new TournamentTeam({
+          teamId: TeamId.from(team.teamId),
+          firstTeamPlayer: team.firstTeamPlayerId,
+          secondTeamPlayer: team.secondTeamPlayerId,
+        }),
+    ),
   });
 }
 
 function fromTournamentTeam(tournamentTeam: TournamentTeam) {
-  return { teamId: tournamentTeam.teamId.raw, firstTeamPlayerId: tournamentTeam.firstTeamPlayer, secondTeamPlayerId: tournamentTeam.secondTeamPlayer }
+  return {
+    teamId: tournamentTeam.teamId.raw,
+    firstTeamPlayerId: tournamentTeam.firstTeamPlayer,
+    secondTeamPlayerId: tournamentTeam.secondTeamPlayer,
+  };
 }
