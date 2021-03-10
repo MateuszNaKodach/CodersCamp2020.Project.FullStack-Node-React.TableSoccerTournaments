@@ -2,7 +2,7 @@ import { testPlayerProfileModule } from './TestPlayerProfileModule';
 import { PlayerProfileWasCreated } from '../../../../../src/modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
 
 describe('Send an email to player', () => {
-  it('When player profile is created, then execute command for email sending', async () => {
+  it('When player profile is created, then execute command for email sending', () => {
     //Given
     const currentTime = new Date();
     const playerProfileModuleCore = testPlayerProfileModule(currentTime);
