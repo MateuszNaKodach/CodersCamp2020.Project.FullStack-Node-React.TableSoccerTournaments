@@ -6,8 +6,7 @@ describe('Send an email to player', () => {
   it('When command SendEmail is sent, then send an email with appropriate arguments', async () => {
     //Given
     const sendEmailFrom = 'TourDeFoos <TourDeFoos@gmail.com>';
-    let emailSender: EmailSender;
-    emailSender = {
+    const emailSender: EmailSender = {
       sendAnEmail: jest.fn(),
     };
     const sendEmailModuleCore = testSendEmailModule(emailSender);
