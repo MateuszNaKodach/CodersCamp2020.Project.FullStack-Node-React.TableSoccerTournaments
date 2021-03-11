@@ -39,6 +39,7 @@ import { MongoMatchRepository } from './modules/match-module/infrastructure/repo
 import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
 import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
+import { InMemoryMatchesQueueRepository } from './modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryMatchesQueueRepository';
 
 config();
 
@@ -183,6 +184,9 @@ function MatchRepository() {
 }
 
 function MatchesQueueRepository() {
-  //TODO code below...
+  //TODO code below
+  // if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.DOUBLES_TOURNAMENT_DATABASE === 'MONGO') {
+  //   return new MongoMatchesQueueRepository();
+  // }
   return new InMemoryMatchesQueueRepository();
 }
