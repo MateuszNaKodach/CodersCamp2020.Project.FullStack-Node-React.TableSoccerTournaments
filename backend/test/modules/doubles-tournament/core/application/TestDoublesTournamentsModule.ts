@@ -2,10 +2,19 @@ import { TestModuleCore, testModuleCore } from '../../../../test-support/shared/
 import { DoublesTournamentModuleCore } from '../../../../../src/modules/doubles-tournament/core/DoublesTournamentModuleCore';
 import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
 import { InMemoryDoublesTournamentRepository } from '../../../../../src/modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryDoublesTournamentRepository';
+import { InMemoryMatchesQueueRepository } from '../../../../../src/modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryMatchesQueueRepository';
 
 export function testDoublesTournamentsModule(currentTime: Date, entityIdGenerator: EntityIdGenerator): TestModuleCore {
   const doublesTournamentRepository = new InMemoryDoublesTournamentRepository();
+  const matchesQueueRepository = new InMemoryMatchesQueueRepository();
   return testModuleCore((commandBus, eventBus, queryBus) =>
-    DoublesTournamentModuleCore(eventBus, commandBus, () => currentTime, entityIdGenerator, doublesTournamentRepository),
+    DoublesTournamentModuleCore(
+      eventBus,
+      commandBus,
+      () => currentTime,
+      entityIdGenerator,
+      doublesTournamentRepository,
+      matchesQueueRepository,
+    ),
   );
 }
