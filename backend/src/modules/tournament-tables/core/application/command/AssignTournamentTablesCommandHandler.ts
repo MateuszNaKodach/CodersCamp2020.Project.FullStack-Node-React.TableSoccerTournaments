@@ -15,7 +15,7 @@ export class AssignTournamentTablesCommandHandler implements CommandHandler<Assi
 
   async execute(command: AssignTournamentTables): Promise<CommandResult> {
     const tournamentId = command.tournamentId;
-    const tournamentTables = await this.repository.findByTournamentId(tournamentId);
+    const tournamentTables = await this.repository.findTablesByTournamentId(tournamentId);
 
     const { state, events } = assignTablesToTournament(tournamentTables, command, this.currentTimeProvider());
     await this.repository.saveAll(state);
