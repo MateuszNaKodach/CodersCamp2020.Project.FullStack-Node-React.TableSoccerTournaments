@@ -3,7 +3,7 @@ import { DoublesTournament } from '../../../../../src/modules/doubles-tournament
 import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
 import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
 import { testModuleRestApi } from '../../../../test-support/shared/presentation/rest-api/TestModuleRestApi';
-import { DoublesTournamentRestApiModule } from '../../../../../src/modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
+import { DoublesTournamentRestApiModule } from '../../../../../src/modules/doubles-tournament/presentation/rest-api/DoublesTournamentRestApiModule';
 import { FindDoublesTournamentById } from '../../../../../src/modules/doubles-tournament/core/application/query/FindDoublesTournamentById';
 import { StatusCodes } from 'http-status-codes';
 import { FindTournamentRegistrationsById } from '../../../../../src/modules/tournaments-registrations/core/application/query/FindTournamentRegistrationsById';
