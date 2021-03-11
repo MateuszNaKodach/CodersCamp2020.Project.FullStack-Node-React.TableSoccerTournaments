@@ -6,6 +6,8 @@ import { QueryPublisherMock } from "../../../../test-support/shared/core/QueryPu
 import { AssignTournamentTables } from "../../../../../src/modules/tournament-tables/core/application/command/AssignTournamentTables";
 import { TournamentTable } from "../../../../../src/modules/tournament-tables/core/domain/TournamentTable";
 import { TableNumber } from "../../../../../src/modules/tournament-tables/core/domain/TableNumber";
+import { tournamentTablesRestApiModule } from "../../../../../src/modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule";
+import { FindTablesByTournamentId } from "../../../../../src/modules/tournament-tables/core/application/query/FindTablesByTournamentId";
 
 describe('Tournament Tables REST API', () => {
   it('POST /rest-api/tournaments/:tournamentId/tables | when command success', async () => {
@@ -17,7 +19,7 @@ describe('Tournament Tables REST API', () => {
       { tableNumber: 3, tableName: 'Leonhart' },
     ];
     const commandPublisher = CommandPublisherMock(CommandResult.success());
-    const { agent } = testModuleRestApi(TournamentTablesRestApiModule, { commandPublisher });
+    const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { commandPublisher });
 
     //When
     const { body, status } = await agent
@@ -40,7 +42,7 @@ describe('Tournament Tables REST API', () => {
     const commandPublisher = CommandPublisherMock(
       CommandResult.failureDueTo(new Error('Some tables are already assigned to that tournament.'))
     );
-    const { agent } = testModuleRestApi(TournamentTablesRestApiModule, { commandPublisher });
+    const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { commandPublisher });
 
     //When
     const { body, status } = await agent
@@ -66,7 +68,7 @@ describe('Tournament Tables REST API', () => {
         tableName: 'P4P',
       }),
     );
-    const { agent } = testModuleRestApi(TournamentTablesRestApiModule, { queryPublisher });
+    const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { queryPublisher });
 
     //When
     const { body, status } = await agent.get('/rest-api/tournaments/sampleTournamentId/tables').send();
@@ -81,7 +83,7 @@ describe('Tournament Tables REST API', () => {
     //Given
     const tournamentId = 'sampleTournamentId';
     const queryPublisher = QueryPublisherMock(undefined);
-    const { agent } = testModuleRestApi(TournamentTablesRestApiModule, { queryPublisher });
+    const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { queryPublisher });
 
     //When
     const { body, status } = await agent.get('/rest-api/tournaments/sampleTournamentId/tables').send();
