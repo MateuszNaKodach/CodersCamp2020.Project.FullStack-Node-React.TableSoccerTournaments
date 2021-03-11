@@ -43,6 +43,24 @@ export class TournamentTree {
     public getTournamentTreeArray(): FightingTeamsGroup[] {
         return this.tournamentTreeArray;
     }
+
+    public getTournamentTreeIdArray(): string[] {
+        return this.tournamentTreeArray
+            .map((item) => item.fightingTeamsGroupId.raw);
+    }
+
+    public getMatchesQueueIdArray(): string[] {
+        return this.tournamentTreeArray
+            .filter((item) => item.firstTeam && item.secondTeam)
+            .map((item) => item.fightingTeamsGroupId.raw);
+    }
+
+    public finishMatch(matchId:string, winnerId:string): void {
+
+    }
+
+
+
 }
 
 
@@ -67,7 +85,7 @@ export function createTournamentTree(
     }
 
     const tournamentTree = TournamentTree.createSingleTournamentTree(props);
-    const tournamentTreeWasCreatedEvent = new TournamentTreeWasCreated(command.tournamentId,  currentTime());
+    const tournamentTreeWasCreatedEvent = new TournamentTreeWasCreated(command.tournamentId, currentTime());
     // const state = {tournamentId: command.tournamentId , tournamentTree: TournamentTree, }
     // return {
     //     state: tournamentTree, events: [tournamentTreeWasCreatedEvent]
