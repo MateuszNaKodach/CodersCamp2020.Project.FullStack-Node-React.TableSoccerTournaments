@@ -11,6 +11,6 @@ export function tournamentTablesRestApiModule(
 ): ModuleRestApi {
   return {
     router: tournamentTablesRouter(commandPublisher, eventPublisher, queryPublisher),
-    path: 'tournaments'
+    path: '/tournaments'
   }
 }
