@@ -3,6 +3,8 @@ import {TournamentWithTeamsWasCreated} from "../../../../doubles-tournament/core
 import {CommandPublisher} from "../../../../../shared/core/application/command/CommandBus";
 import {CreateTournamentTree} from "../command/CreateTournamentTree";
 import {TournamentTeam} from "../../domain/TournamentTeam";
+import {tournamentRegistrationsRouter} from "../../../../tournaments-registrations/presentation/rest-api/TournamentRegistrationsRouter";
+import {generateTournamentTeamsList} from "../../../../../../test/modules/elimination-tournament-tree/core/domain/TouramentTeamsListGenerator";
 
 export class CreateTournamentTreeWhenTournamentWithTeamsWasCreated implements EventHandler<TournamentWithTeamsWasCreated> {
     constructor(
@@ -12,12 +14,18 @@ export class CreateTournamentTreeWhenTournamentWithTeamsWasCreated implements Ev
 
     async handle(event: TournamentWithTeamsWasCreated): Promise<void> {
 // event.tournamentTeams.
+        const tournamentTeams = event.tournamentTeams.map((team) => {
+            return {
+                teamId: team.teamId,
+                firstTeamPlayer: team.firstTeamPlayerId,
+                secondTeamPlayer: team.secondTeamPlayerId
+            }
+        })
 
         await this.commandPublisher.execute(new CreateTournamentTree({
             tournamentId: event.tournamentId,
-            tournamentTeams: event.tournamentTeams
+            tournamentTeams:tournamentTeams
+
         }))
     }
-
-
 }
