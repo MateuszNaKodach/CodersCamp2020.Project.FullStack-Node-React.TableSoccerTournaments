@@ -1,5 +1,5 @@
-import {TournamentTeam} from "../../../../../src/modules/elimination-tournament-tree/core/domain/TournamentTeam";
-import {TournamentTeamId} from "../../../../../src/modules/elimination-tournament-tree/core/domain/TournamentTeamId";
+import {TournamentTeam} from "../../../../../src/modules/tournament-tree/core/domain/TournamentTeam";
+import {TournamentTeamId} from "../../../../../src/modules/tournament-tree/core/domain/TournamentTeamId";
 import {EntityIdGenerator} from "../../../../../src/shared/core/application/EntityIdGenerator";
 
 export function generateTournamentTeamsList(entityIdGen: EntityIdGenerator, numberOfTeams = 1): TournamentTeam[] {

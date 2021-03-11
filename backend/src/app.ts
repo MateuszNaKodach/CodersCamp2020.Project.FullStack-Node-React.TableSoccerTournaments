@@ -39,6 +39,8 @@ import { MongoMatchRepository } from './modules/match-module/infrastructure/repo
 import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
 import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
+import {TournamentTreeModuleCore} from "./modules/tournament-tree/core/TournamentTreeModuleCore";
+import {InMemoryTournamentTreeRepository} from "./modules/tournament-tree/infrastructure/repository/inmemory/InMemoryTournamentTreeRepository";
 
 config();
 
@@ -86,6 +88,12 @@ export async function TableSoccerTournamentsApplication(
     core: MatchModuleCore(eventBus, commandBus, currentTimeProvider, matchRepository),
     restApi: MatchRestApiModule(commandBus, eventBus, queryBus),
   };
+
+  const tournamentTreeRepository = TournamentTreeRepository();
+  const eliminationTournamentTree:Module ={
+    core: TournamentTreeModuleCore(eventBus, commandBus, currentTimeProvider,entityIdGenerator, tournamentTreeRepository ),
+    restApi: TournamentTreeApiModule(),
+  }
 
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
@@ -173,3 +181,12 @@ function MatchRepository() {
   }
   return new InMemoryMatchRepository();
 }
+
+function TournamentTreeRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENT_TREE_DATABASE === 'MONGO') {
+    // TODO: below
+    // return new MongoTournamentTreeRepository();
+  }
+  return new InMemoryTournamentTreeRepository();
+}
+

@@ -1,8 +1,8 @@
 import {NumberIdGeneratorStub} from "../../../../test-support/shared/core/NumberIdGeneratorStub";
-import {TournamentTree} from "../../../../../src/modules/elimination-tournament-tree/core/domain/TournamentTree";
+import {TournamentTree} from "../../../../../src/modules/tournament-tree/core/domain/TournamentTree";
 import {generateTournamentTeamsList} from "./TouramentTeamsListGenerator";
-import {FightingTeamsGroup} from "../../../../../src/modules/elimination-tournament-tree/core/domain/FightingTeamsGroup";
-import {FightingTeamsGroupId} from "../../../../../src/modules/elimination-tournament-tree/core/domain/FightingTeamsGroupId";
+import {FightingTeamsGroup} from "../../../../../src/modules/tournament-tree/core/domain/FightingTeamsGroup";
+import {FightingTeamsGroupId} from "../../../../../src/modules/tournament-tree/core/domain/FightingTeamsGroupId";
 
 describe('TournamentTree', () => {
     const testTournamentId = NumberIdGeneratorStub(1000, "testTournamentId");

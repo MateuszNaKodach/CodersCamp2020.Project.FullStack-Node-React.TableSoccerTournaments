@@ -10,6 +10,10 @@ export class InMemoryTournamentTreeRepository implements TournamentTreeRepositor
         this.entities[tournamentTree.tournamentId] = tournamentTree;
     }
 
+    // async save(tournamentTree: TournamentTree): Promise<void> {
+    //     this.entities[tournamentTree.tournamentId] = tournamentTree;
+    // }
+
     // findAll(): Promise<DoublesTournament[]> {
     //     return Promise.resolve(Object.keys(this.entities).map((id) => this.entities[id]));
     // }
