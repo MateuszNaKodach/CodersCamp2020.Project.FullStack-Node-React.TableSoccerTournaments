@@ -41,9 +41,6 @@ describe('Tournament Tables REST API', () => {
       CommandResult.failureDueTo(new Error('Some tables are already assigned to that tournament.'))
     );
     const { agent } = testModuleRestApi(TournamentTablesRestApiModule, { commandPublisher });
-    await agent
-      .post('/rest-api/tournaments/sampleTournamentId/tables')
-      .send({ tablesList });
 
     //When
     const { body, status } = await agent

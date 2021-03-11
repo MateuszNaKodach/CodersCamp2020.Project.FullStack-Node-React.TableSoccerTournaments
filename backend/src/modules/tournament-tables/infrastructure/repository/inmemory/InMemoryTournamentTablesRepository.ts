@@ -13,7 +13,7 @@ export class InMemoryTournamentTablesRepository implements TournamentTablesRepos
     tournamentTables.forEach((table) => this.save(table));
   }
 
-  findTablesByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
+  findAllByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
     return Promise.resolve(
       Object.keys(this.entities)
         .filter((id) => this.entities[id].tournamentId === tournamentId)
