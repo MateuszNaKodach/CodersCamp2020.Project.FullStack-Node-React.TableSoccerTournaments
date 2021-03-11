@@ -76,8 +76,16 @@ export async function TableSoccerTournamentsApplication(
   };
 
   const doublesTournamentRepository = DoublesTournamentRepository();
+  const matchesQueueRepository = MatchesQueueRepository();
   const doublesTournamentModule: Module = {
-    core: DoublesTournamentModuleCore(eventBus, commandBus, currentTimeProvider, entityIdGenerator, doublesTournamentRepository),
+    core: DoublesTournamentModuleCore(
+      eventBus,
+      commandBus,
+      currentTimeProvider,
+      entityIdGenerator,
+      doublesTournamentRepository,
+      matchesQueueRepository,
+    ),
     restApi: DoublesTournamentRestApiModule(commandBus, eventBus, queryBus),
   };
 
@@ -172,4 +180,9 @@ function MatchRepository() {
     return new MongoMatchRepository();
   }
   return new InMemoryMatchRepository();
+}
+
+function MatchesQueueRepository() {
+  //TODO code below...
+  return new InMemoryMatchesQueueRepository();
 }
