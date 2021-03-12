@@ -1,8 +1,8 @@
-import { DoublesTournamentRepository } from '../../../application/DoublesTournamentRepository';
-import { DoublesTournament } from '../../../domain/DoublesTournament';
+import { DoublesTournamentRepository } from '../../../core/application/DoublesTournamentRepository';
+import { DoublesTournament } from '../../../core/domain/DoublesTournament';
 import mongoose, { Schema } from 'mongoose';
-import { TeamId } from '../../../domain/TeamId';
-import { TournamentTeam } from '../../../domain/TournamentTeam';
+import { TeamId } from '../../../core/domain/TeamId';
+import { TournamentTeam } from '../../../core/domain/TournamentTeam';
 
 export class MongoDoublesTournamentRepository implements DoublesTournamentRepository {
   async findByTournamentId(tournamentId: string): Promise<DoublesTournament | undefined> {

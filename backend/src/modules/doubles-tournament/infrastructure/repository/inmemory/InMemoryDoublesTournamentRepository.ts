@@ -1,5 +1,5 @@
-import { DoublesTournament } from '../../../domain/DoublesTournament';
-import { DoublesTournamentRepository } from '../../../application/DoublesTournamentRepository';
+import { DoublesTournament } from '../../../core/domain/DoublesTournament';
+import { DoublesTournamentRepository } from '../../../core/application/DoublesTournamentRepository';
 
 export class InMemoryDoublesTournamentRepository implements DoublesTournamentRepository {
   private readonly entities: { [id: string]: DoublesTournament } = {};
