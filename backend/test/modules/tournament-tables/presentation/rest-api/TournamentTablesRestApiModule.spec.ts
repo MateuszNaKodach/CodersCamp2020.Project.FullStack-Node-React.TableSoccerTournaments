@@ -7,7 +7,6 @@ import { AssignTournamentTables } from '../../../../../src/modules/tournament-ta
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
 import { tournamentTablesRestApiModule } from '../../../../../src/modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
-import { FindTablesByTournamentId } from '../../../../../src/modules/tournament-tables/core/application/query/FindTablesByTournamentId';
 
 describe('Tournament Tables REST API', () => {
   it('POST /rest-api/tournaments/:tournamentId/tables | when command success', async () => {
