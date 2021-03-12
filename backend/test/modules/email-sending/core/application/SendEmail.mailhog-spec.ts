@@ -1,7 +1,7 @@
 import { MailhogClient } from 'mailhog-awesome';
 import { NodeMailerEmailSender } from '../../../../../src/modules/email-sending/infrastructure/mailer/NodeMailerEmailSender';
 
-describe('Example Jest email test-suite', () => {
+describe('Example email sending using NodeMailer', () => {
   let mailhog: MailhogClient;
   const host = 'localhost';
 
@@ -12,25 +12,25 @@ describe('Example Jest email test-suite', () => {
     });
   });
 
-  it('Retrieve the "reset password" email', async () => {
+  it('check if email arrived on correct email address with correct subject', async () => {
     //Given
-    const inbox = 'user1@your-domain.com';
+    const inbox = 'user@test.com';
     await mailhog.clearInbox(inbox);
-    const transport = new NodeMailerEmailSender({ host: host, port: 1025, secure: false });
+    const emailSender = new NodeMailerEmailSender({ host: host, port: 1025, secure: false });
 
     //When
-    transport.sendAnEmail({
-      from: 'system@your-domain.com',
+    await emailSender.sendAnEmail({
+      from: 'admin@test.com',
       to: inbox,
-      subject: 'Reset your password',
-      html: 'Please follow the link to reset your password.',
+      subject: 'Test subject',
+      html: 'Test html body',
     });
 
     //Then
     const email = await mailhog.getLastEmail({
-      from: 'system@your-domain.com',
+      from: 'admin@test.com',
       to: inbox,
-      subject: 'Reset your password',
+      subject: 'Test subject',
     });
     expect(email).toBeTruthy();
     await mailhog.clearInbox(inbox);
