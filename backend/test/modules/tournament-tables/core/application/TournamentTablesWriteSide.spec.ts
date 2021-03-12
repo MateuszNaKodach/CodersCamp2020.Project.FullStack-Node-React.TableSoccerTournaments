@@ -6,7 +6,7 @@ import Failure = CommandResult.Failure;
 import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 
-describe('Table reservation', function () {
+describe('Tournament Tables | Write Side', function () {
   it('When assign tables, then tables reservation for the tournament is made', async () => {
     //Given
     const currentTime = new Date();
