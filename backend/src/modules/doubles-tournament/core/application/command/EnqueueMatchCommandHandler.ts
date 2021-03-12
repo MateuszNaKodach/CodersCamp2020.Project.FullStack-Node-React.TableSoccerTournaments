@@ -1,5 +1,5 @@
 import { CommandHandler } from '../../../../../shared/core/application/command/CommandHandler';
-import { QueueMatch } from './QueueMatch';
+import { EnqueueMatch } from './EnqueueMatch';
 import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
 import { DoublesTournamentRepository } from '../DoublesTournamentRepository';
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
@@ -9,7 +9,7 @@ import { TeamId } from '../../domain/TeamId';
 import { MatchesQueueRepository } from '../MatchesQueueRepository';
 import { pushMatchToQueue } from '../../domain/QueuedMatch';
 
-export class QueueMatchCommandHandler implements CommandHandler<QueueMatch> {
+export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> {
   constructor(
     private readonly eventPublisher: DomainEventPublisher,
     private readonly currentTimeProvider: CurrentTimeProvider,
@@ -17,7 +17,7 @@ export class QueueMatchCommandHandler implements CommandHandler<QueueMatch> {
     private readonly matchesQueue: MatchesQueueRepository,
   ) {}
 
-  async execute(command: QueueMatch): Promise<CommandResult> {
+  async execute(command: EnqueueMatch): Promise<CommandResult> {
     const tournamentId = TournamentId.from(command.tournamentId);
     const team1Id = TeamId.from(command.team1Id);
     const team2Id = TeamId.from(command.team2Id);

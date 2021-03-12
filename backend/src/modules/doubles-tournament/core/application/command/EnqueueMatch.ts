@@ -1,4 +1,4 @@
-export class QueueMatch {
+export class EnqueueMatch {
   readonly tournamentId: string;
   readonly matchNumber: number;
   readonly team1Id: string;
