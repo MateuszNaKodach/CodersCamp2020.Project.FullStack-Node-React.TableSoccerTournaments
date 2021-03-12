@@ -252,7 +252,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostAssignTournamentTablesListRequestBody'
+              $ref: '#/components/schemas/PostAssignTournamentTablesRequestBody'
       responses:
         200:
           description: Tables successfully assigned to the tournament
@@ -422,20 +422,22 @@ components:
           type: string
           format: uuid
           example: 3510fc2c-bbd7-427c-9439-02f76583aef5
-    PostAssignTournamentTablesListRequestBody:
-      type: array
-      items:
-        $ref: '#/components/schemas/PostAssignTournamentTablesRequestBody'
-      uniqueItems: true
     PostAssignTournamentTablesRequestBody:
       type: object
       properties:
-        tableNumber:
-          description: Number of the table (1-200)
-          type: integer
-          minimum: 1
-          maximum: 200
-          example: 1
-        tableName:
-          description: Name of the table
-          type: string
+        tables:
+          description: List of tournament tables
+          type: array
+          items:
+            type: object
+            properties:
+              tableNumber:
+                description: Number of the table (1-200)
+                type: integer
+                minimum: 1
+                maximum: 200
+                example: 1
+              tableName:
+                description: Name of the table
+                type: string
+          uniqueItems: true

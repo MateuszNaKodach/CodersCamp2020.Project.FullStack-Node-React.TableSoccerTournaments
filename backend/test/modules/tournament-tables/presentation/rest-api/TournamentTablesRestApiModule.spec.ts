@@ -13,7 +13,7 @@ describe('Tournament Tables REST API', () => {
   it('POST /rest-api/tournaments/:tournamentId/tables | when command success', async () => {
     //Given
     const tournamentId = 'sampleTournamentId';
-    const tablesList = [
+    const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
       { tableNumber: 2, tableName: 'Garlando' },
       { tableNumber: 3, tableName: 'Leonhart' },
@@ -22,10 +22,10 @@ describe('Tournament Tables REST API', () => {
     const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent.post('/rest-api/tournaments/sampleTournamentId/tables').send({ tablesList });
+    const { body, status } = await agent.post('/rest-api/tournaments/sampleTournamentId/tables').send({ tables });
 
     //Then
-    expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTournamentTables(tournamentId, tablesList));
+    expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTournamentTables(tournamentId, tables));
     expect(status).toBe(StatusCodes.OK);
     expect(body).toBeEmpty();
   });
@@ -33,7 +33,7 @@ describe('Tournament Tables REST API', () => {
   it('POST /rest-api/tournaments/:tournamentId/tables | when command failure', async () => {
     //Given
     const tournamentId = 'sampleTournamentId';
-    const tablesList = [
+    const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
       { tableNumber: 2, tableName: 'Garlando' },
     ];
@@ -43,10 +43,10 @@ describe('Tournament Tables REST API', () => {
     const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent.post('/rest-api/tournaments/sampleTournamentId/tables').send({ tablesList });
+    const { body, status } = await agent.post('/rest-api/tournaments/sampleTournamentId/tables').send({ tables });
 
     //Then
-    expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTournamentTables(tournamentId, tablesList));
+    expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTournamentTables(tournamentId, tables));
     expect(status).toBe(StatusCodes.BAD_REQUEST);
     expect(body).toStrictEqual({ message: 'Some tables are already assigned to that tournament.' });
   });
@@ -54,7 +54,7 @@ describe('Tournament Tables REST API', () => {
   it('GET /rest-api/tournaments/:tournamentId/tables | when tables for given tournament found', async () => {
     //Given
     const tournamentId = 'sampleTournamentId';
-    const tablesList = [
+    const tables = [
       { tableNumber: 10, tableName: 'P4P' }
     ];
     const queryPublisher = QueryPublisherMock(
@@ -72,7 +72,7 @@ describe('Tournament Tables REST API', () => {
     //Then
     expect(queryPublisher.executeCalls).toBeCalledWith(new FindTablesByTournamentId({ tournamentId }));
     expect(status).toBe(StatusCodes.OK);
-    expect(body).toStrictEqual({ tablesList });
+    expect(body).toStrictEqual({ tables });
   });
 
   it('GET /rest-api/tournaments/:tournamentId/tables | when tables for given tournament not found', async () => {

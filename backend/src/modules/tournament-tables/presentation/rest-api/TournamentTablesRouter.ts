@@ -14,7 +14,7 @@ export function tournamentTablesRouter(
   const postAssignTournamentTables = async (request: Request, response: Response) => {
     const requestBody: PostAssignTournamentTablesRequestBody = request.body;
     const { tournamentId } = request.params;
-    const commandResult = await commandPublisher.execute(new AssignTournamentTables(tournamentId, requestBody.tablesList));
+    const commandResult = await commandPublisher.execute(new AssignTournamentTables(tournamentId, requestBody.tables));
     return commandResult.process(
       () => response.status(StatusCodes.OK).send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
