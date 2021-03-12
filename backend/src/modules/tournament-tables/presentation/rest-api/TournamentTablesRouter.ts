@@ -2,7 +2,7 @@ import { CommandPublisher } from '../../../../shared/core/application/command/Co
 import { DomainEventPublisher } from '../../../../shared/core/application/event/DomainEventBus';
 import { QueryPublisher } from '../../../../shared/core/application/query/QueryBus';
 import express, { Request, Response } from 'express';
-import { PostAssignTournamentTables } from './request/PostAssignTournamentTables';
+import { PostAssignTournamentTablesRequestBody } from './request/PostAssignTournamentTablesRequestBody';
 import { AssignTournamentTables } from '../../core/application/command/AssignTournamentTables';
 import { StatusCodes } from 'http-status-codes';
 
@@ -12,7 +12,7 @@ export function tournamentTablesRouter(
   queryPublisher: QueryPublisher,
 ): express.Router {
   const postAssignTournamentTables = async (request: Request, response: Response) => {
-    const requestBody: PostAssignTournamentTables = request.body;
+    const requestBody: PostAssignTournamentTablesRequestBody = request.body;
     const { tournamentId } = request.params;
     const commandResult = await commandPublisher.execute(new AssignTournamentTables(tournamentId, requestBody.tablesList));
     return commandResult.process(

@@ -13,6 +13,8 @@ tags:
     description: Save and get players profiles
   - name: Doubles Tournament
     description: Get doubles tournament teams
+  - name: Tournament Tables
+    description: Assign tables to the tournament
   - name: Match
     description: Start/End match
   - name: Specification
@@ -232,6 +234,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TournamentRegistrationsListDto'
+  /tournaments/{tournamentId}/tables:
+    post:
+      tags:
+        - Tournament Tables
+      description: Assign tables to the tournament
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostAssignTournamentTablesListRequestBody'
+      responses:
+        200:
+          description: Tables successfully assigned to the tournament
 components:
   schemas:
     TournamentTeamDto:
@@ -398,5 +422,20 @@ components:
           type: string
           format: uuid
           example: 3510fc2c-bbd7-427c-9439-02f76583aef5
-
-
+    PostAssignTournamentTablesListRequestBody:
+      type: array
+      items:
+        $ref: '#/components/schemas/PostAssignTournamentTablesRequestBody'
+      uniqueItems: true
+    PostAssignTournamentTablesRequestBody:
+      type: object
+      properties:
+        tableNumber:
+          description: Number of the table (1-200)
+          type: integer
+          minimum: 1
+          maximum: 200
+          example: 1
+        tableName:
+          description: Name of the table
+          type: string
