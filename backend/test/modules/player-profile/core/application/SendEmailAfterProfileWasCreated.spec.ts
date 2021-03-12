@@ -1,16 +1,17 @@
 import { PlayerProfileWasCreated } from '../../../../../src/modules/player-profiles/core/domain/event/PlayerProfileWasCreated';
-import { CommandPublisher } from '../../../../../src/shared/core/application/command/CommandBus';
-import { SendEmailAfterPlayerProfileWasCreatedEventHandler } from '../../../../../src/modules/player-profiles/core/application/event/SendEmailAfterPlayerProfileWasCreatedEventHandler';
+import { CommandBus } from '../../../../../src/shared/core/application/command/CommandBus';
 import { SendEmail } from '../../../../../src/modules/email-sending/core/application/command/SendEmail';
-import { testModuleCore, TestModuleCore } from '../../../../test-support/shared/core/TestModuleCore';
-import { InMemoryPlayerProfileRepository } from '../../../../../src/modules/player-profiles/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
-import { PlayerProfilesModuleCore } from '../../../../../src/modules/player-profiles/core/PlayerProfilesModuleCore';
+import { testPlayerProfileModule } from './TestPlayerProfileModule';
 
 describe('Send an email to player', () => {
   it('When player profile is created, then execute command for email sending', async () => {
     //Given
     const currentTime = new Date();
-    const playerProfileModuleCore = testPlayerProfileModule_2(currentTime);
+    const commandBus: CommandBus = {
+      registerHandler: jest.fn(),
+      execute: jest.fn(),
+    };
+    const playerProfileModuleCore = testPlayerProfileModule(currentTime, commandBus);
     const firstName = 'Johnny';
     const emailAddress = 'bravo@gmail.com';
 
@@ -23,28 +24,20 @@ describe('Send an email to player', () => {
       phoneNumber: '123456789',
     });
 
-    const sendEmail = new SendEmail({
-      subject: 'test',
-      emailAddress: 'test@gmail.com',
-      htmlContent: '<div>test</div>',
-    });
-
     //When
     playerProfileModuleCore.publishEvent(playerProfileWasCreated);
 
     //Then
-    //TODO check if commandPublisher from playerProfileModuleCore execute command with type SendEmail!
-    // sth like expect(playerProfileModuleCore.commandPublisher.execute(SendEmail)).toBeCalledWith()
+    const sendEmail = new SendEmail({
+      subject: 'Welcome on board Johnny!',
+      emailAddress: 'bravo@gmail.com',
+      htmlContent: `
+        <div style="text-align: center">
+            <h3>Your player profile was successfully created!</h3>
+            <h1>We wish you good luck on oncoming tournament!</h1>
+        </div>
+        `,
+    });
+    expect(commandBus.execute).toBeCalledWith(sendEmail);
   });
-
-  function testPlayerProfileModule_2(currentTime: Date): TestModuleCore {
-    const playerProfilesRepository = new InMemoryPlayerProfileRepository();
-    const commandPublisher: CommandPublisher = {
-      execute: jest.fn(),
-    };
-
-    return testModuleCore((commandBus, eventBus, queryBus) =>
-      PlayerProfilesModuleCore(eventBus, commandPublisher, () => currentTime, playerProfilesRepository),
-    );
-  }
 });
