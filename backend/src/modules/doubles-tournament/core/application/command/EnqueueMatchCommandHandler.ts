@@ -15,7 +15,7 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
     private readonly eventPublisher: DomainEventPublisher,
     private readonly currentTimeProvider: CurrentTimeProvider,
     private readonly repository: DoublesTournamentRepository,
-    private readonly matchesQueue: MatchesQueueRepository,
+    private readonly matchesQueueRepository: MatchesQueueRepository,
   ) {}
 
   async execute(command: EnqueueMatch): Promise<CommandResult> {
@@ -24,7 +24,7 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
     const team1Id = TeamId.from(command.team1Id);
     const team2Id = TeamId.from(command.team2Id);
     const doublesTournament = await this.repository.findByTournamentId(command.tournamentId);
-    const matchesQueue = await this.matchesQueue.findByTournamentId(command.tournamentId);
+    const matchesQueue = await this.matchesQueueRepository.findByTournamentId(command.tournamentId);
     const newCommand = {
       tournamentId: tournamentId,
       matchNumber: matchNumber,
@@ -34,7 +34,7 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
 
     const { state, events } = pushMatchToQueue(doublesTournament, matchesQueue, newCommand, this.currentTimeProvider());
 
-    await this.matchesQueue.save(state);
+    await this.matchesQueueRepository.save(state);
     this.eventPublisher.publishAll(events);
     return CommandResult.success();
   }

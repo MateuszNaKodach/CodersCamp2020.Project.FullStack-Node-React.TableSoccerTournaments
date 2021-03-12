@@ -38,17 +38,12 @@ export function pushMatchToQueue(
       queuedMatches: [],
     });
   }
-  if (isMatchAlreadyInQueue(command.matchNumber.raw, queue)) {
-    throw new Error('Such match is already waiting in matches queue!');
-  }
 
   const matchToPush = new QueuedMatch({
     matchNumber: command.matchNumber,
     team1Id: command.team1Id,
     team2Id: command.team2Id,
   });
-
-  queue.queuedMatches.push(matchToPush);
 
   const matchWasQueued = new MatchWasQueued({
     occurredAt: currentTime,
@@ -58,11 +53,7 @@ export function pushMatchToQueue(
   });
 
   return {
-    state: queue,
+    state: queue.withEnqueuedMatch(matchToPush),
     events: [matchWasQueued],
   };
-}
-
-function isMatchAlreadyInQueue(matchNumber: number, queue: MatchesQueue): boolean {
-  return !!queue.queuedMatches.find((elem) => elem.matchNumber.raw === matchNumber);
 }

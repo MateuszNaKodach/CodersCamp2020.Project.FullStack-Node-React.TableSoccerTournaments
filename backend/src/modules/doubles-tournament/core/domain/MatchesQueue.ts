@@ -3,10 +3,28 @@ import { TournamentId } from './TournamentId';
 
 export class MatchesQueue {
   readonly tournamentId: TournamentId;
-  readonly queuedMatches: QueuedMatch[];
+  private readonly queue: QueuedMatch[];
 
   constructor(props: { tournamentId: TournamentId; queuedMatches: QueuedMatch[] }) {
     this.tournamentId = props.tournamentId;
-    this.queuedMatches = props.queuedMatches;
+    this.queue = props.queuedMatches;
+  }
+
+  withEnqueuedMatch(match: QueuedMatch): MatchesQueue {
+    if (this.isMatchAlreadyInQueue(match)) {
+      throw new Error('Such match is already waiting in matches queue!');
+    }
+    return new MatchesQueue({
+      tournamentId: this.tournamentId,
+      queuedMatches: [...this.queue, match],
+    });
+  }
+
+  isMatchAlreadyInQueue(match: QueuedMatch): boolean {
+    return !!this.queue.find((elem) => elem.matchNumber.raw === match.matchNumber.raw);
+  }
+
+  get queuedMatches(): QueuedMatch[] {
+    return [...this.queue];
   }
 }
