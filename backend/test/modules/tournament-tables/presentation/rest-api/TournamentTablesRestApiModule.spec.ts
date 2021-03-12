@@ -54,7 +54,7 @@ describe('Tournament Tables REST API', () => {
     expect(status).toBe(StatusCodes.BAD_REQUEST);
     expect(body).toStrictEqual({ message: 'Some tables are already assigned to that tournament.' });
   });
-
+/*
   it('GET /rest-api/tournaments/:tournamentId/tables | when tables for given tournament found', async () => {
     //Given
     const tournamentId = 'sampleTournamentId';
@@ -93,4 +93,5 @@ describe('Tournament Tables REST API', () => {
     expect(status).toBe(StatusCodes.NOT_FOUND);
     expect(body).toStrictEqual({ message: 'Tables for given tournament not found!' });
   });
+ */
 });
