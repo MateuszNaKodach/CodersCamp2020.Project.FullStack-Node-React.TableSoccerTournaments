@@ -8,6 +8,7 @@ import { TournamentId } from '../../domain/TournamentId';
 import { TeamId } from '../../domain/TeamId';
 import { MatchesQueueRepository } from '../MatchesQueueRepository';
 import { pushMatchToQueue } from '../../domain/QueuedMatch';
+import { MatchNumber } from '../../domain/MatchNumber';
 
 export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> {
   constructor(
@@ -19,13 +20,14 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
 
   async execute(command: EnqueueMatch): Promise<CommandResult> {
     const tournamentId = TournamentId.from(command.tournamentId);
+    const matchNumber = MatchNumber.from(command.matchNumber);
     const team1Id = TeamId.from(command.team1Id);
     const team2Id = TeamId.from(command.team2Id);
     const doublesTournament = await this.repository.findByTournamentId(command.tournamentId);
     const matchesQueue = await this.matchesQueue.findByTournamentId(command.tournamentId);
     const newCommand = {
       tournamentId: tournamentId,
-      matchNumber: command.matchNumber,
+      matchNumber: matchNumber,
       team1Id: team1Id,
       team2Id: team2Id,
     };

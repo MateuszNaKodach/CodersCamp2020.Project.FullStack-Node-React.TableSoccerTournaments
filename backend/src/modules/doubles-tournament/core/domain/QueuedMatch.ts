@@ -4,13 +4,14 @@ import { DoublesTournament } from './DoublesTournament';
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { MatchesQueue } from './MatchesQueue';
 import { MatchWasQueued } from './event/MatchWasQueued';
+import { MatchNumber } from './MatchNumber';
 
 export class QueuedMatch {
-  readonly matchNumber: number;
+  readonly matchNumber: MatchNumber;
   readonly team1Id: TeamId;
   readonly team2Id: TeamId;
 
-  constructor(props: { matchNumber: number; team1Id: TeamId; team2Id: TeamId }) {
+  constructor(props: { matchNumber: MatchNumber; team1Id: TeamId; team2Id: TeamId }) {
     this.matchNumber = props.matchNumber;
     this.team1Id = props.team1Id;
     this.team2Id = props.team2Id;
@@ -22,7 +23,7 @@ export function pushMatchToQueue(
   queue: MatchesQueue | undefined,
   command: {
     tournamentId: TournamentId;
-    matchNumber: number;
+    matchNumber: MatchNumber;
     team1Id: TeamId;
     team2Id: TeamId;
   },
@@ -31,16 +32,13 @@ export function pushMatchToQueue(
   if (tournament === undefined) {
     throw new Error("This tournament doesn't exists.");
   }
-  if (command.matchNumber <= 0) {
-    throw new Error('Such match number is incorrect!');
-  }
   if (queue === undefined) {
     queue = new MatchesQueue({
       tournamentId: command.tournamentId,
       queuedMatches: [],
     });
   }
-  if (isMatchAlreadyInQueue(command.matchNumber, queue)) {
+  if (isMatchAlreadyInQueue(command.matchNumber.raw, queue)) {
     throw new Error('Such match is already waiting in matches queue!');
   }
 
@@ -54,7 +52,7 @@ export function pushMatchToQueue(
 
   const matchWasQueued = new MatchWasQueued({
     occurredAt: currentTime,
-    matchNumber: command.matchNumber,
+    matchNumber: command.matchNumber.raw,
     team1Id: command.team1Id.raw,
     team2Id: command.team2Id.raw,
   });
@@ -66,5 +64,5 @@ export function pushMatchToQueue(
 }
 
 function isMatchAlreadyInQueue(matchNumber: number, queue: MatchesQueue): boolean {
-  return !!queue.queuedMatches.find((elem) => elem.matchNumber === matchNumber);
+  return !!queue.queuedMatches.find((elem) => elem.matchNumber.raw === matchNumber);
 }

@@ -4,6 +4,7 @@ import mongoose, { Schema } from 'mongoose';
 import { TournamentId } from '../../../domain/TournamentId';
 import { QueuedMatch } from '../../../domain/QueuedMatch';
 import { TeamId } from '../../../domain/TeamId';
+import { MatchNumber } from '../../../domain/MatchNumber';
 
 export class MongoMatchesQueueRepository implements MatchesQueueRepository {
   async findByTournamentId(tournamentId: string): Promise<MatchesQueue | undefined> {
@@ -17,7 +18,7 @@ export class MongoMatchesQueueRepository implements MatchesQueueRepository {
       {
         tournamentId: matchesQueue.tournamentId.raw,
         queuedMatches: matchesQueue.queuedMatches.map((queuedMatch) => ({
-          matchNumber: queuedMatch.matchNumber,
+          matchNumber: queuedMatch.matchNumber.raw,
           team1Id: queuedMatch.team1Id.raw,
           team2Id: queuedMatch.team2Id.raw,
         })),
@@ -57,7 +58,7 @@ function mongoDocumentToDomain(mongoDocument: MongoMatchesQueue): MatchesQueue {
       ...mongoDocument.queue.map(
         (match) =>
           new QueuedMatch({
-            matchNumber: match.matchNumber,
+            matchNumber: MatchNumber.from(match.matchNumber),
             team1Id: TeamId.from(match.team1Id),
             team2Id: TeamId.from(match.team2Id),
           }),
