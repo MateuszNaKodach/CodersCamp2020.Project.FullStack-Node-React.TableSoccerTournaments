@@ -15,6 +15,8 @@ import { FindDoublesTournamentByIdQueryHandler } from './application/query/FindD
 import { EnqueueMatch } from './application/command/EnqueueMatch';
 import { EnqueueMatchCommandHandler } from './application/command/EnqueueMatchCommandHandler';
 import { MatchesQueueRepository } from './application/MatchesQueueRepository';
+import { FindMatchesQueueByTournamentById } from './application/query/FindMatchesQueueByTournamentId';
+import { FindMatchesQueueByTournamentIdQueryHandler } from './application/query/FindMatchesQueueByTournamentIdQueryHandler';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -49,6 +51,10 @@ export function DoublesTournamentModuleCore(
       {
         queryType: FindDoublesTournamentById,
         handler: new FindDoublesTournamentByIdQueryHandler(repository),
+      },
+      {
+        queryType: FindMatchesQueueByTournamentById,
+        handler: new FindMatchesQueueByTournamentIdQueryHandler(matchesQueue),
       },
     ],
   };
