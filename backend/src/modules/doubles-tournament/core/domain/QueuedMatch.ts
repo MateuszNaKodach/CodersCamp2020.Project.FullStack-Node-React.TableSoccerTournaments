@@ -6,13 +6,11 @@ import { MatchesQueue } from './MatchesQueue';
 import { MatchWasQueued } from './event/MatchWasQueued';
 
 export class QueuedMatch {
-  readonly tournamentId: TournamentId;
   readonly matchNumber: number;
   readonly team1Id: TeamId;
   readonly team2Id: TeamId;
 
-  constructor(props: { tournamentId: TournamentId; matchNumber: number; team1Id: TeamId; team2Id: TeamId }) {
-    this.tournamentId = props.tournamentId;
+  constructor(props: { matchNumber: number; team1Id: TeamId; team2Id: TeamId }) {
     this.matchNumber = props.matchNumber;
     this.team1Id = props.team1Id;
     this.team2Id = props.team2Id;
@@ -37,21 +35,26 @@ export function pushMatchToQueue(
     throw new Error('Such match number is incorrect!');
   }
   if (queue === undefined) {
-    queue = new MatchesQueue(command.tournamentId, []);
+    queue = new MatchesQueue({
+      tournamentId: command.tournamentId,
+      queuedMatches: [],
+    });
+  }
+  if (isMatchAlreadyInQueue(command.matchNumber, queue)) {
+    throw new Error('Such match is already waiting in matches queue!');
   }
 
   const matchToPush = new QueuedMatch({
-    tournamentId: command.tournamentId,
     matchNumber: command.matchNumber,
     team1Id: command.team1Id,
     team2Id: command.team2Id,
   });
 
-  queue.queuedMatch.push(matchToPush);
+  queue.queuedMatches.push(matchToPush);
 
   const matchWasQueued = new MatchWasQueued({
     occurredAt: currentTime,
-    tournamentId: command.tournamentId.raw,
+    matchNumber: command.matchNumber,
     team1Id: command.team1Id.raw,
     team2Id: command.team2Id.raw,
   });
@@ -60,4 +63,8 @@ export function pushMatchToQueue(
     state: queue,
     events: [matchWasQueued],
   };
+}
+
+function isMatchAlreadyInQueue(matchNumber: number, queue: MatchesQueue): boolean {
+  return !!queue.queuedMatches.find((elem) => elem.matchNumber === matchNumber);
 }
