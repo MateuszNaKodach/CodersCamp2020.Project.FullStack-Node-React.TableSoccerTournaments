@@ -18,6 +18,49 @@ tags:
   - name: Specification
     description: The Open API specification
 paths:
+  /matches/{matchId}/result:
+    post:
+      tags:
+        - Match
+      description: End match
+      parameters:
+        - name: matchId
+          in: path
+          description: Match Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/PostEndMatchRequestBody'
+      responses:
+        200:
+          description: Match successfully ended
+  /matches/{matchId}:
+    get:
+      tags:
+        - Match
+      description: Fetch match with given id
+      parameters:
+        - name: matchId
+          in: path
+          description: Match Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Match with given id
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/MatchDto'
   /matches:
     post:
       tags:
@@ -27,7 +70,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#components/schemas/PostMatchRequestBody'
+              $ref: '#components/schemas/PostStartMatchRequestBody'
       responses:
         200:
           description: Match successfully started
@@ -302,7 +345,7 @@ components:
           type: string
         emailAddress:
           type: string
-    PostMatchRequestBody:
+    PostStartMatchRequestBody:
       type: object
       properties:
         matchId:
@@ -324,7 +367,36 @@ components:
         - tournamentId
         - firstMatchSideId
         - secondMatchSideId
-
-
+    PostEndMatchRequestBody:
+      type: object
+      properties:
+        winnerId:
+          description: Identifier of the winner team
+          type: string
+          format: uuid
+          example: 3510fc2c-bbd7-427c-9439-02f76583aef5
+    MatchDto:
+      type: object
+      properties:
+        matchId:
+          description: Identifier of the match
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        firstMatchSideId:
+          description: Identifier of the match first team
+          type: string
+          format: uuid
+          example: 3510fc2c-bbd7-427c-9439-02f76583aef5
+        secondMatchSideId:
+          description: Identifier of the match second team
+          type: string
+          format: uuid
+          example: 8321fc2c-bbd7-427c-9439-02f76583aef7
+        winnerId:
+          description: Identifier of the winner team, returned only when match was ended
+          type: string
+          format: uuid
+          example: 3510fc2c-bbd7-427c-9439-02f76583aef5
 
 

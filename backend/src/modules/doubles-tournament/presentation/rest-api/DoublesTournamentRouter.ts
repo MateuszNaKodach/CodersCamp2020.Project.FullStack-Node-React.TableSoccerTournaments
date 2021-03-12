@@ -1,10 +1,10 @@
-import { CommandPublisher } from '../../../../../shared/core/application/command/CommandBus';
-import { DomainEventPublisher } from '../../../../../shared/core/application/event/DomainEventBus';
-import { QueryPublisher } from '../../../../../shared/core/application/query/QueryBus';
+import { CommandPublisher } from '../../../../shared/core/application/command/CommandBus';
+import { DomainEventPublisher } from '../../../../shared/core/application/event/DomainEventBus';
+import { QueryPublisher } from '../../../../shared/core/application/query/QueryBus';
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { FindDoublesTournamentById, FindDoublesTournamentByIdResult } from '../../application/query/FindDoublesTournamentById';
-import { DoublesTournament } from '../../domain/DoublesTournament';
+import { FindDoublesTournamentById, FindDoublesTournamentByIdResult } from '../../core/application/query/FindDoublesTournamentById';
+import { DoublesTournament } from '../../core/domain/DoublesTournament';
 import { TournamentTeamDto } from './response/TournamentTeamDto';
 import { TournamentTeamListDto } from './response/TournamentTeamListDto';
 
