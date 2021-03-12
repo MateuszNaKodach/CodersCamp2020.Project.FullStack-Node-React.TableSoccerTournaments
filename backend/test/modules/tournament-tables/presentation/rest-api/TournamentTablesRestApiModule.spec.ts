@@ -1,13 +1,13 @@
-import { CommandPublisherMock } from "../../../../test-support/shared/core/CommandPublisherMock";
-import { CommandResult } from "../../../../../src/shared/core/application/command/CommandResult";
-import { testModuleRestApi } from "../../../../test-support/shared/presentation/rest-api/TestModuleRestApi";
-import { StatusCodes } from "http-status-codes";
-import { QueryPublisherMock } from "../../../../test-support/shared/core/QueryPublisherMock";
-import { AssignTournamentTables } from "../../../../../src/modules/tournament-tables/core/application/command/AssignTournamentTables";
-import { TournamentTable } from "../../../../../src/modules/tournament-tables/core/domain/TournamentTable";
-import { TableNumber } from "../../../../../src/modules/tournament-tables/core/domain/TableNumber";
-import { tournamentTablesRestApiModule } from "../../../../../src/modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule";
-import { FindTablesByTournamentId } from "../../../../../src/modules/tournament-tables/core/application/query/FindTablesByTournamentId";
+import { CommandPublisherMock } from '../../../../test-support/shared/core/CommandPublisherMock';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import { testModuleRestApi } from '../../../../test-support/shared/presentation/rest-api/TestModuleRestApi';
+import { StatusCodes } from 'http-status-codes';
+import { QueryPublisherMock } from '../../../../test-support/shared/core/QueryPublisherMock';
+import { AssignTournamentTables } from '../../../../../src/modules/tournament-tables/core/application/command/AssignTournamentTables';
+import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
+import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
+import { tournamentTablesRestApiModule } from '../../../../../src/modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
+import { FindTablesByTournamentId } from '../../../../../src/modules/tournament-tables/core/application/query/FindTablesByTournamentId';
 
 describe('Tournament Tables REST API', () => {
   it('POST /rest-api/tournaments/:tournamentId/tables | when command success', async () => {
@@ -22,9 +22,7 @@ describe('Tournament Tables REST API', () => {
     const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent
-      .post('/rest-api/tournaments/sampleTournamentId/tables')
-      .send({ tablesList });
+    const { body, status } = await agent.post('/rest-api/tournaments/sampleTournamentId/tables').send({ tablesList });
 
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTournamentTables(tournamentId, tablesList));
@@ -37,24 +35,22 @@ describe('Tournament Tables REST API', () => {
     const tournamentId = 'sampleTournamentId';
     const tablesList = [
       { tableNumber: 1, tableName: 'Leonhart' },
-      { tableNumber: 2, tableName: 'Garlando' }
+      { tableNumber: 2, tableName: 'Garlando' },
     ];
     const commandPublisher = CommandPublisherMock(
-      CommandResult.failureDueTo(new Error('Some tables are already assigned to that tournament.'))
+      CommandResult.failureDueTo(new Error('Some tables are already assigned to that tournament.')),
     );
     const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { commandPublisher });
 
     //When
-    const { body, status } = await agent
-      .post('/rest-api/tournaments/sampleTournamentId/tables')
-      .send({ tablesList });
+    const { body, status } = await agent.post('/rest-api/tournaments/sampleTournamentId/tables').send({ tablesList });
 
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTournamentTables(tournamentId, tablesList));
     expect(status).toBe(StatusCodes.BAD_REQUEST);
     expect(body).toStrictEqual({ message: 'Some tables are already assigned to that tournament.' });
   });
-/*
+  /*
   it('GET /rest-api/tournaments/:tournamentId/tables | when tables for given tournament found', async () => {
     //Given
     const tournamentId = 'sampleTournamentId';

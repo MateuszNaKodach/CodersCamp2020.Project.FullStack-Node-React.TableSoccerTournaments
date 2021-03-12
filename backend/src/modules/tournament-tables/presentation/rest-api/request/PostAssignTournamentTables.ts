@@ -1,3 +1,3 @@
 export class PostAssignTournamentTables {
-  tablesList: { tableNumber: number, tableName: string }[];
+  tablesList: { tableNumber: number; tableName: string }[];
 }
