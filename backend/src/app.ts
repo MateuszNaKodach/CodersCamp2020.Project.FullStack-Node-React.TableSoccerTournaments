@@ -41,6 +41,7 @@ import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
 import { TournamentTablesModuleCore } from './modules/tournament-tables/core/TournamentTablesModuleCore';
 import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/inmemory/InMemoryTournamentTablesRepository';
+import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
 
 config();
 
@@ -92,6 +93,7 @@ export async function TableSoccerTournamentsApplication(
   const tournamentTablesRepository = TournamentTablesRepository();
   const tournamentTablesModule: Module = {
     core: TournamentTablesModuleCore(eventBus, commandBus, currentTimeProvider, tournamentTablesRepository),
+    restApi: tournamentTablesRestApiModule(commandBus, eventBus, queryBus),
   };
 
   const modules: Module[] = [
