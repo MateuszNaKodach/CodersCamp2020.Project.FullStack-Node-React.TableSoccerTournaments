@@ -14,18 +14,18 @@ export class AssignTournamentTablesCommandHandler implements CommandHandler<Assi
     private readonly repository: TournamentTablesRepository,
   ) {}
 
-  async execute(command: AssignTournamentTables): Promise<CommandResult> {
-    const tournamentId = command.tournamentId;
+  async execute(applicationCommand: AssignTournamentTables): Promise<CommandResult> {
+    const tournamentId = applicationCommand.tournamentId;
     const tournamentTables = await this.repository.findAllByTournamentId(tournamentId);
-    const tablesToAssign = command.tables.map((table) => {
+    const tablesToAssign = applicationCommand.tables.map((table) => {
       return {
         tableNumber: TableNumber.from(table.tableNumber),
         tableName: table.tableName,
       };
     });
-    const newCommand = { tournamentId, tables: tablesToAssign };
+    const domainCommand = { tournamentId, tables: tablesToAssign };
 
-    const { state, events } = assignTablesToTournament(tournamentTables, newCommand, this.currentTimeProvider());
+    const { state, events } = assignTablesToTournament(tournamentTables, domainCommand, this.currentTimeProvider());
     await this.repository.saveAll(state);
     this.eventPublisher.publishAll(events);
     return CommandResult.success();
