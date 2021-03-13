@@ -45,11 +45,14 @@ jobs:
       - run: npm run lint:ci
       - run: npm run format:ci
       - run: npm run build --if-present
-      - run: npm run test:ci
+      - name: Unit & Integration Tests | Start docker-compose with backend dependencies
+        run: docker-compose -f docker/docker-compose.local.yaml --log-level INFO up -d
+      - name: Unit & Integration Tests | Run all tests
+        run: npm run test:ci
       - name: Upload test coverage report to Codecov
         uses: codecov/codecov-action@v1
         with:
-          flags: backend, unittests
+          flags: backend, unittests, integrationtests
       - name: Mutation testing
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
         run: npx stryker run --logLevel error
