@@ -2,9 +2,12 @@ import { CommandPublisher } from '../../../../shared/core/application/command/Co
 import { DomainEventPublisher } from '../../../../shared/core/application/event/DomainEventBus';
 import { QueryPublisher } from '../../../../shared/core/application/query/QueryBus';
 import express, { Request, Response } from 'express';
-import { PostAssignTournamentTablesRequestBody } from './request/PostAssignTournamentTablesRequestBody';
 import { AssignTournamentTables } from '../../core/application/command/AssignTournamentTables';
 import { StatusCodes } from 'http-status-codes';
+import { PostAssignTournamentTablesRequestBody } from './request/PostAssignTournamentTablesRequestBody';
+import { FindTablesByTournamentId, FindTablesByTournamentIdResult } from '../../core/application/query/FindTablesByTournamentId';
+import { TournamentTable } from '../../core/domain/TournamentTable';
+import { TournamentTablesDto } from './response/TournamentTablesDto';
 
 export function tournamentTablesRouter(
   commandPublisher: CommandPublisher,
@@ -21,7 +24,27 @@ export function tournamentTablesRouter(
     );
   };
 
+  const getAssignTournamentTables = async (request: Request, response: Response) => {
+    const { tournamentId } = request.params;
+    const queryResult = await queryPublisher.execute<FindTablesByTournamentIdResult>(new FindTablesByTournamentId({ tournamentId }));
+    return queryResult
+      ? response.status(StatusCodes.OK).json(toTournamentTablesDto(queryResult))
+      : response.status(StatusCodes.NOT_FOUND).json({ message: 'Tables for given tournament not found!' });
+  };
+
   const router = express.Router();
   router.post('/:tournamentId/tables', postAssignTournamentTables);
+  router.get('/:tournamentId/tables', getAssignTournamentTables);
   return router;
+}
+
+function toTournamentTablesDto(tournamentTables: TournamentTable[]): TournamentTablesDto {
+  return new TournamentTablesDto(
+    tournamentTables.map((table) => {
+      return {
+        tableNumber: table.tableNumber.raw,
+        tableName: table.tableName,
+      };
+    }),
+  );
 }

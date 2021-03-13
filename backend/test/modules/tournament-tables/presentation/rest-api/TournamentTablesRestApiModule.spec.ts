@@ -55,13 +55,13 @@ describe('Tournament Tables REST API', () => {
     //Given
     const tournamentId = 'sampleTournamentId';
     const tables = [{ tableNumber: 10, tableName: 'P4P' }];
-    const queryPublisher = QueryPublisherMock(
+    const queryPublisher = QueryPublisherMock([
       new TournamentTable({
         tournamentId,
         tableNumber: TableNumber.from(10),
         tableName: 'P4P',
       }),
-    );
+    ]);
     const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { queryPublisher });
 
     //When
