@@ -16,23 +16,23 @@ export class TournamentTable {
 
 export function assignTablesToTournament(
   state: TournamentTable[] | undefined,
-  command: { tournamentId: string; tablesList: { tableNumber: number; tableName: string }[] },
+  command: { tournamentId: string; tables: { tableNumber: TableNumber; tableName: string }[] },
   currentTime: Date,
 ): DomainCommandResult<TournamentTable[]> {
   if (state !== undefined && state.length > 0) {
     throw new Error('Some tables are already assigned to that tournament.');
   }
-  if (command.tablesList.length === 0) {
+  if (command.tables.length === 0) {
     throw new Error('Tournament must have at least 1 table assigned.');
   }
-  if (isTableNumberDuplicated(command.tablesList)) {
+  if (isTableNumberDuplicated(command.tables)) {
     throw new Error('Tables numbers must be different.');
   }
 
-  const tournamentTables: TournamentTable[] = command.tablesList.map((table) => {
+  const tournamentTables: TournamentTable[] = command.tables.map((table) => {
     return new TournamentTable({
       tournamentId: command.tournamentId,
-      tableNumber: TableNumber.from(table.tableNumber),
+      tableNumber: table.tableNumber,
       tableName: table.tableName,
     });
   });
@@ -50,9 +50,9 @@ export function assignTablesToTournament(
   };
 }
 
-function isTableNumberDuplicated(tableList: { tableNumber: number; tableName: string }[]) {
-  const uniqueValues = new Set(tableList.map((table) => table.tableNumber));
-  return uniqueValues.size < tableList.length;
+function isTableNumberDuplicated(tables: { tableNumber: TableNumber; tableName: string }[]) {
+  const uniqueValues = new Set(tables.map((table) => table.tableNumber.raw));
+  return uniqueValues.size < tables.length;
 }
 
 function onTournamentTablesWereAssigned(state: TournamentTable[] | undefined, event: TournamentTablesWereAssigned): TournamentTable[] {
