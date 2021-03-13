@@ -25,8 +25,8 @@ export function TournamentTablesModuleCore(
     queryHandlers: [
       {
         queryType: FindTablesByTournamentId,
-        handler: new FindTablesByTournamentIdQueryHandler(repository)
-      }
+        handler: new FindTablesByTournamentIdQueryHandler(repository),
+      },
     ],
   };
 }

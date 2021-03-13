@@ -7,7 +7,7 @@ import {
   FindTablesByTournamentIdResult,
 } from '../../../../../src/modules/tournament-tables/core/application/query/FindTablesByTournamentId';
 
-describe('Tournament Tables | Query Side', function() {
+describe('Tournament Tables | Query Side', function () {
   it('When any table assigned to given tournament, then FindTablesByTournamentId returns tables list', async () => {
     //Given
     const currentTime = new Date();
@@ -21,23 +21,23 @@ describe('Tournament Tables | Query Side', function() {
     await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //When
-    const findTablesByIdResult = await tournamentTablesModule.executeQuery<FindTablesByTournamentIdResult>(new FindTablesByTournamentId({ tournamentId }));
+    const findTablesByIdResult = await tournamentTablesModule.executeQuery<FindTablesByTournamentIdResult>(
+      new FindTablesByTournamentId({ tournamentId }),
+    );
 
     //Then
-    expect(findTablesByIdResult).toStrictEqual(
-      [
-        new TournamentTable({
-          tournamentId,
-          tableNumber: TableNumber.from(5),
-          tableName: 'Bonzini',
-        }),
-        new TournamentTable({
-          tournamentId,
-          tableNumber: TableNumber.from(8),
-          tableName: 'P4P',
-        }),
-      ],
-    );
+    expect(findTablesByIdResult).toStrictEqual([
+      new TournamentTable({
+        tournamentId,
+        tableNumber: TableNumber.from(5),
+        tableName: 'Bonzini',
+      }),
+      new TournamentTable({
+        tournamentId,
+        tableNumber: TableNumber.from(8),
+        tableName: 'P4P',
+      }),
+    ]);
   });
 
   it('When any table not assigned to given tournament, then FindTablesByTournamentId returns undefined', async () => {
@@ -47,7 +47,9 @@ describe('Tournament Tables | Query Side', function() {
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const findTablesByIdResult = await tournamentTablesModule.executeQuery<FindTablesByTournamentIdResult>(new FindTablesByTournamentId({ tournamentId }));
+    const findTablesByIdResult = await tournamentTablesModule.executeQuery<FindTablesByTournamentIdResult>(
+      new FindTablesByTournamentId({ tournamentId }),
+    );
 
     //Then
     expect(findTablesByIdResult).toStrictEqual([]);

@@ -6,6 +6,6 @@ export class FindTablesByTournamentIdQueryHandler implements QueryHandler<FindTa
   constructor(private readonly repository: TournamentTablesRepository) {}
 
   execute(query: FindTablesByTournamentId): Promise<FindTablesByTournamentIdResult> {
-    return this.repository.findAllByTournamentId(query.tournamentId)
+    return this.repository.findAllByTournamentId(query.tournamentId);
   }
 }
