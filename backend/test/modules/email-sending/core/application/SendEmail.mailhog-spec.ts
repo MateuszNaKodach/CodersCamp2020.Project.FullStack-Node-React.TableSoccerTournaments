@@ -33,6 +33,10 @@ describe('Example email sending using NodeMailer', () => {
       subject: 'Test subject',
     });
     expect(email).toBeTruthy();
+    expect(email?.html).toBe('Test html body');
+    expect(email?.subject).toBe('Test subject');
+    expect(email?.to).toBe('user@test.com');
+    expect(email?.from).toBe('admin@test.com');
     await mailhog.clearInbox(inbox);
   });
 });
