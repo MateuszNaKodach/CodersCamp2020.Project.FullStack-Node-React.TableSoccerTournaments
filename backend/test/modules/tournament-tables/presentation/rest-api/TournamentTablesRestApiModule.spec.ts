@@ -7,6 +7,7 @@ import { AssignTournamentTables } from '../../../../../src/modules/tournament-ta
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
 import { tournamentTablesRestApiModule } from '../../../../../src/modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
+import { FindTablesByTournamentId } from '../../../../../src/modules/tournament-tables/core/application/query/FindTablesByTournamentId';
 
 describe('Tournament Tables REST API', () => {
   it('POST /rest-api/tournaments/:tournamentId/tables | when command success', async () => {
@@ -49,13 +50,11 @@ describe('Tournament Tables REST API', () => {
     expect(status).toBe(StatusCodes.BAD_REQUEST);
     expect(body).toStrictEqual({ message: 'Some tables are already assigned to that tournament.' });
   });
-  /*
+
   it('GET /rest-api/tournaments/:tournamentId/tables | when tables for given tournament found', async () => {
     //Given
     const tournamentId = 'sampleTournamentId';
-    const tables = [
-      { tableNumber: 10, tableName: 'P4P' }
-    ];
+    const tables = [{ tableNumber: 10, tableName: 'P4P' }];
     const queryPublisher = QueryPublisherMock(
       new TournamentTable({
         tournamentId,
@@ -88,5 +87,4 @@ describe('Tournament Tables REST API', () => {
     expect(status).toBe(StatusCodes.NOT_FOUND);
     expect(body).toStrictEqual({ message: 'Tables for given tournament not found!' });
   });
- */
 });
