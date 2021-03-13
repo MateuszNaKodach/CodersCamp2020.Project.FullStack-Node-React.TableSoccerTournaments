@@ -44,6 +44,7 @@ import { NodeMailerEmailSender } from './modules/email-sending/infrastructure/ma
 import { TournamentTablesModuleCore } from './modules/tournament-tables/core/TournamentTablesModuleCore';
 import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/inmemory/InMemoryTournamentTablesRepository';
 import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
+import { ConsoleEmailSender } from './modules/email-sending/infrastructure/mailer/ConsoleEmailSender';
 
 config();
 
@@ -98,19 +99,7 @@ export async function TableSoccerTournamentsApplication(
     restApi: tournamentTablesRestApiModule(commandBus, eventBus, queryBus),
   };
 
-  const sendingEmailModule: Module = {
-    core: SendEmailModuleCore(
-      new NodeMailerEmailSender({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.NODEMAILER_USER,
-          pass: process.env.NODEMAILER_PASSWORD,
-        },
-      }),
-    ),
-  };
+  const sendingEmailModule: Module = EmailModuleCore();
 
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
@@ -203,4 +192,25 @@ function MatchRepository() {
 
 function TournamentTablesRepository() {
   return new InMemoryTournamentTablesRepository();
+}
+
+function EmailModuleCore() {
+  if (process.env.EMAIL_SENDER === 'CONSOLE') {
+    return {
+      core: SendEmailModuleCore(new ConsoleEmailSender()),
+    };
+  }
+  return {
+    core: SendEmailModuleCore(
+      new NodeMailerEmailSender({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.NODEMAILER_USER,
+          pass: process.env.NODEMAILER_PASSWORD,
+        },
+      }),
+    ),
+  };
 }

@@ -19,7 +19,7 @@
     "test:all": "jest --testRegex \"[.](spec|test|mongo-spec|postgres-spec|mailhog-spec)[.]ts\"",
     "test:mongo": "jest --testRegex \"[.](mongo-spec)[.]ts\"",
     "test:postgres": "jest --testRegex \"[.](postgres-spec)[.]ts\"",
-    "test:mailhog": "jest --testRegex '[.].(mailhog-spec)[.].ts'",
+    "test:mailhog": "jest --testRegex \"[.](mailhog-spec)[.]ts\"",
     "test:watch": "jest --watchAll",
     "test:cov": "jest --coverage",
     "test:ci": "jest --testRegex \"[.](spec|test)[.]ts\" --ci --silent --coverage"
