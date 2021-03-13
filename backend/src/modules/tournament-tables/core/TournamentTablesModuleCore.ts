@@ -5,6 +5,8 @@ import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { TournamentTablesRepository } from './application/TournamentTablesRepository';
 import { AssignTournamentTables } from './application/command/AssignTournamentTables';
 import { AssignTournamentTablesCommandHandler } from './application/command/AssignTournamentTablesCommandHandler';
+import { FindTablesByTournamentId } from './application/query/FindTablesByTournamentId';
+import { FindTablesByTournamentIdQueryHandler } from './application/query/FindTablesByTournamentIdQueryHandler';
 
 export function TournamentTablesModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -20,6 +22,11 @@ export function TournamentTablesModuleCore(
       },
     ],
     eventHandlers: [],
-    queryHandlers: [],
+    queryHandlers: [
+      {
+        queryType: FindTablesByTournamentId,
+        handler: new FindTablesByTournamentIdQueryHandler(repository)
+      }
+    ],
   };
 }

@@ -5,5 +5,5 @@ export interface TournamentTablesRepository {
 
   saveAll(tournamentTables: TournamentTable[]): Promise<void>;
 
-  findAllByTournamentId(tournamentId: string): Promise<TournamentTable[] | undefined>;
+  findAllByTournamentId(tournamentId: string): Promise<TournamentTable[]>;
 }
