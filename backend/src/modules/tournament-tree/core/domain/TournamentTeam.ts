@@ -1,9 +1,9 @@
 import { TournamentTeamId } from './TournamentTeamId';
 
 export class TournamentTeam {
-    readonly teamId: TournamentTeamId;
+  readonly teamId: TournamentTeamId;
 
-    constructor(props: { teamId: TournamentTeamId;  }) {
-        this.teamId = props.teamId;
-    }
+  constructor(props: { teamId: TournamentTeamId }) {
+    this.teamId = props.teamId;
+  }
 }

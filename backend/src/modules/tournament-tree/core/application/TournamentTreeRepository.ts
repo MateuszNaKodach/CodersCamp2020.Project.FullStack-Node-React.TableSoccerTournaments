@@ -1,9 +1,9 @@
-import {TournamentTree} from "../domain/TournamentTree";
+import { TournamentTree } from '../domain/TournamentTree';
 
 export interface TournamentTreeRepository {
-    save(tournamentTree: TournamentTree): Promise<void>;
+  save(tournamentTree: TournamentTree): Promise<void>;
 
-    findByTournamentTreeId(tournamentTreeId: string): Promise<TournamentTree | undefined>;
+  findByTournamentTreeId(tournamentTreeId: string): Promise<TournamentTree | undefined>;
 
-    // findAll(): Promise<DoublesTournament[]>;
+  // findAll(): Promise<DoublesTournament[]>;
 }
