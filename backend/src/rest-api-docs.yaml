@@ -14,7 +14,7 @@ tags:
   - name: Doubles Tournament
     description: Get doubles tournament teams
   - name: Tournament Tables
-    description: Assign tables to the tournament
+    description: Assign and get list of tournament tables 
   - name: Match
     description: Start/End match
   - name: Specification
@@ -256,6 +256,26 @@ paths:
       responses:
         200:
           description: Tables successfully assigned to the tournament
+    get:
+      tags:
+        - Tournament Tables
+      description: Fetch list of all tournament tables
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Tournament tables for requested tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentTablesDto'
 components:
   schemas:
     TournamentTeamDto:
@@ -436,6 +456,23 @@ components:
                 type: integer
                 minimum: 1
                 maximum: 200
+                example: 1
+              tableName:
+                description: Name of the table
+                type: string
+          uniqueItems: true
+    TournamentTablesDto:
+      type: object
+      properties:
+        tables:
+          description: List of tournament tables
+          type: array
+          items:
+            type: object
+            properties:
+              tableNumber:
+                description: Number of the table (1-200)
+                type: integer
                 example: 1
               tableName:
                 description: Name of the table
