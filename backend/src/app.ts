@@ -41,6 +41,9 @@ import { InMemoryMatchRepository } from './modules/match-module/infrastructure/r
 import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
 import { NodeMailerEmailSender } from './modules/email-sending/infrastructure/mailer/NodeMailerEmailSender';
+import { TournamentTablesModuleCore } from './modules/tournament-tables/core/TournamentTablesModuleCore';
+import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/inmemory/InMemoryTournamentTablesRepository';
+import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
 
 config();
 
@@ -89,6 +92,12 @@ export async function TableSoccerTournamentsApplication(
     restApi: MatchRestApiModule(commandBus, eventBus, queryBus),
   };
 
+  const tournamentTablesRepository = TournamentTablesRepository();
+  const tournamentTablesModule: Module = {
+    core: TournamentTablesModuleCore(eventBus, commandBus, currentTimeProvider, tournamentTablesRepository),
+    restApi: tournamentTablesRestApiModule(commandBus, eventBus, queryBus),
+  };
+
   const sendingEmailModule: Module = {
     core: SendEmailModuleCore(
       new NodeMailerEmailSender({
@@ -109,6 +118,7 @@ export async function TableSoccerTournamentsApplication(
     process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined,
     process.env.DOUBLES_TOURNAMENT_MODULE === 'ENABLED' ? doublesTournamentModule : undefined,
     process.env.MATCH_MODULE === 'ENABLED' ? matchModule : undefined,
+    process.env.TOURNAMENTS_TABLES_MODULE === 'ENABLED' ? tournamentTablesModule : undefined,
     process.env.EMAILS_SENDING_MODULE === 'ENABLED' ? sendingEmailModule : undefined,
   ].filter(isDefined);
 
@@ -189,4 +199,8 @@ function MatchRepository() {
     return new MongoMatchRepository();
   }
   return new InMemoryMatchRepository();
+}
+
+function TournamentTablesRepository() {
+  return new InMemoryTournamentTablesRepository();
 }

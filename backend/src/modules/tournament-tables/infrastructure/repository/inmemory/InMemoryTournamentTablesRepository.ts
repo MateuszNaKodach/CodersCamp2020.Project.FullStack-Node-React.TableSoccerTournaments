@@ -1,5 +1,5 @@
-import { TournamentTablesRepository } from '../../../application/TournamentTablesRepository';
-import { TournamentTable } from '../../../domain/TournamentTable';
+import { TournamentTablesRepository } from '../../../core/application/TournamentTablesRepository';
+import { TournamentTable } from '../../../core/domain/TournamentTable';
 
 export class InMemoryTournamentTablesRepository implements TournamentTablesRepository {
   private readonly entities: { [tableId: string]: TournamentTable } = {};
@@ -13,7 +13,7 @@ export class InMemoryTournamentTablesRepository implements TournamentTablesRepos
     tournamentTables.forEach((table) => this.save(table));
   }
 
-  findByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
+  findAllByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
     return Promise.resolve(
       Object.keys(this.entities)
         .filter((id) => this.entities[id].tournamentId === tournamentId)
