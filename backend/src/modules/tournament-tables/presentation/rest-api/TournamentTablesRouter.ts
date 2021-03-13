@@ -24,7 +24,7 @@ export function tournamentTablesRouter(
     );
   };
 
-  const getAssignTournamentTables = async (request: Request, response: Response) => {
+  const getTablesAssignedToTournamentId = async (request: Request, response: Response) => {
     const { tournamentId } = request.params;
     const queryResult = await queryPublisher.execute<FindTablesByTournamentIdResult>(new FindTablesByTournamentId({ tournamentId }));
     return queryResult
@@ -34,7 +34,7 @@ export function tournamentTablesRouter(
 
   const router = express.Router();
   router.post('/:tournamentId/tables', postAssignTournamentTables);
-  router.get('/:tournamentId/tables', getAssignTournamentTables);
+  router.get('/:tournamentId/tables', getTablesAssignedToTournamentId);
   return router;
 }
 
