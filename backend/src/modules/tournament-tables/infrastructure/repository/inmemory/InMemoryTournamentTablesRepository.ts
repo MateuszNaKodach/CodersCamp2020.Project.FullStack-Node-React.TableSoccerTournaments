@@ -5,7 +5,7 @@ export class InMemoryTournamentTablesRepository implements TournamentTablesRepos
   private readonly entities: { [tableId: string]: TournamentTable } = {};
 
   async save(tournamentTable: TournamentTable): Promise<void> {
-    const tableId = `${tournamentTable.tournamentId}_${tournamentTable.tableNumber}`;
+    const tableId = `${tournamentTable.tournamentId}_${tournamentTable.tableNumber.raw}`;
     this.entities[tableId] = tournamentTable;
   }
 
