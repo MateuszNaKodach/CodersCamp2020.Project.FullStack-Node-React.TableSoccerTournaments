@@ -20,7 +20,7 @@ export class MatchesQueue {
     });
   }
 
-  isMatchAlreadyInQueue(match: QueuedMatch): boolean {
+  private isMatchAlreadyInQueue(match: QueuedMatch): boolean {
     return !!this.queue.find((elem) => elem.matchNumber.raw === match.matchNumber.raw);
   }
 
