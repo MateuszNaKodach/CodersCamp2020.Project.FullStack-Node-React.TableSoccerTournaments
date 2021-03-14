@@ -10,12 +10,13 @@ describe('Example email sending using NodeMailer', () => {
       host,
       port: 8025,
     });
+    const inbox = 'user@test.com';
+    await mailhog.clearInbox(inbox);
   });
 
   it('check if email arrived on correct email address with correct subject', async () => {
     //Given
     const inbox = 'user@test.com';
-    await mailhog.clearInbox(inbox);
     const emailSender = new NodeMailerEmailSender({ host: host, port: 1025, from: 'admin@test.com', secure: false });
 
     //When
@@ -36,6 +37,5 @@ describe('Example email sending using NodeMailer', () => {
     expect(email?.subject).toBe('Test subject');
     expect(email?.to).toBe('user@test.com');
     expect(email?.from).toBe('admin@test.com');
-    await mailhog.clearInbox(inbox);
   });
 });
