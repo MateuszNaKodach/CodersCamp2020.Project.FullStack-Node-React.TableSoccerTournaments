@@ -10,7 +10,7 @@ export class InMemoryTournamentTablesRepository implements TournamentTablesRepos
   }
 
   async saveAll(tournamentTables: TournamentTable[]): Promise<void> {
-    tournamentTables.forEach((table) => this.save(table));
+    Promise.all(tournamentTables.map((table) => this.save(table)));
   }
 
   findAllByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
