@@ -22,15 +22,13 @@ export class CreateTournamentTreeCommandHandler implements CommandHandler<Create
     // ! Konwersja typów tutaj!
     // ---------------
 
-    console.log();
-
     const tournamentId = command.tournamentId;
 
-    const tournamentTeams = command.tournamentTeams.map((team) => new TournamentTeam({ teamId: TournamentTeamId.from(team.teamId) }));
-
+    const tournamentTeams = command.tournamentTeams.map((team) => {
+      return new TournamentTeam({teamId: TournamentTeamId.from(team.teamId)})
+    });
     const commandForCreateTournamentTree = { tournamentId: tournamentId, tournamentTeams: tournamentTeams };
     // const newCommand = {tournamentId: tournamentId, tournamentTeams: tournamentTeams,}
-
     // TODO: To co poniżej!
     // const tournamentTree: TournamentTree = {} as TournamentTree;
     const tournamentTree = await this.repository.findByTournamentTreeId(tournamentId);
@@ -41,13 +39,10 @@ export class CreateTournamentTreeCommandHandler implements CommandHandler<Create
       this.currentTimeProvider,
       this.entityIdGenerator,
     );
-
     // tree.giveMeThisThings();
     // const doublesTournament = await this.repository.findByTournamentId(tournamentId);
     //
-
     // const { state, events } = createTournamentTreeWithTeams(doublesTournament, command, this.currentTimeProvider(), this.entityIdGenerator);
-
     await this.repository.save(state);
 
     this.eventPublisher.publishAll(events);
