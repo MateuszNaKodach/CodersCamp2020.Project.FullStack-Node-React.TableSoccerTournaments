@@ -47,6 +47,7 @@ import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/
 import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
 import { ConsoleEmailSender } from './modules/email-sending/infrastructure/mailer/ConsoleEmailSender';
 import { SendEmailModuleCore } from './modules/email-sending/core/SendEmailModuleCore';
+import { MongoTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/mongo/MongoTournamentTablesRepository';
 
 config();
 
@@ -201,6 +202,9 @@ function MatchRepository() {
 }
 
 function TournamentTablesRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.MATCH_DATABASE === 'MONGO') {
+    return new MongoTournamentTablesRepository();
+  }
   return new InMemoryTournamentTablesRepository();
 }
 
