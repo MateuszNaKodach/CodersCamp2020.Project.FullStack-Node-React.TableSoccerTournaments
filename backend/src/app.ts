@@ -30,10 +30,10 @@ import { PlayerProfilesModuleCore } from './modules/player-profiles/core/PlayerP
 import { PlayerProfileRestApiModule } from './modules/player-profiles/presentation/rest-api/PlayerProfileRestApiModule';
 import { InMemoryPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/inmemory/InMemoryPlayerProfileRepository';
 import { MongoPlayerProfileRepository } from './modules/player-profiles/infrastructure/repository/mongo/MongoPlayerProfileRepository';
-import { InMemoryDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryDoublesTournamentRepository';
+import { InMemoryDoublesTournamentRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryDoublesTournamentRepository';
 import { DoublesTournamentModuleCore } from './modules/doubles-tournament/core/DoublesTournamentModuleCore';
-import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
-import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/core/presentation/rest-api/DoublesTournamentRestApiModule';
+import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
+import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/presentation/rest-api/DoublesTournamentRestApiModule';
 import { CreatePlayerProfile } from './modules/player-profiles/core/application/command/CreatePlayerProfile';
 import { MongoMatchRepository } from './modules/match-module/infrastructure/repository/mongo/MongoMatchRepository';
 import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
@@ -41,6 +41,9 @@ import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
 import { InMemoryMatchesQueueRepository } from './modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryMatchesQueueRepository';
 import { MongoMatchesQueueRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoMatchesQueueRepository';
+import { TournamentTablesModuleCore } from './modules/tournament-tables/core/TournamentTablesModuleCore';
+import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/inmemory/InMemoryTournamentTablesRepository';
+import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
 
 config();
 
@@ -97,12 +100,19 @@ export async function TableSoccerTournamentsApplication(
     restApi: MatchRestApiModule(commandBus, eventBus, queryBus),
   };
 
+  const tournamentTablesRepository = TournamentTablesRepository();
+  const tournamentTablesModule: Module = {
+    core: TournamentTablesModuleCore(eventBus, commandBus, currentTimeProvider, tournamentTablesRepository),
+    restApi: tournamentTablesRestApiModule(commandBus, eventBus, queryBus),
+  };
+
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
     process.env.PLAYERS_MATCHING_MODULE === 'ENABLED' ? playersMatchingModule : undefined,
     process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined,
     process.env.DOUBLES_TOURNAMENT_MODULE === 'ENABLED' ? doublesTournamentModule : undefined,
     process.env.MATCH_MODULE === 'ENABLED' ? matchModule : undefined,
+    process.env.TOURNAMENTS_TABLES_MODULE === 'ENABLED' ? tournamentTablesModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
@@ -182,6 +192,10 @@ function MatchRepository() {
     return new MongoMatchRepository();
   }
   return new InMemoryMatchRepository();
+}
+
+function TournamentTablesRepository() {
+  return new InMemoryTournamentTablesRepository();
 }
 
 function MatchesQueueRepository() {
