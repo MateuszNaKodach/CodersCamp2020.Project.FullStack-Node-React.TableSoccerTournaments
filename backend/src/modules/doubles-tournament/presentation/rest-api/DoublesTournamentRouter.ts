@@ -12,6 +12,7 @@ import {
   FindMatchesQueueByTournamentById,
   FindMatchesQueueByTournamentByIdResult,
 } from '../../core/application/query/FindMatchesQueueByTournamentId';
+import { QueuedMatchDto } from './response/QueuedMatchDto';
 
 export function doublesTournamentRouter(
   commandPublisher: CommandPublisher,
@@ -37,12 +38,12 @@ export function doublesTournamentRouter(
         .status(StatusCodes.NOT_FOUND)
         .json({ message: `Such Matches queue doesn't exist because doubles tournament with id = ${tournamentId} is not found!` });
     }
-    const matchesQueueWithPrimitiveTypes = queryResult.queuedMatches.map((match) => ({
+    const queuedMatchesDto: QueuedMatchDto[] = queryResult.queuedMatches.map((match) => ({
       matchNumber: match.matchNumber.raw,
       team1Id: match.team1Id.raw,
       team2Id: match.team2Id.raw,
     }));
-    return response.status(StatusCodes.OK).json(new MatchesQueueDto(queryResult.tournamentId.raw, matchesQueueWithPrimitiveTypes));
+    return response.status(StatusCodes.OK).json(new MatchesQueueDto(queryResult.tournamentId.raw, queuedMatchesDto));
   };
 
   const router = express.Router();
