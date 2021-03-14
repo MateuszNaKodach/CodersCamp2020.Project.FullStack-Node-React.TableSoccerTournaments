@@ -46,7 +46,7 @@ import { TournamentTablesModuleCore } from './modules/tournament-tables/core/Tou
 import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/inmemory/InMemoryTournamentTablesRepository';
 import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
 import { ConsoleEmailSender } from './modules/email-sending/infrastructure/mailer/ConsoleEmailSender';
-import {SendEmailModuleCore} from "./modules/email-sending/core/SendEmailModuleCore";
+import { SendEmailModuleCore } from './modules/email-sending/core/SendEmailModuleCore';
 
 config();
 
