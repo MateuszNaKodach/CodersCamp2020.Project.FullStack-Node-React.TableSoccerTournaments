@@ -22,7 +22,7 @@
     "test:mailhog": "jest --testRegex \"[.](mailhog-spec)[.]ts\"",
     "test:watch": "jest --watchAll",
     "test:cov": "jest --coverage",
-    "test:ci": "jest --testRegex \"[.](spec|test)[.]ts\" --ci --silent --coverage"
+    "test:ci": "jest --testRegex \"[.](spec|test|mongo-spec|postgres-spec)[.]ts\" --ci --silent --coverage"
   },
   "dependencies": {
     "axios": "^0.21.1",
