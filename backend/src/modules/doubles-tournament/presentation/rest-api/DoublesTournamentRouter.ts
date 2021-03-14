@@ -7,11 +7,11 @@ import { FindDoublesTournamentById, FindDoublesTournamentByIdResult } from '../.
 import { DoublesTournament } from '../../core/domain/DoublesTournament';
 import { TournamentTeamDto } from './response/TournamentTeamDto';
 import { TournamentTeamListDto } from './response/TournamentTeamListDto';
+import { MatchesQueueDto } from './response/MatchesQueueDto';
 import {
   FindMatchesQueueByTournamentById,
   FindMatchesQueueByTournamentByIdResult,
-} from '../../application/query/FindMatchesQueueByTournamentId';
-import { MatchesQueueDto } from './response/MatchesQueueDto';
+} from '../../core/application/query/FindMatchesQueueByTournamentId';
 
 export function doublesTournamentRouter(
   commandPublisher: CommandPublisher,

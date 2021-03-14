@@ -1,5 +1,5 @@
-import { MatchesQueueRepository } from '../../../application/MatchesQueueRepository';
-import { MatchesQueue } from '../../../domain/MatchesQueue';
+import { MatchesQueueRepository } from '../../../core/application/MatchesQueueRepository';
+import { MatchesQueue } from '../../../core/domain/MatchesQueue';
 
 export class InMemoryMatchesQueueRepository implements MatchesQueueRepository {
   private readonly entities: { [id: string]: MatchesQueue } = {};

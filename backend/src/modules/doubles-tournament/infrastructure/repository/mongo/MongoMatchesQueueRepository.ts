@@ -1,10 +1,10 @@
-import { MatchesQueueRepository } from '../../../application/MatchesQueueRepository';
-import { MatchesQueue } from '../../../domain/MatchesQueue';
+import { MatchesQueueRepository } from '../../../core/application/MatchesQueueRepository';
+import { MatchesQueue } from '../../../core/domain/MatchesQueue';
 import mongoose, { Schema } from 'mongoose';
-import { TournamentId } from '../../../domain/TournamentId';
-import { QueuedMatch } from '../../../domain/QueuedMatch';
-import { TeamId } from '../../../domain/TeamId';
-import { MatchNumber } from '../../../domain/MatchNumber';
+import { TournamentId } from '../../../core/domain/TournamentId';
+import { QueuedMatch } from '../../../core/domain/QueuedMatch';
+import { TeamId } from '../../../core/domain/TeamId';
+import { MatchNumber } from '../../../core/domain/MatchNumber';
 
 export class MongoMatchesQueueRepository implements MatchesQueueRepository {
   async findByTournamentId(tournamentId: string): Promise<MatchesQueue | undefined> {

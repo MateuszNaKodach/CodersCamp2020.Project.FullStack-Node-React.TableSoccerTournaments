@@ -39,13 +39,14 @@ import { MongoMatchRepository } from './modules/match-module/infrastructure/repo
 import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
 import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
-import { InMemoryMatchesQueueRepository } from './modules/doubles-tournament/core/infrastructure/repository/inmemory/InMemoryMatchesQueueRepository';
-import { MongoMatchesQueueRepository } from './modules/doubles-tournament/core/infrastructure/repository/mongo/MongoMatchesQueueRepository';
+import { InMemoryMatchesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryMatchesQueueRepository';
+import { MongoMatchesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoMatchesQueueRepository';
 import { NodeMailerEmailSender } from './modules/email-sending/infrastructure/mailer/NodeMailerEmailSender';
 import { TournamentTablesModuleCore } from './modules/tournament-tables/core/TournamentTablesModuleCore';
 import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/inmemory/InMemoryTournamentTablesRepository';
 import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
 import { ConsoleEmailSender } from './modules/email-sending/infrastructure/mailer/ConsoleEmailSender';
+import {SendEmailModuleCore} from "./modules/email-sending/core/SendEmailModuleCore";
 
 config();
 
