@@ -4,8 +4,10 @@ import NodeMailer from 'nodemailer';
 
 export class NodeMailerEmailSender implements EmailSender {
   private readonly transporter: Mail;
+  readonly mailFrom: string;
 
-  constructor(transport: { host: string; port: number; secure: boolean; auth?: { user?: string; pass?: string } }) {
+  constructor(transport: { host: string; port: number; from: string; secure: boolean; auth?: { user?: string; pass?: string } }) {
+    this.mailFrom = transport.from;
     this.transporter = NodeMailer.createTransport({
       host: transport.host,
       port: transport.port,
@@ -14,9 +16,9 @@ export class NodeMailerEmailSender implements EmailSender {
     });
   }
 
-  async sendAnEmail(mailOptions: { from: string; to: string; subject: string; html: string }): Promise<void> {
+  async sendAnEmail(mailOptions: { to: string; subject: string; html: string }): Promise<void> {
     return await this.transporter.sendMail({
-      from: mailOptions.from,
+      from: this.mailFrom,
       to: mailOptions.to,
       subject: mailOptions.subject,
       html: mailOptions.html,

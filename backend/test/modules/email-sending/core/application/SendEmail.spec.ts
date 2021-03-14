@@ -5,8 +5,8 @@ import { EmailSender } from '../../../../../src/modules/email-sending/core/appli
 describe('Send an email to player', () => {
   it('When command SendEmail is sent, then send an email with appropriate arguments', async () => {
     //Given
-    const sendEmailFrom = 'TourDeFoos <TourDeFoos@gmail.com>';
     const emailSender: EmailSender = {
+      mailFrom: 'Test',
       sendAnEmail: jest.fn(),
     };
     const sendEmailModuleCore = testSendEmailModule(emailSender);
@@ -23,7 +23,6 @@ describe('Send an email to player', () => {
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(emailSender.sendAnEmail).toHaveBeenCalled();
     expect(emailSender.sendAnEmail).toHaveBeenCalledWith({
-      from: sendEmailFrom,
       to: 'test@gmail.com',
       subject: 'test',
       html: '<div>test</div>',

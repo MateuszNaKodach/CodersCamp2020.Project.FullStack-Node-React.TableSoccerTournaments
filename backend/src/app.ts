@@ -197,7 +197,7 @@ function TournamentTablesRepository() {
 function EmailModuleCore() {
   if (process.env.EMAIL_SENDER === 'CONSOLE') {
     return {
-      core: SendEmailModuleCore(new ConsoleEmailSender()),
+      core: SendEmailModuleCore(new ConsoleEmailSender('Console <console@console.com>')),
     };
   }
   return {
@@ -205,6 +205,7 @@ function EmailModuleCore() {
       new NodeMailerEmailSender({
         host: 'smtp.gmail.com',
         port: 465,
+        from: 'TourDeFoos <TourDeFoos@gmail.com>',
         secure: true,
         auth: {
           user: process.env.NODEMAILER_USER,

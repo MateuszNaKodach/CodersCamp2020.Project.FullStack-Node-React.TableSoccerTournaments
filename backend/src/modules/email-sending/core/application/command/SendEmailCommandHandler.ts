@@ -8,7 +8,6 @@ export class SendEmailCommandHandler implements CommandHandler<SendEmail> {
 
   async execute(command: SendEmail): Promise<CommandResult> {
     await this.emailSender.sendAnEmail({
-      from: 'TourDeFoos <TourDeFoos@gmail.com>',
       to: command.emailAddress,
       subject: command.subject,
       html: command.htmlContent,

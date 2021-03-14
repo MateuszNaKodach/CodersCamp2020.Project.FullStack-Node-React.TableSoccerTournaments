@@ -16,11 +16,10 @@ describe('Example email sending using NodeMailer', () => {
     //Given
     const inbox = 'user@test.com';
     await mailhog.clearInbox(inbox);
-    const emailSender = new NodeMailerEmailSender({ host: host, port: 1025, secure: false });
+    const emailSender = new NodeMailerEmailSender({ host: host, port: 1025, from: 'admin@test.com', secure: false });
 
     //When
     await emailSender.sendAnEmail({
-      from: 'admin@test.com',
       to: inbox,
       subject: 'Test subject',
       html: 'Test html body',
