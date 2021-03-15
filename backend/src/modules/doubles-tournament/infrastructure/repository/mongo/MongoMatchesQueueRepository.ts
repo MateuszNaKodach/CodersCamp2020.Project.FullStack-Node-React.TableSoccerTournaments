@@ -17,7 +17,7 @@ export class MongoMatchesQueueRepository implements MatchesQueueRepository {
       { _id: matchesQueue.tournamentId.raw },
       {
         _id: matchesQueue.tournamentId.raw,
-        queuedMatches: matchesQueue.queuedMatches.map((queuedMatch) => ({
+        queue: matchesQueue.queuedMatches.map((queuedMatch) => ({
           matchNumber: queuedMatch.matchNumber.raw,
           team1Id: queuedMatch.team1Id.raw,
           team2Id: queuedMatch.team2Id.raw,
