@@ -20,9 +20,14 @@ export class MongoTournamentTablesRepository implements TournamentTablesReposito
     Promise.all(tournamentTables.map((table) => this.save(table)));
   }
 
+  async findByTournamentIdAndTableNumber(tournamentId: string, tableNumber: number): Promise<TournamentTable | undefined> {
+    const mongoFindResult = await MongoTournamentTables.findById({ _id: `${tournamentId}_${tableNumber}` });
+    return mongoFindResult ? mongoDocumentToDomain(mongoFindResult) : undefined;
+  }
+
   async findAllByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
     const mongoFindResult = await MongoTournamentTables.find({ tournamentId });
-    return mongoDocumentToDomain(mongoFindResult);
+    return mongoFindResult.map(mongoDocument => mongoDocumentToDomain(mongoDocument));
   }
 }
 
@@ -46,13 +51,10 @@ const TournamentTablesSchema = new mongoose.Schema({
 
 const MongoTournamentTables = mongoose.model<MongoTournamentTables>('TournamentTables', TournamentTablesSchema);
 
-function mongoDocumentToDomain(mongoDocument: MongoTournamentTables[]): TournamentTable[] {
-  return mongoDocument.map(
-    (document) =>
-      new TournamentTable({
-        tournamentId: document.tournamentId,
-        tableNumber: TableNumber.from(document.tableNumber),
-        tableName: document.tableName,
-      }),
-  );
+function mongoDocumentToDomain(mongoDocument: MongoTournamentTables): TournamentTable {
+  return new TournamentTable({
+    tournamentId: mongoDocument.tournamentId,
+    tableNumber: TableNumber.from(mongoDocument.tableNumber),
+    tableName: mongoDocument.tableName,
+  })
 }
