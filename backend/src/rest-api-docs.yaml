@@ -234,6 +234,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TournamentRegistrationsListDto'
+  /doubles-tournaments/{tournamentId}/matches:
+    get:
+      tags:
+        - Doubles Tournament
+      description: Fetch list of matches in queue
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Matches queue for requested tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchesQueueDto'
   /tournaments/{tournamentId}/tables:
     post:
       tags:
