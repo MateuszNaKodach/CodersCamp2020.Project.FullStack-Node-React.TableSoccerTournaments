@@ -41,7 +41,7 @@ import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
 import { TournamentTreeModuleCore } from './modules/tournament-tree/core/TournamentTreeModuleCore';
 import { InMemoryTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/inmemory/InMemoryTournamentTreeRepository';
-import {TournamentTreeRestApiModule} from "./modules/tournament-tree/presentation/rest-api/TournamentTreeRestApiModule";
+import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentation/rest-api/TournamentTreeRestApiModule';
 
 config();
 

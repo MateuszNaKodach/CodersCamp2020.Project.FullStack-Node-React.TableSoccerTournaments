@@ -1,22 +1,22 @@
-import {testTournamentTreeModule} from "./TestTournamentTreeModule";
-import {FindTournamentTreeByTournamentId} from "../../../../../src/modules/tournament-tree/core/application/query/FindTournamentTreeByTournamentId";
-import {NumberIdGeneratorStub} from "../../../../test-support/shared/core/NumberIdGeneratorStub";
+import { testTournamentTreeModule } from './TestTournamentTreeModule';
+import { FindTournamentTreeByTournamentId } from '../../../../../src/modules/tournament-tree/core/application/query/FindTournamentTreeByTournamentId';
+import { NumberIdGeneratorStub } from '../../../../test-support/shared/core/NumberIdGeneratorStub';
 
 describe('Tournament Tree | Query Side', () => {
   it('FindTournamentTreeResult | No doubles tournaments', async () => {
     //Given
     const currentTime = new Date();
-    const entityIdGen = NumberIdGeneratorStub(100, "entityId");
+    const entityIdGen = NumberIdGeneratorStub(100, 'entityId');
     // const teamEntityIdGen = NumberIdGeneratorStub(100, "teamId");
     // const playerEntityIdGen = NumberIdGeneratorStub(100, "playerId");
     const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen);
 
     //When
     const findTournamentTreeResult = await tournamentTree.executeQuery<FindTournamentTreeByTournamentId>(
-      new FindTournamentTreeByTournamentId({ tournamentId: "testNonExistId" }),
+      new FindTournamentTreeByTournamentId({ tournamentId: 'testNonExistId' }),
     );
 
-    console.log(findTournamentTreeResult)
+    console.log(findTournamentTreeResult);
     //Then
     // expect(findTournamentTreeResult).toBeEmpty();
     expect(findTournamentTreeResult).toBeUndefined();

@@ -25,7 +25,7 @@ export class CreateTournamentTreeCommandHandler implements CommandHandler<Create
     const tournamentId = command.tournamentId;
 
     const tournamentTeams = command.tournamentTeams.map((team) => {
-      return new TournamentTeam({teamId: TournamentTeamId.from(team.teamId)})
+      return new TournamentTeam({ teamId: TournamentTeamId.from(team.teamId) });
     });
     const commandForCreateTournamentTree = { tournamentId: tournamentId, tournamentTeams: tournamentTeams };
     // const newCommand = {tournamentId: tournamentId, tournamentTeams: tournamentTeams,}
