@@ -27,7 +27,7 @@ export class MongoTournamentTablesRepository implements TournamentTablesReposito
 
   async findAllByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
     const mongoFindResult = await MongoTournamentTables.find({ tournamentId });
-    return mongoFindResult.map(mongoDocument => mongoDocumentToDomain(mongoDocument));
+    return mongoFindResult.map((mongoDocument) => mongoDocumentToDomain(mongoDocument));
   }
 }
 
@@ -56,5 +56,5 @@ function mongoDocumentToDomain(mongoDocument: MongoTournamentTables): Tournament
     tournamentId: mongoDocument.tournamentId,
     tableNumber: TableNumber.from(mongoDocument.tableNumber),
     tableName: mongoDocument.tableName,
-  })
+  });
 }
