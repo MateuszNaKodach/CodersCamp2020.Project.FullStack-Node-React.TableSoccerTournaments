@@ -21,11 +21,9 @@ export function tournamentTreeRouter(
       new FindTournamentTreeByTournamentId({ tournamentId: tournamentId }),
     );
     if (!queryResult) {
-      return response
-        .status(StatusCodes.NOT_FOUND)
-        .json({
-          message: `Tournament tree in tournament with id = ${tournamentId} not found, because tournament with such id doesn't exist!`,
-        });
+      return response.status(StatusCodes.NOT_FOUND).json({
+        message: `Tournament tree in tournament with id = ${tournamentId} not found, because tournament with such id doesn't exist!`,
+      });
     }
 
     const x = response
