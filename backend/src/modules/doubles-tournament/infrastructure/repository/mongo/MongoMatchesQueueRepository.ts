@@ -44,10 +44,8 @@ const QueuedMatchSchema = new mongoose.Schema({
 });
 
 const MatchesQueueSchema = new mongoose.Schema({
-  tournamentId: Schema.Types.String,
-  queue: {
-    type: [QueuedMatchSchema],
-  },
+  _id: Schema.Types.String,
+  queue: [QueuedMatchSchema],
 });
 
 const MongoMatchesQueue = mongoose.model<MongoMatchesQueue>('MatchesQueue', MatchesQueueSchema);
