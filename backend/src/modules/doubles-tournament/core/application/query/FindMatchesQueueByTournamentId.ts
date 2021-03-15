@@ -1,6 +1,6 @@
 import { MatchesQueue } from '../../domain/MatchesQueue';
 
-export class FindMatchesQueueByTournamentById {
+export class FindMatchesQueueByTournamentId {
   readonly tournamentId: string;
 
   constructor(props: { tournamentId: string }) {
@@ -8,4 +8,4 @@ export class FindMatchesQueueByTournamentById {
   }
 }
 
-export type FindMatchesQueueByTournamentByIdResult = MatchesQueue | undefined;
+export type FindMatchesQueueByTournamentIdResult = MatchesQueue | undefined;

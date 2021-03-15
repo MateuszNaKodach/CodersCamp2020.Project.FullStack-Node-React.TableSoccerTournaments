@@ -7,7 +7,7 @@ import { DoublesTournamentRestApiModule } from '../../../../../src/modules/doubl
 import { FindDoublesTournamentById } from '../../../../../src/modules/doubles-tournament/core/application/query/FindDoublesTournamentById';
 import { StatusCodes } from 'http-status-codes';
 import { FindTournamentRegistrationsById } from '../../../../../src/modules/tournaments-registrations/core/application/query/FindTournamentRegistrationsById';
-import { FindMatchesQueueByTournamentById } from '../../../../../src/modules/doubles-tournament/core/application/query/FindMatchesQueueByTournamentId';
+import { FindMatchesQueueByTournamentId } from '../../../../../src/modules/doubles-tournament/core/application/query/FindMatchesQueueByTournamentId';
 import { QueuedMatch } from '../../../../../src/modules/doubles-tournament/core/domain/QueuedMatch';
 import { MatchNumber } from '../../../../../src/modules/doubles-tournament/core/domain/MatchNumber';
 import { MatchesQueue } from '../../../../../src/modules/doubles-tournament/core/domain/MatchesQueue';
@@ -89,7 +89,7 @@ describe('Doubles Tournament REST API', () => {
     const { body, status } = await agent.get('/rest-api/doubles-tournaments/sampleTournamentId/matches').send();
 
     //Then
-    expect(queryPublisher.executeCalls).toBeCalledWith(new FindMatchesQueueByTournamentById({ tournamentId: 'sampleTournamentId' }));
+    expect(queryPublisher.executeCalls).toBeCalledWith(new FindMatchesQueueByTournamentId({ tournamentId: 'sampleTournamentId' }));
     expect(status).toBe(StatusCodes.OK);
     expect(body).toStrictEqual({
       tournamentId: 'sampleTournamentId',
@@ -117,7 +117,7 @@ describe('Doubles Tournament REST API', () => {
     const { body, status } = await agent.get('/rest-api/doubles-tournaments/sampleTournamentId/matches').send();
 
     //Then
-    expect(queryPublisher.executeCalls).toBeCalledWith(new FindMatchesQueueByTournamentById({ tournamentId: 'sampleTournamentId' }));
+    expect(queryPublisher.executeCalls).toBeCalledWith(new FindMatchesQueueByTournamentId({ tournamentId: 'sampleTournamentId' }));
     expect(status).toBe(StatusCodes.NOT_FOUND);
     expect(body).toStrictEqual({
       message: "Such Matches queue doesn't exist because doubles tournament with id = sampleTournamentId is not found!",

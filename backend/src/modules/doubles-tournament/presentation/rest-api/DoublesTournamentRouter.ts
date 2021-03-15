@@ -9,8 +9,8 @@ import { TournamentTeamDto } from './response/TournamentTeamDto';
 import { TournamentTeamListDto } from './response/TournamentTeamListDto';
 import { MatchesQueueDto } from './response/MatchesQueueDto';
 import {
-  FindMatchesQueueByTournamentById,
-  FindMatchesQueueByTournamentByIdResult,
+  FindMatchesQueueByTournamentId,
+  FindMatchesQueueByTournamentIdResult,
 } from '../../core/application/query/FindMatchesQueueByTournamentId';
 import { QueuedMatchDto } from './response/QueuedMatchDto';
 
@@ -30,8 +30,8 @@ export function doublesTournamentRouter(
 
   const getMatchesQueueByTournamentId = async (request: Request, response: Response) => {
     const { tournamentId } = request.params;
-    const queryResult = await queryPublisher.execute<FindMatchesQueueByTournamentByIdResult>(
-      new FindMatchesQueueByTournamentById({ tournamentId }),
+    const queryResult = await queryPublisher.execute<FindMatchesQueueByTournamentIdResult>(
+      new FindMatchesQueueByTournamentId({ tournamentId }),
     );
     if (!queryResult) {
       return response

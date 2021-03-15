@@ -1,6 +1,6 @@
 import { TestModuleCore } from '../../../../test-support/shared/core/TestModuleCore';
 import { createTournamentForTests } from './TestDoublesTournamentModuleWithTournament';
-import { FindMatchesQueueByTournamentById } from '../../../../../src/modules/doubles-tournament/core/application/query/FindMatchesQueueByTournamentId';
+import { FindMatchesQueueByTournamentId } from '../../../../../src/modules/doubles-tournament/core/application/query/FindMatchesQueueByTournamentId';
 import { EnqueueMatch } from '../../../../../src/modules/doubles-tournament/core/application/command/EnqueueMatch';
 import { MatchesQueue } from '../../../../../src/modules/doubles-tournament/core/domain/MatchesQueue';
 import { TournamentId } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentId';
@@ -40,8 +40,8 @@ describe('Matches queue | Query Side', () => {
     await doublesTournament.executeCommand(enqueueMatch);
 
     //When
-    const findMatchesQueueByTournamentByIdResult = await doublesTournament.executeQuery<FindMatchesQueueByTournamentById>(
-      new FindMatchesQueueByTournamentById({ tournamentId }),
+    const findMatchesQueueByTournamentByIdResult = await doublesTournament.executeQuery<FindMatchesQueueByTournamentId>(
+      new FindMatchesQueueByTournamentId({ tournamentId }),
     );
 
     //Then
@@ -62,8 +62,8 @@ describe('Matches queue | Query Side', () => {
     await doublesTournament.executeCommand(enqueueMatch2);
 
     //When
-    const findMatchesQueueByTournamentByIdResult = await doublesTournament.executeQuery<FindMatchesQueueByTournamentById>(
-      new FindMatchesQueueByTournamentById({ tournamentId }),
+    const findMatchesQueueByTournamentByIdResult = await doublesTournament.executeQuery<FindMatchesQueueByTournamentId>(
+      new FindMatchesQueueByTournamentId({ tournamentId }),
     );
 
     //Then
@@ -83,8 +83,8 @@ describe('Matches queue | Query Side', () => {
     //Given
 
     //When
-    const findMatchesQueueByTournamentByIdResult = await doublesTournament.executeQuery<FindMatchesQueueByTournamentById>(
-      new FindMatchesQueueByTournamentById({ tournamentId }),
+    const findMatchesQueueByTournamentByIdResult = await doublesTournament.executeQuery<FindMatchesQueueByTournamentId>(
+      new FindMatchesQueueByTournamentId({ tournamentId }),
     );
 
     //Then
