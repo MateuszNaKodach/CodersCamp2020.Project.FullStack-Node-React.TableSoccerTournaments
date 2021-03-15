@@ -7,7 +7,8 @@ import {TournamentTreeModuleCore} from "../../../../../src/modules/tournament-tr
 
 export function testTournamentTreeModule(currentTime: Date, entityIdGenerator: EntityIdGenerator): TestModuleCore {
   const tournamentTreeRepository = new InMemoryTournamentTreeRepository();
-  return testModuleCore((commandBus, eventBus,/* queryBus*/) =>
+  // return testModuleCore((commandBus, eventBus,/* queryBus*/) =>
+  return testModuleCore((commandBus, eventBus, queryBus) =>
       TournamentTreeModuleCore(eventBus, commandBus, () => currentTime, entityIdGenerator, tournamentTreeRepository),
   );
 }
