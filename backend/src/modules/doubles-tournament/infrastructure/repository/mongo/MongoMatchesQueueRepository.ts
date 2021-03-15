@@ -14,21 +14,22 @@ export class MongoMatchesQueueRepository implements MatchesQueueRepository {
 
   async save(matchesQueue: MatchesQueue): Promise<void> {
     await MongoMatchesQueue.findByIdAndUpdate(
-      { tournamentId: matchesQueue.tournamentId.raw },
+      { _id: matchesQueue.tournamentId.raw },
       {
-        tournamentId: matchesQueue.tournamentId.raw,
+        _id: matchesQueue.tournamentId.raw,
         queuedMatches: matchesQueue.queuedMatches.map((queuedMatch) => ({
           matchNumber: queuedMatch.matchNumber.raw,
           team1Id: queuedMatch.team1Id.raw,
           team2Id: queuedMatch.team2Id.raw,
         })),
       },
+      { upsert: true, useFindAndModify: true },
     );
   }
 }
 
 type MongoMatchesQueue = {
-  readonly tournamentId: string;
+  readonly _id: string;
   readonly queue: {
     matchNumber: number;
     team1Id: string;
@@ -53,7 +54,7 @@ const MongoMatchesQueue = mongoose.model<MongoMatchesQueue>('MatchesQueue', Matc
 
 function mongoDocumentToDomain(mongoDocument: MongoMatchesQueue): MatchesQueue {
   return new MatchesQueue({
-    tournamentId: TournamentId.from(mongoDocument.tournamentId),
+    tournamentId: TournamentId.from(mongoDocument._id),
     queuedMatches: [
       ...mongoDocument.queue.map(
         (match) =>
