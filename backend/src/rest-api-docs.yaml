@@ -322,6 +322,36 @@ components:
       items:
         $ref: '#/components/schemas/TournamentTeamDto'
       uniqueItems: true
+    QueuedMatchDto:
+      type: object
+      properties:
+        matchNumber:
+          description: Match number
+          type: number
+        team1Id:
+          description: First team id
+          type: string
+          format: uuid
+          example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
+        team12d:
+          description: Second team id
+          type: string
+          format: uuid
+          example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
+    MatchesQueueDto:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament
+          type: string
+          format: uuid
+          example: 094469cf-6fcc-4947-a5c0-be1e94f54855
+        queue:
+          description: Matches queue
+          type: array
+          items:
+            $ref: '#/components/schemas/QueuedMatchDto'
+          uniqueItems: true
     TournamentRegistrationsListDto:
       type: array
       items:
