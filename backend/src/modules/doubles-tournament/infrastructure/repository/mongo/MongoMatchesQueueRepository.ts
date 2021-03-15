@@ -14,7 +14,7 @@ export class MongoMatchesQueueRepository implements MatchesQueueRepository {
 
   async save(matchesQueue: MatchesQueue): Promise<void> {
     await MongoMatchesQueue.findByIdAndUpdate(
-      { tournamentId: matchesQueue.tournamentId },
+      { tournamentId: matchesQueue.tournamentId.raw },
       {
         tournamentId: matchesQueue.tournamentId.raw,
         queuedMatches: matchesQueue.queuedMatches.map((queuedMatch) => ({
