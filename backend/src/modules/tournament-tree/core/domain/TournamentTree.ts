@@ -35,6 +35,14 @@ export class TournamentTree {
         return new TournamentTree(tournamentTreeProps);
     }
 
+    static setTournamentTreeFromDataBase(props: { tournamentId: string; tournamentTreeArray: FightingTeamsGroup[]; tournamentTeams: TournamentTeam[] }) {
+        return new TournamentTree({
+            tournamentId: props.tournamentId,
+            tournamentTreeArray: props.tournamentTreeArray,
+            tournamentTeams: props.tournamentTeams,
+        });
+    }
+
     public getTournamentTreeArray(): FightingTeamsGroup[] {
         return this.tournamentTreeArray;
     }
@@ -73,7 +81,7 @@ export function createTournamentTree(
     const tournamentTree = TournamentTree.createSingleTournamentTree(props);
     const tournamentTreeWasCreatedEvent = new TournamentTreeWasCreated(command.tournamentId, currentTime());
 
-    
+
     return {
         state: tournamentTree,
         events: [tournamentTreeWasCreatedEvent],

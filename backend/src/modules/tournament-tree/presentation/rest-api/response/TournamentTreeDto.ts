@@ -4,16 +4,16 @@ import {FightingTeamsGroup} from "../../../core/domain/FightingTeamsGroup";
 import {TournamentTeamDto} from "./TournamentTeamDto";
 
 export class TournamentTreeDto {
-    readonly tournamentTeams: TournamentTeamDto[];
+    readonly tournamentTeams: TournamentTeam[]
     readonly tournamentTreeArray: FightingTeamsGroup[];
     readonly tournamentId: string;
 
+    constructor(tournamentId: string , tournamentTreeArray: FightingTeamsGroup[] ,tournamentTeams: TournamentTeam[],) {
 
-    constructor(tournamentTeams: TournamentTeamDto[], tournamentTreeArray, tournamentId: string) {
-
+        // TU ZMIANY
 
         this.tournamentTeams = tournamentTeams;
-        this.tournamentTreeArray = tournamentTreeArray.;
+        this.tournamentTreeArray = tournamentTreeArray;
         this.tournamentId = tournamentId;
     }
 }
