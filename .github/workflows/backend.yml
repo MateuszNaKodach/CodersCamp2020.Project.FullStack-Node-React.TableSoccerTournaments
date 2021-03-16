@@ -54,7 +54,17 @@ jobs:
         with:
           flags: backend, unittests, integrationtests
       - name: Mutation testing
-        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/develop'
         run: npx stryker run --logLevel error
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+      - name: Deploy on Heroku from main branch
+        if: github.ref == 'refs/heads/main'
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "coderscamp2020-tablesoccer"
+          heroku_email: "mateusz.nowak@coderscrew.pl"
+          usedocker: true
+          branch: main
+          appdir: backend
