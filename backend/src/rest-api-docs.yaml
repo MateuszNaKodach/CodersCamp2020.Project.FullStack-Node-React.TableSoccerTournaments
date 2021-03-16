@@ -234,6 +234,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TournamentRegistrationsListDto'
+  /doubles-tournaments/{tournamentId}/matches:
+    get:
+      tags:
+        - Doubles Tournament
+      description: Fetch list of matches in queue
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Matches queue for requested tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchesQueueDto'
   /tournaments/{tournamentId}/tables:
     post:
       tags:
@@ -301,6 +322,36 @@ components:
       items:
         $ref: '#/components/schemas/TournamentTeamDto'
       uniqueItems: true
+    QueuedMatchDto:
+      type: object
+      properties:
+        matchNumber:
+          description: Match number
+          type: number
+        team1Id:
+          description: First team id
+          type: string
+          format: uuid
+          example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
+        team12d:
+          description: Second team id
+          type: string
+          format: uuid
+          example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
+    MatchesQueueDto:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament
+          type: string
+          format: uuid
+          example: 094469cf-6fcc-4947-a5c0-be1e94f54855
+        queue:
+          description: Matches queue
+          type: array
+          items:
+            $ref: '#/components/schemas/QueuedMatchDto'
+          uniqueItems: true
     TournamentRegistrationsListDto:
       type: array
       items:

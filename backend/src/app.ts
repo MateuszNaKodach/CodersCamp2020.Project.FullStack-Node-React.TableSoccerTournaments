@@ -35,16 +35,18 @@ import { DoublesTournamentModuleCore } from './modules/doubles-tournament/core/D
 import { MongoDoublesTournamentRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoDoublesTournamentRepository';
 import { DoublesTournamentRestApiModule } from './modules/doubles-tournament/presentation/rest-api/DoublesTournamentRestApiModule';
 import { CreatePlayerProfile } from './modules/player-profiles/core/application/command/CreatePlayerProfile';
-import { SendEmailModuleCore } from './modules/email-sending/core/SendEmailModuleCore';
 import { MongoMatchRepository } from './modules/match-module/infrastructure/repository/mongo/MongoMatchRepository';
 import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
 import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
+import { InMemoryMatchesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryMatchesQueueRepository';
+import { MongoMatchesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoMatchesQueueRepository';
 import { NodeMailerEmailSender } from './modules/email-sending/infrastructure/mailer/NodeMailerEmailSender';
 import { TournamentTablesModuleCore } from './modules/tournament-tables/core/TournamentTablesModuleCore';
 import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/inmemory/InMemoryTournamentTablesRepository';
 import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
 import { ConsoleEmailSender } from './modules/email-sending/infrastructure/mailer/ConsoleEmailSender';
+import { SendEmailModuleCore } from './modules/email-sending/core/SendEmailModuleCore';
 import { MongoTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/mongo/MongoTournamentTablesRepository';
 
 config();
@@ -83,8 +85,16 @@ export async function TableSoccerTournamentsApplication(
   };
 
   const doublesTournamentRepository = DoublesTournamentRepository();
+  const matchesQueueRepository = MatchesQueueRepository();
   const doublesTournamentModule: Module = {
-    core: DoublesTournamentModuleCore(eventBus, commandBus, currentTimeProvider, entityIdGenerator, doublesTournamentRepository),
+    core: DoublesTournamentModuleCore(
+      eventBus,
+      commandBus,
+      currentTimeProvider,
+      entityIdGenerator,
+      doublesTournamentRepository,
+      matchesQueueRepository,
+    ),
     restApi: DoublesTournamentRestApiModule(commandBus, eventBus, queryBus),
   };
 
@@ -218,4 +228,11 @@ function EmailModuleCore() {
       }),
     ),
   };
+}
+
+function MatchesQueueRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.DOUBLES_TOURNAMENT_DATABASE === 'MONGO') {
+    return new MongoMatchesQueueRepository();
+  }
+  return new InMemoryMatchesQueueRepository();
 }
