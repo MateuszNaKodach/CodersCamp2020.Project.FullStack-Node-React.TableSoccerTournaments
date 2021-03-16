@@ -511,6 +511,9 @@ components:
               tableName:
                 description: Name of the table
                 type: string
+              availableToPlay:
+                description: Is table available for next match
+                type: boolean
           uniqueItems: true
     TournamentTablesDto:
       type: object
@@ -528,4 +531,7 @@ components:
               tableName:
                 description: Name of the table
                 type: string
+              availableToPlay:
+                description: Is table available for next match
+                type: boolean
           uniqueItems: true
