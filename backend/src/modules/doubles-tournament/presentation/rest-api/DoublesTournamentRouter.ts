@@ -7,11 +7,17 @@ import { FindDoublesTournamentById, FindDoublesTournamentByIdResult } from '../.
 import { DoublesTournament } from '../../core/domain/DoublesTournament';
 import { TournamentTeamDto } from './response/TournamentTeamDto';
 import { TournamentTeamListDto } from './response/TournamentTeamListDto';
+import { MatchesQueueDto } from './response/MatchesQueueDto';
+import {
+  FindMatchesQueueByTournamentId,
+  FindMatchesQueueByTournamentIdResult,
+} from '../../core/application/query/FindMatchesQueueByTournamentId';
+import { QueuedMatchDto } from './response/QueuedMatchDto';
 
 export function doublesTournamentRouter(
-  commandPublisher: CommandPublisher,
-  eventPublisher: DomainEventPublisher,
-  queryPublisher: QueryPublisher,
+    commandPublisher: CommandPublisher,
+    eventPublisher: DomainEventPublisher,
+    queryPublisher: QueryPublisher,
 ): express.Router {
   const getTournamentTeamsByTournamentId = async (request: Request, response: Response) => {
     const { tournamentId } = request.params;
@@ -22,8 +28,27 @@ export function doublesTournamentRouter(
     return response.status(StatusCodes.OK).json(new TournamentTeamListDto(toTournamentTeamDto(queryResult)));
   };
 
+  const getMatchesQueueByTournamentId = async (request: Request, response: Response) => {
+    const { tournamentId } = request.params;
+    const queryResult = await queryPublisher.execute<FindMatchesQueueByTournamentIdResult>(
+        new FindMatchesQueueByTournamentId({ tournamentId }),
+    );
+    if (!queryResult) {
+      return response
+          .status(StatusCodes.NOT_FOUND)
+          .json({ message: `Such Matches queue doesn't exist because doubles tournament with id = ${tournamentId} is not found!` });
+    }
+    const queuedMatchesDto: QueuedMatchDto[] = queryResult.queuedMatches.map((match) => ({
+      matchNumber: match.matchNumber.raw,
+      team1Id: match.team1Id.raw,
+      team2Id: match.team2Id.raw,
+    }));
+    return response.status(StatusCodes.OK).json(new MatchesQueueDto(queryResult.tournamentId.raw, queuedMatchesDto));
+  };
+
   const router = express.Router();
   router.get('/:tournamentId/teams', getTournamentTeamsByTournamentId);
+  router.get('/:tournamentId/matches', getMatchesQueueByTournamentId);
   return router;
 }
 
