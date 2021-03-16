@@ -1,22 +1,26 @@
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { TournamentTablesWereAssigned } from './event/TournamentTablesWereAssigned';
 import { TableNumber } from './TableNumber';
+import { TableWasExcludedFromAvailableTables } from './event/TableWasExcludedFromAvailableTables';
+import { isDefined } from '../../../../common/Defined';
 
 export class TournamentTable {
   readonly tournamentId: string;
   readonly tableNumber: TableNumber;
   readonly tableName: string;
+  readonly availableToPlay: boolean;
 
-  constructor(props: { tournamentId: string; tableNumber: TableNumber; tableName: string }) {
+  constructor(props: { tournamentId: string; tableNumber: TableNumber; tableName: string; availableToPlay?: boolean }) {
     this.tournamentId = props.tournamentId;
     this.tableNumber = props.tableNumber;
     this.tableName = props.tableName;
+    this.availableToPlay = isDefined(props.availableToPlay) ? props.availableToPlay : true;
   }
 }
 
 export function assignTablesToTournament(
   state: TournamentTable[] | undefined,
-  command: { tournamentId: string; tables: { tableNumber: TableNumber; tableName: string }[] },
+  command: { tournamentId: string; tables: { tableNumber: TableNumber; tableName: string; availableToPlay?: boolean }[] },
   currentTime: Date,
 ): DomainCommandResult<TournamentTable[]> {
   if (state !== undefined && state.length > 0) {
@@ -34,6 +38,7 @@ export function assignTablesToTournament(
       tournamentId: command.tournamentId,
       tableNumber: table.tableNumber,
       tableName: table.tableName,
+      availableToPlay: isDefined(table.availableToPlay) ? table.availableToPlay : true,
     });
   });
 
@@ -57,4 +62,35 @@ function isTableNumberDuplicated(tables: { tableNumber: TableNumber; tableName: 
 
 function onTournamentTablesWereAssigned(state: TournamentTable[] | undefined, event: TournamentTablesWereAssigned): TournamentTable[] {
   return event.tablesAssigned.map((table) => new TournamentTable(table));
+}
+
+export function excludeFromAvailableTables(
+  state: TournamentTable | undefined,
+  command: { tournamentId: string; tableNumber: TableNumber },
+  currentTime: Date,
+): DomainCommandResult<TournamentTable> {
+  if (!state) {
+    throw new Error(`Table number ${command.tableNumber.raw} is not assigned to the tournament with id=${command.tournamentId}`);
+  }
+  if (!state.availableToPlay) {
+    throw new Error(
+      `Table number ${command.tableNumber.raw} in tournament with id=${command.tournamentId} has been already excluded from available tournament tables`,
+    );
+  }
+
+  const excludedTableFromAvailableTables = onTournamentTableWasExcluded(state);
+
+  const tableWasExcludedFromAvailableTables = new TableWasExcludedFromAvailableTables({
+    occurredAt: currentTime,
+    tableExcluded: excludedTableFromAvailableTables,
+  });
+
+  return {
+    state: excludedTableFromAvailableTables,
+    events: [tableWasExcludedFromAvailableTables],
+  };
+}
+
+function onTournamentTableWasExcluded(state: TournamentTable): TournamentTable {
+  return new TournamentTable({ ...state, availableToPlay: false });
 }

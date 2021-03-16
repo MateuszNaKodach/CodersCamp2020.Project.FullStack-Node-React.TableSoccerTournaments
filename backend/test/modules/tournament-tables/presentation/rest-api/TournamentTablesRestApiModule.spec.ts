@@ -60,6 +60,7 @@ describe('Tournament Tables REST API', () => {
         tournamentId,
         tableNumber: TableNumber.from(10),
         tableName: 'P4P',
+        availableToPlay: false,
       }),
     ]);
     const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { queryPublisher });

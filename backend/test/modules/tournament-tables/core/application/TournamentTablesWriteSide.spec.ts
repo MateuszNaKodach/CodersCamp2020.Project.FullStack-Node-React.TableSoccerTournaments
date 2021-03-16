@@ -6,6 +6,7 @@ import Failure = CommandResult.Failure;
 import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 import { ExcludeFromAvailableTables } from '../../../../../src/modules/tournament-tables/core/application/command/ExcludeFromAvailableTables';
+import { TableWasExcludedFromAvailableTables } from '../../../../../src/modules/tournament-tables/core/domain/event/TableWasExcludedFromAvailableTables';
 
 describe('Tournament Tables | Write Side', function () {
   it('When assign tables then tables are assigned to the tournament as available to play by default', async () => {
