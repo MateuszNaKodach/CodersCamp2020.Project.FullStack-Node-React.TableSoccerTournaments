@@ -57,6 +57,11 @@ The following technologies were used :
 Our application follows the TDD approach and is almost **fully covered** by tests. The architecture has been designed according to the **DDD** (Domain-driven design) & **CQRS** (Command Query Responsibility Segregation) & **Event Sourcing** patterns.
 
 
+## Event Modeling
+
+During this project we tried to use event modeling to model our application flow and for task division. We used for it miro web app.
+![image](https://user-images.githubusercontent.com/31566345/111337374-537e9680-8676-11eb-861e-b1b358bfc0ab.png)
+
 ## Running the project
 
 Running this project locally
