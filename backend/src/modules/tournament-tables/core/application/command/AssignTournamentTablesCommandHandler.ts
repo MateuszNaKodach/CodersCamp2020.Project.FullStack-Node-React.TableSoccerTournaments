@@ -4,8 +4,9 @@ import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvi
 import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
 import { AssignTournamentTables } from './AssignTournamentTables';
 import { TournamentTablesRepository } from '../TournamentTablesRepository';
-import { assignTablesToTournament, TournamentTable } from '../../domain/TournamentTable';
+import { assignTablesToTournament } from '../../domain/TournamentTable';
 import { TableNumber } from '../../domain/TableNumber';
+import { isDefined } from '../../../../../common/Defined';
 
 export class AssignTournamentTablesCommandHandler implements CommandHandler<AssignTournamentTables> {
   constructor(
@@ -21,6 +22,7 @@ export class AssignTournamentTablesCommandHandler implements CommandHandler<Assi
       return {
         tableNumber: TableNumber.from(table.tableNumber),
         tableName: table.tableName,
+        availableToPlay: isDefined(table.availableToPlay) ? table.availableToPlay : true,
       };
     });
     const domainCommand = { tournamentId, tables: tablesToAssign };

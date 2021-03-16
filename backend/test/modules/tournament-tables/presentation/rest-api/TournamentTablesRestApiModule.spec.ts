@@ -54,12 +54,13 @@ describe('Tournament Tables REST API', () => {
   it('GET /rest-api/tournaments/:tournamentId/tables | when tables for given tournament found', async () => {
     //Given
     const tournamentId = 'sampleTournamentId';
-    const tables = [{ tableNumber: 10, tableName: 'P4P' }];
+    const tables = [{ tableNumber: 10, tableName: 'P4P', availableToPlay: false }];
     const queryPublisher = QueryPublisherMock([
       new TournamentTable({
         tournamentId,
         tableNumber: TableNumber.from(10),
         tableName: 'P4P',
+        availableToPlay: false,
       }),
     ]);
     const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { queryPublisher });
