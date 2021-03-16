@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: Table Soccer Tournamtes REST API
+  title: Table Soccer Tournaments REST API
   description: REST API for supporting organizators of table soccer tournaments
   version: 0.1.0
 servers:
