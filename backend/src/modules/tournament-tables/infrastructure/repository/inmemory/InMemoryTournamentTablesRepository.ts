@@ -13,6 +13,10 @@ export class InMemoryTournamentTablesRepository implements TournamentTablesRepos
     Promise.all(tournamentTables.map((table) => this.save(table)));
   }
 
+  findByTournamentIdAndTableNumber(tournamentId: string, tableNumber: number): Promise<TournamentTable> {
+    return Promise.resolve(this.entities[`${tournamentId}_${tableNumber}`]);
+  }
+
   findAllByTournamentId(tournamentId: string): Promise<TournamentTable[]> {
     return Promise.resolve(
       Object.keys(this.entities)

@@ -13,8 +13,8 @@ describe('Tournament Tables | Query Side', function () {
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
     const tables = [
-      { tableNumber: 5, tableName: 'Bonzini' },
-      { tableNumber: 8, tableName: 'P4P' },
+      { tableNumber: 5, tableName: 'Bonzini', availableToPlay: true },
+      { tableNumber: 8, tableName: 'P4P', availableToPlay: false },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
     const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
@@ -31,11 +31,13 @@ describe('Tournament Tables | Query Side', function () {
         tournamentId,
         tableNumber: TableNumber.from(5),
         tableName: 'Bonzini',
+        availableToPlay: true,
       }),
       new TournamentTable({
         tournamentId,
         tableNumber: TableNumber.from(8),
         tableName: 'P4P',
+        availableToPlay: false,
       }),
     ]);
   });
