@@ -6,12 +6,12 @@ import Failure = CommandResult.Failure;
 import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 
-describe('Table reservation', function () {
+describe('Tournament Tables | Write Side', function () {
   it('When assign tables, then tables reservation for the tournament is made', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
-    const tablesList = [
+    const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
       { tableNumber: 2, tableName: 'Garlando' },
       { tableNumber: 3, tableName: 'Leonhart' },
@@ -19,7 +19,7 @@ describe('Table reservation', function () {
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
+    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
     const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //Then
@@ -38,12 +38,12 @@ describe('Table reservation', function () {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
-    const tablesList = [
+    const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
       { tableNumber: 2, tableName: 'Garlando' },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
+    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
     await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //When
@@ -58,11 +58,11 @@ describe('Table reservation', function () {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
-    const tablesList: { tableNumber: number; tableName: string }[] = [];
+    const tables: { tableNumber: number; tableName: string }[] = [];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
+    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
     const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //Then
@@ -74,14 +74,14 @@ describe('Table reservation', function () {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
-    const tablesList = [
+    const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
       { tableNumber: 1, tableName: 'Garlando' },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tablesList);
+    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
     const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
 
     //Then

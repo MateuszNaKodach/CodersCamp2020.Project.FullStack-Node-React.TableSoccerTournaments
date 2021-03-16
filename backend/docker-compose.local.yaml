@@ -23,3 +23,10 @@ services:
       POSTGRES_DB: coderscamp_table_soccer_tournaments
 #    volumes: # uncomment those lines if you want to save database data between container runs
 #      - /data/postgres:/data/postgres
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025

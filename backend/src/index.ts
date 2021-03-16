@@ -1,6 +1,6 @@
 import { TableSoccerTournamentsApplication } from './app';
 
-const port = process.env.REST_API_PORT || 5000;
+const port = process.env.REST_API_PORT || process.env.PORT || 5000;
 
 TableSoccerTournamentsApplication().then(({ restApi }) =>
   restApi.listen(port, () => {

@@ -39,6 +39,15 @@ import { MongoMatchRepository } from './modules/match-module/infrastructure/repo
 import { InMemoryMatchRepository } from './modules/match-module/infrastructure/repository/inmemory/InMemoryMatchRepository';
 import { MatchModuleCore } from './modules/match-module/core/MatchModuleCore';
 import { MatchRestApiModule } from './modules/match-module/presentation/rest-api/MatchRestApiModule';
+import { InMemoryMatchesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryMatchesQueueRepository';
+import { MongoMatchesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoMatchesQueueRepository';
+import { NodeMailerEmailSender } from './modules/email-sending/infrastructure/mailer/NodeMailerEmailSender';
+import { TournamentTablesModuleCore } from './modules/tournament-tables/core/TournamentTablesModuleCore';
+import { InMemoryTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/inmemory/InMemoryTournamentTablesRepository';
+import { tournamentTablesRestApiModule } from './modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
+import { ConsoleEmailSender } from './modules/email-sending/infrastructure/mailer/ConsoleEmailSender';
+import { SendEmailModuleCore } from './modules/email-sending/core/SendEmailModuleCore';
+import { MongoTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/mongo/MongoTournamentTablesRepository';
 import { TournamentTreeModuleCore } from './modules/tournament-tree/core/TournamentTreeModuleCore';
 import { InMemoryTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/inmemory/InMemoryTournamentTreeRepository';
 import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentation/rest-api/TournamentTreeRestApiModule';
@@ -74,13 +83,21 @@ export async function TableSoccerTournamentsApplication(
 
   const playerProfilesRepository = PlayerProfilesRepository();
   const playerProfilesModule: Module = {
-    core: PlayerProfilesModuleCore(eventBus, currentTimeProvider, playerProfilesRepository),
+    core: PlayerProfilesModuleCore(eventBus, commandBus, currentTimeProvider, playerProfilesRepository),
     restApi: PlayerProfileRestApiModule(commandBus, eventBus, queryBus),
   };
 
   const doublesTournamentRepository = DoublesTournamentRepository();
+  const matchesQueueRepository = MatchesQueueRepository();
   const doublesTournamentModule: Module = {
-    core: DoublesTournamentModuleCore(eventBus, commandBus, currentTimeProvider, entityIdGenerator, doublesTournamentRepository),
+    core: DoublesTournamentModuleCore(
+      eventBus,
+      commandBus,
+      currentTimeProvider,
+      entityIdGenerator,
+      doublesTournamentRepository,
+      matchesQueueRepository,
+    ),
     restApi: DoublesTournamentRestApiModule(commandBus, eventBus, queryBus),
   };
 
@@ -89,6 +106,14 @@ export async function TableSoccerTournamentsApplication(
     core: MatchModuleCore(eventBus, commandBus, currentTimeProvider, matchRepository),
     restApi: MatchRestApiModule(commandBus, eventBus, queryBus),
   };
+
+  const tournamentTablesRepository = TournamentTablesRepository();
+  const tournamentTablesModule: Module = {
+    core: TournamentTablesModuleCore(eventBus, commandBus, currentTimeProvider, tournamentTablesRepository),
+    restApi: tournamentTablesRestApiModule(commandBus, eventBus, queryBus),
+  };
+
+  const sendingEmailModule: Module = EmailModuleCore();
 
   const tournamentTreeRepository = TournamentTreeRepository();
   const eliminationTournamentTree: Module = {
@@ -102,6 +127,8 @@ export async function TableSoccerTournamentsApplication(
     process.env.PLAYER_PROFILES_MODULE === 'ENABLED' ? playerProfilesModule : undefined,
     process.env.DOUBLES_TOURNAMENT_MODULE === 'ENABLED' ? doublesTournamentModule : undefined,
     process.env.MATCH_MODULE === 'ENABLED' ? matchModule : undefined,
+    process.env.TOURNAMENTS_TABLES_MODULE === 'ENABLED' ? tournamentTablesModule : undefined,
+    process.env.EMAILS_SENDING_MODULE === 'ENABLED' ? sendingEmailModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
@@ -181,6 +208,42 @@ function MatchRepository() {
     return new MongoMatchRepository();
   }
   return new InMemoryMatchRepository();
+}
+
+function TournamentTablesRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.MATCH_DATABASE === 'MONGO') {
+    return new MongoTournamentTablesRepository();
+  }
+  return new InMemoryTournamentTablesRepository();
+}
+
+function EmailModuleCore() {
+  if (process.env.EMAIL_SENDER === 'CONSOLE') {
+    return {
+      core: SendEmailModuleCore(new ConsoleEmailSender('Console <console@console.com>')),
+    };
+  }
+  return {
+    core: SendEmailModuleCore(
+      new NodeMailerEmailSender({
+        host: 'smtp.gmail.com',
+        port: 465,
+        from: 'TourDeFoos <TourDeFoos@gmail.com>',
+        secure: true,
+        auth: {
+          user: process.env.NODEMAILER_USER,
+          pass: process.env.NODEMAILER_PASSWORD,
+        },
+      }),
+    ),
+  };
+}
+
+function MatchesQueueRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.DOUBLES_TOURNAMENT_DATABASE === 'MONGO') {
+    return new MongoMatchesQueueRepository();
+  }
+  return new InMemoryMatchesQueueRepository();
 }
 
 function TournamentTreeRepository() {
