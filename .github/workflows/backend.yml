@@ -67,7 +67,4 @@ jobs:
           heroku_email: "mateusz.nowak@coderscrew.pl"
           usedocker: true
           branch: main
-          docker_build_args: |
-            PORT
-        env:
-          PORT: 80
+          appdir: backend
