@@ -12,6 +12,5 @@ export function TournamentTreeRestApiModule(
   return {
     router: tournamentTreeRouter(commandPublisher, eventPublisher, queryPublisher),
     path: '/doubles-tournaments',
-    // path: "/tournament-tree"
   };
 }

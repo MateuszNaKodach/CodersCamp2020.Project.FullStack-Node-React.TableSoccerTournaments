@@ -22,17 +22,6 @@ export class FightingTeamsGroup {
     this.nextMatchId = props.nextMatchId;
   }
 
-  static fromArgs(
-    fightingTeamsGroupId: FightingTeamsGroupId,
-    firstTeam: TournamentTeam | undefined,
-    secondTeam: TournamentTeam | undefined,
-    fightingTeamsGroupLevel: number,
-    nextMatchId: FightingTeamsGroupId | undefined,
-  ): FightingTeamsGroup {
-    const props = { fightingTeamsGroupId, firstTeam, secondTeam, fightingTeamsGroupLevel, nextMatchId: nextMatchId };
-    return new FightingTeamsGroup(props);
-  }
-
   static fromObj(props: {
     fightingTeamsGroupId: FightingTeamsGroupId;
     firstTeam: TournamentTeam | undefined;

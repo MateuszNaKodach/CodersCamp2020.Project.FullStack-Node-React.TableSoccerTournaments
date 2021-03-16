@@ -1,11 +1,8 @@
-import { DoublesTournament } from '../../../../doubles-tournament/core/domain/DoublesTournament';
 import { TournamentTree } from '../../../core/domain/TournamentTree';
-import { TeamId } from '../../../../doubles-tournament/core/domain/TeamId';
 import { TournamentTreeRepository } from '../../../core/application/TournamentTreeRepository';
 import { FightingTeamsGroupId } from '../../../core/domain/FightingTeamsGroupId';
 import * as mongoose from 'mongoose';
 import { Schema } from 'mongoose';
-import { FightingTeamsGroup } from '../../../core/domain/FightingTeamsGroup';
 import { TournamentTeam } from '../../../core/domain/TournamentTeam';
 import { TournamentTeamId } from '../../../core/domain/TournamentTeamId';
 

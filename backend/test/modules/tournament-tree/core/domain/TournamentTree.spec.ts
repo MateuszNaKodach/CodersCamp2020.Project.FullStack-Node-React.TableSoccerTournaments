@@ -19,8 +19,6 @@ describe('TournamentTree', () => {
       tournamentTeams: tournamentTeamsList,
       entityIdGenerator: matchEntityIdGen,
     });
-
-    // Then
     const expectedWinnerTree: FightingTeamsGroup[] = [
       {
         fightingTeamsGroupId: FightingTeamsGroupId.from('match_3'),
@@ -45,6 +43,7 @@ describe('TournamentTree', () => {
       },
     ].map((item) => FightingTeamsGroup.fromObj(item));
 
+    // Then
     expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
   });
 
@@ -61,7 +60,6 @@ describe('TournamentTree', () => {
       entityIdGenerator: matchEntityIdGen,
     });
 
-    // Then
     const expectedWinnerTree: FightingTeamsGroup[] = [
       {
         fightingTeamsGroupId: FightingTeamsGroupId.from('match_7'),
@@ -114,6 +112,7 @@ describe('TournamentTree', () => {
       },
     ].map((item) => FightingTeamsGroup.fromObj(item));
 
+    // Then
     expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
   });
 });

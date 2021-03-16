@@ -9,7 +9,6 @@ import { EntityIdGenerator } from '../../../shared/core/application/EntityIdGene
 import { CommandPublisher } from '../../../shared/core/application/command/CommandBus';
 import { CreateTournamentTreeWhenTournamentWithTeamsWasCreated } from './application/event/CreateTournamentTreeWhenTournamentWithTeamsWasCreated';
 import { CreateTournamentTree } from './application/command/CreateTournamentTree';
-import { FindDoublesTournamentById } from '../../doubles-tournament/core/application/query/FindDoublesTournamentById';
 import { DomainEventPublisher } from '../../../shared/core/application/event/DomainEventBus';
 
 export function TournamentTreeModuleCore(
@@ -28,7 +27,7 @@ export function TournamentTreeModuleCore(
     ],
     eventHandlers: [
       {
-        eventType: TournamentWithTeamsWasCreated, // Ten typ eventu łapie :)))
+        eventType: TournamentWithTeamsWasCreated,
         handler: new CreateTournamentTreeWhenTournamentWithTeamsWasCreated(commandPublisher),
       },
     ],

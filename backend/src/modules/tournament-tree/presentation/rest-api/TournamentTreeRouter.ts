@@ -25,17 +25,12 @@ export function tournamentTreeRouter(
       });
     }
 
-    const x = response
+    return response
       .status(StatusCodes.OK)
       .json(new TournamentTreeDto(queryResult.tournamentId, queryResult.tournamentTreeArray, queryResult?.tournamentTeams));
-
-    console.log(x);
-    return x;
   };
 
   const router = express.Router();
   router.get('/:tournamentId/tree', getTournamentTreeById);
   return router;
 }
-
-// function toTournamentTree

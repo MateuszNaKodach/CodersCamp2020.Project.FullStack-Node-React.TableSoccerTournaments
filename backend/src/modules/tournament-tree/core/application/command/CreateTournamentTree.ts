@@ -1,7 +1,4 @@
-import { TournamentTeam } from '../../domain/TournamentTeam';
-
 export class CreateTournamentTree {
-  // readonly tournamentTeams: TournamentTeam[];
   readonly tournamentTeams: { teamId: string; firstTeamPlayer: string; secondTeamPlayer: string }[];
   readonly tournamentId: string;
 

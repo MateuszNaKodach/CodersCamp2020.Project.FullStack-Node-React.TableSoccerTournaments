@@ -6,7 +6,7 @@ import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvi
 import { EntityIdGenerator } from '../../../../../shared/core/application/EntityIdGenerator';
 import { TournamentTeam } from '../../domain/TournamentTeam';
 import { TournamentTeamId } from '../../domain/TournamentTeamId';
-import { createTournamentTree, TournamentTree } from '../../domain/TournamentTree';
+import { createTournamentTree } from '../../domain/TournamentTree';
 import { TournamentTreeRepository } from '../TournamentTreeRepository';
 
 export class CreateTournamentTreeCommandHandler implements CommandHandler<CreateTournamentTree> {
@@ -18,31 +18,20 @@ export class CreateTournamentTreeCommandHandler implements CommandHandler<Create
   ) {}
 
   async execute(command: CreateTournamentTree): Promise<CommandResult> {
-    // ---------------
-    // ! Konwersja typów tutaj!
-    // ---------------
-
     const tournamentId = command.tournamentId;
-
     const tournamentTeams = command.tournamentTeams.map((team) => {
       return new TournamentTeam({ teamId: TournamentTeamId.from(team.teamId) });
     });
-    const commandForCreateTournamentTree = { tournamentId: tournamentId, tournamentTeams: tournamentTeams };
-    // const newCommand = {tournamentId: tournamentId, tournamentTeams: tournamentTeams,}
-    // TODO: To co poniżej!
-    // const tournamentTree: TournamentTree = {} as TournamentTree;
-    const tournamentTree = await this.repository.findByTournamentTreeId(tournamentId);
 
+    const commandForCreateTournamentTree = { tournamentId: tournamentId, tournamentTeams: tournamentTeams };
+    const tournamentTree = await this.repository.findByTournamentTreeId(tournamentId);
     const { state, events } = createTournamentTree(
       tournamentTree,
       commandForCreateTournamentTree,
       this.currentTimeProvider,
       this.entityIdGenerator,
     );
-    // tree.giveMeThisThings();
-    // const doublesTournament = await this.repository.findByTournamentId(tournamentId);
-    //
-    // const { state, events } = createTournamentTreeWithTeams(doublesTournament, command, this.currentTimeProvider(), this.entityIdGenerator);
+
     await this.repository.save(state);
 
     this.eventPublisher.publishAll(events);

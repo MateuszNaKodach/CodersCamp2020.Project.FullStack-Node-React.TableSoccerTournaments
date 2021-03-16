@@ -6,7 +6,6 @@ import { testTournamentTreeModule } from './TestTournamentTreeModule';
 import { TournamentTreeWasCreated } from '../../../../../src/modules/tournament-tree/core/domain/event/TournamentTreeWasCreated';
 
 describe('Tournament Tree | Write Side', () => {
-  //TODO:
   it('given tournament Teams, when create tournament tree, then tournament tree was created', async () => {
     //Given
     const currentTime = new Date();
@@ -15,18 +14,17 @@ describe('Tournament Tree | Write Side', () => {
     const playerEntityIdGen = NumberIdGeneratorStub(100, 'playerId');
     const testTournamentTree = testTournamentTreeModule(currentTime, entityIdGen);
     const tournamentId = 'tournamentId';
-
     const tournamentTeams = Array.from(Array(10).keys()).map(() => ({
       teamId: teamEntityIdGen.generate(),
       firstTeamPlayer: playerEntityIdGen.generate(),
       secondTeamPlayer: playerEntityIdGen.generate(),
     }));
-
     const createTournamentTree = new CreateTournamentTree({
       tournamentId: tournamentId,
       tournamentTeams: tournamentTeams,
     });
 
+    // When
     const commandResult = await testTournamentTree.executeCommand(createTournamentTree);
 
     //Then
@@ -42,7 +40,6 @@ describe('Tournament Tree | Write Side', () => {
     const playerEntityIdGen = NumberIdGeneratorStub(100, 'playerId');
     const testTournamentTree = testTournamentTreeModule(currentTime, entityIdGen);
     const tournamentId = 'tournamentId';
-
     const tournamentTeams = Array.from(Array(1).keys()).map(() => ({
       teamId: teamEntityIdGen.generate(),
       firstTeamPlayer: playerEntityIdGen.generate(),
@@ -52,6 +49,8 @@ describe('Tournament Tree | Write Side', () => {
       tournamentId: tournamentId,
       tournamentTeams: tournamentTeams,
     });
+
+    // When
     const commandResult = await testTournamentTree.executeCommand(createTournamentTree);
 
     //Then

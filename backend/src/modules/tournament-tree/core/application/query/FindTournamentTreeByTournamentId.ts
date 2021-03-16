@@ -1,4 +1,3 @@
-import { DoublesTournament } from '../../../../doubles-tournament/core/domain/DoublesTournament';
 import { TournamentTree } from '../../domain/TournamentTree';
 
 export class FindTournamentTreeByTournamentId {
