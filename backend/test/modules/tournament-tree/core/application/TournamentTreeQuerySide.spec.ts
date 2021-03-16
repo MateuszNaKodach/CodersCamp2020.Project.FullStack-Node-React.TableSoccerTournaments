@@ -55,6 +55,5 @@ describe('Tournament Tree | Query Side', () => {
         entityIdGenerator: teamEntityIdGenForExpectedResult,
       }),
     );
-
   });
 });
