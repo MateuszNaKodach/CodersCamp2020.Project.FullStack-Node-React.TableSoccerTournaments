@@ -68,7 +68,3 @@ jobs:
           usedocker: true
           branch: main
           appdir: backend
-          docker_build_args: |
-            PORT
-        env:
-          PORT: 80
