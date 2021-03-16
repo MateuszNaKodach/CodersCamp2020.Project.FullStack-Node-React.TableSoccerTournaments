@@ -93,11 +93,13 @@ export function TournamentTablesRepositoryTestCases(props: {
           tournamentId,
           tableNumber: TableNumber.from(1),
           tableName: 'Roberto',
+          availableToPlay: false,
         }),
         new TournamentTable({
           tournamentId,
           tableNumber: TableNumber.from(2),
           tableName: 'Tornado',
+          availableToPlay: true,
         }),
       ];
 
