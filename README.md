@@ -1,4 +1,4 @@
-# TABLE SOCCER TOURNAMENT
+# TourDeFoos - CodersCamp final project
 
 
 ### Backend Test Coverage
@@ -12,38 +12,49 @@
 
 ## Overview
 
-**TABLE SOCCER TOURNAMENT is an application for organising and conducting table soccer tournaments.**
+**TourDeFoos is an application to organize and manage tournaments - in this case it's dedicated especially for foosball tournaments.**
+
+**It was created as a final project of CodersCamp course.**
 
 
 ## Our Crew
 
 Mentor **[Mateusz Nowak](https://github.com/nowakprojects)**
 
-- [Piotr Rynio](https://github.com/PiotrWR)
 - [Anna Lamperska](https://github.com/lamparina)
+- [Dominika Zwolenik](https://github.com/DomiZet)
+- [Piotr Rynio](https://github.com/PiotrWR)
 - [Tomasz Dworniczak](https://github.com/tomdworniczak)
 - [Paweł Szambelan](https://github.com/Szambelan)
 
 
 ## Main functionalities
 
-1. Tournament organisation
-2. Creating of a player profile (regardless of tournaments)
-3. Handling tournament payments and verification of player's licences
-4. Registration of players for the tournament (both by the organiser and by the competitors themselves)
-5. Division into teams and assignment to teams (random / basket and manual allocation)
-6. Random division of matches between teams
+1. Tournament organisation (still in progress)
+2. Creating players profiles (regardless of tournaments) and sending them confirmation emails via NodeMailer.
+3. Tournament registration
+4. Tournament tables module responsible for enable/disable tables during tournament
+5. Division into teams and assignment to teams
+6. Division of matches between teams - making tournament tree (still in progress)
+7. Matches module responsible for starting and finishing matches
 
 
 ## Dependencies
 
 The following technologies were used :
 
-- Node.js / Express
-- Database: MongoDB
+- Node.js
+- Express
+- Database: MongoDB / in memory save
+- TypeScript
+- Docker
+- Nodemailer
+- Jest
+- MailHog
+- Stryker
 - React (next stage)
 
-Our application follows the TDD approach and is 100% covered by tests. The architecture has been designed according to the MVP model.
+Our application follows the TDD approach and is almost **fully covered** by tests. The architecture has been designed according to the **DDD** (Domain-driven design) & **CQRS** (Command Query Responsibility Segregation) & **Event Sourcing** patterns.
 
 
 ## Running the project
@@ -52,7 +63,7 @@ Running this project locally
 
 ###### Live version:
 
-[live version]
+[App on Heroku](https://coderscamp2020-tablesoccer.herokuapp.com/rest-api-docs/)
 
 ###### From the repo:
 
