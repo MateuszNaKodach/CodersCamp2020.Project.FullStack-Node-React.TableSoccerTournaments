@@ -4,7 +4,9 @@ services:
     build:
       context: .
     ports:
-      - 5000:5000
+      - 1234:1234
+    environment:
+      PORT: 1234
   coderscamp_table_soccer_database_mongodb:
     image: mongo:latest
     restart: always
