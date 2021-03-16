@@ -7,7 +7,6 @@ import {
   FindTournamentTreeByTournamentIdResult,
 } from '../../core/application/query/FindTournamentTreeByTournamentId';
 import { StatusCodes } from 'http-status-codes';
-import { TournamentTeamListDto } from '../../../doubles-tournament/presentation/rest-api/response/TournamentTeamListDto';
 import { TournamentTreeDto } from './response/TournamentTreeDto';
 
 export function tournamentTreeRouter(

@@ -23,7 +23,7 @@ export class MongoMatchesQueueRepository implements MatchesQueueRepository {
           team2Id: queuedMatch.team2Id.raw,
         })),
       },
-      { upsert: true, useFindAndModify: true },
+      { upsert: false, useFindAndModify: true },
     );
   }
 }
