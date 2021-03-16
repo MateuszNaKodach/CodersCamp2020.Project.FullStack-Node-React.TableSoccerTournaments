@@ -21,7 +21,51 @@ export function TournamentTablesRepositoryTestCases(props: {
     afterEach(async () => await props.databaseTestSupport.clearDatabase());
     afterAll(async () => await props.databaseTestSupport.closeConnection());
 
-    test('findAllByTournamentId returns empty array when no table is saved for given tournamentId', async () => {
+    test('When no table is saved for given tournamentId with given tableNumber then findByTournamentIdAndTableNumber returns undefined', async () => {
+      const tournamentId = entityIdGenerator.generate();
+      const tournamentTables: TournamentTable[] = [
+        new TournamentTable({
+          tournamentId,
+          tableNumber: TableNumber.from(1),
+          tableName: 'Roberto',
+        }),
+        new TournamentTable({
+          tournamentId,
+          tableNumber: TableNumber.from(2),
+          tableName: 'Tornado',
+        }),
+      ];
+
+      await repository.saveAll(tournamentTables);
+
+      const notSavedTournamentId = entityIdGenerator.generate();
+      expect(await repository.findByTournamentIdAndTableNumber(notSavedTournamentId, 2)).toBeUndefined();
+      expect(await repository.findByTournamentIdAndTableNumber(tournamentId, 3)).toBeUndefined();
+    });
+
+    test('When table with given tableNumber assigned to given tournamentId was saved then findByTournamentIdAndTableNumber returns table', async () => {
+      const tournamentId = entityIdGenerator.generate();
+      const tournamentTables: TournamentTable[] = [
+        new TournamentTable({
+          tournamentId,
+          tableNumber: TableNumber.from(1),
+          tableName: 'Roberto',
+          availableToPlay: true,
+        }),
+        new TournamentTable({
+          tournamentId,
+          tableNumber: TableNumber.from(2),
+          tableName: 'Tornado',
+          availableToPlay: false,
+        }),
+      ];
+
+      await repository.saveAll(tournamentTables);
+
+      expect(await repository.findByTournamentIdAndTableNumber(tournamentId, 2)).toStrictEqual(tournamentTables[1]);
+    });
+
+    test('When no table is saved for given tournamentId then findAllByTournamentId returns empty array', async () => {
       const tournamentId = entityIdGenerator.generate();
       const tournamentTables: TournamentTable[] = [
         new TournamentTable({
@@ -42,18 +86,20 @@ export function TournamentTablesRepositoryTestCases(props: {
       expect(await repository.findAllByTournamentId(notSavedTournamentId)).toStrictEqual([]);
     });
 
-    test('findAllByTournamentId returns tables assigned to given tournament when were saved', async () => {
+    test('When tables assigned to given tournamentId were saved then findAllByTournamentId returns tables', async () => {
       const tournamentId = entityIdGenerator.generate();
       const tournamentTables: TournamentTable[] = [
         new TournamentTable({
           tournamentId,
           tableNumber: TableNumber.from(1),
           tableName: 'Roberto',
+          availableToPlay: false,
         }),
         new TournamentTable({
           tournamentId,
           tableNumber: TableNumber.from(2),
           tableName: 'Tornado',
+          availableToPlay: true,
         }),
       ];
 
