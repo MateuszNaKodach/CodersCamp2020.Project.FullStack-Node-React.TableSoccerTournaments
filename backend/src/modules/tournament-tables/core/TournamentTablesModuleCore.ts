@@ -7,6 +7,8 @@ import { AssignTournamentTables } from './application/command/AssignTournamentTa
 import { AssignTournamentTablesCommandHandler } from './application/command/AssignTournamentTablesCommandHandler';
 import { FindTablesByTournamentId } from './application/query/FindTablesByTournamentId';
 import { FindTablesByTournamentIdQueryHandler } from './application/query/FindTablesByTournamentIdQueryHandler';
+import { ExcludeFromAvailableTables } from './application/command/ExcludeFromAvailableTables';
+import { ExcludeFromAvailableTablesCommandHandler } from './application/command/ExcludeFromAvailableTablesCommandHandler';
 
 export function TournamentTablesModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -19,6 +21,10 @@ export function TournamentTablesModuleCore(
       {
         commandType: AssignTournamentTables,
         handler: new AssignTournamentTablesCommandHandler(eventPublisher, currentTimeProvider, repository),
+      },
+      {
+        commandType: ExcludeFromAvailableTables,
+        handler: new ExcludeFromAvailableTablesCommandHandler(eventPublisher, currentTimeProvider, repository),
       },
     ],
     eventHandlers: [],

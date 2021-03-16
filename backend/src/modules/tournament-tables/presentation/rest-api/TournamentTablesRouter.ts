@@ -44,6 +44,7 @@ function toTournamentTablesDto(tournamentTables: TournamentTable[]): TournamentT
       return {
         tableNumber: table.tableNumber.raw,
         tableName: table.tableName,
+        availableToPlay: table.availableToPlay,
       };
     }),
   );
