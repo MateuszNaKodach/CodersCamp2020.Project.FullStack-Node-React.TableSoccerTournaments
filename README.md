@@ -53,7 +53,7 @@ Running this project locally
 
 ###### Live version:
 
-[live version]
+[live version](https://coderscamp2020-tablesoccer.herokuapp.com/rest-api-docs/)
 
 ###### From the repo:
 
