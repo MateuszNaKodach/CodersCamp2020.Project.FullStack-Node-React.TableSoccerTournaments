@@ -12,6 +12,11 @@ import { FindAllDoublesTournaments } from './application/query/FindAllDoublesTou
 import { FindAllDoublesTournamentsQueryHandler } from './application/query/FindAllDoublesTournamentsQueryHandler';
 import { FindDoublesTournamentById } from './application/query/FindDoublesTournamentById';
 import { FindDoublesTournamentByIdQueryHandler } from './application/query/FindDoublesTournamentByIdQueryHandler';
+import { EnqueueMatch } from './application/command/EnqueueMatch';
+import { EnqueueMatchCommandHandler } from './application/command/EnqueueMatchCommandHandler';
+import { MatchesQueueRepository } from './application/MatchesQueueRepository';
+import { FindMatchesQueueByTournamentId } from './application/query/FindMatchesQueueByTournamentId';
+import { FindMatchesQueueByTournamentIdQueryHandler } from './application/query/FindMatchesQueueByTournamentIdQueryHandler';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -19,12 +24,17 @@ export function DoublesTournamentModuleCore(
   currentTimeProvider: CurrentTimeProvider,
   entityIdGenerator: EntityIdGenerator,
   repository: DoublesTournamentRepository,
+  matchesQueue: MatchesQueueRepository,
 ): ModuleCore {
   return {
     commandHandlers: [
       {
         commandType: CreateTournamentWithTeams,
         handler: new CreateTournamentWithTeamsCommandHandler(eventPublisher, currentTimeProvider, entityIdGenerator, repository),
+      },
+      {
+        commandType: EnqueueMatch,
+        handler: new EnqueueMatchCommandHandler(eventPublisher, currentTimeProvider, repository, matchesQueue),
       },
     ],
     eventHandlers: [
@@ -41,6 +51,10 @@ export function DoublesTournamentModuleCore(
       {
         queryType: FindDoublesTournamentById,
         handler: new FindDoublesTournamentByIdQueryHandler(repository),
+      },
+      {
+        queryType: FindMatchesQueueByTournamentId,
+        handler: new FindMatchesQueueByTournamentIdQueryHandler(matchesQueue),
       },
     ],
   };
