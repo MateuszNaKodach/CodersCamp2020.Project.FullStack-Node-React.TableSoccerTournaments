@@ -1,5 +1,6 @@
 # TABLE SOCCER TOURNAMENT
 
+![soccer](https://user-images.githubusercontent.com/57037612/111320324-28407b00-8667-11eb-89bf-1514306bc92b.jpg)
 
 ### Backend Test Coverage
 [![codecov](https://codecov.io/gh/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/branch/develop/graph/badge.svg?token=CZ2VUMUK29)](https://codecov.io/gh/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments)
