@@ -9,6 +9,8 @@ import { FindTablesByTournamentId } from './application/query/FindTablesByTourna
 import { FindTablesByTournamentIdQueryHandler } from './application/query/FindTablesByTournamentIdQueryHandler';
 import { ExcludeFromAvailableTables } from './application/command/ExcludeFromAvailableTables';
 import { ExcludeFromAvailableTablesCommandHandler } from './application/command/ExcludeFromAvailableTablesCommandHandler';
+import { IncludeInAvailableTables } from './application/command/IncludeInAvailableTables';
+import { IncludeInAvailableTablesCommandHandler } from './application/command/IncludeInAvailableTablesCommandHandler';
 
 export function TournamentTablesModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -25,6 +27,10 @@ export function TournamentTablesModuleCore(
       {
         commandType: ExcludeFromAvailableTables,
         handler: new ExcludeFromAvailableTablesCommandHandler(eventPublisher, currentTimeProvider, repository),
+      },
+      {
+        commandType: IncludeInAvailableTables,
+        handler: new IncludeInAvailableTablesCommandHandler(eventPublisher, currentTimeProvider, repository),
       },
     ],
     eventHandlers: [],

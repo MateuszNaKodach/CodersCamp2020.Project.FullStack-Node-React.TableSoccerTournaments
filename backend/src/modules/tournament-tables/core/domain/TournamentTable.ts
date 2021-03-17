@@ -3,6 +3,7 @@ import { TournamentTablesWereAssigned } from './event/TournamentTablesWereAssign
 import { TableNumber } from './TableNumber';
 import { TableWasExcludedFromAvailableTables } from './event/TableWasExcludedFromAvailableTables';
 import { isDefined } from '../../../../common/Defined';
+import { TableWasIncludedInAvailableTables } from './event/TableWasIncludedInAvailableTables';
 
 export class TournamentTable {
   readonly tournamentId: string;
@@ -78,7 +79,7 @@ export function excludeFromAvailableTables(
     );
   }
 
-  const excludedTableFromAvailableTables = onTournamentTableWasExcluded(state);
+  const excludedTableFromAvailableTables = onTableAvailabilityWasChanged(state);
 
   const tableWasExcludedFromAvailableTables = new TableWasExcludedFromAvailableTables({
     occurredAt: currentTime,
@@ -91,6 +92,33 @@ export function excludeFromAvailableTables(
   };
 }
 
-function onTournamentTableWasExcluded(state: TournamentTable): TournamentTable {
-  return new TournamentTable({ ...state, availableToPlay: false });
+function onTableAvailabilityWasChanged(state: TournamentTable): TournamentTable {
+  return new TournamentTable({ ...state, availableToPlay: !state.availableToPlay });
+}
+
+export function includeInAvailableTables(
+  state: TournamentTable | undefined,
+  command: { tournamentId: string; tableNumber: TableNumber },
+  currentTime: Date,
+): DomainCommandResult<TournamentTable> {
+  if (!state) {
+    throw new Error(`Table number ${command.tableNumber.raw} is not assigned to the tournament with id=${command.tournamentId}`);
+  }
+  if (state.availableToPlay) {
+    throw new Error(
+      `Table number ${command.tableNumber.raw} in tournament with id=${command.tournamentId} has been already included in available tournament tables`,
+    );
+  }
+
+  const includedTableInAvailableTables = onTableAvailabilityWasChanged(state);
+
+  const tableWasIncludedInAvailableTables = new TableWasIncludedInAvailableTables({
+    occurredAt: currentTime,
+    tableIncluded: includedTableInAvailableTables,
+  });
+
+  return {
+    state: includedTableInAvailableTables,
+    events: [tableWasIncludedInAvailableTables],
+  };
 }

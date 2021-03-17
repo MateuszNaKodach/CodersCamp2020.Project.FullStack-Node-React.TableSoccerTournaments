@@ -7,6 +7,8 @@ import { TableNumber } from '../../../../../src/modules/tournament-tables/core/d
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 import { ExcludeFromAvailableTables } from '../../../../../src/modules/tournament-tables/core/application/command/ExcludeFromAvailableTables';
 import { TableWasExcludedFromAvailableTables } from '../../../../../src/modules/tournament-tables/core/domain/event/TableWasExcludedFromAvailableTables';
+import { IncludeInAvailableTables } from '../../../../../src/modules/tournament-tables/core/application/command/IncludeInAvailableTables';
+import { TableWasIncludedInAvailableTables } from '../../../../../src/modules/tournament-tables/core/domain/event/TableWasIncludedInAvailableTables';
 
 describe('Tournament Tables | Write Side', function () {
   it('When assign tables then tables are assigned to the tournament as available to play by default', async () => {
@@ -226,7 +228,7 @@ describe('Tournament Tables | Write Side', function () {
     await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
 
     //When
-    const includeTournamentTable = new IncludeInAvailableTables(tournamentId, 2);
+    const includeTournamentTable = new IncludeInAvailableTables('anotherTournamentId', 2);
     const commandResult = await tournamentTablesModule.executeCommand(includeTournamentTable);
 
     //Then
