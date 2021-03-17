@@ -62,16 +62,32 @@ export class FileSystemEventStore implements EventStore, EventStoreSubscriptions
     await fs.promises.writeFile(filePath, eventJson);
   }
 
-  subscribe(subscriber: (event: StoreEvent) => any, options?: SubscriptionOptions): Subscription {
-    const watcher = chokidar.watch(this.directory, { awaitWriteFinish: true }).on('add', async (filePath) => {
-      if (options?.eventType) {
-        if (filePath.includes(options?.eventType)) {
+  subscribe(subscriber: (event: StoreEvent) => any, options?: Partial<SubscriptionOptions>): Subscription {
+    const config: SubscriptionOptions = {
+      eventType: undefined,
+      startingPoint: 0,
+      type: 'volatile',
+      ...options,
+    };
+
+    const ignoreInitial = config.type === 'volatile';
+    const watcher = chokidar.watch(this.directory, { awaitWriteFinish: true, ignoreInitial }).on('add', async (filePath) => {
+      if (config.eventType) {
+        if (filePath.includes(config.eventType)) {
           const event = await filePathToEvent(filePath);
           subscriber(event);
         }
       } else {
-        const event = await filePathToEvent(filePath);
-        subscriber(event);
+        const eventGlobalOrder = parseInt(path.parse(filePath).base.split('_')[0]);
+        if (!ignoreInitial) {
+          if (eventGlobalOrder >= config.startingPoint) {
+            const event = await filePathToEvent(filePath);
+            subscriber(event);
+          }
+        } else {
+          const event = await filePathToEvent(filePath);
+          subscriber(event);
+        }
       }
     });
     return {

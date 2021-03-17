@@ -18,15 +18,8 @@ describe('FileSystemEventStore', () => {
     const directory = path.join(__dirname, 'event-store-files');
     const eventStore: EventStore = new FileSystemEventStore(directory);
 
-    const eventStreamName = EventStreamName.from('SampleEventGroup', uuidGenerator.generate());
-    const events: StoreEvent[] = [
-      {
-        occurredAt: date,
-        eventId: uuidGenerator.generate(),
-        eventType: 'PullRequestWasOpened',
-        data: { repositoryId: 'nowakprojects/eventmodeling-workshop', pullRequestId: 52, author: 'nowakprojects' },
-      },
-    ];
+    const eventStreamName = EventStreamName.from('PullRequest', uuidGenerator.generate());
+    const events: StoreEvent[] = [pullRequestWasOpenedEvent(date)];
     await eventStore.write(eventStreamName, StreamVersion.notExists(), events);
 
     expect(await eventStore.read(eventStreamName)).toStrictEqual(new EventStream(eventStreamName, StreamVersion.exactly(0), events));
@@ -37,23 +30,24 @@ describe('FileSystemEventStore', () => {
     const directory = path.join(__dirname, 'event-store-files');
     const eventStore: EventStore & EventStoreSubscriptions = new FileSystemEventStore(directory);
 
-    const eventStreamName = EventStreamName.from('SampleEventGroup', uuidGenerator.generate());
-    const events: StoreEvent[] = [
-      {
-        occurredAt: date,
-        eventId: uuidGenerator.generate(),
-        eventType: 'SampleEventType',
-        data: { sampleKey: 'sampleValue' },
-      },
-    ];
+    const eventStreamName = EventStreamName.from('PullRequest', uuidGenerator.generate());
+    const pullRequestWasOpened = pullRequestWasOpenedEvent(date);
+    const events: StoreEvent[] = [pullRequestWasOpened];
 
-    const receivedEvents: StoreEvent[] = [];
     await eventStore.subscribe((event) => {
-      receivedEvents.push(event);
-      console.log(event);
-      expect(receivedEvents).toHaveLength(1);
+      expect(event).toStrictEqual(pullRequestWasOpened);
       done();
     });
+
     await eventStore.write(eventStreamName, StreamVersion.notExists(), events);
   });
 });
+
+function pullRequestWasOpenedEvent(date: Date) {
+  return {
+    occurredAt: date,
+    eventId: uuidGenerator.generate(),
+    eventType: 'PullRequestWasOpened',
+    data: { repositoryId: 'nowakprojects/eventmodeling-workshop', pullRequestId: 52, author: 'nowakprojects' },
+  };
+}

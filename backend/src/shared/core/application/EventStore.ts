@@ -59,11 +59,13 @@ export interface EventStore {
 }
 
 export interface EventStoreSubscriptions {
-  subscribe(subscriber: (event: StoreEvent) => any, options?: SubscriptionOptions): Subscription;
+  subscribe(subscriber: (event: StoreEvent) => any, options?: Partial<SubscriptionOptions>): Subscription;
 }
 
 export interface SubscriptionOptions {
   eventType?: string;
+  type: 'volatile' | 'catch-up';
+  startingPoint: number;
 }
 
 export interface Subscription {
