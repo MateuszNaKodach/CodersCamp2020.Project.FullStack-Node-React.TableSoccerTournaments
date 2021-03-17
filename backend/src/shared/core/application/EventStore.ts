@@ -17,14 +17,22 @@ export class StreamVersion {
   private constructor(readonly raw: number) {}
 
   static exactly(version: number): StreamVersion {
-    if (version >= 0) {
-      throw new Error('StreamVersion cannot be empty!');
+    if (version < -1) {
+      throw new Error('StreamVersion is invalid!');
     }
     return new StreamVersion(version);
   }
 
   static notExists(): StreamVersion {
     return new StreamVersion(-1);
+  }
+
+  next(): StreamVersion {
+    return StreamVersion.exactly(this.raw + 1);
+  }
+
+  equals(other: StreamVersion | undefined) {
+    return this.raw === other?.raw;
   }
 }
 
@@ -43,6 +51,7 @@ export class EventStream {
   }
 }
 
+//TODO: Maybe change to CloudEvents
 export interface EventStore {
   write(eventStreamName: EventStreamName, expectedVersion: StreamVersion, events: StoreEvent[]): Promise<void>;
 
