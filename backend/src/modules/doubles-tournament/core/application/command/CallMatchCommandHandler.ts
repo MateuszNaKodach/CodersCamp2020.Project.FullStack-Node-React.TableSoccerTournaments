@@ -22,7 +22,7 @@ export class CallMatchCommandHandler implements CommandHandler<CallMatch> {
       tableNumber: command.tableNumber,
     });
 
-    await this.commandPublisher.execute(new ExcludeFromAvailableTables(command.tournamentId, command.tableNumber));
+    // await this.commandPublisher.execute(new ExcludeFromAvailableTables(command.tournamentId, command.tableNumber));
 
     this.eventPublisher.publish(matchWasCalled);
     return CommandResult.success();
