@@ -57,3 +57,15 @@ export interface EventStore {
 
   read(eventStreamName: EventStreamName): Promise<EventStream>;
 }
+
+export interface EventStoreSubscriptions {
+  subscribe(subscriber: (event: StoreEvent) => any, options?: SubscriptionOptions): Subscription;
+}
+
+export interface SubscriptionOptions {
+  eventType?: string;
+}
+
+export interface Subscription {
+  unsubscribe(): Promise<void>;
+}
