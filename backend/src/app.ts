@@ -48,6 +48,9 @@ import { tournamentTablesRestApiModule } from './modules/tournament-tables/prese
 import { ConsoleEmailSender } from './modules/email-sending/infrastructure/mailer/ConsoleEmailSender';
 import { SendEmailModuleCore } from './modules/email-sending/core/SendEmailModuleCore';
 import { MongoTournamentTablesRepository } from './modules/tournament-tables/infrastructure/repository/mongo/MongoTournamentTablesRepository';
+import { TournamentTreeModuleCore } from './modules/tournament-tree/core/TournamentTreeModuleCore';
+import { InMemoryTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/inmemory/InMemoryTournamentTreeRepository';
+import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentation/rest-api/TournamentTreeRestApiModule';
 
 config();
 
@@ -111,6 +114,12 @@ export async function TableSoccerTournamentsApplication(
   };
 
   const sendingEmailModule: Module = EmailModuleCore();
+
+  const tournamentTreeRepository = TournamentTreeRepository();
+  const eliminationTournamentTree: Module = {
+    core: TournamentTreeModuleCore(eventBus, commandBus, currentTimeProvider, entityIdGenerator, tournamentTreeRepository),
+    restApi: TournamentTreeRestApiModule(commandBus, eventBus, queryBus),
+  };
 
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
@@ -235,4 +244,12 @@ function MatchesQueueRepository() {
     return new MongoMatchesQueueRepository();
   }
   return new InMemoryMatchesQueueRepository();
+}
+
+function TournamentTreeRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENT_TREE_DATABASE === 'MONGO') {
+    // TODO: below
+    // return new MongoTournamentTreeRepository();
+  }
+  return new InMemoryTournamentTreeRepository();
 }
