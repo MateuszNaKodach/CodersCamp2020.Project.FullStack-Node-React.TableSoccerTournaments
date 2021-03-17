@@ -4,17 +4,17 @@ export class MatchWasCalled implements DomainEvent {
   readonly occurredAt: Date;
   readonly tournamentId: string;
   readonly matchFromQueue: { matchNumber: number; team1Id: string; team2Id: string };
-  readonly table: { tableNumber: number; tableName: string; availableToPlay?: boolean };
+  readonly tableNumber: number;
 
   constructor(props: {
     occurredAt: Date;
     tournamentId: string;
     matchFromQueue: { matchNumber: number; team1Id: string; team2Id: string };
-    table: { tableNumber: number; tableName: string; availableToPlay?: boolean };
+    tableNumber: number;
   }) {
     this.occurredAt = props.occurredAt;
     this.tournamentId = props.tournamentId;
-    this.table = props.table;
+    this.tableNumber = props.tableNumber;
     this.matchFromQueue = props.matchFromQueue;
   }
 }

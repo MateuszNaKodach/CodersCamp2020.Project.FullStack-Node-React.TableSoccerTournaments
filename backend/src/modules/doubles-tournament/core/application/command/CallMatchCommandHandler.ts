@@ -5,7 +5,7 @@ import { CommandResult } from '../../../../../shared/core/application/command/Co
 import { MatchWasCalled } from '../../domain/event/MatchWasCalled';
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 import { CommandPublisher } from '../../../../../shared/core/application/command/CommandBus';
-import { AssignTournamentTables } from '../../../../tournament-tables/core/application/command/AssignTournamentTables';
+import { ExcludeFromAvailableTables } from '../../../../tournament-tables/core/application/command/ExcludeFromAvailableTables';
 
 export class CallMatchCommandHandler implements CommandHandler<CallMatch> {
   constructor(
@@ -19,17 +19,10 @@ export class CallMatchCommandHandler implements CommandHandler<CallMatch> {
       occurredAt: this.currentTimeProvider(),
       tournamentId: command.tournamentId,
       matchFromQueue: command.matchFromQueue,
-      table: command.table,
+      tableNumber: command.tableNumber,
     });
 
-    const tableNumber = command.table.tableNumber;
-    const tableName = command.table.tableName;
-    const availableToPlay: boolean = command.table.availableToPlay;
-    const tableToAssign: { tableNumber: number; tableName: string; availableToPlay?: boolean }[] = [
-      { tableNumber, tableName, availableToPlay },
-    ];
-
-    await this.commandPublisher.execute(new AssignTournamentTables(command.tournamentId, tableToAssign));
+    await this.commandPublisher.execute(new ExcludeFromAvailableTables(command.tournamentId, command.tableNumber));
 
     this.eventPublisher.publish(matchWasCalled);
     return CommandResult.success();
