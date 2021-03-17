@@ -163,4 +163,76 @@ describe('Tournament Tables | Write Side', function () {
       new Error('Table number 2 is not assigned to the tournament with id=anotherTournamentId'),
     );
   });
+
+  it('When include table then table is available to play', async () => {
+    //Given
+    const currentTime = new Date();
+    const tournamentId = 'TournamentId';
+    const tables = [
+      { tableNumber: 1, tableName: 'Leonhart', availableToPlay: false },
+      { tableNumber: 2, tableName: 'Garlando', availableToPlay: false },
+    ];
+    const tournamentTablesModule = testTournamentTablesModule(currentTime);
+    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
+    const tableIncluded = new TournamentTable({
+      tournamentId,
+      tableNumber: TableNumber.from(2),
+      tableName: 'Garlando',
+      availableToPlay: true,
+    });
+
+    //When
+    const includeTournamentTable = new IncludeInAvailableTables(tournamentId, 2);
+    const commandResult = await tournamentTablesModule.executeCommand(includeTournamentTable);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeTruthy();
+    expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(
+      new TableWasIncludedInAvailableTables({ occurredAt: currentTime, tableIncluded }),
+    );
+  });
+
+  it('When table is already available then including command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const tournamentId = 'TournamentId';
+    const tables = [
+      { tableNumber: 1, tableName: 'Leonhart' },
+      { tableNumber: 2, tableName: 'Garlando' },
+    ];
+    const tournamentTablesModule = testTournamentTablesModule(currentTime);
+    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
+
+    //When
+    const includeTournamentTable = new IncludeInAvailableTables(tournamentId, 2);
+    const commandResult = await tournamentTablesModule.executeCommand(includeTournamentTable);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(
+      new Error(`Table number 2 in tournament with id=${tournamentId} has been already included in available tournament tables`),
+    );
+  });
+
+  it('When table is not assigned to tournament then including command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const tournamentId = 'TournamentId';
+    const tables = [
+      { tableNumber: 1, tableName: 'Leonhart' },
+      { tableNumber: 2, tableName: 'Garlando', availableToPlay: true },
+    ];
+    const tournamentTablesModule = testTournamentTablesModule(currentTime);
+    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
+
+    //When
+    const includeTournamentTable = new IncludeInAvailableTables(tournamentId, 2);
+    const commandResult = await tournamentTablesModule.executeCommand(includeTournamentTable);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(
+      new Error('Table number 2 is not assigned to the tournament with id=anotherTournamentId'),
+    );
+  });
 });
