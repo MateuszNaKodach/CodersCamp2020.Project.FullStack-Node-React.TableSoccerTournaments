@@ -50,13 +50,13 @@ export function TournamentTablesRepositoryTestCases(props: {
           tournamentId,
           tableNumber: TableNumber.from(1),
           tableName: 'Roberto',
-          availableToPlay: true,
+          isFree: true,
         }),
         new TournamentTable({
           tournamentId,
           tableNumber: TableNumber.from(2),
           tableName: 'Tornado',
-          availableToPlay: false,
+          isFree: false,
         }),
       ];
 
@@ -93,13 +93,13 @@ export function TournamentTablesRepositoryTestCases(props: {
           tournamentId,
           tableNumber: TableNumber.from(1),
           tableName: 'Roberto',
-          availableToPlay: false,
+          isFree: false,
         }),
         new TournamentTable({
           tournamentId,
           tableNumber: TableNumber.from(2),
           tableName: 'Tornado',
-          availableToPlay: true,
+          isFree: true,
         }),
       ];
 

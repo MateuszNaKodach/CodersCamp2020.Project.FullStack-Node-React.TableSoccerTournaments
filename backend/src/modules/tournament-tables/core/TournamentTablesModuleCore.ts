@@ -3,12 +3,14 @@ import { CommandPublisher } from '../../../shared/core/application/command/Comma
 import { CurrentTimeProvider } from '../../../shared/core/CurrentTimeProvider';
 import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { TournamentTablesRepository } from './application/TournamentTablesRepository';
-import { AssignTournamentTables } from './application/command/AssignTournamentTables';
-import { AssignTournamentTablesCommandHandler } from './application/command/AssignTournamentTablesCommandHandler';
+import { AssignTablesToTournament } from './application/command/AssignTablesToTournament';
+import { AssignTablesToTournamentCommandHandler } from './application/command/AssignTablesToTournamentCommandHandler';
 import { FindTablesByTournamentId } from './application/query/FindTablesByTournamentId';
 import { FindTablesByTournamentIdQueryHandler } from './application/query/FindTablesByTournamentIdQueryHandler';
-import { ExcludeFromAvailableTables } from './application/command/ExcludeFromAvailableTables';
-import { ExcludeFromAvailableTablesCommandHandler } from './application/command/ExcludeFromAvailableTablesCommandHandler';
+import { BookTournamentTable } from './application/command/BookTournamentTable';
+import { BookTournamentTableCommandHandler } from './application/command/BookTournamentTableCommandHandler';
+import { ReleaseTournamentTable } from './application/command/ReleaseTournamentTable';
+import { ReleaseTournamentTableCommandHandler } from './application/command/ReleaseTournamentTableCommandHandler';
 
 export function TournamentTablesModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -19,12 +21,16 @@ export function TournamentTablesModuleCore(
   return {
     commandHandlers: [
       {
-        commandType: AssignTournamentTables,
-        handler: new AssignTournamentTablesCommandHandler(eventPublisher, currentTimeProvider, repository),
+        commandType: AssignTablesToTournament,
+        handler: new AssignTablesToTournamentCommandHandler(eventPublisher, currentTimeProvider, repository),
       },
       {
-        commandType: ExcludeFromAvailableTables,
-        handler: new ExcludeFromAvailableTablesCommandHandler(eventPublisher, currentTimeProvider, repository),
+        commandType: BookTournamentTable,
+        handler: new BookTournamentTableCommandHandler(eventPublisher, currentTimeProvider, repository),
+      },
+      {
+        commandType: ReleaseTournamentTable,
+        handler: new ReleaseTournamentTableCommandHandler(eventPublisher, currentTimeProvider, repository),
       },
     ],
     eventHandlers: [],
