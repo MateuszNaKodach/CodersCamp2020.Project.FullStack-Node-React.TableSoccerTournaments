@@ -3,7 +3,7 @@ import { CommandResult } from '../../../../../src/shared/core/application/comman
 import { testModuleRestApi } from '../../../../test-support/shared/presentation/rest-api/TestModuleRestApi';
 import { StatusCodes } from 'http-status-codes';
 import { QueryPublisherMock } from '../../../../test-support/shared/core/QueryPublisherMock';
-import { AssignTournamentTables } from '../../../../../src/modules/tournament-tables/core/application/command/AssignTournamentTables';
+import { AssignTablesToTournament } from '../../../../../src/modules/tournament-tables/core/application/command/AssignTablesToTournament';
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
 import { tournamentTablesRestApiModule } from '../../../../../src/modules/tournament-tables/presentation/rest-api/TournamentTablesRestApiModule';
@@ -25,7 +25,7 @@ describe('Tournament Tables REST API', () => {
     const { body, status } = await agent.post('/rest-api/tournaments/sampleTournamentId/tables').send({ tables });
 
     //Then
-    expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTournamentTables(tournamentId, tables));
+    expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTablesToTournament(tournamentId, tables));
     expect(status).toBe(StatusCodes.OK);
     expect(body).toBeEmpty();
   });
@@ -46,7 +46,7 @@ describe('Tournament Tables REST API', () => {
     const { body, status } = await agent.post('/rest-api/tournaments/sampleTournamentId/tables').send({ tables });
 
     //Then
-    expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTournamentTables(tournamentId, tables));
+    expect(commandPublisher.executeCalls).toBeCalledWith(new AssignTablesToTournament(tournamentId, tables));
     expect(status).toBe(StatusCodes.BAD_REQUEST);
     expect(body).toStrictEqual({ message: 'Some tables are already assigned to that tournament.' });
   });
@@ -54,13 +54,13 @@ describe('Tournament Tables REST API', () => {
   it('GET /rest-api/tournaments/:tournamentId/tables | when tables for given tournament found', async () => {
     //Given
     const tournamentId = 'sampleTournamentId';
-    const tables = [{ tableNumber: 10, tableName: 'P4P', availableToPlay: false }];
+    const tables = [{ tableNumber: 10, tableName: 'P4P', isFree: false }];
     const queryPublisher = QueryPublisherMock([
       new TournamentTable({
         tournamentId,
         tableNumber: TableNumber.from(10),
         tableName: 'P4P',
-        availableToPlay: false,
+        isFree: false,
       }),
     ]);
     const { agent } = testModuleRestApi(tournamentTablesRestApiModule, { queryPublisher });
