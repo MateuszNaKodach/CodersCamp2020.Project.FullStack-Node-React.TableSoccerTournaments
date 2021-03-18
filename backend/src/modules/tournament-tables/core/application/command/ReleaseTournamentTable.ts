@@ -1,4 +1,4 @@
-export class ExcludeFromAvailableTables {
+export class ReleaseTournamentTable {
   readonly tournamentId: string;
   readonly tableNumber: number;
 

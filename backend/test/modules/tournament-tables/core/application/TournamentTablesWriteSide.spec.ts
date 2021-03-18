@@ -1,36 +1,36 @@
 import { testTournamentTablesModule } from './TestTournamentTablesModule';
-import { AssignTournamentTables } from '../../../../../src/modules/tournament-tables/core/application/command/AssignTournamentTables';
+import { AssignTablesToTournament } from '../../../../../src/modules/tournament-tables/core/application/command/AssignTablesToTournament';
 import { TournamentTablesWereAssigned } from '../../../../../src/modules/tournament-tables/core/domain/event/TournamentTablesWereAssigned';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
 import Failure = CommandResult.Failure;
 import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
-import { ExcludeFromAvailableTables } from '../../../../../src/modules/tournament-tables/core/application/command/ExcludeFromAvailableTables';
-import { TableWasExcludedFromAvailableTables } from '../../../../../src/modules/tournament-tables/core/domain/event/TableWasExcludedFromAvailableTables';
-import { IncludeInAvailableTables } from '../../../../../src/modules/tournament-tables/core/application/command/IncludeInAvailableTables';
-import { TableWasIncludedInAvailableTables } from '../../../../../src/modules/tournament-tables/core/domain/event/TableWasIncludedInAvailableTables';
+import { BookTournamentTable } from '../../../../../src/modules/tournament-tables/core/application/command/BookTournamentTable';
+import { TournamentTableWasBooked } from '../../../../../src/modules/tournament-tables/core/domain/event/TournamentTableWasBooked';
+import { ReleaseTournamentTable } from '../../../../../src/modules/tournament-tables/core/application/command/ReleaseTournamentTable';
+import { TournamentTableWasReleased } from '../../../../../src/modules/tournament-tables/core/domain/event/TournamentTableWasReleased';
 
 describe('Tournament Tables | Write Side', function () {
-  it('When assign tables then tables are assigned to the tournament as available to play by default', async () => {
+  it('When assign tables then tables are assigned to the tournament as free by default', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
     const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
-      { tableNumber: 2, tableName: 'Garlando', availableToPlay: false },
-      { tableNumber: 3, tableName: 'Leonhart', availableToPlay: true },
+      { tableNumber: 2, tableName: 'Garlando', isFree: false },
+      { tableNumber: 3, tableName: 'Leonhart', isFree: true },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
-    const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
+    const assignTablesToTournament = new AssignTablesToTournament(tournamentId, tables);
+    const commandResult = await tournamentTablesModule.executeCommand(assignTablesToTournament);
 
     //Then
     const tablesAssigned: TournamentTable[] = [
-      new TournamentTable({ tournamentId, tableNumber: TableNumber.from(1), tableName: 'Leonhart', availableToPlay: true }),
-      new TournamentTable({ tournamentId, tableNumber: TableNumber.from(2), tableName: 'Garlando', availableToPlay: false }),
-      new TournamentTable({ tournamentId, tableNumber: TableNumber.from(3), tableName: 'Leonhart', availableToPlay: true }),
+      new TournamentTable({ tournamentId, tableNumber: TableNumber.from(1), tableName: 'Leonhart', isFree: true }),
+      new TournamentTable({ tournamentId, tableNumber: TableNumber.from(2), tableName: 'Garlando', isFree: false }),
+      new TournamentTable({ tournamentId, tableNumber: TableNumber.from(3), tableName: 'Leonhart', isFree: true }),
     ];
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(
@@ -47,11 +47,11 @@ describe('Tournament Tables | Write Side', function () {
       { tableNumber: 2, tableName: 'Garlando' },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
-    await tournamentTablesModule.executeCommand(assignTournamentTables);
+    const assignTablesToTournament = new AssignTablesToTournament(tournamentId, tables);
+    await tournamentTablesModule.executeCommand(assignTablesToTournament);
 
     //When
-    const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
+    const commandResult = await tournamentTablesModule.executeCommand(assignTablesToTournament);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
@@ -66,8 +66,8 @@ describe('Tournament Tables | Write Side', function () {
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
-    const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
+    const assignTablesToTournament = new AssignTablesToTournament(tournamentId, tables);
+    const commandResult = await tournamentTablesModule.executeCommand(assignTablesToTournament);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
@@ -85,15 +85,15 @@ describe('Tournament Tables | Write Side', function () {
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
 
     //When
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
-    const commandResult = await tournamentTablesModule.executeCommand(assignTournamentTables);
+    const assignTablesToTournament = new AssignTablesToTournament(tournamentId, tables);
+    const commandResult = await tournamentTablesModule.executeCommand(assignTablesToTournament);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Tables numbers must be different.'));
   });
 
-  it('When exclude table then table is not available to play', async () => {
+  it('When book table then table becomes not free', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
@@ -103,61 +103,55 @@ describe('Tournament Tables | Write Side', function () {
       { tableNumber: 3, tableName: 'Leonhart' },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
-    const tableExcluded = new TournamentTable({
-      tournamentId,
-      tableNumber: TableNumber.from(2),
-      tableName: 'Garlando',
-      availableToPlay: false,
-    });
+    await tournamentTablesModule.executeCommand(new AssignTablesToTournament(tournamentId, tables));
 
     //When
-    const excludeTournamentTable = new ExcludeFromAvailableTables(tournamentId, 2);
-    const commandResult = await tournamentTablesModule.executeCommand(excludeTournamentTable);
+    const bookTournamentTable = new BookTournamentTable(tournamentId, 2);
+    const commandResult = await tournamentTablesModule.executeCommand(bookTournamentTable);
 
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(
-      new TableWasExcludedFromAvailableTables({ occurredAt: currentTime, tableExcluded }),
+      new TournamentTableWasBooked({ occurredAt: currentTime, tournamentId, tableNumber: 2 }),
     );
   });
 
-  it('When table is already not available then excluding command should fail', async () => {
+  it('When table is already not free then booking command should fail', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
     const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
-      { tableNumber: 2, tableName: 'Garlando', availableToPlay: false },
+      { tableNumber: 2, tableName: 'Garlando', isFree: false },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
+    await tournamentTablesModule.executeCommand(new AssignTablesToTournament(tournamentId, tables));
 
     //When
-    const excludeTournamentTable = new ExcludeFromAvailableTables(tournamentId, 2);
-    const commandResult = await tournamentTablesModule.executeCommand(excludeTournamentTable);
+    const bookTournamentTable = new BookTournamentTable(tournamentId, 2);
+    const commandResult = await tournamentTablesModule.executeCommand(bookTournamentTable);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(
-      new Error(`Table number 2 in tournament with id=${tournamentId} has been already excluded from available tournament tables`),
+      new Error(`Table number 2 in tournament with id=${tournamentId} has been already booked`),
     );
   });
 
-  it('When table is not assigned to tournament then excluding command should fail', async () => {
+  it('When table is not assigned to tournament then booking command should fail', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
     const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
-      { tableNumber: 2, tableName: 'Garlando', availableToPlay: true },
+      { tableNumber: 2, tableName: 'Garlando', isFree: true },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
+    await tournamentTablesModule.executeCommand(new AssignTablesToTournament(tournamentId, tables));
 
     //When
-    const excludeTournamentTable = new ExcludeFromAvailableTables('anotherTournamentId', 2);
-    const commandResult = await tournamentTablesModule.executeCommand(excludeTournamentTable);
+    const bookTournamentTable = new BookTournamentTable('anotherTournamentId', 2);
+    const commandResult = await tournamentTablesModule.executeCommand(bookTournamentTable);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
@@ -166,35 +160,29 @@ describe('Tournament Tables | Write Side', function () {
     );
   });
 
-  it('When include table then table is available to play', async () => {
+  it('When release table then table becomes free', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
     const tables = [
-      { tableNumber: 1, tableName: 'Leonhart', availableToPlay: false },
-      { tableNumber: 2, tableName: 'Garlando', availableToPlay: false },
+      { tableNumber: 1, tableName: 'Leonhart', isFree: false },
+      { tableNumber: 2, tableName: 'Garlando', isFree: false },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
-    const tableIncluded = new TournamentTable({
-      tournamentId,
-      tableNumber: TableNumber.from(2),
-      tableName: 'Garlando',
-      availableToPlay: true,
-    });
+    await tournamentTablesModule.executeCommand(new AssignTablesToTournament(tournamentId, tables));
 
     //When
-    const includeTournamentTable = new IncludeInAvailableTables(tournamentId, 2);
-    const commandResult = await tournamentTablesModule.executeCommand(includeTournamentTable);
+    const releaseTournamentTable = new ReleaseTournamentTable(tournamentId, 2);
+    const commandResult = await tournamentTablesModule.executeCommand(releaseTournamentTable);
 
     //Then
     expect(commandResult.isSuccess()).toBeTruthy();
     expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(
-      new TableWasIncludedInAvailableTables({ occurredAt: currentTime, tableIncluded }),
+      new TournamentTableWasReleased({ occurredAt: currentTime, tournamentId, tableNumber: 2 }),
     );
   });
 
-  it('When table is already available then including command should fail', async () => {
+  it('When table is already free then releasing command should fail', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
@@ -203,33 +191,33 @@ describe('Tournament Tables | Write Side', function () {
       { tableNumber: 2, tableName: 'Garlando' },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
+    await tournamentTablesModule.executeCommand(new AssignTablesToTournament(tournamentId, tables));
 
     //When
-    const includeTournamentTable = new IncludeInAvailableTables(tournamentId, 2);
-    const commandResult = await tournamentTablesModule.executeCommand(includeTournamentTable);
+    const releaseTournamentTable = new ReleaseTournamentTable(tournamentId, 2);
+    const commandResult = await tournamentTablesModule.executeCommand(releaseTournamentTable);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(
-      new Error(`Table number 2 in tournament with id=${tournamentId} has been already included in available tournament tables`),
+      new Error(`Table number 2 in tournament with id=${tournamentId} is already free`),
     );
   });
 
-  it('When table is not assigned to tournament then including command should fail', async () => {
+  it('When table is not assigned to tournament then releasing command should fail', async () => {
     //Given
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
     const tables = [
       { tableNumber: 1, tableName: 'Leonhart' },
-      { tableNumber: 2, tableName: 'Garlando', availableToPlay: true },
+      { tableNumber: 2, tableName: 'Garlando', isFree: true },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    await tournamentTablesModule.executeCommand(new AssignTournamentTables(tournamentId, tables));
+    await tournamentTablesModule.executeCommand(new AssignTablesToTournament(tournamentId, tables));
 
     //When
-    const includeTournamentTable = new IncludeInAvailableTables('anotherTournamentId', 2);
-    const commandResult = await tournamentTablesModule.executeCommand(includeTournamentTable);
+    const releaseTournamentTable = new ReleaseTournamentTable('anotherTournamentId', 2);
+    const commandResult = await tournamentTablesModule.executeCommand(releaseTournamentTable);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();

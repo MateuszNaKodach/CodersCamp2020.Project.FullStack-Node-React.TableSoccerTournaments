@@ -1,4 +1,4 @@
-export class IncludeInAvailableTables {
+export class BookTournamentTable {
   readonly tournamentId: string;
   readonly tableNumber: number;
 
