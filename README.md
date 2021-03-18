@@ -54,7 +54,7 @@ The following technologies were used :
 - Stryker
 - React (next stage)
 
-Our application follows the TDD approach and is almost **fully covered** by tests. The architecture has been designed according to the **DDD** (Domain-driven design) & **CQRS** (Command Query Responsibility Segregation) & **Event Sourcing** patterns.
+Our application follows the TDD approach and is almost **fully covered** by tests. The architecture has been designed according to the **DDD (Domain-driven design)**.
 
 
 ## Event Modeling

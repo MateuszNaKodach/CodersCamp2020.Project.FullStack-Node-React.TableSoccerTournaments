@@ -11,7 +11,7 @@ export class MongoTournamentTablesRepository implements TournamentTablesReposito
         tournamentId: tournamentTable.tournamentId,
         tableNumber: tournamentTable.tableNumber.raw,
         tableName: tournamentTable.tableName,
-        availableToPlay: tournamentTable.availableToPlay,
+        isFree: tournamentTable.isFree,
       },
       { upsert: true, useFindAndModify: true },
     );
@@ -37,7 +37,7 @@ type MongoTournamentTables = {
   readonly tournamentId: string;
   readonly tableNumber: number;
   readonly tableName: string;
-  readonly availableToPlay: boolean;
+  readonly isFree: boolean;
 } & mongoose.Document;
 
 const TournamentTablesSchema = new mongoose.Schema({
@@ -49,7 +49,7 @@ const TournamentTablesSchema = new mongoose.Schema({
     max: 200,
   },
   tableName: Schema.Types.String,
-  availableToPlay: Schema.Types.Boolean,
+  isFree: Schema.Types.Boolean,
 });
 
 const MongoTournamentTables = mongoose.model<MongoTournamentTables>('TournamentTables', TournamentTablesSchema);
@@ -59,6 +59,6 @@ function mongoDocumentToDomain(mongoDocument: MongoTournamentTables): Tournament
     tournamentId: mongoDocument.tournamentId,
     tableNumber: TableNumber.from(mongoDocument.tableNumber),
     tableName: mongoDocument.tableName,
-    availableToPlay: mongoDocument.availableToPlay,
+    isFree: mongoDocument.isFree,
   });
 }
