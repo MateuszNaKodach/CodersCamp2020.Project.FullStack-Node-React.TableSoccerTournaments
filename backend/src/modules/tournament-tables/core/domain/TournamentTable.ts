@@ -1,26 +1,27 @@
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { TournamentTablesWereAssigned } from './event/TournamentTablesWereAssigned';
 import { TableNumber } from './TableNumber';
-import { TableWasExcludedFromAvailableTables } from './event/TableWasExcludedFromAvailableTables';
+import { TournamentTableWasBooked } from './event/TournamentTableWasBooked';
 import { isDefined } from '../../../../common/Defined';
+import { TournamentTableWasReleased } from './event/TournamentTableWasReleased';
 
 export class TournamentTable {
   readonly tournamentId: string;
   readonly tableNumber: TableNumber;
   readonly tableName: string;
-  readonly availableToPlay: boolean;
+  readonly isFree: boolean;
 
-  constructor(props: { tournamentId: string; tableNumber: TableNumber; tableName: string; availableToPlay?: boolean }) {
+  constructor(props: { tournamentId: string; tableNumber: TableNumber; tableName: string; isFree?: boolean }) {
     this.tournamentId = props.tournamentId;
     this.tableNumber = props.tableNumber;
     this.tableName = props.tableName;
-    this.availableToPlay = isDefined(props.availableToPlay) ? props.availableToPlay : true;
+    this.isFree = isDefined(props.isFree) ? props.isFree : true;
   }
 }
 
 export function assignTablesToTournament(
   state: TournamentTable[] | undefined,
-  command: { tournamentId: string; tables: { tableNumber: TableNumber; tableName: string; availableToPlay?: boolean }[] },
+  command: { tournamentId: string; tables: { tableNumber: TableNumber; tableName: string; isFree?: boolean }[] },
   currentTime: Date,
 ): DomainCommandResult<TournamentTable[]> {
   if (state !== undefined && state.length > 0) {
@@ -38,7 +39,7 @@ export function assignTablesToTournament(
       tournamentId: command.tournamentId,
       tableNumber: table.tableNumber,
       tableName: table.tableName,
-      availableToPlay: isDefined(table.availableToPlay) ? table.availableToPlay : true,
+      isFree: isDefined(table.isFree) ? table.isFree : true,
     });
   });
 
@@ -64,7 +65,7 @@ function onTournamentTablesWereAssigned(state: TournamentTable[] | undefined, ev
   return event.tablesAssigned.map((table) => new TournamentTable(table));
 }
 
-export function excludeFromAvailableTables(
+export function bookTournamentTable(
   state: TournamentTable | undefined,
   command: { tournamentId: string; tableNumber: TableNumber },
   currentTime: Date,
@@ -72,25 +73,50 @@ export function excludeFromAvailableTables(
   if (!state) {
     throw new Error(`Table number ${command.tableNumber.raw} is not assigned to the tournament with id=${command.tournamentId}`);
   }
-  if (!state.availableToPlay) {
-    throw new Error(
-      `Table number ${command.tableNumber.raw} in tournament with id=${command.tournamentId} has been already excluded from available tournament tables`,
-    );
+  if (!state.isFree) {
+    throw new Error(`Table number ${command.tableNumber.raw} in tournament with id=${command.tournamentId} has been already booked`);
   }
 
-  const excludedTableFromAvailableTables = onTournamentTableWasExcluded(state);
+  const bookedTable = onTableAvailabilityWasChanged(state);
 
-  const tableWasExcludedFromAvailableTables = new TableWasExcludedFromAvailableTables({
+  const tournamentTableWasBooked = new TournamentTableWasBooked({
     occurredAt: currentTime,
-    tableExcluded: excludedTableFromAvailableTables,
+    tournamentId: bookedTable.tournamentId,
+    tableNumber: bookedTable.tableNumber.raw,
   });
 
   return {
-    state: excludedTableFromAvailableTables,
-    events: [tableWasExcludedFromAvailableTables],
+    state: bookedTable,
+    events: [tournamentTableWasBooked],
   };
 }
 
-function onTournamentTableWasExcluded(state: TournamentTable): TournamentTable {
-  return new TournamentTable({ ...state, availableToPlay: false });
+function onTableAvailabilityWasChanged(state: TournamentTable): TournamentTable {
+  return new TournamentTable({ ...state, isFree: !state.isFree });
+}
+
+export function releaseTournamentTable(
+  state: TournamentTable | undefined,
+  command: { tournamentId: string; tableNumber: TableNumber },
+  currentTime: Date,
+): DomainCommandResult<TournamentTable> {
+  if (!state) {
+    throw new Error(`Table number ${command.tableNumber.raw} is not assigned to the tournament with id=${command.tournamentId}`);
+  }
+  if (state.isFree) {
+    throw new Error(`Table number ${command.tableNumber.raw} in tournament with id=${command.tournamentId} is already free`);
+  }
+
+  const releasedTable = onTableAvailabilityWasChanged(state);
+
+  const tournamentTableWasReleased = new TournamentTableWasReleased({
+    occurredAt: currentTime,
+    tournamentId: releasedTable.tournamentId,
+    tableNumber: releasedTable.tableNumber.raw,
+  });
+
+  return {
+    state: releasedTable,
+    events: [tournamentTableWasReleased],
+  };
 }

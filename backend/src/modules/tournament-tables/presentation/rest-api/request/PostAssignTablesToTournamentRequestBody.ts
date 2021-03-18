@@ -1,3 +1,3 @@
-export class PostAssignTournamentTablesRequestBody {
+export class PostAssignTablesToTournamentRequestBody {
   tables: { tableNumber: number; tableName: string }[];
 }
