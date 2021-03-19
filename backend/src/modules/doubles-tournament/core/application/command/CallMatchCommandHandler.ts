@@ -18,7 +18,7 @@ export class CallMatchCommandHandler implements CommandHandler<CallMatch> {
     const matchWasCalled = new MatchWasCalled({
       occurredAt: this.currentTimeProvider(),
       tournamentId: command.tournamentId,
-      matchFromQueue: command.matchFromQueue,
+      calledMatch: command.calledMatch,
       tableNumber: command.tableNumber,
     });
 

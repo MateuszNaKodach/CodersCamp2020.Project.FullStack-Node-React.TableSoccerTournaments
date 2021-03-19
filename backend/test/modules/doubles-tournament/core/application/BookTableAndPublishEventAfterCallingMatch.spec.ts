@@ -34,7 +34,7 @@ describe('Execute command CallMatch', () => {
     //When
     const callMatch = new CallMatch({
       tournamentId: tournamentId,
-      matchFromQueue: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
+      calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
       tableNumber: tableNumber,
     });
     const commandResult = await doublesTournament.executeCommand(callMatch);
@@ -45,7 +45,7 @@ describe('Execute command CallMatch', () => {
       new MatchWasCalled({
         occurredAt: currentTime,
         tournamentId: tournamentId,
-        matchFromQueue: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
+        calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
         tableNumber: tableNumber,
       }),
     );
@@ -75,7 +75,7 @@ describe('Execute command CallMatch', () => {
     //When
     const callMatch = new CallMatch({
       tournamentId: tournamentId,
-      matchFromQueue: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
+      calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
       tableNumber: tableNumber,
     });
     const commandResultFromCallingMatch = await doublesTournament.executeCommand(callMatch);
@@ -91,7 +91,7 @@ describe('Execute command CallMatch', () => {
       new MatchWasCalled({
         occurredAt: currentTime,
         tournamentId: tournamentId,
-        matchFromQueue: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
+        calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
         tableNumber: tableNumber,
       }),
     );
@@ -119,7 +119,7 @@ describe('Execute command CallMatch', () => {
     //When
     const callMatch = new CallMatch({
       tournamentId: tournamentId,
-      matchFromQueue: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
+      calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
       tableNumber: tableNumber,
     });
     const commandResultFromCallingMatch = await doublesTournament.executeCommand(callMatch);
@@ -135,7 +135,7 @@ describe('Execute command CallMatch', () => {
       new MatchWasCalled({
         occurredAt: currentTime,
         tournamentId: tournamentId,
-        matchFromQueue: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
+        calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
         tableNumber: tableNumber,
       }),
     );
