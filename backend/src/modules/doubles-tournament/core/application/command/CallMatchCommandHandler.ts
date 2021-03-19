@@ -5,7 +5,7 @@ import { CommandResult } from '../../../../../shared/core/application/command/Co
 import { MatchWasCalled } from '../../domain/event/MatchWasCalled';
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 import { CommandPublisher } from '../../../../../shared/core/application/command/CommandBus';
-import { ExcludeFromAvailableTables } from '../../../../tournament-tables/core/application/command/ExcludeFromAvailableTables';
+import { BookTournamentTable } from '../../../../tournament-tables/core/application/command/BookTournamentTable';
 
 export class CallMatchCommandHandler implements CommandHandler<CallMatch> {
   constructor(
@@ -22,7 +22,7 @@ export class CallMatchCommandHandler implements CommandHandler<CallMatch> {
       tableNumber: command.tableNumber,
     });
 
-    // await this.commandPublisher.execute(new ExcludeFromAvailableTables(command.tournamentId, command.tableNumber));
+    await this.commandPublisher.execute(new BookTournamentTable(command.tournamentId, command.tableNumber));
 
     this.eventPublisher.publish(matchWasCalled);
     return CommandResult.success();

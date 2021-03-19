@@ -2,8 +2,10 @@ import { FromListIdGeneratorStub } from '../../../../test-support/shared/core/Fr
 import { testDoublesTournamentsModule } from './TestDoublesTournamentsModule';
 import { CallMatch } from '../../../../../src/modules/doubles-tournament/core/application/command/CallMatch';
 import { MatchWasCalled } from '../../../../../src/modules/doubles-tournament/core/domain/event/MatchWasCalled';
-import { CommandBus } from '../../../../../src/shared/core/application/command/CommandBus';
-import { ExcludeFromAvailableTables } from '../../../../../src/modules/tournament-tables/core/application/command/ExcludeFromAvailableTables';
+import { BookTournamentTable } from '../../../../../src/modules/tournament-tables/core/application/command/BookTournamentTable';
+import { InMemoryCommandBus } from '../../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus';
+import { CommandHandler } from '../../../../../src/shared/core/application/command/CommandHandler';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
 
 describe('Calling the match', () => {
   it('When command CallMatch was executed, then publish event and execute ExcludeFromAvailableTables command', async () => {
@@ -15,12 +17,18 @@ describe('Calling the match', () => {
     const tableNumber = 1;
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id]);
-    const commandBus: CommandBus = {
-      registerHandler: jest.fn(),
-      execute: jest.fn(),
+
+    const bookTournamentTableCommandHandler: CommandHandler<BookTournamentTable> = {
+      async execute(command: BookTournamentTable): Promise<CommandResult> {
+        return CommandResult.success();
+      },
     };
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
-    // const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen,commandBus);
+
+    const commandBus = new InMemoryCommandBus();
+    commandBus.registerHandler(BookTournamentTable, bookTournamentTableCommandHandler);
+    const spy = jest.spyOn(commandBus, 'execute');
+
+    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
 
     //When
     const callMatch = new CallMatch({
@@ -40,8 +48,10 @@ describe('Calling the match', () => {
         tableNumber: tableNumber,
       }),
     );
-    const excludeFromAvailableTables = new ExcludeFromAvailableTables(tournamentId, tableNumber);
-    // expect(commandBus.execute).toHaveBeenLastCalledWith(excludeFromAvailableTables);
-    // expect(commandBus.execute).toHaveBeenCalledTimes(2);
+
+    expect(spy).toHaveBeenCalledTimes(2);
+
+    const bookFromAvailableTables = new BookTournamentTable(tournamentId, tableNumber);
+    expect(commandBus.execute).toHaveBeenLastCalledWith(bookFromAvailableTables);
   });
 });
