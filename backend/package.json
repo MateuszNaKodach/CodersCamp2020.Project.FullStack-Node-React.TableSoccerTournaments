@@ -25,6 +25,7 @@
     "test:ci": "jest --testRegex \"[.](spec|test|mongo-spec|postgres-spec|mailhog-spec)[.]ts\" --ci --silent --coverage"
   },
   "dependencies": {
+    "@eventstore/db-client": "^1.0.1",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
