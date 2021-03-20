@@ -43,11 +43,19 @@ export function assignTablesToTournament(
     });
   });
 
-  const bookReleaseEvents = tournamentTables.map((table) => {
-    return table.isFree
-      ? tournamentTableWasReleased(currentTime, table.tournamentId, table.tableNumber.raw)
-      : tournamentTableWasBooked(currentTime, table.tournamentId, table.tableNumber.raw);
-  });
+  const bookReleaseEvents = tournamentTables.map((table) =>
+    table.isFree
+      ? new TournamentTableWasReleased({
+          occurredAt: currentTime,
+          tournamentId: table.tournamentId,
+          tableNumber: table.tableNumber.raw,
+        })
+      : new TournamentTableWasBooked({
+          occurredAt: currentTime,
+          tournamentId: table.tournamentId,
+          tableNumber: table.tableNumber.raw,
+        }),
+  );
 
   const tournamentTablesWereAssigned = new TournamentTablesWereAssigned({
     occurredAt: currentTime,
@@ -85,20 +93,20 @@ export function bookTournamentTable(
 
   const bookedTable = onTableAvailabilityWasChanged(state);
 
-  const tournamentTableWasBookedEvent = tournamentTableWasBooked(currentTime, bookedTable.tournamentId, bookedTable.tableNumber.raw);
+  const tournamentTableWasBooked = new TournamentTableWasBooked({
+    occurredAt: currentTime,
+    tournamentId: bookedTable.tournamentId,
+    tableNumber: bookedTable.tableNumber.raw,
+  });
 
   return {
     state: bookedTable,
-    events: [tournamentTableWasBookedEvent],
+    events: [tournamentTableWasBooked],
   };
 }
 
 function onTableAvailabilityWasChanged(state: TournamentTable): TournamentTable {
   return new TournamentTable({ ...state, isFree: !state.isFree });
-}
-
-function tournamentTableWasBooked(occurredAt: Date, tournamentId: string, tableNumber: number): TournamentTableWasBooked {
-  return new TournamentTableWasBooked({ occurredAt, tournamentId, tableNumber });
 }
 
 export function releaseTournamentTable(
@@ -115,18 +123,14 @@ export function releaseTournamentTable(
 
   const releasedTable = onTableAvailabilityWasChanged(state);
 
-  const tournamentTableWasReleasedEvent = tournamentTableWasReleased(
-    currentTime,
-    releasedTable.tournamentId,
-    releasedTable.tableNumber.raw,
-  );
+  const tournamentTableWasReleased = new TournamentTableWasReleased({
+    occurredAt: currentTime,
+    tournamentId: releasedTable.tournamentId,
+    tableNumber: releasedTable.tableNumber.raw,
+  });
 
   return {
     state: releasedTable,
-    events: [tournamentTableWasReleasedEvent],
+    events: [tournamentTableWasReleased],
   };
-}
-
-function tournamentTableWasReleased(occurredAt: Date, tournamentId: string, tableNumber: number): TournamentTableWasReleased {
-  return new TournamentTableWasReleased({ occurredAt, tournamentId, tableNumber });
 }
