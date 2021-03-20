@@ -46,7 +46,7 @@ jobs:
         name: Upload build as artifact
         with:
           name: tournament-build
-          path: ./build
+          path: ./frontend/build
 
   deploy-on-github-pages:
     name: 'Deploy app to GitHub Pages from develop branch source code'
@@ -57,13 +57,13 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: tournament-build
-          path: .frontend/build
+          path: ./frontend/build
       - name: Deploy app as GitHub Pages
         uses: peaceiris/actions-gh-pages@v3.7.0-6
         if: ${{ github.event_name != 'pull_request' && always() }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: '.frontend/build'
+          publish_dir: './frontend/build'
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           force_orphan: true
