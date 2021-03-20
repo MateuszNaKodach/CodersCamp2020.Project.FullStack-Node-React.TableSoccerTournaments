@@ -69,6 +69,8 @@ export class TournamentTree {
   }
 
   public finishMatch(matchId: string, winnerId: string): void {}
+
+
 }
 
 export function createTournamentTree(
