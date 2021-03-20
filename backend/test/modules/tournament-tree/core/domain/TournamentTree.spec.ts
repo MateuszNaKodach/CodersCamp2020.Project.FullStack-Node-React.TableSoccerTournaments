@@ -128,4 +128,80 @@ describe('TournamentTree', () => {
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
   });
+
+  describe('getMatchQueue() function', () => {
+    const testTournamentId = NumberIdGeneratorStub(1000, 'testTournamentId');
+
+    it('Get queue from 4 teams tree', async () => {
+      //Given
+      const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
+      const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
+      const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
+
+      // //When
+      const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
+        tournamentId: testTournamentId.generate(),
+        tournamentTeams: tournamentTeamsList,
+        entityIdGenerator: matchEntityIdGen,
+      });
+
+      const expectedMatchesQueue: FightingTeamsGroup[] = [
+        {
+          fightingTeamsGroupId: FightingTeamsGroupId.from('match_3'),
+          firstTeam: tournamentTeamsList[0],
+          secondTeam: tournamentTeamsList[3],
+          fightingTeamsGroupLevel: 0,
+          nextMatchId: FightingTeamsGroupId.from('match_1'),
+          matchNumberInSequence: 1,
+        },
+        {
+          fightingTeamsGroupId: FightingTeamsGroupId.from('match_2'),
+          firstTeam: tournamentTeamsList[2],
+          secondTeam: tournamentTeamsList[1],
+          fightingTeamsGroupLevel: 0,
+          nextMatchId: FightingTeamsGroupId.from('match_1'),
+          matchNumberInSequence: 2,
+        },
+      ].map((item) => FightingTeamsGroup.fromObj(item));
+
+      // Then
+      expect(tournamentTree.getMatchesQueueReadyToBegin()).toIncludeSameMembers(expectedMatchesQueue);
+    });
+
+    it('Get queue from 6 teams tree', async () => {
+      //Given
+      const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
+      const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
+      const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 6);
+
+      // //When
+      const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
+        tournamentId: testTournamentId.generate(),
+        tournamentTeams: tournamentTeamsList,
+        entityIdGenerator: matchEntityIdGen,
+      });
+
+      const expectedMatchesQueue: FightingTeamsGroup[] = [
+        {
+          fightingTeamsGroupId: FightingTeamsGroupId.from('match_6'),
+          firstTeam: tournamentTeamsList[4],
+          secondTeam: tournamentTeamsList[3],
+          fightingTeamsGroupLevel: 0,
+          nextMatchId: FightingTeamsGroupId.from('match_3'),
+          matchNumberInSequence: 2,
+        },
+        {
+          fightingTeamsGroupId: FightingTeamsGroupId.from('match_5'),
+          firstTeam: tournamentTeamsList[2],
+          secondTeam: tournamentTeamsList[5],
+          fightingTeamsGroupLevel: 0,
+          nextMatchId: FightingTeamsGroupId.from('match_2'),
+          matchNumberInSequence: 3,
+        },
+      ].map((item) => FightingTeamsGroup.fromObj(item));
+
+      // Then
+      expect(tournamentTree.getMatchesQueueReadyToBegin()).toIncludeSameMembers(expectedMatchesQueue);
+    });
+  });
 });
