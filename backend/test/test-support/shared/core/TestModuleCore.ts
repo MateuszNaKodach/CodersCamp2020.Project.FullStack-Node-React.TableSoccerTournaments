@@ -12,6 +12,7 @@ import { Query } from '../../../../src/shared/core/application/query/Query';
 import { InMemoryCommandBus } from '../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus';
 
 export type TestModuleCore = {
+  publishedEvents(): DomainEvent[];
   lastPublishedEvent(): DomainEvent | undefined;
   publishEvent(event: DomainEvent): void;
   executeCommand<CommandType extends Command>(command: CommandType): Promise<CommandResult>;
@@ -34,6 +35,9 @@ export function testModuleCore(
   return {
     publishEvent(event: DomainEvent): void {
       eventBus.publish(event);
+    },
+    publishedEvents(): DomainEvent[] {
+      return eventBus.storedEvents;
     },
     lastPublishedEvent(): DomainEvent | undefined {
       return eventBus.storedEvents.reverse()[0];
