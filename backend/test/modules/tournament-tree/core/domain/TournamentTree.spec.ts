@@ -221,8 +221,8 @@ describe('TournamentTree', () => {
                 entityIdGenerator: matchEntityIdGen,
             });
 
-            expect(tournamentTree.getMatchIdFromMatchNumberInSequence(2)).toIncludeSameMembers('match_6');
-            expect(tournamentTree.getMatchIdFromMatchNumberInSequence(5)).toIncludeSameMembers('match_3');
+            expect(tournamentTree.getMatchIdFromMatchNumberInSequence(2)).toBe('match_6');
+            expect(tournamentTree.getMatchIdFromMatchNumberInSequence(5)).toBe('match_3');
         });
 
         it('Try find not existed match and return undefined', async () => {
@@ -238,7 +238,7 @@ describe('TournamentTree', () => {
                 entityIdGenerator: matchEntityIdGen,
             });
 
-            expect(tournamentTree.getMatchIdFromMatchNumberInSequence(100)).toIncludeSameMembers(undefined);
+            expect(tournamentTree.getMatchIdFromMatchNumberInSequence(100)).toBeUndefined();
         });
     });
 });
