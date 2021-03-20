@@ -20,6 +20,7 @@ describe('TournamentTree', () => {
         tournamentTeams: tournamentTeamsList,
         entityIdGenerator: matchEntityIdGen,
       });
+
       const expectedWinnerTree: FightingTeamsGroup[] = [
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_3'),
