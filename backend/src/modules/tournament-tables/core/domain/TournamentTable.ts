@@ -115,7 +115,11 @@ export function releaseTournamentTable(
 
   const releasedTable = onTableAvailabilityWasChanged(state);
 
-  const tournamentTableWasReleasedEvent = tournamentTableWasReleased(currentTime, releasedTable.tournamentId, releasedTable.tableNumber.raw);
+  const tournamentTableWasReleasedEvent = tournamentTableWasReleased(
+    currentTime,
+    releasedTable.tournamentId,
+    releasedTable.tableNumber.raw,
+  );
 
   return {
     state: releasedTable,
