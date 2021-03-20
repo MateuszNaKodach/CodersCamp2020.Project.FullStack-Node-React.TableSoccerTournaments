@@ -17,7 +17,7 @@ export class TournamentTree {
     this.tournamentId = props.tournamentId;
   }
 
-  static createSingleTournamentTree(props: {
+  public static createSingleTournamentTree(props: {
     tournamentId: string;
     tournamentTeams: TournamentTeam[];
     entityIdGenerator: EntityIdGenerator;
@@ -26,11 +26,17 @@ export class TournamentTree {
       tournamentTeams: props.tournamentTeams,
       entityIdGenerator: props.entityIdGenerator,
     });
+
+    const tournamentTreeArray = winnerTree.getTournamentTreeArray().map((item, index) => {
+      return { ...item, matchNumberInSequence: index + 1 };
+    });
+
     const tournamentTreeProps = {
       tournamentId: props.tournamentId,
-      tournamentTreeArray: winnerTree.getTournamentTreeArray(),
+      tournamentTreeArray: tournamentTreeArray,
       tournamentTeams: props.tournamentTeams,
     };
+
     return new TournamentTree(tournamentTreeProps);
   }
 
@@ -49,6 +55,7 @@ export class TournamentTree {
   public getTournamentTreeArray(): FightingTeamsGroup[] {
     return this.tournamentTreeArray;
   }
+
 
   public getTournamentTreeIdArray(): string[] {
     return this.tournamentTreeArray.map((item) => item.fightingTeamsGroupId.raw);
