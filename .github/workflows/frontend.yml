@@ -42,3 +42,29 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
+      - uses: actions/upload-artifact@v1
+        name: Upload build as artifact
+        with:
+          name: tournament-build
+          path: ./build
+
+  deploy-on-github-pages:
+    name: 'Deploy app to GitHub Pages from develop branch source code'
+    if: github.ref == 'refs/heads/develop'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: tournament-build
+          path: ./build
+      - name: Deploy app as GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3.7.0-6
+        if: ${{ github.event_name != 'pull_request' && always() }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: './build'
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          force_orphan: true
+          keep_files: false
