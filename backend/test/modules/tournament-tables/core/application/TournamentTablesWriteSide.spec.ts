@@ -33,9 +33,12 @@ describe('Tournament Tables | Write Side', function () {
       new TournamentTable({ tournamentId, tableNumber: TableNumber.from(3), tableName: 'Leonhart', isFree: true }),
     ];
     expect(commandResult.isSuccess()).toBeTruthy();
-    expect(tournamentTablesModule.lastPublishedEvent()).toStrictEqual(
+    expect(tournamentTablesModule.publishedEvents()).toStrictEqual([
+      new TournamentTableWasReleased({ occurredAt: currentTime, tournamentId, tableNumber: 1 }),
+      new TournamentTableWasBooked({ occurredAt: currentTime, tournamentId, tableNumber: 2 }),
+      new TournamentTableWasReleased({ occurredAt: currentTime, tournamentId, tableNumber: 3 }),
       new TournamentTablesWereAssigned({ occurredAt: currentTime, tablesAssigned }),
-    );
+    ]);
   });
 
   it('Given tournament with tables assigned when attempt to assign tables again then assigning command should fail', async () => {
