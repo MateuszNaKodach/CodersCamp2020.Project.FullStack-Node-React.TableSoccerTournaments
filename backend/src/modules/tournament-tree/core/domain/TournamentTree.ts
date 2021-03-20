@@ -56,6 +56,9 @@ export class TournamentTree {
     return this.tournamentTreeArray;
   }
 
+  public getMatchesQueueReadyToBegin(): FightingTeamsGroup[] {
+    return this.tournamentTreeArray.filter(({ firstTeam, secondTeam }) => firstTeam && secondTeam);
+  }
 
   public getTournamentTreeIdArray(): string[] {
     return this.tournamentTreeArray.map((item) => item.fightingTeamsGroupId.raw);
