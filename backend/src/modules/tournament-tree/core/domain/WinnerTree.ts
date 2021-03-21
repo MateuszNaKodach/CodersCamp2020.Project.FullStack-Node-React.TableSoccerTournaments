@@ -63,6 +63,7 @@ function createEmptyLevel(
         firstTeam: undefined,
         secondTeam: undefined,
         nextMatchId: nextMatchId,
+        matchNumberInSequence: undefined,
       }),
     );
   }
