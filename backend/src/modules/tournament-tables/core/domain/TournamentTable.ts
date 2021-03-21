@@ -43,6 +43,20 @@ export function assignTablesToTournament(
     });
   });
 
+  const bookReleaseEvents = tournamentTables.map((table) =>
+    table.isFree
+      ? new TournamentTableWasReleased({
+          occurredAt: currentTime,
+          tournamentId: table.tournamentId,
+          tableNumber: table.tableNumber.raw,
+        })
+      : new TournamentTableWasBooked({
+          occurredAt: currentTime,
+          tournamentId: table.tournamentId,
+          tableNumber: table.tableNumber.raw,
+        }),
+  );
+
   const tournamentTablesWereAssigned = new TournamentTablesWereAssigned({
     occurredAt: currentTime,
     tablesAssigned: tournamentTables,
@@ -52,7 +66,7 @@ export function assignTablesToTournament(
 
   return {
     state: assignedTablesToTournament,
-    events: [tournamentTablesWereAssigned],
+    events: [...bookReleaseEvents, tournamentTablesWereAssigned],
   };
 }
 
