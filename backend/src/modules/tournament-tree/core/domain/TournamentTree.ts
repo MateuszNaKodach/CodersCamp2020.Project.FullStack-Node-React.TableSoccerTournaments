@@ -2,6 +2,9 @@ import { TournamentTeam } from './TournamentTeam';
 import { FightingTeamsGroup } from './FightingTeamsGroup';
 import { WinnerTree } from './WinnerTree';
 import { EntityIdGenerator } from '../../../../shared/core/application/EntityIdGenerator';
+import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
+import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
+import { TournamentTreeWasCreated } from './event/TournamentTreeWasCreated';
 import { TournamentTeamId } from './TournamentTeamId';
 
 export class TournamentTree {
@@ -39,7 +42,7 @@ export class TournamentTree {
     return new TournamentTree(tournamentTreeProps);
   }
 
-  static setTournamentTreeFromDataBase(props: {
+  public static setTournamentTreeFromDataBase(props: {
     tournamentId: string;
     tournamentTreeArray: FightingTeamsGroup[];
     tournamentTeams: TournamentTeam[];
@@ -96,4 +99,32 @@ export class TournamentTree {
       }
     });
   }
+}
+
+export function createTournamentTree(
+  state: TournamentTree | undefined,
+  command: { tournamentId: string; tournamentTeams: TournamentTeam[] },
+  currentTime: CurrentTimeProvider,
+  entityIdGenerator: EntityIdGenerator,
+): DomainCommandResult<TournamentTree> {
+  if (state !== undefined) {
+    throw new Error('This tournament already exists.');
+  }
+  if (command.tournamentTeams.length < 2) {
+    throw new Error('Tournament must have at least 2 fighting teams.');
+  }
+
+  const props = {
+    tournamentId: command.tournamentId,
+    tournamentTeams: command.tournamentTeams,
+    entityIdGenerator: entityIdGenerator,
+  };
+
+  const tournamentTree = TournamentTree.createSingleTournamentTree(props);
+  const tournamentTreeWasCreatedEvent = new TournamentTreeWasCreated(command.tournamentId, currentTime());
+
+  return {
+    state: tournamentTree,
+    events: [tournamentTreeWasCreatedEvent],
+  };
 }

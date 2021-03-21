@@ -1,8 +1,12 @@
 import { NumberIdGeneratorStub } from '../../../../test-support/shared/core/NumberIdGeneratorStub';
-import { TournamentTree } from '../../../../../src/modules/tournament-tree/core/domain/TournamentTree';
+import { createTournamentTree, TournamentTree } from '../../../../../src/modules/tournament-tree/core/domain/TournamentTree';
 import { generateTournamentTeamsList } from './TouramentTeamsListGenerator';
 import { FightingTeamsGroup } from '../../../../../src/modules/tournament-tree/core/domain/FightingTeamsGroup';
 import { FightingTeamsGroupId } from '../../../../../src/modules/tournament-tree/core/domain/FightingTeamsGroupId';
+import { TournamentTeam } from '../../../../../src/modules/tournament-tree/core/domain/TournamentTeam';
+import { CurrentTimeProvider } from '../../../../../src/shared/core/CurrentTimeProvider';
+import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
+import { state } from '@stryker-mutator/jest-runner/src/messaging';
 
 describe('TournamentTree', () => {
   describe('Single Tournament Tree', () => {
@@ -288,6 +292,25 @@ describe('TournamentTree', () => {
       // Then
       tournamentTree.setMatchWinner('match_3', tournamentTeamsList[0].teamId.raw);
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
+    });
+  });
+
+  describe('createTournamentTree() function', () => {
+    const testIdGenerator = NumberIdGeneratorStub(1000, 'testId');
+
+    it('Correct called', async () => {
+      //Given
+      const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
+      const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
+
+      // Then
+      const result = createTournamentTree(
+        undefined,
+        { tournamentId: 'testTournamentId', tournamentTeams: tournamentTeamsList },
+        () => new Date(),
+        testIdGenerator,
+      );
+      expect(result.events).toBeArray();
     });
   });
 });
