@@ -9,18 +9,15 @@ describe('TournamentTree', () => {
     const testTournamentId = NumberIdGeneratorStub(1000, 'testTournamentId');
 
     it('CreateTournamentTree | Create correct 4 teams tree', async () => {
-      //Given
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testTournamentId.generate(),
         tournamentTeams: tournamentTeamsList,
         entityIdGenerator: matchEntityIdGen,
       });
-
       const expectedWinnerTree: FightingTeamsGroup[] = [
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_3'),
@@ -48,17 +45,14 @@ describe('TournamentTree', () => {
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      // Then
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
 
     it('CreateTournamentTree | Create correct 6 teams tree', async () => {
-      //Given
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 6);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testTournamentId.generate(),
         tournamentTeams: tournamentTeamsList,
@@ -124,21 +118,18 @@ describe('TournamentTree', () => {
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      // Then
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
   });
 
-  describe('getMatchQueue() function', () => {
+  describe('Generate matches queue', () => {
     const testTournamentId = NumberIdGeneratorStub(1000, 'testTournamentId');
 
-    it('Get queue from 4 teams tree', async () => {
-      //Given
+    it('from 4 teams tree', async () => {
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testTournamentId.generate(),
         tournamentTeams: tournamentTeamsList,
@@ -164,23 +155,19 @@ describe('TournamentTree', () => {
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      // Then
       expect(tournamentTree.getMatchesQueueReadyToBegin()).toIncludeSameMembers(expectedMatchesQueue);
     });
 
-    it('Get queue from 6 teams tree', async () => {
-      //Given
+    it('from 6 teams tree', async () => {
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 6);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testTournamentId.generate(),
         tournamentTeams: tournamentTeamsList,
         entityIdGenerator: matchEntityIdGen,
       });
-
       const expectedMatchesQueue: FightingTeamsGroup[] = [
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_6'),
@@ -200,21 +187,18 @@ describe('TournamentTree', () => {
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      // Then
       expect(tournamentTree.getMatchesQueueReadyToBegin()).toIncludeSameMembers(expectedMatchesQueue);
     });
   });
 
-  describe('getMatchIdFromMatchNumberInSequence() function', () => {
+  describe('get match id from match number in sequence', () => {
     const testTournamentId = NumberIdGeneratorStub(1000, 'testTournamentId');
 
-    it('Find match Id', async () => {
-      //Given
+    it('when given correct id', async () => {
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 6);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testTournamentId.generate(),
         tournamentTeams: tournamentTeamsList,
@@ -226,12 +210,10 @@ describe('TournamentTree', () => {
     });
 
     it('Try find not existed match and return undefined', async () => {
-      //Given
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 6);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testTournamentId.generate(),
         tournamentTeams: tournamentTeamsList,
@@ -242,16 +224,14 @@ describe('TournamentTree', () => {
     });
   });
 
-  describe('setMatchWinner() function', () => {
+  describe('save match result', () => {
     const testTournamentId = NumberIdGeneratorStub(1000, 'testTournamentId');
 
-    it('Set match winner | 4 teams tree and two matchs is finished ', async () => {
-      //Given
+    it('when is 4 teams tree and two matches is finished ', async () => {
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testTournamentId.generate(),
         tournamentTeams: tournamentTeamsList,
@@ -285,9 +265,8 @@ describe('TournamentTree', () => {
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      // Then
-      tournamentTree.setMatchWinner('match_3', tournamentTeamsList[0].teamId.raw);
-      tournamentTree.setMatchWinner('match_2', tournamentTeamsList[1].teamId.raw);
+      tournamentTree.saveMatchResult('match_3', tournamentTeamsList[0].teamId.raw);
+      tournamentTree.saveMatchResult('match_2', tournamentTeamsList[1].teamId.raw);
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
   });
@@ -295,12 +274,10 @@ describe('TournamentTree', () => {
   describe('Other functions', () => {
     const testIdGenerator = NumberIdGeneratorStub(1000, 'testId');
 
-    it('getTournamentTreeIdArray() | Correct called', async () => {
-      //Given
+    it('createTournamentTree | Correct called', async () => {
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
 
-      // Then
       const result = createTournamentTree(
         undefined,
         { tournamentId: 'testTournamentId', tournamentTeams: tournamentTeamsList },
@@ -311,37 +288,31 @@ describe('TournamentTree', () => {
     });
 
     it('getTournamentTreeIdArray', async () => {
-      //Given
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testIdGenerator.generate(),
         tournamentTeams: tournamentTeamsList,
         entityIdGenerator: matchEntityIdGen,
       });
 
-      // Then
       expect(tournamentTree.getTournamentTreeIdArray()).toBeArray();
       expect(tournamentTree.getTournamentTreeIdArray()[0]).toBe('match_3');
     });
 
     it('getMatchesQueueIdArray', async () => {
-      //Given
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
 
-      // //When
       const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
         tournamentId: testIdGenerator.generate(),
         tournamentTeams: tournamentTeamsList,
         entityIdGenerator: matchEntityIdGen,
       });
 
-      // Then
       expect(tournamentTree.getMatchesQueueIdArray()).toBeArray();
       expect(tournamentTree.getMatchesQueueIdArray().length).toBe(2);
     });

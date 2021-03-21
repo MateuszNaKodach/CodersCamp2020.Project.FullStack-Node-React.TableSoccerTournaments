@@ -85,5 +85,5 @@ function mongoDocumentToDomain(mongoDocument: MongoTournamentTreeModel): Tournam
     })),
   };
 
-  return TournamentTree.setTournamentTreeFromDataBase(returnedObject);
+  return TournamentTree.loadAlreadyCreatedTree(returnedObject);
 }

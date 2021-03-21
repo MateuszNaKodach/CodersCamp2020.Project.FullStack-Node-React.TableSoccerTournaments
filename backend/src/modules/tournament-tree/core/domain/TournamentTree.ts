@@ -42,7 +42,7 @@ export class TournamentTree {
     return new TournamentTree(tournamentTreeProps);
   }
 
-  public static setTournamentTreeFromDataBase(props: {
+  public static loadAlreadyCreatedTree(props: {
     tournamentId: string;
     tournamentTreeArray: FightingTeamsGroup[];
     tournamentTeams: TournamentTeam[];
@@ -74,16 +74,21 @@ export class TournamentTree {
     return this.tournamentTreeArray.find((match) => match.matchNumberInSequence === matchNumberInSequence)?.fightingTeamsGroupId.raw;
   }
 
-  public setMatchWinner(matchId: string, winnerId: string) {
+  public saveMatchResult(matchId: string, winnerTeamId: string): void {
     const match = this.tournamentTreeArray.find((match) => matchId == match.fightingTeamsGroupId.raw);
-    const winnerMatchId = match?.nextMatchId?.raw;
+    const nextMatchIdForWinner = match?.nextMatchId?.raw;
+
+    if (!nextMatchIdForWinner) {
+      this.firstPlaceTeamId = winnerTeamId;
+      return;
+    }
 
     this.tournamentTreeArray.forEach((match) => {
-      if (match.fightingTeamsGroupId.raw !== winnerMatchId) return;
+      if (match.fightingTeamsGroupId.raw !== nextMatchIdForWinner) return;
       if (!match.firstTeam) {
-        match.firstTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerId) });
+        match.firstTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerTeamId) });
       } else {
-        match.secondTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerId) });
+        match.secondTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerTeamId) });
       }
     });
   }
