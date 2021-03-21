@@ -2,9 +2,9 @@ import { CommandPublisher } from '../../../../shared/core/application/command/Co
 import { DomainEventPublisher } from '../../../../shared/core/application/event/DomainEventBus';
 import { QueryPublisher } from '../../../../shared/core/application/query/QueryBus';
 import express, { Request, Response } from 'express';
-import { AssignTournamentTables } from '../../core/application/command/AssignTournamentTables';
+import { AssignTablesToTournament } from '../../core/application/command/AssignTablesToTournament';
 import { StatusCodes } from 'http-status-codes';
-import { PostAssignTournamentTablesRequestBody } from './request/PostAssignTournamentTablesRequestBody';
+import { PostAssignTablesToTournamentRequestBody } from './request/PostAssignTablesToTournamentRequestBody';
 import { FindTablesByTournamentId, FindTablesByTournamentIdResult } from '../../core/application/query/FindTablesByTournamentId';
 import { TournamentTable } from '../../core/domain/TournamentTable';
 import { TournamentTablesDto } from './response/TournamentTablesDto';
@@ -14,10 +14,10 @@ export function tournamentTablesRouter(
   eventPublisher: DomainEventPublisher,
   queryPublisher: QueryPublisher,
 ): express.Router {
-  const postAssignTournamentTables = async (request: Request, response: Response) => {
-    const requestBody: PostAssignTournamentTablesRequestBody = request.body;
+  const postAssignTablesToTournament = async (request: Request, response: Response) => {
+    const requestBody: PostAssignTablesToTournamentRequestBody = request.body;
     const { tournamentId } = request.params;
-    const commandResult = await commandPublisher.execute(new AssignTournamentTables(tournamentId, requestBody.tables));
+    const commandResult = await commandPublisher.execute(new AssignTablesToTournament(tournamentId, requestBody.tables));
     return commandResult.process(
       () => response.status(StatusCodes.OK).send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
@@ -33,7 +33,7 @@ export function tournamentTablesRouter(
   };
 
   const router = express.Router();
-  router.post('/:tournamentId/tables', postAssignTournamentTables);
+  router.post('/:tournamentId/tables', postAssignTablesToTournament);
   router.get('/:tournamentId/tables', getTablesAssignedToTournamentId);
   return router;
 }
@@ -44,6 +44,7 @@ function toTournamentTablesDto(tournamentTables: TournamentTable[]): TournamentT
       return {
         tableNumber: table.tableNumber.raw,
         tableName: table.tableName,
+        isFree: table.isFree,
       };
     }),
   );

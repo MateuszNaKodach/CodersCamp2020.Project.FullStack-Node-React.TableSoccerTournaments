@@ -1,5 +1,5 @@
 import { testTournamentTablesModule } from './TestTournamentTablesModule';
-import { AssignTournamentTables } from '../../../../../src/modules/tournament-tables/core/application/command/AssignTournamentTables';
+import { AssignTablesToTournament } from '../../../../../src/modules/tournament-tables/core/application/command/AssignTablesToTournament';
 import { TableNumber } from '../../../../../src/modules/tournament-tables/core/domain/TableNumber';
 import { TournamentTable } from '../../../../../src/modules/tournament-tables/core/domain/TournamentTable';
 import {
@@ -13,12 +13,12 @@ describe('Tournament Tables | Query Side', function () {
     const currentTime = new Date();
     const tournamentId = 'TournamentId';
     const tables = [
-      { tableNumber: 5, tableName: 'Bonzini' },
-      { tableNumber: 8, tableName: 'P4P' },
+      { tableNumber: 5, tableName: 'Bonzini', isFree: true },
+      { tableNumber: 8, tableName: 'P4P', isFree: false },
     ];
     const tournamentTablesModule = testTournamentTablesModule(currentTime);
-    const assignTournamentTables = new AssignTournamentTables(tournamentId, tables);
-    await tournamentTablesModule.executeCommand(assignTournamentTables);
+    const assignTablesToTournament = new AssignTablesToTournament(tournamentId, tables);
+    await tournamentTablesModule.executeCommand(assignTablesToTournament);
 
     //When
     const findTablesByIdResult = await tournamentTablesModule.executeQuery<FindTablesByTournamentIdResult>(
@@ -31,11 +31,13 @@ describe('Tournament Tables | Query Side', function () {
         tournamentId,
         tableNumber: TableNumber.from(5),
         tableName: 'Bonzini',
+        isFree: true,
       }),
       new TournamentTable({
         tournamentId,
         tableNumber: TableNumber.from(8),
         tableName: 'P4P',
+        isFree: false,
       }),
     ]);
   });
