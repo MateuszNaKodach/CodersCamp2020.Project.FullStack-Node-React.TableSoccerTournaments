@@ -265,8 +265,8 @@ describe('TournamentTree', () => {
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      tournamentTree.saveMatchResult('match_3', tournamentTeamsList[0].teamId.raw);
-      tournamentTree.saveMatchResult('match_2', tournamentTeamsList[1].teamId.raw);
+      tournamentTree.finishMatch('match_3', tournamentTeamsList[0].teamId.raw);
+      tournamentTree.finishMatch('match_2', tournamentTeamsList[1].teamId.raw);
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
   });

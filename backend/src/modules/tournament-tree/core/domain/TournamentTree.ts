@@ -74,7 +74,7 @@ export class TournamentTree {
     return this.tournamentTreeArray.find((match) => match.matchNumberInSequence === matchNumberInSequence)?.fightingTeamsGroupId.raw;
   }
 
-  public saveMatchResult(matchId: string, winnerTeamId: string): void {
+  public finishMatch(matchId: string, winnerTeamId: string): void {
     const match = this.tournamentTreeArray.find((match) => matchId == match.fightingTeamsGroupId.raw);
     const nextMatchIdForWinner = match?.nextMatchId?.raw;
 
