@@ -94,7 +94,7 @@ describe('TournamentTree', () => {
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_3'),
-          firstTeam: undefined,
+          firstTeam: tournamentTeamsList[0],
           secondTeam: undefined,
           fightingTeamsGroupLevel: 1,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
@@ -102,7 +102,7 @@ describe('TournamentTree', () => {
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_2'),
-          firstTeam: undefined,
+          firstTeam: tournamentTeamsList[1],
           secondTeam: undefined,
           fightingTeamsGroupLevel: 1,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
@@ -117,7 +117,6 @@ describe('TournamentTree', () => {
           matchNumberInSequence: 7,
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
-
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
   });
