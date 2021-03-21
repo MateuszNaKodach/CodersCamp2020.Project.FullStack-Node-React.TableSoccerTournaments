@@ -64,6 +64,7 @@ function createEmptyLevel(
         secondTeam: undefined,
         nextMatchId: nextMatchId,
         matchNumberInSequence: undefined,
+        isMatchFinished: false,
       }),
     );
   }
