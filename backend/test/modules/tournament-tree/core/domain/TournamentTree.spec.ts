@@ -245,7 +245,7 @@ describe('TournamentTree', () => {
   describe('setMatchWinner() function', () => {
     const testTournamentId = NumberIdGeneratorStub(1000, 'testTournamentId');
 
-    it('Set match winner | 4 teams tree and one match is finished', async () => {
+    it('Set match winner | 4 teams tree and two matchs is finished ', async () => {
       //Given
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
@@ -278,7 +278,7 @@ describe('TournamentTree', () => {
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_1'),
           firstTeam: tournamentTeamsList[0],
-          secondTeam: undefined,
+          secondTeam: tournamentTeamsList[1],
           fightingTeamsGroupLevel: 1,
           nextMatchId: undefined,
           matchNumberInSequence: 3,
@@ -286,10 +286,9 @@ describe('TournamentTree', () => {
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
       // Then
-      expect(tournamentTree.setMatchWinner('match_3', tournamentTeamsList[0].teamId.raw)).toBe(true);
+      tournamentTree.setMatchWinner('match_3', tournamentTeamsList[0].teamId.raw);
+      tournamentTree.setMatchWinner('match_2', tournamentTeamsList[1].teamId.raw);
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
-      expect(tournamentTree.setMatchWinner('NotExistedId', tournamentTeamsList[0].teamId.raw)).toBe(false);
-      expect(tournamentTree.setMatchWinner('match_3', 'NotExistedId')).toBe(false);
     });
   });
 

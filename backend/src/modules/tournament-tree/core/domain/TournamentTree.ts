@@ -74,22 +74,9 @@ export class TournamentTree {
     return this.tournamentTreeArray.find((match) => match.matchNumberInSequence === matchNumberInSequence)?.fightingTeamsGroupId.raw;
   }
 
-  public setMatchWinner(matchId: string, winnerId: string): boolean {
+  public setMatchWinner(matchId: string, winnerId: string) {
     const match = this.tournamentTreeArray.find((match) => matchId == match.fightingTeamsGroupId.raw);
-    if (!match) {
-      return false;
-    }
-
-    const isWinnerIdCorrect = match.firstTeam?.teamId?.raw === winnerId || match.secondTeam?.teamId?.raw === winnerId;
-    if (!isWinnerIdCorrect) {
-      return false;
-    }
-
-    const winnerMatchId = match.nextMatchId?.raw;
-    if (!winnerMatchId) {
-      this.firstPlaceTeamId = winnerMatchId;
-      return true;
-    }
+    const winnerMatchId = match?.nextMatchId?.raw;
 
     this.tournamentTreeArray.forEach((match) => {
       if (match.fightingTeamsGroupId.raw !== winnerMatchId) return;
@@ -99,7 +86,6 @@ export class TournamentTree {
         match.secondTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerId) });
       }
     });
-    return true;
   }
 }
 
