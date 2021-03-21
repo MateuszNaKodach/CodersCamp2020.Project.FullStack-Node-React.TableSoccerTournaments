@@ -3,10 +3,6 @@ import { createTournamentTree, TournamentTree } from '../../../../../src/modules
 import { generateTournamentTeamsList } from './TouramentTeamsListGenerator';
 import { FightingTeamsGroup } from '../../../../../src/modules/tournament-tree/core/domain/FightingTeamsGroup';
 import { FightingTeamsGroupId } from '../../../../../src/modules/tournament-tree/core/domain/FightingTeamsGroupId';
-import { TournamentTeam } from '../../../../../src/modules/tournament-tree/core/domain/TournamentTeam';
-import { CurrentTimeProvider } from '../../../../../src/shared/core/CurrentTimeProvider';
-import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
-import { state } from '@stryker-mutator/jest-runner/src/messaging';
 
 describe('TournamentTree', () => {
   describe('Single Tournament Tree', () => {
@@ -290,10 +286,10 @@ describe('TournamentTree', () => {
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
       // Then
-      expect(  tournamentTree.setMatchWinner('match_3', tournamentTeamsList[0].teamId.raw)).toBe(true);
+      expect(tournamentTree.setMatchWinner('match_3', tournamentTeamsList[0].teamId.raw)).toBe(true);
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
-      expect(  tournamentTree.setMatchWinner('NotExistedId', tournamentTeamsList[0].teamId.raw)).toBe(false);
-      expect(  tournamentTree.setMatchWinner('match_3', 'NotExistedId')).toBe(false);
+      expect(tournamentTree.setMatchWinner('NotExistedId', tournamentTeamsList[0].teamId.raw)).toBe(false);
+      expect(tournamentTree.setMatchWinner('match_3', 'NotExistedId')).toBe(false);
     });
   });
 
@@ -330,7 +326,7 @@ describe('TournamentTree', () => {
 
       // Then
       expect(tournamentTree.getTournamentTreeIdArray()).toBeArray();
-      expect(tournamentTree.getTournamentTreeIdArray()[0]).toBe("match_3");
+      expect(tournamentTree.getTournamentTreeIdArray()[0]).toBe('match_3');
     });
 
     it('getMatchesQueueIdArray', async () => {
@@ -351,5 +347,4 @@ describe('TournamentTree', () => {
       expect(tournamentTree.getMatchesQueueIdArray().length).toBe(2);
     });
   });
-
 });
