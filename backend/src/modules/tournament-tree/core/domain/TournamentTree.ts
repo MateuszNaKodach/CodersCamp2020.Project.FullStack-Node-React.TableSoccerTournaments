@@ -42,7 +42,7 @@ export class TournamentTree {
     return new TournamentTree(tournamentTreeProps);
   }
 
-  public setTournamentTreeFromDataBase(props: {
+  public static setTournamentTreeFromDataBase(props: {
     tournamentId: string;
     tournamentTreeArray: FightingTeamsGroup[];
     tournamentTeams: TournamentTeam[];
@@ -74,7 +74,7 @@ export class TournamentTree {
     return this.tournamentTreeArray.find((match) => match.matchNumberInSequence === matchNumberInSequence)?.fightingTeamsGroupId.raw;
   }
 
-  public setMatchWinner(matchId: string, winnerId: string) {
+  public setMatchWinner(matchId: string, winnerId: string): void {
     const match = this.tournamentTreeArray.find((match) => matchId == match.fightingTeamsGroupId.raw);
     if (!match) {
       throw new Error('This Id not exist!');

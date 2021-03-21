@@ -27,6 +27,7 @@ export class MongoTournamentTreeRepository implements TournamentTreeRepository {
           secondTeam: item.secondTeam?.teamId.raw,
           fightingTeamsGroupLevel: item.fightingTeamsGroupLevel,
           nextMatchId: item.nextMatchId?.raw,
+          matchNumberInSequence: item.matchNumberInSequence,
         })),
       },
       { upsert: true, useFindAndModify: true },
@@ -48,6 +49,7 @@ type MongoTournamentTreeModel = {
       secondTeam: string | undefined;
       fightingTeamsGroupLevel: number;
       nextMatchId: string | undefined;
+      matchNumberInSequence: number | undefined;
     },
   ];
 } & mongoose.Document;
@@ -62,6 +64,7 @@ const TournamentTreeSchema = new mongoose.Schema({
       secondTeam: Schema.Types.String,
       fightingTeamsGroupLevel: Schema.Types.Number,
       nextMatchId: Schema.Types.String,
+      matchNumberInSequence: Schema.Types.Number,
     },
   ],
 });
@@ -78,6 +81,7 @@ function mongoDocumentToDomain(mongoDocument: MongoTournamentTreeModel): Tournam
       secondTeam: item.secondTeam ? new TournamentTeam({ teamId: TournamentTeamId.from(item.secondTeam) }) : undefined,
       fightingTeamsGroupLevel: item.fightingTeamsGroupLevel,
       nextMatchId: item.nextMatchId ? FightingTeamsGroupId.from(item.nextMatchId) : undefined,
+      matchNumberInSequence: item.matchNumberInSequence ? item.matchNumberInSequence : undefined,
     })),
   };
 
