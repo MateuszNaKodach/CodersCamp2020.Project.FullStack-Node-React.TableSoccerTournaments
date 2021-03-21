@@ -50,7 +50,7 @@ jobs:
 
   deploy-on-github-pages:
     name: 'Deploy app to GitHub Pages from develop branch source code'
-    if: github.ref == 'refs/heads/Frontend/Add_github_actions_workflow'
+    if: github.ref == 'refs/heads/develop'
     needs: build
     runs-on: ubuntu-latest
     steps:
