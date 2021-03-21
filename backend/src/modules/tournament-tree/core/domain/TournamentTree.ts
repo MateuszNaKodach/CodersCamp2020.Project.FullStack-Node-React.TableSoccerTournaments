@@ -5,11 +5,13 @@ import { EntityIdGenerator } from '../../../../shared/core/application/EntityIdG
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
 import { TournamentTreeWasCreated } from './event/TournamentTreeWasCreated';
+import { TournamentTeamId } from './TournamentTeamId';
 
 export class TournamentTree {
   readonly tournamentTeams: TournamentTeam[];
   readonly tournamentTreeArray: FightingTeamsGroup[];
   readonly tournamentId: string;
+  firstPlaceTeamId: string | undefined = undefined;
 
   private constructor(props: { tournamentId: string; tournamentTreeArray: FightingTeamsGroup[]; tournamentTeams: TournamentTeam[] }) {
     this.tournamentTeams = props.tournamentTeams;
@@ -17,7 +19,7 @@ export class TournamentTree {
     this.tournamentId = props.tournamentId;
   }
 
-  static createSingleTournamentTree(props: {
+  public static createSingleTournamentTree(props: {
     tournamentId: string;
     tournamentTeams: TournamentTeam[];
     entityIdGenerator: EntityIdGenerator;
@@ -26,19 +28,25 @@ export class TournamentTree {
       tournamentTeams: props.tournamentTeams,
       entityIdGenerator: props.entityIdGenerator,
     });
+
+    const tournamentTreeArray = winnerTree.getTournamentTreeArray().map((item, index) => {
+      return { ...item, matchNumberInSequence: index + 1 };
+    });
+
     const tournamentTreeProps = {
       tournamentId: props.tournamentId,
-      tournamentTreeArray: winnerTree.getTournamentTreeArray(),
+      tournamentTreeArray: tournamentTreeArray,
       tournamentTeams: props.tournamentTeams,
     };
+
     return new TournamentTree(tournamentTreeProps);
   }
 
-  static setTournamentTreeFromDataBase(props: {
+  public static loadAlreadyCreatedTree(props: {
     tournamentId: string;
     tournamentTreeArray: FightingTeamsGroup[];
     tournamentTeams: TournamentTeam[];
-  }) {
+  }): TournamentTree {
     return new TournamentTree({
       tournamentId: props.tournamentId,
       tournamentTreeArray: props.tournamentTreeArray,
@@ -50,6 +58,10 @@ export class TournamentTree {
     return this.tournamentTreeArray;
   }
 
+  public getMatchesQueueReadyToBegin(): FightingTeamsGroup[] {
+    return this.tournamentTreeArray.filter(({ firstTeam, secondTeam }) => firstTeam && secondTeam);
+  }
+
   public getTournamentTreeIdArray(): string[] {
     return this.tournamentTreeArray.map((item) => item.fightingTeamsGroupId.raw);
   }
@@ -58,7 +70,28 @@ export class TournamentTree {
     return this.tournamentTreeArray.filter((item) => item.firstTeam && item.secondTeam).map((item) => item.fightingTeamsGroupId.raw);
   }
 
-  public finishMatch(matchId: string, winnerId: string): void {}
+  public getMatchIdFromMatchNumberInSequence(matchNumberInSequence: number): string | undefined {
+    return this.tournamentTreeArray.find((match) => match.matchNumberInSequence === matchNumberInSequence)?.fightingTeamsGroupId.raw;
+  }
+
+  public saveMatchResult(matchId: string, winnerTeamId: string): void {
+    const match = this.tournamentTreeArray.find((match) => matchId == match.fightingTeamsGroupId.raw);
+    const nextMatchIdForWinner = match?.nextMatchId?.raw;
+
+    if (!nextMatchIdForWinner) {
+      this.firstPlaceTeamId = winnerTeamId;
+      return;
+    }
+
+    this.tournamentTreeArray.forEach((match) => {
+      if (match.fightingTeamsGroupId.raw !== nextMatchIdForWinner) return;
+      if (!match.firstTeam) {
+        match.firstTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerTeamId) });
+      } else {
+        match.secondTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerTeamId) });
+      }
+    });
+  }
 }
 
 export function createTournamentTree(
