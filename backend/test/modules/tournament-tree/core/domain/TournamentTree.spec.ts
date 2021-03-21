@@ -290,15 +290,17 @@ describe('TournamentTree', () => {
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
       // Then
-      tournamentTree.setMatchWinner('match_3', tournamentTeamsList[0].teamId.raw);
+      expect(  tournamentTree.setMatchWinner('match_3', tournamentTeamsList[0].teamId.raw)).toBe(true);
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
+      expect(  tournamentTree.setMatchWinner('NotExistedId', tournamentTeamsList[0].teamId.raw)).toBe(false);
+      expect(  tournamentTree.setMatchWinner('match_3', 'NotExistedId')).toBe(false);
     });
   });
 
-  describe('createTournamentTree() function', () => {
+  describe('Other functions', () => {
     const testIdGenerator = NumberIdGeneratorStub(1000, 'testId');
 
-    it('Correct called', async () => {
+    it('getTournamentTreeIdArray() | Correct called', async () => {
       //Given
       const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
       const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
@@ -312,5 +314,42 @@ describe('TournamentTree', () => {
       );
       expect(result.events).toBeArray();
     });
+
+    it('getTournamentTreeIdArray', async () => {
+      //Given
+      const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
+      const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
+      const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
+
+      // //When
+      const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
+        tournamentId: testIdGenerator.generate(),
+        tournamentTeams: tournamentTeamsList,
+        entityIdGenerator: matchEntityIdGen,
+      });
+
+      // Then
+      expect(tournamentTree.getTournamentTreeIdArray()).toBeArray();
+      expect(tournamentTree.getTournamentTreeIdArray()[0]).toBe("match_3");
+    });
+
+    it('getMatchesQueueIdArray', async () => {
+      //Given
+      const teamEntityIdGen = NumberIdGeneratorStub(1000, 'team');
+      const matchEntityIdGen = NumberIdGeneratorStub(1000, 'match');
+      const tournamentTeamsList = generateTournamentTeamsList(teamEntityIdGen, 4);
+
+      // //When
+      const tournamentTree: TournamentTree = TournamentTree.createSingleTournamentTree({
+        tournamentId: testIdGenerator.generate(),
+        tournamentTeams: tournamentTeamsList,
+        entityIdGenerator: matchEntityIdGen,
+      });
+
+      // Then
+      expect(tournamentTree.getMatchesQueueIdArray()).toBeArray();
+      expect(tournamentTree.getMatchesQueueIdArray().length).toBe(2);
+    });
   });
+
 });

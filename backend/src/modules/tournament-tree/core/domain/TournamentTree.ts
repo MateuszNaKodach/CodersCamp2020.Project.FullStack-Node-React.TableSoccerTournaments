@@ -74,20 +74,21 @@ export class TournamentTree {
     return this.tournamentTreeArray.find((match) => match.matchNumberInSequence === matchNumberInSequence)?.fightingTeamsGroupId.raw;
   }
 
-  public setMatchWinner(matchId: string, winnerId: string): void {
+  public setMatchWinner(matchId: string, winnerId: string): boolean {
     const match = this.tournamentTreeArray.find((match) => matchId == match.fightingTeamsGroupId.raw);
     if (!match) {
-      throw new Error('This Id not exist!');
+      return false;
     }
 
     const isWinnerIdCorrect = match.firstTeam?.teamId?.raw === winnerId || match.secondTeam?.teamId?.raw === winnerId;
     if (!isWinnerIdCorrect) {
-      throw new Error('This TeamId not exist in this match!');
+      return false;
     }
 
     const winnerMatchId = match.nextMatchId?.raw;
     if (!winnerMatchId) {
       this.firstPlaceTeamId = winnerMatchId;
+      return true;
     }
 
     this.tournamentTreeArray.forEach((match) => {
@@ -98,6 +99,7 @@ export class TournamentTree {
         match.secondTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerId) });
       }
     });
+    return true;
   }
 }
 
