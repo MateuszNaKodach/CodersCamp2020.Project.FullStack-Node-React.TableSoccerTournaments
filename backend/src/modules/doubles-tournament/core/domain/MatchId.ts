@@ -7,6 +7,6 @@ export class MatchId {
     if (tournamentId.length <= 0) {
       throw new Error('TournamentId cannot be empty!');
     }
-    return new MatchId(tournamentId + '-' + matchNumber);
+    return new MatchId(tournamentId + '_' + matchNumber);
   }
 }
