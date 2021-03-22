@@ -3,6 +3,7 @@ import { testDoublesTournamentsModule } from './TestDoublesTournamentsModule';
 import { FromListIdGeneratorStub } from '../../../../test-support/shared/core/FromListIdGeneratorStub';
 import { MatchWasCalled } from '../../../../../src/modules/doubles-tournament/core/domain/event/MatchWasCalled';
 import { StartMatch } from '../../../../../src/modules/match-module/core/application/command/StartMatch';
+import { MatchId } from '../../../../../src/modules/doubles-tournament/core/domain/MatchId';
 
 describe('Starting match', () => {
   it('when match was called, then execute command for starting such match', () => {
@@ -11,6 +12,7 @@ describe('Starting match', () => {
     const team2Id = 'Team2Id';
     const tournamentId = 'TournamentId';
     const matchNumber = 1;
+    const matchId: MatchId = MatchId.from(tournamentId, matchNumber);
     const tableNumber = 1;
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id]);
@@ -32,9 +34,7 @@ describe('Starting match', () => {
 
     //Then
     const startMatch = new StartMatch({
-      // matchId: '1',
-      //TODO wait with that for update in match module
-      matchNumber: matchNumber,
+      matchId: matchId.raw,
       firstMatchSideId: team1Id,
       secondMatchSideId: team2Id,
     });
