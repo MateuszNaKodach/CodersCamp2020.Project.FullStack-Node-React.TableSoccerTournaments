@@ -17,6 +17,8 @@ import { EnqueueMatchCommandHandler } from './application/command/EnqueueMatchCo
 import { MatchesQueueRepository } from './application/MatchesQueueRepository';
 import { FindMatchesQueueByTournamentId } from './application/query/FindMatchesQueueByTournamentId';
 import { FindMatchesQueueByTournamentIdQueryHandler } from './application/query/FindMatchesQueueByTournamentIdQueryHandler';
+import { CallMatch } from './application/command/CallMatch';
+import { CallMatchCommandHandler } from './application/command/CallMatchCommandHandler';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -35,6 +37,10 @@ export function DoublesTournamentModuleCore(
       {
         commandType: EnqueueMatch,
         handler: new EnqueueMatchCommandHandler(eventPublisher, currentTimeProvider, repository, matchesQueue),
+      },
+      {
+        commandType: CallMatch,
+        handler: new CallMatchCommandHandler(eventPublisher, currentTimeProvider, commandPublisher),
       },
     ],
     eventHandlers: [
