@@ -18,7 +18,9 @@ export class CallMatchCommandHandler implements CommandHandler<CallMatch> {
     const bookTable = await this.commandPublisher.execute(new BookTournamentTable(command.tournamentId, command.tableNumber));
 
     if (!bookTable.isSuccess()) {
-      return CommandResult.failureDueTo(new Error('Table has been already booked!'));
+      return CommandResult.failureDueTo(
+        new Error(`Match cannot be called on this table, because table nr ${command.tableNumber} has been already booked!`),
+      );
     }
 
     const matchWasCalled = new MatchWasCalled({

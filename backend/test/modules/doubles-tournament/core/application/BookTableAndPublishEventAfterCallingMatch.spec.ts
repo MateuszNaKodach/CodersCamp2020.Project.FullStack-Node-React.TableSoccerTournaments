@@ -54,7 +54,7 @@ describe('Execute command CallMatch', () => {
     //Given
     const alwaysFailBookTournamentTableCommandHandler: CommandHandler<BookTournamentTable> = {
       async execute(command: BookTournamentTable): Promise<CommandResult> {
-        return CommandResult.failureDueTo(new Error('Table has been already booked!'));
+        return CommandResult.failureDueTo(new Error(`Match cannot be called on this table, because table nr 1 has been already booked!`));
       },
     };
     const commandBus = new InMemoryCommandBus();
@@ -71,7 +71,9 @@ describe('Execute command CallMatch', () => {
     const commandResult = await doublesTournament.executeCommand(callMatch);
 
     //Then
-    expect((commandResult as Failure).reason).toStrictEqual(new Error('Table has been already booked!'));
+    expect((commandResult as Failure).reason).toStrictEqual(
+      new Error(`Match cannot be called on this table, because table nr 1 has been already booked!`),
+    );
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(undefined);
   });
 });
