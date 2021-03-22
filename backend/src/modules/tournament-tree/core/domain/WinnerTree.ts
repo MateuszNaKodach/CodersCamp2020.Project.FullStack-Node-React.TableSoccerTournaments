@@ -22,7 +22,7 @@ export class WinnerTree {
   }
 
   public getTournamentTreeArray(): FightingTeamsGroup[] {
-    return this.treeArray;
+    return [...this.treeArray];
   }
 }
 

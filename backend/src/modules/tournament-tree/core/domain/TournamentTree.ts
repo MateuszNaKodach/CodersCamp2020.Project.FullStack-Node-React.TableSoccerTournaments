@@ -20,15 +20,16 @@ export class TournamentTree {
   }
 
   private finishMatchesFromLevelZeroWhereIsOnlyOneTeam(): void {
-    this.getTournamentTreeArray().map((match) => {
-      const isMatchFromLevelZeroWithoutOneTeam = match.fightingTeamsGroupLevel === 0 && (!match.firstTeam || !match.secondTeam);
-      if (isMatchFromLevelZeroWithoutOneTeam && match.firstTeam) {
-        this.finishMatch(match.fightingTeamsGroupId.raw, match.firstTeam.teamId.raw);
-      }
-      if (isMatchFromLevelZeroWithoutOneTeam && match.secondTeam) {
-        this.finishMatch(match.fightingTeamsGroupId.raw, match.secondTeam.teamId.raw);
-      }
-    });
+    this.tournamentTreeArray
+      .filter((match) => match.fightingTeamsGroupLevel === 0 && (!match.firstTeam || !match.secondTeam))
+      .map((match) => {
+        if (match.firstTeam) {
+          this.finishMatch(match.fightingTeamsGroupId.raw, match.firstTeam.teamId.raw);
+        }
+        if (match.secondTeam) {
+          this.finishMatch(match.fightingTeamsGroupId.raw, match.secondTeam.teamId.raw);
+        }
+      });
   }
 
   public static createSingleTournamentTree(props: {
@@ -68,7 +69,7 @@ export class TournamentTree {
   }
 
   public getTournamentTreeArray(): FightingTeamsGroup[] {
-    return this.tournamentTreeArray;
+    return [...this.tournamentTreeArray];
   }
 
   public getMatchesQueueReadyToBegin(): FightingTeamsGroup[] {
