@@ -22,7 +22,7 @@ export class WinnerTree {
   }
 
   public getTournamentTreeArray(): FightingTeamsGroup[] {
-    return this.treeArray;
+    return [...this.treeArray];
   }
 }
 
@@ -63,6 +63,8 @@ function createEmptyLevel(
         firstTeam: undefined,
         secondTeam: undefined,
         nextMatchId: nextMatchId,
+        matchNumberInSequence: undefined,
+        isMatchFinished: false,
       }),
     );
   }

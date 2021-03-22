@@ -6,6 +6,11 @@
       "dom.iterable",
       "esnext"
     ],
+    "rootDir": "./src",
+    "types": [
+      "@types/jest",
+      "jest"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -21,6 +26,6 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src/**/*.tsx"
   ]
 }

@@ -7,6 +7,8 @@ export class FightingTeamsGroup {
   secondTeam: TournamentTeam | undefined;
   readonly fightingTeamsGroupLevel: number;
   nextMatchId: FightingTeamsGroupId | undefined;
+  matchNumberInSequence: number | undefined;
+  isMatchFinished: boolean;
 
   private constructor(props: {
     fightingTeamsGroupId: FightingTeamsGroupId;
@@ -14,12 +16,16 @@ export class FightingTeamsGroup {
     secondTeam: TournamentTeam | undefined;
     fightingTeamsGroupLevel: number;
     nextMatchId: FightingTeamsGroupId | undefined;
+    matchNumberInSequence: number | undefined;
+    isMatchFinished: boolean;
   }) {
     this.fightingTeamsGroupId = props.fightingTeamsGroupId;
     this.firstTeam = props.firstTeam;
     this.secondTeam = props.secondTeam;
     this.fightingTeamsGroupLevel = props.fightingTeamsGroupLevel;
     this.nextMatchId = props.nextMatchId;
+    this.matchNumberInSequence = props.matchNumberInSequence;
+    this.isMatchFinished = props.isMatchFinished;
   }
 
   static fromObj(props: {
@@ -28,6 +34,8 @@ export class FightingTeamsGroup {
     secondTeam: TournamentTeam | undefined;
     fightingTeamsGroupLevel: number;
     nextMatchId: FightingTeamsGroupId | undefined;
+    matchNumberInSequence: number | undefined;
+    isMatchFinished: boolean;
   }): FightingTeamsGroup {
     return new FightingTeamsGroup(props);
   }
