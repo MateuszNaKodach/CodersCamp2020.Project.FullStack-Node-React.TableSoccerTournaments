@@ -26,6 +26,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
           matchNumberInSequence: 1,
+          isMatchFinished: false,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_2'),
@@ -34,6 +35,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
           matchNumberInSequence: 2,
+          isMatchFinished: false,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_1'),
@@ -42,6 +44,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 1,
           nextMatchId: undefined,
           matchNumberInSequence: 3,
+          isMatchFinished: false,
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
@@ -67,6 +70,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_3'),
           matchNumberInSequence: 1,
+          isMatchFinished: true,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_6'),
@@ -75,6 +79,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_3'),
           matchNumberInSequence: 2,
+          isMatchFinished: false,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_5'),
@@ -83,6 +88,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_2'),
           matchNumberInSequence: 3,
+          isMatchFinished: false,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_4'),
@@ -91,22 +97,25 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_2'),
           matchNumberInSequence: 4,
+          isMatchFinished: true,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_3'),
-          firstTeam: undefined,
+          firstTeam: tournamentTeamsList[0],
           secondTeam: undefined,
           fightingTeamsGroupLevel: 1,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
           matchNumberInSequence: 5,
+          isMatchFinished: false,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_2'),
-          firstTeam: undefined,
+          firstTeam: tournamentTeamsList[1],
           secondTeam: undefined,
           fightingTeamsGroupLevel: 1,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
           matchNumberInSequence: 6,
+          isMatchFinished: false,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_1'),
@@ -115,9 +124,9 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 2,
           nextMatchId: undefined,
           matchNumberInSequence: 7,
+          isMatchFinished: false,
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
-
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
   });
@@ -144,6 +153,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
           matchNumberInSequence: 1,
+          isMatchFinished: false,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_2'),
@@ -152,6 +162,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
           matchNumberInSequence: 2,
+          isMatchFinished: false,
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
@@ -176,6 +187,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_3'),
           matchNumberInSequence: 2,
+          isMatchFinished: false,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_5'),
@@ -184,6 +196,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_2'),
           matchNumberInSequence: 3,
+          isMatchFinished: false,
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
@@ -246,6 +259,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
           matchNumberInSequence: 1,
+          isMatchFinished: true,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_2'),
@@ -254,6 +268,7 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 0,
           nextMatchId: FightingTeamsGroupId.from('match_1'),
           matchNumberInSequence: 2,
+          isMatchFinished: true,
         },
         {
           fightingTeamsGroupId: FightingTeamsGroupId.from('match_1'),
@@ -262,11 +277,12 @@ describe('TournamentTree', () => {
           fightingTeamsGroupLevel: 1,
           nextMatchId: undefined,
           matchNumberInSequence: 3,
+          isMatchFinished: false,
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      tournamentTree.saveMatchResult('match_3', tournamentTeamsList[0].teamId.raw);
-      tournamentTree.saveMatchResult('match_2', tournamentTeamsList[1].teamId.raw);
+      tournamentTree.finishMatch('match_3', tournamentTeamsList[0].teamId.raw);
+      tournamentTree.finishMatch('match_2', tournamentTeamsList[1].teamId.raw);
       expect(tournamentTree.getTournamentTreeArray()).toIncludeSameMembers(expectedWinnerTree);
     });
   });
