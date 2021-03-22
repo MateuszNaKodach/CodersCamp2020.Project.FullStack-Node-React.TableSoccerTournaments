@@ -4,7 +4,7 @@ import { CommandPublisher } from '../../../../../shared/core/application/command
 import { StartMatch } from '../../../../match-module/core/application/command/StartMatch';
 import { MatchId } from '../../domain/MatchId';
 
-export class StartMatchAfterItsCallingEventHandler implements EventHandler<MatchWasCalled> {
+export class StartMatchAfterItsCalling implements EventHandler<MatchWasCalled> {
   constructor(private readonly commandPublisher: CommandPublisher) {}
 
   async handle(event: MatchWasCalled): Promise<void> {

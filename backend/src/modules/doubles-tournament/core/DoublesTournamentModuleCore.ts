@@ -20,7 +20,7 @@ import { FindMatchesQueueByTournamentIdQueryHandler } from './application/query/
 import { CallMatch } from './application/command/CallMatch';
 import { CallMatchCommandHandler } from './application/command/CallMatchCommandHandler';
 import { MatchWasCalled } from './domain/event/MatchWasCalled';
-import { StartMatchAfterItsCallingEventHandler } from './application/event/StartMatchAfterItsCallingEventHandler';
+import { StartMatchAfterItsCalling } from './application/event/StartMatchAfterItsCalling';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -52,7 +52,7 @@ export function DoublesTournamentModuleCore(
       },
       {
         eventType: MatchWasCalled,
-        handler: new StartMatchAfterItsCallingEventHandler(commandPublisher),
+        handler: new StartMatchAfterItsCalling(commandPublisher),
       },
     ],
     queryHandlers: [
