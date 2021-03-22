@@ -15,7 +15,11 @@ export class CallMatchCommandHandler implements CommandHandler<CallMatch> {
   ) {}
 
   async execute(command: CallMatch): Promise<CommandResult> {
-    await this.commandPublisher.execute(new BookTournamentTable(command.tournamentId, command.tableNumber));
+    const bookTable = await this.commandPublisher.execute(new BookTournamentTable(command.tournamentId, command.tableNumber));
+
+    if (!bookTable.isSuccess()) {
+      return CommandResult.failureDueTo(new Error('Table has been already booked!'));
+    }
 
     const matchWasCalled = new MatchWasCalled({
       occurredAt: this.currentTimeProvider(),

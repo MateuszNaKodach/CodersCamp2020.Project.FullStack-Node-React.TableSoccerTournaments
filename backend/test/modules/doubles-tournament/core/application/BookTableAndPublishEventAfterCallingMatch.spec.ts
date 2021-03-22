@@ -17,47 +17,6 @@ describe('Execute command CallMatch', () => {
   const currentTime = new Date();
   const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id]);
 
-  it('Then publish event and execute BookTournamentTable command from different module |  happy path', async () => {
-    //Given
-    const alwaysSuccessBookTournamentTableCommandHandler: CommandHandler<BookTournamentTable> = {
-      async execute(command: BookTournamentTable): Promise<CommandResult> {
-        return CommandResult.success();
-      },
-    };
-
-    const commandBus = new InMemoryCommandBus();
-    commandBus.registerHandler(BookTournamentTable, alwaysSuccessBookTournamentTableCommandHandler);
-    const executeSpy = jest.spyOn(commandBus, 'execute');
-
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
-
-    //When
-    const callMatch = new CallMatch({
-      tournamentId: tournamentId,
-      calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
-      tableNumber: tableNumber,
-    });
-    const commandResult = await doublesTournament.executeCommand(callMatch);
-
-    //Then
-    expect(commandResult.isSuccess()).toBeTruthy();
-    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
-      new MatchWasCalled({
-        occurredAt: currentTime,
-        tournamentId: tournamentId,
-        calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
-        tableNumber: tableNumber,
-      }),
-    );
-
-    expect(executeSpy).toHaveBeenCalledTimes(2);
-
-    const bookFromAvailableTables = new BookTournamentTable(tournamentId, tableNumber);
-    expect(commandBus.execute).toHaveBeenLastCalledWith(bookFromAvailableTables);
-  });
-
-  //--------------------------------------------------------------------------------------------------------------------
-
   it('Then publish event and execute BookTournamentTable command from different module | happy path', async () => {
     //Given
     const alwaysSuccessBookTournamentTableCommandHandler: CommandHandler<BookTournamentTable> = {
@@ -65,10 +24,8 @@ describe('Execute command CallMatch', () => {
         return CommandResult.success();
       },
     };
-
     const commandBus = new InMemoryCommandBus();
     commandBus.registerHandler(BookTournamentTable, alwaysSuccessBookTournamentTableCommandHandler);
-    const executeSpy = jest.spyOn(commandBus, 'execute');
 
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
 
@@ -80,12 +37,8 @@ describe('Execute command CallMatch', () => {
     });
     const commandResultFromCallingMatch = await doublesTournament.executeCommand(callMatch);
 
-    const bookTable = new BookTournamentTable(tournamentId, tableNumber);
-    const commandResultFromBookingTable = await doublesTournament.executeCommand(bookTable);
-
     //Then
     expect(commandResultFromCallingMatch.isSuccess()).toBeTruthy();
-    expect(commandResultFromBookingTable.isSuccess()).toBeTruthy();
 
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
       new MatchWasCalled({
@@ -95,11 +48,6 @@ describe('Execute command CallMatch', () => {
         tableNumber: tableNumber,
       }),
     );
-
-    expect(executeSpy).toHaveBeenCalledTimes(3);
-
-    const bookFromAvailableTables = new BookTournamentTable(tournamentId, tableNumber);
-    expect(commandBus.execute).toHaveBeenLastCalledWith(bookFromAvailableTables);
   });
 
   it('Then publish event and execute BookTournamentTable command from different module | table has been already booked', async () => {
@@ -109,10 +57,8 @@ describe('Execute command CallMatch', () => {
         return CommandResult.failureDueTo(new Error('Table has been already booked!'));
       },
     };
-
     const commandBus = new InMemoryCommandBus();
     commandBus.registerHandler(BookTournamentTable, alwaysFailBookTournamentTableCommandHandler);
-    const executeSpy = jest.spyOn(commandBus, 'execute');
 
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
 
@@ -124,25 +70,8 @@ describe('Execute command CallMatch', () => {
     });
     const commandResultFromCallingMatch = await doublesTournament.executeCommand(callMatch);
 
-    const bookTable = new BookTournamentTable(tournamentId, tableNumber);
-    const commandResultFromBookingTable = await doublesTournament.executeCommand(bookTable);
-
     //Then
-    expect(commandResultFromCallingMatch.isSuccess()).toBeTruthy();
-    expect((commandResultFromBookingTable as Failure).reason).toStrictEqual(new Error('Table has been already booked!'));
-
-    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
-      new MatchWasCalled({
-        occurredAt: currentTime,
-        tournamentId: tournamentId,
-        calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
-        tableNumber: tableNumber,
-      }),
-    );
-
-    expect(executeSpy).toHaveBeenCalledTimes(3);
-
-    const bookFromAvailableTables = new BookTournamentTable(tournamentId, tableNumber);
-    expect(commandBus.execute).toHaveBeenLastCalledWith(bookFromAvailableTables);
+    expect((commandResultFromCallingMatch as Failure).reason).toStrictEqual(new Error('Table has been already booked!'));
+    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(undefined);
   });
 });
