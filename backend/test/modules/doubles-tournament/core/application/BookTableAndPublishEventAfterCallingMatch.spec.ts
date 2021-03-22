@@ -35,10 +35,10 @@ describe('Execute command CallMatch', () => {
       calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
       tableNumber: tableNumber,
     });
-    const commandResultFromCallingMatch = await doublesTournament.executeCommand(callMatch);
+    const commandResult = await doublesTournament.executeCommand(callMatch);
 
     //Then
-    expect(commandResultFromCallingMatch.isSuccess()).toBeTruthy();
+    expect(commandResult.isSuccess()).toBeTruthy();
 
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
       new MatchWasCalled({
@@ -68,10 +68,10 @@ describe('Execute command CallMatch', () => {
       calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
       tableNumber: tableNumber,
     });
-    const commandResultFromCallingMatch = await doublesTournament.executeCommand(callMatch);
+    const commandResult = await doublesTournament.executeCommand(callMatch);
 
     //Then
-    expect((commandResultFromCallingMatch as Failure).reason).toStrictEqual(new Error('Table has been already booked!'));
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Table has been already booked!'));
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(undefined);
   });
 });
