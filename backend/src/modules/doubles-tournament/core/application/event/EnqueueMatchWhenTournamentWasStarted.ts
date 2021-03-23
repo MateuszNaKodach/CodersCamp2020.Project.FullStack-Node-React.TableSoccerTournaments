@@ -6,19 +6,28 @@ import {TournamentTreeRepository} from "../../../../tournament-tree/core/applica
 export class EnqueueMatchWhenTournamentWasStarted implements EventHandler<TournamentWasStarted> {
     constructor(private readonly commandPublisher: CommandPublisher, private readonly repository: TournamentTreeRepository) {}
 
-    async handle(event: TournamentWasStarted): Promise<void> {
-        const tournamentTree = await this.repository.findByTournamentTreeId(event.tournamentId);
+    /** Nie wiem, które rozwiązanie lepsze */
 
-        // Poniższe rozwiązanie jest tymczasowe -> Piter dodaje nowe funkcjonalności do drzewka, z których będzie tutaj można skorzystać
-        const matchesToEnqueue = tournamentTree?.tournamentTreeArray
-            .filter(({firstTeam, secondTeam}) => firstTeam && secondTeam)
+    async handle(event: TournamentWasStarted): Promise<void> {
+        const tournamentTree = await this.repository
+            .findByTournamentTreeId(event.tournamentId)
+            // .then((tournamentTree) => tournamentTree?.getMatchesQueueReadyToBegin().forEach((matchToEnqueue) => {
+            //     this.commandPublisher.execute(new EnqueueMatch({
+            //         tournamentId: event.tournamentId,
+            //         matchNumber: matchToEnqueue.matchNumberInSequence,
+            //         team1Id: matchToEnqueue.firstTeam?.teamId.raw,
+            //         team2Id: matchToEnqueue.secondTeam?.teamId.raw
+            //     }));
+            // }));
+
+        const matchesToEnqueue = tournamentTree?.getMatchesQueueReadyToBegin()
             .forEach((matchToEnqueue) => {
-            this.commandPublisher.execute(new EnqueueMatch({
-                tournamentId: event.tournamentId,
-                matchNumber: matchNumber,
-                team1Id: matchToEnqueue.firstTeam!.teamId.raw,
-                team2Id: matchToEnqueue.secondTeam!.teamId.raw
-            }));
-        });
+                this.commandPublisher.execute(new EnqueueMatch({
+                    tournamentId: event.tournamentId,
+                    matchNumber: matchToEnqueue.matchNumberInSequence as number,
+                    team1Id: matchToEnqueue.firstTeam?.teamId.raw as string,
+                    team2Id: matchToEnqueue.secondTeam?.teamId.raw as string
+                }));
+            });
     }
 }
