@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./FooTouer.css";
 import {
   Avatar,
@@ -30,6 +30,8 @@ import {
   VisibilityOff,
 } from "@material-ui/icons";
 import styled from "styled-components";
+import { rest } from "msw";
+import axios from "axios";
 
 const theme = createMuiTheme({
   palette: {
@@ -105,6 +107,12 @@ const TournamentRegistrations = () => {
     },
   ];
   const [players, setPlayers] = useState(defaultPlayers);
+
+  useEffect(() => {
+    axios
+      .get<{ items: PlayerProps[] }>("localhost:5000/rest-api/players-profiles")
+      .then((r) => setPlayers(r.data.items));
+  }, []);
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {
