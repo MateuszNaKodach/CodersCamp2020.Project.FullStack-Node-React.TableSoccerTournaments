@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import FooTouer from './components/FooTouer/FooTouer';
+import React from "react";
+import ReactDOM from "react-dom";
+import TourDeFoos from "./components/FooTouer/TourDeFoos";
 
 ReactDOM.render(
   <React.StrictMode>
-    <FooTouer />
+    <TourDeFoos />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
