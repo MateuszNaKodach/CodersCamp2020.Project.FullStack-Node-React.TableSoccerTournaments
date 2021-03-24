@@ -26,14 +26,14 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       main: grey[800],
-      contrastText: "#E3E152"
-    }
-  }
+      contrastText: "#E3E152",
+    },
+  },
 });
 
 const MainMenuCard = styled(Card)({
   maxWidth: "500px",
-  minHeight: "500px"
+  minHeight: "500px",
 });
 
 interface PlayerProps {
@@ -61,7 +61,9 @@ interface TournamentRegistrationsProps {
 const TournamentRegistrations = (props: TournamentRegistrationsProps) => {
   const [initPlayers, setInitPlayers] = useState<PlayerProps[]>([]);
   const [players, setPlayers] = useState<PlayerProps[]>([]);
-  const [registeredPlayers, setRegisteredPlayers] = useState<{ playerId: string }[]>([]);
+  const [registeredPlayers, setRegisteredPlayers] = useState<
+    { playerId: string }[]
+  >([]);
 
   useEffect(() => {
     axios
@@ -149,7 +151,7 @@ function TourDeFoos() {
   return (
     <MuiThemeProvider theme={theme}>
       <Centered>
-        <TournamentRegistrations tournamentId='sampleTournamentId' />
+        <TournamentRegistrations tournamentId="sampleTournamentId" />
       </Centered>
       <Button variant="contained" color="primary">
         Primary
