@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FooTouer from './components/FooTouer/FooTouer';
+import FooTouer from './components/TourDeFoos/FooTouer';
 import './index.css';
 
 ReactDOM.render(
