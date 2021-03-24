@@ -10,7 +10,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@types/node": "^12.0.0",
+    "@types/node": "^14.14.35",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "axios": "^0.21.1",
@@ -50,5 +50,8 @@
     "@types/jest": "^26.0.21",
     "@types/styled-components": "^5.1.9",
     "msw": "^0.27.2"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

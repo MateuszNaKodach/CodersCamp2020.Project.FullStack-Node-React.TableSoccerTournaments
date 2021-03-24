@@ -9,7 +9,8 @@
     "rootDir": "./src",
     "types": [
       "@types/jest",
-      "jest"
+      "jest",
+      "node"
     ],
     "allowJs": true,
     "skipLibCheck": true,
