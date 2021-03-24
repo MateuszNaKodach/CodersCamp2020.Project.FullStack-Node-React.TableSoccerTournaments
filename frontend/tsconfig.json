@@ -10,7 +10,8 @@
     "types": [
       "@types/jest",
       "jest",
-      "node"
+      "node",
+      "@types/testing-library__jest-dom"
     ],
     "allowJs": true,
     "skipLibCheck": true,

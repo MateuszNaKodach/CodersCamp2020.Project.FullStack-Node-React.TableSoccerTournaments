@@ -44,7 +44,7 @@ jobs:
       - run: npm install
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm test
+      - run: npm test --detectOpenHandles --forceExit
       - uses: actions/upload-artifact@v1
         name: Upload build as artifact
         with:

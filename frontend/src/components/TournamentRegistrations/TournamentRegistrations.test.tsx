@@ -8,7 +8,6 @@ import { rest } from "msw";
 import { server } from "../../mocks/msw/server";
 import { PlayerProfileDto } from "../../restapi/players-profiles";
 import userEvent from "@testing-library/user-event";
-import "@testing-library/jest-dom/extend-expect";
 
 describe("Tournament Registrations", () => {
   it(`should show title "Zapisy na turniej"`, () => {
