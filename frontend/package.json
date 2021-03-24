@@ -53,6 +53,9 @@
     "@types/testing-library__jest-dom": "^5.9.5",
     "msw": "^0.27.2"
   },
+  "optionalDependencies": {
+    "fsevents": "*"
+  },
   "msw": {
     "workerDirectory": "public"
   }
