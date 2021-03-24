@@ -6,7 +6,7 @@ export type UserProfilesRestApiConfig = {
 };
 
 const defaultConfig: UserProfilesRestApiConfig = {
-  baseUrl: "http://localhost:5000/rest-api"
+  baseUrl: "http://localhost:5000/rest-api",
 };
 
 export const UserProfileRestApi = (
@@ -14,13 +14,13 @@ export const UserProfileRestApi = (
 ) => {
   const currentConfig = {
     ...defaultConfig,
-    config
+    config,
   };
   return {
     getPlayersProfiles(): Promise<PlayerProfilesListDto> {
       return axios
         .get<PlayerProfilesListDto>(`${currentConfig.baseUrl}/players-profiles`)
         .then((response) => response.data);
-    }
+    },
   };
 };

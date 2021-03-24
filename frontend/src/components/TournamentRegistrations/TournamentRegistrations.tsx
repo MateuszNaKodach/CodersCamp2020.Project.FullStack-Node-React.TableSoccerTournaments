@@ -13,30 +13,32 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   OutlinedInput,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import {
   AddCircleOutline,
   Search,
-  SupervisedUserCircle
+  SupervisedUserCircle,
 } from "@material-ui/icons";
 import {
   PlayerProfileDto,
-  UserProfileRestApi
+  UserProfileRestApi,
 } from "../../restapi/players-profiles";
 import { Centered } from "../Shared/Centered";
 import { VerticalSpace } from "../Shared/VerticalSpace";
 
-export interface TournamentRegistrationsProps {
+export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
-}
+};
 
 export const TournamentRegistrations = (
   props: TournamentRegistrationsProps
 ) => {
   const [initPlayers, setInitPlayers] = useState<PlayerProfileDto[]>([]);
   const [players, setPlayers] = useState<PlayerProfileDto[]>([]);
-  const [registeredPlayers, setRegisteredPlayers] = useState<{ playerId: string }[]>([]);
+  const [registeredPlayers, setRegisteredPlayers] = useState<
+    { playerId: string }[]
+  >([]); //TODO: Fetch already registered players
 
   useEffect(() => {
     UserProfileRestApi()
@@ -86,12 +88,14 @@ export const TournamentRegistrations = (
   );
 };
 
+//TODO: Use something responsive instead of setting card maxWidth/Height (for example Grid from MaterialUI)
 const RegistrationsCard = styled(Card)({
   maxWidth: "500px",
-  minHeight: "500px"
+  minHeight: "500px",
 });
 
-export const PlayersList = (props: { players: PlayerProfileDto[] }) => (
+type PlayersListProps = { players: PlayerProfileDto[] };
+export const PlayersList = (props: PlayersListProps) => (
   <List>
     {props.players.map((player) => (
       <PlayersListItem key={player.playerId} player={player} />
@@ -114,7 +118,7 @@ export const PlayersListItem = (props: PlayersListItemProps) => (
     <ListItemSecondaryAction>
       <IconButton
         edge="end"
-        aria-label="delete"
+        aria-label="register-player"
         onClick={() => console.log("Register player clicked!")}
       >
         <AddCircleOutline />

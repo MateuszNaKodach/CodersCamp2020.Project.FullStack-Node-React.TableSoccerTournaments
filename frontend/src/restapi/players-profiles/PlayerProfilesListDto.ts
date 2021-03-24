@@ -1,5 +1,5 @@
 import { PlayerProfileDto } from "./PlayerProfileDto";
 
-export interface PlayerProfilesListDto {
+export type PlayerProfilesListDto = {
   readonly items: PlayerProfileDto[];
-}
+};
