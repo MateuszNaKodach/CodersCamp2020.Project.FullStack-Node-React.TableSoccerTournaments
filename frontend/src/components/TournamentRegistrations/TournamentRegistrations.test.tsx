@@ -10,6 +10,9 @@ import { PlayerProfileDto } from "../../restapi/players-profiles";
 
 describe("Tournament Registrations", () => {
   it(`should show title "Zapisy na turniej"`, () => {
+    //Given
+    getPlayersProfilesIsLoading();
+
     //When
     render(<TournamentRegistrations tournamentId="sampleTournamentId" />);
 
