@@ -1,7 +1,11 @@
 import { rest } from "msw";
 
+/**
+ * This can mock API requests for local development if server is not ready. Example with players-profiles.
+ * If you want to use real server set REACT_APP_MOCK_WITH_MSW to false in .env file.
+ */
 export const handlers = [
-  rest.get("/players-profiles", (req, res, ctx) => {
+  rest.get("*/players-profiles", (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
