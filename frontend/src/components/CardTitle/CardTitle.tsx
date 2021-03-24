@@ -1,14 +1,11 @@
 import React from 'react';
-import {Card, CardContent, Typography, } from "@material-ui/core";
-import styled from "styled-components";
+import { CardContent, Typography, } from "@material-ui/core";
 import {APP_NAME} from "../../constants/constants";
 import {VerticalSpace} from "../shared/VerticalSpace"
-import {Title} from "@material-ui/icons";
 
 export type TitleProps = {
     readonly title: string |undefined;
 };
-
 
 export const CardTitle = (props: TitleProps | undefined) => {
     const titleComponent = (
@@ -26,15 +23,3 @@ export const CardTitle = (props: TitleProps | undefined) => {
         titleComponent
     );
 }
-//
-// const StartMenuCard = styled(Card)({
-//     maxWidth: "500px",
-//     minHeight: "500px",
-// });
-
-// const CardTitle = styled(Typography)({
-//     maxWidth: "500px",
-//     minHeight: "500px",
-// });
-
-
