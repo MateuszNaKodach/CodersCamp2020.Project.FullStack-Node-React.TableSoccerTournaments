@@ -15,6 +15,10 @@ export const UserProfileRestApi = (
   const currentConfig = {
     ...defaultConfig,
     config,
+    baseUrl:
+      process.env.REACT_APP_REST_API_BASE_URL ??
+      config?.baseUrl ??
+      defaultConfig.baseUrl,
   };
   return {
     getPlayersProfiles(): Promise<PlayerProfilesListDto> {
