@@ -8,7 +8,6 @@
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
-    "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/node": "^14.14.35",
@@ -48,8 +47,10 @@
   },
   "author": "CodersCamp 2020 | Tomasz Dworniczak, Anna Lamperska, Piotr Rynio, Paweł Szambelan, Dominika Zwolenik, Mateusz Nowak",
   "devDependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
     "@types/jest": "^26.0.21",
     "@types/styled-components": "^5.1.9",
+    "@types/testing-library__jest-dom": "^5.9.5",
     "msw": "^0.27.2"
   },
   "msw": {
