@@ -1,35 +1,38 @@
 import React from 'react';
-import {Card, CardContent, Typography,} from "@material-ui/core";
+import {Button, Card, CardContent,} from "@material-ui/core";
 import styled from "styled-components";
-import {APP_NAME} from "../../constants/constants";
-import {CardTitle} from "../CardTitle/CardTitle";
-import {Title} from "@material-ui/icons";
-import { Centered } from "../shared/Centered/Centered";
+import CardTitle from "../CardTitle/CardTitle";
+import {VerticalSpace} from "../shared/VerticalSpace";
+import {Centered} from "../shared/Centered";
 
-export type StartMenuProps = {
-    // readonly tournamentId: string;
-};
-
-
-export const StartMenuComponent = (props: StartMenuProps) => {
+export const StartMenuComponent = () => {
     const startMenuComponent = (
         <StartMenuCard>
             <CardContent>
                 <Centered>
-                <CardTitle title={undefined} />
+                    <CardTitle title={undefined}/>
+                    <Button variant="contained" color="primary">
+                        Turniej
+                    </Button>
+                    <VerticalSpace height="1rem"/>
+                    <Button variant="contained" color="primary">
+                        Zawodnicy
+                    </Button>
                 </Centered>
-        </CardContent>
+            </CardContent>
         </StartMenuCard>
     );
-
     return (
         startMenuComponent
     );
 }
 
 const StartMenuCard = styled(Card)({
+    display:"block",
+    boxSizing: "border-box",
     maxWidth: "500px",
-    minHeight: "500px",
+    paddingTop: "40px",
+    paddingBottom: "40px",
 });
 
 

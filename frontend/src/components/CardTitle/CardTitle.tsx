@@ -1,21 +1,22 @@
 import React from 'react';
-import {CardContent, Typography,} from "@material-ui/core";
+import { Typography,} from "@material-ui/core";
 import {APP_NAME} from "../../constants/constants";
 import {VerticalSpace} from "../shared/VerticalSpace"
 import {Centered} from "../shared/Centered";
+import styled from "styled-components";
 
 export type TitleProps = {
     readonly title: string | undefined;
 };
 
-export const CardTitle = (props: TitleProps | undefined) => {
+const CardTitleComponent = (props: TitleProps | undefined) => {
     const titleComponent = (
         <>
             <Centered>
-                <Typography component="h6" variant="h6">
+                <Typography component="h5" variant="h5">
                     {props?.title || APP_NAME}
                 </Typography>
-                <VerticalSpace height="1rem"/>
+                <VerticalSpace height="2rem"/>
             </Centered>
         </>
     );
@@ -24,3 +25,9 @@ export const CardTitle = (props: TitleProps | undefined) => {
         titleComponent
     );
 }
+
+export default styled(({ ...otherProps }) => (
+    <CardTitleComponent {...otherProps}   />
+))`
+     marginBottom: "20px",
+`;
