@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Avatar,
   Card,
@@ -21,24 +20,12 @@ import {
   Search,
   SupervisedUserCircle
 } from "@material-ui/icons";
-
-export interface PlayerProfileDto {
-  readonly playerId: string;
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly emailAddress: string;
-}
-
-export const Centered = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
-export const Divider = (props: { height: string | number }) => (
-  <div style={{ minHeight: props.height }} />
-);
+import {
+  PlayerProfileDto,
+  UserProfileRestApi
+} from "../../restapi/players-profiles";
+import { Centered } from "../Shared/Centered";
+import { VerticalSpace } from "../Shared/VerticalSpace";
 
 export interface TournamentRegistrationsProps {
   readonly tournamentId: string;
@@ -51,16 +38,12 @@ export const TournamentRegistrations = (
   const [players, setPlayers] = useState<PlayerProfileDto[]>([]);
   const [registeredPlayers, setRegisteredPlayers] = useState<{ playerId: string }[]>([]);
 
-  //TODO: Create abstraction for requests. Something like UserProfilesRestApi class
   useEffect(() => {
-    axios
-      .get<{ items: PlayerProfileDto[] }>(
-        "http://localhost:5000/rest-api/players-profiles"
-      )
-      .then((r) => {
-        const players = r.data.items;
-        setInitPlayers(players);
-        setPlayers(players);
+    UserProfileRestApi()
+      .getPlayersProfiles()
+      .then((playerProfilesList) => {
+        setInitPlayers(playerProfilesList.items);
+        setPlayers(playerProfilesList.items);
       });
   }, []);
 
@@ -85,7 +68,7 @@ export const TournamentRegistrations = (
           <Typography component="h6" variant="h6">
             Zapisy na turniej
           </Typography>
-          <Divider height="1rem" />
+          <VerticalSpace height="1rem" />
           <FormControl variant="outlined">
             <InputLabel htmlFor="player-search-input">Zawodnik</InputLabel>
             <OutlinedInput
@@ -95,7 +78,7 @@ export const TournamentRegistrations = (
               labelWidth={70}
             />
           </FormControl>
-          <Divider height="1rem" />
+          <VerticalSpace height="1rem" />
         </Centered>
         <PlayersList players={players} />
       </CardContent>
