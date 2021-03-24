@@ -18,7 +18,11 @@ import {
   Typography
 } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
-import { AddCircleOutline, Search, SupervisedUserCircle } from "@material-ui/icons";
+import {
+  AddCircleOutline,
+  Search,
+  SupervisedUserCircle
+} from "@material-ui/icons";
 import styled from "styled-components";
 import axios from "axios";
 
