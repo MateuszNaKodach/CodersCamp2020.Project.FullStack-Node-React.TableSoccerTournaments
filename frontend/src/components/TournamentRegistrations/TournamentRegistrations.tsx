@@ -4,6 +4,7 @@ import {
   Avatar,
   Card,
   CardContent,
+  CircularProgress,
   FormControl,
   IconButton,
   InputLabel,
@@ -34,7 +35,9 @@ export type TournamentRegistrationsProps = {
 export const TournamentRegistrations = (
   props: TournamentRegistrationsProps
 ) => {
-  const [initPlayers, setInitPlayers] = useState<PlayerProfileDto[]>([]);
+  const [initPlayers, setInitPlayers] = useState<
+    PlayerProfileDto[] | undefined
+  >(undefined);
   const [players, setPlayers] = useState<PlayerProfileDto[]>([]);
   const [registeredPlayers, setRegisteredPlayers] = useState<
     { playerId: string }[]
@@ -51,7 +54,7 @@ export const TournamentRegistrations = (
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {
-      setPlayers(initPlayers);
+      setPlayers(initPlayers ?? []);
     } else {
       setPlayers(
         players.filter((player) =>
@@ -63,6 +66,8 @@ export const TournamentRegistrations = (
     }
   }
 
+  //TODO: Add REST API error handling
+  const isLoading = initPlayers === undefined;
   return (
     <RegistrationsCard>
       <CardContent>
@@ -71,18 +76,24 @@ export const TournamentRegistrations = (
             Zapisy na turniej
           </Typography>
           <VerticalSpace height="1rem" />
-          <FormControl variant="outlined">
-            <InputLabel htmlFor="player-search-input">Zawodnik</InputLabel>
-            <OutlinedInput
-              id="player-search-input"
-              onChange={(event) => onPlayerSearch(event.target.value)}
-              endAdornment={<Search />}
-              labelWidth={70}
-            />
-          </FormControl>
-          <VerticalSpace height="1rem" />
+          {isLoading ? (
+            <CircularProgress data-testid="TournamentRegistrationsLoadingIndicator" />
+          ) : (
+            <>
+              <FormControl variant="outlined">
+                <InputLabel htmlFor="player-search-input">Zawodnik</InputLabel>
+                <OutlinedInput
+                  id="player-search-input"
+                  onChange={(event) => onPlayerSearch(event.target.value)}
+                  endAdornment={<Search />}
+                  labelWidth={70}
+                />
+              </FormControl>
+              <VerticalSpace height="1rem" />
+              <PlayersList players={players} />
+            </>
+          )}
         </Centered>
-        <PlayersList players={players} />
       </CardContent>
     </RegistrationsCard>
   );
