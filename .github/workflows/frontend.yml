@@ -45,6 +45,7 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test --detectOpenHandles --forceExit
+        timeout-minutes: 1
       - uses: actions/upload-artifact@v1
         name: Upload build as artifact
         with:
