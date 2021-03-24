@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import {
   Avatar,
+  Button,
   Card,
   CardContent,
   CircularProgress,
@@ -13,9 +14,11 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
+  MuiThemeProvider,
   OutlinedInput,
   Typography,
 } from "@material-ui/core";
+import { Alert, AlertTitle } from "@material-ui/lab";
 import {
   AddCircleOutline,
   Search,
@@ -106,16 +109,34 @@ const RegistrationsCard = styled(Card)({
 });
 
 type PlayersListProps = { players: PlayerProfileDto[] };
-export const PlayersList = (props: PlayersListProps) => (
-  <List>
-    {props.players.map((player) => (
-      <PlayersListItem key={player.playerId} player={player} />
-    ))}
-  </List>
+const PlayersList = (props: PlayersListProps) => {
+  if (props.players.length === 0) {
+    return <PlayerNotFound />;
+  }
+  return (
+    <List>
+      {props.players.map((player) => (
+        <PlayersListItem key={player.playerId} player={player} />
+      ))}
+    </List>
+  );
+};
+
+const PlayerNotFound = () => (
+  <Centered>
+    <Alert severity="info">
+      <AlertTitle>Nie znaleziono zawodnika?</AlertTitle>
+      Zapisz nowego poniżej.
+    </Alert>
+    <VerticalSpace height="1rem" />
+    <Button variant="contained" color="primary">
+      Dodaj i zapisz
+    </Button>
+  </Centered>
 );
 
 type PlayersListItemProps = { player: PlayerProfileDto };
-export const PlayersListItem = (props: PlayersListItemProps) => (
+const PlayersListItem = (props: PlayersListItemProps) => (
   <ListItem>
     <ListItemAvatar>
       <Avatar>
