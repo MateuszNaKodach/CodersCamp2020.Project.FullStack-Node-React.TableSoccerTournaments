@@ -7,3 +7,4 @@ css
 .history
 *.stryker-tmp
 reports
+.env*.local
