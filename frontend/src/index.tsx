@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import TourDeFoos from "./components/FooTouer/TourDeFoos";
+import TourDeFoos from "./components/TourDeFoos/TourDeFoos";
 
 //Disable when you want to interact with real REST API server
 if (process.env.REACT_APP_MOCK_WITH_MSW === "true") {
