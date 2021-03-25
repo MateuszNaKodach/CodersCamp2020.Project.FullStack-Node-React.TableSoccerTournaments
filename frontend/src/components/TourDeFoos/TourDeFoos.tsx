@@ -1,8 +1,10 @@
 import React from "react";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { Button, createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import {StartMenuComponent} from '../StartMenuComponent';
 import { grey } from "@material-ui/core/colors";
 import { Centered } from "../Shared/Centered";
 import { TournamentRegistrations } from "../TournamentRegistrations";
+import {VerticalSpace} from "../Shared/VerticalSpace";
 
 const theme = createMuiTheme({
   palette: {
@@ -16,8 +18,22 @@ const theme = createMuiTheme({
 function TourDeFoos() {
   return (
     <MuiThemeProvider theme={theme}>
+
       <Centered>
+        <VerticalSpace height="1rem"/>
+
+        <StartMenuComponent/>
+        <VerticalSpace height="1rem"/>
+
+        <Button variant="contained" color="primary">
+          Primary
+        </Button>
+
+        <VerticalSpace height="1rem"/>
+
         <TournamentRegistrations tournamentId="sampleTournamentId" />
+
+        <VerticalSpace height="1rem"/>
       </Centered>
     </MuiThemeProvider>
   );
