@@ -9,7 +9,9 @@
     "rootDir": "./src",
     "types": [
       "@types/jest",
-      "jest"
+      "jest",
+      "node",
+      "@types/testing-library__jest-dom"
     ],
     "allowJs": true,
     "skipLibCheck": true,
