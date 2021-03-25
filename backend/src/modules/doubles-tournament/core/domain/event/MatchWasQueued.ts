@@ -2,7 +2,7 @@ import { DomainEvent } from '../../../../../shared/domain/event/DomainEvent';
 
 export class MatchWasQueued implements DomainEvent {
   readonly occurredAt: Date;
-  readonly tournamentId: string
+  readonly tournamentId: string;
   readonly matchNumber: number;
   readonly team1Id: string;
   readonly team2Id: string;
