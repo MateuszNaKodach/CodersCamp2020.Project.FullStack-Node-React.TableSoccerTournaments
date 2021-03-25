@@ -1,42 +1,58 @@
 import React from "react";
-import { Button, createMuiTheme, MuiThemeProvider } from "@material-ui/core";
-import {StartMenuComponent} from '../StartMenuComponent';
-import { grey } from "@material-ui/core/colors";
-import { Centered } from "../Shared/Centered";
-import { TournamentRegistrations } from "../TournamentRegistrations";
+import {Button, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
+import {Menu} from '../StartMenuComponent';
+import {grey} from "@material-ui/core/colors";
+import {Centered} from "../Shared/Centered";
+import {TournamentRegistrations} from "../TournamentRegistrations";
 import {VerticalSpace} from "../Shared/VerticalSpace";
+import {APP_NAME} from "../../constants/constants";
 
 const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: grey[800],
-      contrastText: "#E3E152",
+    palette: {
+        primary: {
+            main: grey[800],
+            contrastText: "#E3E152",
+        },
     },
-  },
 });
 
 function TourDeFoos() {
-  return (
-    <MuiThemeProvider theme={theme}>
+    const menuButtonsListProps = [
+        {
+            textName: "Turniej",
+            onClick: () => {
+                console.log("Tournament Button was clicked!")
+            },
+        },
+        {
+            textName: "Zawodnicy",
+            onClick: () => {
+                console.log("Tournament Button was clicked!")
+            },
+        }
+    ];
 
-      <Centered>
-        <VerticalSpace height="1rem"/>
+    return (
+        <MuiThemeProvider theme={theme}>
 
-        <StartMenuComponent/>
-        <VerticalSpace height="1rem"/>
+            <Centered>
+                <VerticalSpace height="1rem"/>
 
-        <Button variant="contained" color="primary">
-          Primary
-        </Button>
+                <Menu title={APP_NAME} menuButtonsList={menuButtonsListProps} />
+                <VerticalSpace height="1rem"/>
 
-        <VerticalSpace height="1rem"/>
+                <Button variant="contained" color="primary">
+                    Primary
+                </Button>
 
-        <TournamentRegistrations tournamentId="sampleTournamentId" />
+                <VerticalSpace height="1rem"/>
 
-        <VerticalSpace height="1rem"/>
-      </Centered>
-    </MuiThemeProvider>
-  );
+                <TournamentRegistrations tournamentId="sampleTournamentId"/>
+
+                <VerticalSpace height="1rem"/>
+            </Centered>
+        </MuiThemeProvider>
+    );
 }
 
 export default TourDeFoos;
