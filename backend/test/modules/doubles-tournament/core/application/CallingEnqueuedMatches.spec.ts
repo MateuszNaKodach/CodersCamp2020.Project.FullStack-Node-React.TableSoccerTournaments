@@ -25,6 +25,7 @@ describe('Calling Enqueued Matches | Write Side', () => {
     await doublesTournament.publishEvent(
       new MatchWasQueued({
         occurredAt: currentTime,
+        tournamentId: tournamentId,
         matchNumber: 5,
         team1Id: team1Id,
         team2Id: team2Id,
@@ -33,6 +34,7 @@ describe('Calling Enqueued Matches | Write Side', () => {
     await doublesTournament.publishEvent(
       new MatchWasQueued({
         occurredAt: currentTime,
+        tournamentId: tournamentId,
         matchNumber: 3,
         team1Id: team3Id,
         team2Id: team4Id,
@@ -70,6 +72,7 @@ describe('Calling Enqueued Matches | Write Side', () => {
     await doublesTournament.publishEvent(
       new MatchWasQueued({
         occurredAt: currentTime,
+        tournamentId: tournamentId,
         matchNumber: 5,
         team1Id: team1Id,
         team2Id: team2Id,
@@ -78,6 +81,7 @@ describe('Calling Enqueued Matches | Write Side', () => {
     await doublesTournament.publishEvent(
       new MatchWasQueued({
         occurredAt: currentTime,
+        tournamentId: tournamentId,
         matchNumber: 3,
         team1Id: team3Id,
         team2Id: team4Id,
@@ -105,6 +109,7 @@ describe('Calling Enqueued Matches | Write Side', () => {
     await doublesTournament.publishEvent(
       new MatchWasQueued({
         occurredAt: currentTime,
+        tournamentId: tournamentId,
         matchNumber: 3,
         team1Id: team1Id,
         team2Id: team2Id,
@@ -127,6 +132,7 @@ describe('Calling Enqueued Matches | Write Side', () => {
     await doublesTournament.publishEvent(
       new MatchWasQueued({
         occurredAt: currentTime,
+        tournamentId: tournamentId,
         matchNumber: 3,
         team1Id: team1Id,
         team2Id: team2Id,

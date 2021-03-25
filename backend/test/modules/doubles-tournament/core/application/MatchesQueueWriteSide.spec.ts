@@ -34,6 +34,7 @@ describe('Matches queue | Write Side', () => {
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
       new MatchWasQueued({
         occurredAt: currentTime,
+        tournamentId: tournamentId,
         matchNumber: matchNumber,
         team1Id: team1Id,
         team2Id: team2Id,
