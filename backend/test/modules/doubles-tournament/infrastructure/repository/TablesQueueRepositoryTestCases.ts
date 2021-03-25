@@ -25,45 +25,44 @@ export function TablesQueueRepositoryTestCases(props: {
     test('When some tables were released then findFreeTablesByTournamentId returns free tables in the given tournament', async () => {
       //Given
       const tournamentId = TournamentId.from(entityIdGenerator.generate());
-      const bookedTable =
-          new QueuedTable({
-            tableNumber: 1,
-            isFree: false
-          });
-      const freeTable =
-          new QueuedTable({
-            tableNumber: 2,
-            isFree: true
-          });
-      const tablesQueue = new TablesQueue({tournamentId: tournamentId, queuedTables: [ bookedTable, freeTable] });
+      const bookedTable = new QueuedTable({
+        tableNumber: 1,
+        isFree: false,
+      });
+      const freeTable = new QueuedTable({
+        tableNumber: 2,
+        isFree: true,
+      });
+      const tablesQueue = new TablesQueue({ tournamentId: tournamentId, queuedTables: [bookedTable, freeTable] });
 
       //When
       await repository.save(tablesQueue);
 
       //Then
-      expect(await repository.findFreeTablesByTournamentId(tournamentId.raw)).toStrictEqual(freeTable);
+      expect(await repository.findFreeTablesByTournamentId(tournamentId.raw)).toStrictEqual([freeTable]);
     });
 
     test('When all tables are booked then findFreeTablesByTournamentId returns empty array', async () => {
       //Given
       const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const tablesQueue = new TablesQueue({
-        tournamentId: tournamentId, queuedTables: [
+        tournamentId: tournamentId,
+        queuedTables: [
           new QueuedTable({
             tableNumber: 1,
-            isFree: false
+            isFree: false,
           }),
           new QueuedTable({
             tableNumber: 2,
-            isFree: false
-          })
-      ]});
+            isFree: false,
+          }),
+        ],
+      });
       //When
       await repository.save(tablesQueue);
 
       //Then
       expect(await repository.findFreeTablesByTournamentId(tournamentId.raw)).toStrictEqual([]);
     });
-
   });
 }

@@ -10,6 +10,8 @@ export class QueuedMatch {
   readonly matchNumber: MatchNumber;
   readonly team1Id: TeamId;
   readonly team2Id: TeamId;
+  readonly tableNumber: number;
+  readonly started: boolean = false;
 
   constructor(props: { matchNumber: MatchNumber; team1Id: TeamId; team2Id: TeamId }) {
     this.matchNumber = props.matchNumber;
@@ -47,6 +49,7 @@ export function pushMatchToQueue(
 
   const matchWasQueued = new MatchWasQueued({
     occurredAt: currentTime,
+    tournamentId: command.tournamentId.raw,
     matchNumber: command.matchNumber.raw,
     team1Id: command.team1Id.raw,
     team2Id: command.team2Id.raw,
