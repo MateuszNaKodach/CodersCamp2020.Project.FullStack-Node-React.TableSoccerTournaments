@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
-import {Menu} from '../StartMenuComponent';
+import {Menu} from '../Menu';
 import {grey} from "@material-ui/core/colors";
 import {Centered} from "../Shared/Centered";
 import {TournamentRegistrations} from "../TournamentRegistrations";
