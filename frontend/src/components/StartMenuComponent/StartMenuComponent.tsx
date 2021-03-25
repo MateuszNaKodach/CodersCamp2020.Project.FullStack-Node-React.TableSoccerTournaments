@@ -11,11 +11,15 @@ export const StartMenuComponent = () => {
             <CardContent>
                 <Centered>
                     <CardTitle title={undefined}/>
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary"
+                            onClick={() => console.log("Tournament Button was clicked!")}
+                    >
                         Turniej
                     </Button>
                     <VerticalSpace height="1rem"/>
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary"
+                            onClick={() => console.log("Tournament Button was clicked!")}
+                    >
                         Zawodnicy
                     </Button>
                 </Centered>
@@ -28,9 +32,10 @@ export const StartMenuComponent = () => {
 }
 
 const StartMenuCard = styled(Card)({
-    display:"block",
+    display: "block",
     boxSizing: "border-box",
     minWidth: "300px",
+    // maxWidth: "500px",
     paddingTop: "40px",
     paddingBottom: "40px",
 });
