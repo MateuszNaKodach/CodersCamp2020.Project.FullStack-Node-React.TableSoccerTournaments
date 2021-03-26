@@ -15,6 +15,7 @@ export function MatchesQueueRepositoryTestCases(props: {
 }): void {
   return describe(props.name, () => {
     const entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator();
+    const tournamentId = TournamentId.from(entityIdGenerator.generate());
     let repository: MatchesQueueRepository;
 
     beforeAll(async () => {
@@ -25,7 +26,6 @@ export function MatchesQueueRepositoryTestCases(props: {
     afterAll(async () => await props.databaseTestSupport.closeConnection());
 
     test('findByTournamentId returns matches queue with given tournament id when it was created and saved', async () => {
-      const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const queue: QueuedMatch[] = [
         new QueuedMatch({
           matchNumber: MatchNumber.from(1),
@@ -49,7 +49,6 @@ export function MatchesQueueRepositoryTestCases(props: {
     });
 
     test('findByTournamentId returns undefined when given tournament id when it was not found', async () => {
-      const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const queue: QueuedMatch[] = [
         new QueuedMatch({
           matchNumber: MatchNumber.from(1),
@@ -75,18 +74,19 @@ export function MatchesQueueRepositoryTestCases(props: {
 
     test('When some matches are not started yet then findNotStartedMatchesByTournamentId returns not started matches in the given tournament', async () => {
       //Given
-      const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const startedMatch = new QueuedMatch({
         matchNumber: MatchNumber.from(1),
         team1Id: TeamId.from('Team1Id'),
         team2Id: TeamId.from('Team2Id'),
+        tableNumber: 1,
+        started: true,
       });
       const notStartedMatch = new QueuedMatch({
         matchNumber: MatchNumber.from(2),
         team1Id: TeamId.from('Team3Id'),
         team2Id: TeamId.from('Team4Id'),
         tableNumber: 2,
-        started: true,
+        started: false,
       });
       const matchesQueue = new MatchesQueue({ tournamentId: tournamentId, queuedMatches: [startedMatch, notStartedMatch] });
 
@@ -99,7 +99,6 @@ export function MatchesQueueRepositoryTestCases(props: {
 
     test('When all matches are already started then findNotStartedMatchesByTournamentId returns empty array', async () => {
       //Given
-      const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const matchesQueue = new MatchesQueue({
         tournamentId: tournamentId,
         queuedMatches: [
