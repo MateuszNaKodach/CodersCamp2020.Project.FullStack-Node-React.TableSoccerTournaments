@@ -5,18 +5,21 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 import { MatchesQueue } from './MatchesQueue';
 import { MatchWasQueued } from './event/MatchWasQueued';
 import { MatchNumber } from './MatchNumber';
+import { isDefined } from '../../../../common/Defined';
 
 export class QueuedMatch {
   readonly matchNumber: MatchNumber;
   readonly team1Id: TeamId;
   readonly team2Id: TeamId;
-  readonly tableNumber: number;
-  readonly started: boolean = false;
+  readonly tableNumber: number | undefined;
+  readonly started: boolean;
 
-  constructor(props: { matchNumber: MatchNumber; team1Id: TeamId; team2Id: TeamId }) {
+  constructor(props: { matchNumber: MatchNumber; team1Id: TeamId; team2Id: TeamId; tableNumber?: number | undefined; started?: boolean }) {
     this.matchNumber = props.matchNumber;
     this.team1Id = props.team1Id;
     this.team2Id = props.team2Id;
+    this.tableNumber = props.tableNumber;
+    this.started = isDefined(props.started) ? props.started : false;
   }
 }
 

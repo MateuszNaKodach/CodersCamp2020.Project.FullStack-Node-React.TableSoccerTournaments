@@ -72,5 +72,59 @@ export function MatchesQueueRepositoryTestCases(props: {
       const notSavedTournamentId = entityIdGenerator.generate();
       expect(await repository.findByTournamentId(notSavedTournamentId)).toBeUndefined();
     });
+
+    test('When some matches are not started yet then findNotStartedMatchesByTournamentId returns not started matches in the given tournament', async () => {
+      //Given
+      const tournamentId = TournamentId.from(entityIdGenerator.generate());
+      const startedMatch = new QueuedMatch({
+        matchNumber: MatchNumber.from(1),
+        team1Id: TeamId.from('Team1Id'),
+        team2Id: TeamId.from('Team2Id'),
+      });
+      const notStartedMatch = new QueuedMatch({
+        matchNumber: MatchNumber.from(2),
+        team1Id: TeamId.from('Team3Id'),
+        team2Id: TeamId.from('Team4Id'),
+        tableNumber: 2,
+        started: true,
+      });
+      const matchesQueue = new MatchesQueue({ tournamentId: tournamentId, queuedMatches: [startedMatch, notStartedMatch] });
+
+      //When
+      await repository.save(matchesQueue);
+
+      //Then
+      expect(await repository.findNotStartedMatchesByTournamentId(tournamentId.raw)).toStrictEqual([notStartedMatch]);
+    });
+
+    test('When all matches are already started then findNotStartedMatchesByTournamentId returns empty array', async () => {
+      //Given
+      const tournamentId = TournamentId.from(entityIdGenerator.generate());
+      const matchesQueue = new MatchesQueue({
+        tournamentId: tournamentId,
+        queuedMatches: [
+          new QueuedMatch({
+            matchNumber: MatchNumber.from(1),
+            team1Id: TeamId.from('Team1Id'),
+            team2Id: TeamId.from('Team2Id'),
+            tableNumber: 1,
+            started: true,
+          }),
+          new QueuedMatch({
+            matchNumber: MatchNumber.from(2),
+            team1Id: TeamId.from('Team3Id'),
+            team2Id: TeamId.from('Team4Id'),
+            tableNumber: 2,
+            started: true,
+          }),
+        ],
+      });
+
+      //When
+      await repository.save(matchesQueue);
+
+      //Then
+      expect(await repository.findNotStartedMatchesByTournamentId(tournamentId.raw)).toStrictEqual([]);
+    });
   });
 }
