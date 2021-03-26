@@ -13,13 +13,14 @@ describe('Calling Enqueued Matches | Write Side', () => {
   const team3Id = 'Team3Id';
   const team4Id = 'Team4Id';
   const tournamentId = 'TournamentId';
+  const commandBus = new InMemoryCommandBus();
+  const spy = jest.spyOn(commandBus, 'execute');
 
   it('When matches were enqueued and only one table was released then call the match with lower matchNumber', async () => {
     //Given
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team3Id, team4Id]);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
-    const commandBus = new InMemoryCommandBus();
 
     //When
     await doublesTournament.publishEvent(
@@ -53,7 +54,7 @@ describe('Calling Enqueued Matches | Write Side', () => {
       calledMatch: { matchNumber: 3, team1Id: team3Id, team2Id: team4Id },
       tableNumber: 2,
     });
-    expect(commandBus.execute).toHaveBeenLastCalledWith(callMatch);
+    expect(spy).toHaveBeenCalledWith(callMatch);
   });
 
   it('When tables are free and new matches were enqueued then call both matches', async () => {
@@ -61,7 +62,6 @@ describe('Calling Enqueued Matches | Write Side', () => {
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team3Id, team4Id]);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
-    const commandBus = new InMemoryCommandBus();
     await doublesTournament.publishEvent(
       new TournamentTableWasReleased({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: 2 }),
     );
@@ -94,8 +94,8 @@ describe('Calling Enqueued Matches | Write Side', () => {
       calledMatch: { matchNumber: 3, team1Id: team3Id, team2Id: team4Id },
       tableNumber: 1,
     });
-    expect(commandBus.execute).toHaveBeenCalledTimes(2);
-    expect(commandBus.execute).toHaveBeenLastCalledWith(callMatch);
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenLastCalledWith(callMatch);
   });
 
   it('When match was enqueued and no table was released then do not call the match', async () => {
@@ -103,7 +103,6 @@ describe('Calling Enqueued Matches | Write Side', () => {
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id]);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
-    const commandBus = new InMemoryCommandBus();
 
     //When
     await doublesTournament.publishEvent(
@@ -120,7 +119,7 @@ describe('Calling Enqueued Matches | Write Side', () => {
     );
 
     //Then
-    expect(commandBus.execute).not.toHaveBeenCalled();
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('When match was already called then do not call the match again', async () => {
@@ -128,7 +127,6 @@ describe('Calling Enqueued Matches | Write Side', () => {
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id]);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
-    const commandBus = new InMemoryCommandBus();
     await doublesTournament.publishEvent(
       new MatchWasQueued({
         occurredAt: currentTime,
@@ -157,6 +155,6 @@ describe('Calling Enqueued Matches | Write Side', () => {
     );
 
     //Then
-    expect(commandBus.execute).not.toHaveBeenCalled();
+    expect(spy).not.toHaveBeenCalled();
   });
 });
