@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Drawer,
   FormControl,
   IconButton,
   InputLabel,
@@ -111,7 +112,7 @@ const RegistrationsCard = styled(Card)({
 type PlayersListProps = { players: PlayerProfileDto[] };
 const PlayersList = (props: PlayersListProps) => {
   if (props.players.length === 0) {
-    return <PlayerNotFound />;
+    return PlayerNotFound();
   }
   return (
     <List>
@@ -122,18 +123,33 @@ const PlayersList = (props: PlayersListProps) => {
   );
 };
 
-const PlayerNotFound = () => (
-  <Centered>
-    <Alert severity="info">
-      <AlertTitle>Nie znaleziono zawodnika?</AlertTitle>
-      Zapisz nowego poniżej.
-    </Alert>
-    <VerticalSpace height="1rem" />
-    <Button variant="contained" color="primary">
-      Dodaj i zapisz
-    </Button>
-  </Centered>
-);
+const PlayerNotFound = () => {
+  const [drawerState, setDrawerState] = useState<boolean>(false);
+
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerState(open);
+  };
+
+  return (
+    <Centered>
+      <Alert severity="info">
+        <AlertTitle>Nie znaleziono zawodnika?</AlertTitle>
+        Zapisz nowego poniżej.
+      </Alert>
+      <VerticalSpace height="1rem" />
+      <Button variant="contained" color="primary" onClick={toggleDrawer(true)}>
+        Dodaj i zapisz
+      </Button>
+      <Drawer
+        anchor={"bottom"}
+        open={drawerState}
+        onClose={toggleDrawer(false)}
+      >
+        <div>cos</div>
+      </Drawer>
+    </Centered>
+  );
+};
 
 type PlayersListItemProps = { player: PlayerProfileDto };
 const PlayersListItem = (props: PlayersListItemProps) => (
