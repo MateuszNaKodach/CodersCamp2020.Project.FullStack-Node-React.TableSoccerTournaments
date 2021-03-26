@@ -1,9 +1,8 @@
 import React from "react";
-import {Button, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
+import { createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import {Menu} from '../Menu';
 import {grey} from "@material-ui/core/colors";
 import {Centered} from "../Shared/Centered";
-import {TournamentRegistrations} from "../TournamentRegistrations";
 import {VerticalSpace} from "../Shared/VerticalSpace";
 import {APP_NAME} from "../../constants/constants";
 
@@ -21,13 +20,13 @@ function TourDeFoos() {
         {
             textName: "Turniej",
             onClick: () => {
-                console.log("Tournament Button was clicked!")
+                console.log("Menu button was clicked!")
             },
         },
         {
             textName: "Zawodnicy",
             onClick: () => {
-                console.log("Tournament Button was clicked!")
+                console.log("Menu button was clicked!")
             },
         }
     ];
@@ -41,15 +40,7 @@ function TourDeFoos() {
                 <Menu title={APP_NAME} menuButtonsList={menuButtonsListProps} />
                 <VerticalSpace height="1rem"/>
 
-                <Button variant="contained" color="primary">
-                    Primary
-                </Button>
 
-                <VerticalSpace height="1rem"/>
-
-                <TournamentRegistrations tournamentId="sampleTournamentId"/>
-
-                <VerticalSpace height="1rem"/>
             </Centered>
         </MuiThemeProvider>
     );

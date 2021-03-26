@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Card, CardContent, List,} from "@material-ui/core";
+import {Button, Card, CardContent, List, makeStyles,} from "@material-ui/core";
 import styled from "styled-components";
 import CardTitle from "../CardTitle/CardTitle";
 import {VerticalSpace} from "../Shared/VerticalSpace";
@@ -39,11 +39,7 @@ const MenuButtonsList = (props: MenuButtonsProps[]) => (
         <Centered>
             {(props.map((item, index) => (
                 <li key={index}>
-                    <Button variant="contained" color="primary"
-                            onClick={item.onClick}
-                    >
-                        {item.textName}
-                    </Button>
+                    <MenuButton textName={item.textName} onClick={item.onClick}/>
                     <VerticalSpace height="1rem"/>
                 </li>
             )))
@@ -52,6 +48,20 @@ const MenuButtonsList = (props: MenuButtonsProps[]) => (
     </List>
 )
 
+function MenuButton(props: MenuButtonsProps) {
+    const classes = useStyles();
+    return (
+        <Button variant="contained"
+                color="primary"
+                onClick={props.onClick}
+                className={classes.root}
+        >
+            {props.textName}
+        </Button>);
+}
 
-
-
+const useStyles = makeStyles({
+    root: {
+        width: "250px",
+    },
+});

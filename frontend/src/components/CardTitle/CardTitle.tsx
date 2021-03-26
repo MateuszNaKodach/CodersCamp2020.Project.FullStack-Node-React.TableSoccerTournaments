@@ -8,7 +8,7 @@ export type CardTitleProps = {
     readonly title: string;
 };
 
-const CardTitleComponent = (props: CardTitleProps) => (
+const CardTitle = (props: CardTitleProps) => (
     <>
         <Centered>
             <Typography component="h5" variant="h5">
@@ -20,7 +20,7 @@ const CardTitleComponent = (props: CardTitleProps) => (
 );
 
 export default styled(({...otherProps}) => (
-    <CardTitleComponent {...otherProps}   />
+    <CardTitle {...otherProps}   />
 ))`
      marginBottom: "20px",
 `;
