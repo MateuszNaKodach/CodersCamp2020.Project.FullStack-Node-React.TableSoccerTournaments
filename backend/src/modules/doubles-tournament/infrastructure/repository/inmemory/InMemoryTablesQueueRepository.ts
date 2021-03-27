@@ -13,7 +13,7 @@ export class InMemoryTablesQueueRepository implements TablesQueueRepository {
     return Promise.resolve(this.entities[tournamentId]);
   }
 
-  findFreeTablesByTournamentId(tournamentId: string): Promise<QueuedTable[]> {
+  findFreeTablesByTournamentId(tournamentId: string): Promise<QueuedTable[] | undefined> {
     return Promise.resolve(this.entities[tournamentId].queuedTables.filter((table) => table.isFree));
   }
 }

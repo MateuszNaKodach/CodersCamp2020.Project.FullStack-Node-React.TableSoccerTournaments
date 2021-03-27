@@ -7,7 +7,7 @@ import { TournamentTableWasReleased } from '../../../../../src/modules/tournamen
 import { CallMatch } from '../../../../../src/modules/doubles-tournament/core/application/command/CallMatch';
 import { MatchWasCalled } from '../../../../../src/modules/doubles-tournament/core/domain/event/MatchWasCalled';
 
-describe('Calling Enqueued Matches | Write Side', () => {
+describe('Calling Enqueued Matches', () => {
   const team1Id = 'Team1Id';
   const team2Id = 'Team2Id';
   const team3Id = 'Team3Id';

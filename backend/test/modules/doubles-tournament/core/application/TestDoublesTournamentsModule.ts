@@ -5,6 +5,7 @@ import { InMemoryMatchesQueueRepository } from '../../../../../src/modules/doubl
 import { InMemoryDoublesTournamentRepository } from '../../../../../src/modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryDoublesTournamentRepository';
 import { CommandBus } from '../../../../../src/shared/core/application/command/CommandBus';
 import { InMemoryCommandBus } from '../../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus';
+import { InMemoryTablesQueueRepository } from '../../../../../src/modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryTablesQueueRepository';
 
 export function testDoublesTournamentsModule(
   currentTime: Date,
@@ -13,6 +14,7 @@ export function testDoublesTournamentsModule(
 ): TestModuleCore {
   const doublesTournamentRepository = new InMemoryDoublesTournamentRepository();
   const matchesQueueRepository = new InMemoryMatchesQueueRepository();
+  const tablesQueueRepository = new InMemoryTablesQueueRepository();
   const moduleCoreFactory: ModuleCoreFactory = (commandBus, eventBus, queryBus) =>
     DoublesTournamentModuleCore(
       eventBus,
@@ -21,6 +23,7 @@ export function testDoublesTournamentsModule(
       entityIdGenerator,
       doublesTournamentRepository,
       matchesQueueRepository,
+      tablesQueueRepository,
     );
   return testModuleCore(moduleCoreFactory, commandBus);
 }

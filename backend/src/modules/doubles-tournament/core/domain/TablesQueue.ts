@@ -9,4 +9,11 @@ export class TablesQueue {
     this.tournamentId = props.tournamentId;
     this.queuedTables = props.queuedTables;
   }
+
+  withEnqueuedTables(table: QueuedTable): TablesQueue {
+    return new TablesQueue({
+      tournamentId: this.tournamentId,
+      queuedTables: [...this.queuedTables, table],
+    });
+  }
 }

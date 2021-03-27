@@ -27,4 +27,11 @@ export class MatchesQueue {
   get queuedMatches(): QueuedMatch[] {
     return [...this.queue];
   }
+
+  withUpdatedMatch(match: QueuedMatch): MatchesQueue {
+    return new MatchesQueue({
+      tournamentId: this.tournamentId,
+      queuedMatches: [...this.queue, match],
+    });
+  }
 }

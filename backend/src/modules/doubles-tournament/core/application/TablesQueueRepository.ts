@@ -6,5 +6,5 @@ export interface TablesQueueRepository {
 
   findByTournamentId(tournamentId: string): Promise<TablesQueue | undefined>;
 
-  findFreeTablesByTournamentId(tournamentId: string): Promise<QueuedTable[]>;
+  findFreeTablesByTournamentId(tournamentId: string): Promise<QueuedTable[] | undefined>;
 }

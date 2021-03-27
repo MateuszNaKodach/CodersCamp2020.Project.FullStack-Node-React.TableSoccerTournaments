@@ -63,3 +63,21 @@ export function pushMatchToQueue(
     events: [matchWasQueued],
   };
 }
+
+export function updateStartedMatchInQueue(
+  tournamentId: TournamentId,
+  match: QueuedMatch,
+  matchesQueue: MatchesQueue | undefined,
+): MatchesQueue {
+  if (!tournamentId || !matchesQueue) {
+    throw new Error("Tournament or its queue doesn't exists.");
+  }
+
+  const startedMatch = new QueuedMatch({
+    matchNumber: match.matchNumber,
+    team1Id: match.team1Id,
+    team2Id: match.team2Id,
+  });
+
+  return matchesQueue.withUpdatedMatch(startedMatch);
+}
