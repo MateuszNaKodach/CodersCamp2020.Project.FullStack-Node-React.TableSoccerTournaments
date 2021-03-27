@@ -13,6 +13,7 @@ export function TablesQueueRepositoryTestCases(props: {
 }): void {
   return describe(props.name, () => {
     const entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator();
+    const tournamentId = TournamentId.from(entityIdGenerator.generate());
     let repository: TablesQueueRepository;
 
     beforeAll(async () => {
@@ -22,9 +23,51 @@ export function TablesQueueRepositoryTestCases(props: {
     afterEach(async () => await props.databaseTestSupport.clearDatabase());
     afterAll(async () => await props.databaseTestSupport.closeConnection());
 
+    test('findByTournamentId returns tables queue with given tournament id when it was created and saved', async () => {
+      //Given
+      const queue: QueuedTable[] = [
+        new QueuedTable({
+          tableNumber: 1,
+          isFree: false,
+        }),
+        new QueuedTable({
+          tableNumber: 2,
+          isFree: true,
+        }),
+      ];
+      const tablesQueue = new TablesQueue({ tournamentId: tournamentId, queuedTables: queue });
+
+      //When
+      await repository.save(tablesQueue);
+
+      //Then
+      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual(tablesQueue);
+    });
+
+    test('findByTournamentId returns undefined when given tournament id when it was not found', async () => {
+      //Given
+      const queue: QueuedTable[] = [
+        new QueuedTable({
+          tableNumber: 1,
+          isFree: false,
+        }),
+        new QueuedTable({
+          tableNumber: 2,
+          isFree: true,
+        }),
+      ];
+      const tablesQueue = new TablesQueue({ tournamentId: tournamentId, queuedTables: queue });
+
+      //When
+      await repository.save(tablesQueue);
+
+      //Then
+      const notSavedTournamentId = entityIdGenerator.generate();
+      expect(await repository.findByTournamentId(notSavedTournamentId)).toBeUndefined();
+    });
+
     test('When some tables were released then findFreeTablesByTournamentId returns free tables in the given tournament', async () => {
       //Given
-      const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const bookedTable = new QueuedTable({
         tableNumber: 1,
         isFree: false,
@@ -44,7 +87,6 @@ export function TablesQueueRepositoryTestCases(props: {
 
     test('When all tables are booked then findFreeTablesByTournamentId returns empty array', async () => {
       //Given
-      const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const tablesQueue = new TablesQueue({
         tournamentId: tournamentId,
         queuedTables: [
