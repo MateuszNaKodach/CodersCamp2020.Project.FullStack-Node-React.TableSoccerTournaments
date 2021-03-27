@@ -10,7 +10,7 @@ import { CommandPublisher } from '../../../shared/core/application/command/Comma
 import { CreateTournamentTreeWhenTournamentWithTeamsWasCreated } from './application/event/CreateTournamentTreeWhenTournamentWithTeamsWasCreated';
 import { CreateTournamentTree } from './application/command/CreateTournamentTree';
 import { DomainEventPublisher } from '../../../shared/core/application/event/DomainEventBus';
-import {EnqueueMatchWhenTournamentWasStarted} from "./application/event/EnqueueMatchWhenTournamentWasStarted";
+import { EnqueueMatchWhenTournamentWasStarted } from './application/event/EnqueueMatchWhenTournamentWasStarted';
 
 export function TournamentTreeModuleCore(
   eventPublisher: DomainEventPublisher,
