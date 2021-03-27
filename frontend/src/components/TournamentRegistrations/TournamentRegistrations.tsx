@@ -31,6 +31,7 @@ import {
 } from "../../restapi/players-profiles";
 import { Centered } from "../Shared/Centered";
 import { VerticalSpace } from "../Shared/VerticalSpace";
+import AddingPlayerForm from "../AddingPlayerForm/AddingPlayerForm";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
@@ -145,7 +146,11 @@ const PlayerNotFound = () => {
         open={drawerState}
         onClose={toggleDrawer(false)}
       >
-        <div>cos</div>
+        <AddingPlayerForm
+          key={"Adding player form"}
+          title={"Nowy zawodnik"}
+          inputs={["Imię", "Nazwisko", "Adres e-mail", "Numer telefonu"]}
+        />
       </Drawer>
     </Centered>
   );
