@@ -6,6 +6,7 @@ import { TournamentTableWasBooked } from '../../../../../src/modules/tournament-
 import { TournamentTableWasReleased } from '../../../../../src/modules/tournament-tables/core/domain/event/TournamentTableWasReleased';
 import { CallMatch } from '../../../../../src/modules/doubles-tournament/core/application/command/CallMatch';
 import { MatchWasCalled } from '../../../../../src/modules/doubles-tournament/core/domain/event/MatchWasCalled';
+import { CommandBus } from '../../../../../src/shared/core/application/command/CommandBus';
 
 describe('Calling Enqueued Matches', () => {
   const team1Id = 'Team1Id';
@@ -13,14 +14,18 @@ describe('Calling Enqueued Matches', () => {
   const team3Id = 'Team3Id';
   const team4Id = 'Team4Id';
   const tournamentId = 'TournamentId';
-  const commandBus = new InMemoryCommandBus();
+  // const commandBus = new InMemoryCommandBus();
+  const commandBus: CommandBus = {
+    registerHandler: jest.fn(),
+    execute: jest.fn(),
+  };
   const spy = jest.spyOn(commandBus, 'execute');
 
   it('When matches were enqueued and only one table was released then call the match with lower matchNumber', async () => {
     //Given
     const currentTime = new Date();
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team3Id, team4Id]);
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
+    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
 
     //When
     await doublesTournament.publishEvent(
@@ -54,7 +59,9 @@ describe('Calling Enqueued Matches', () => {
       calledMatch: { matchNumber: 3, team1Id: team3Id, team2Id: team4Id },
       tableNumber: 2,
     });
-    expect(spy).toHaveBeenCalledWith(callMatch);
+    // expect(spy).toHaveBeenCalledWith(callMatch);
+    expect(commandBus.execute).toHaveBeenCalled();
+    expect(commandBus.execute).toHaveBeenLastCalledWith(callMatch);
   });
 
   it('When tables are free and new matches were enqueued then call both matches', async () => {
