@@ -22,11 +22,12 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write \"src/**/*.tsx\" \"test/**/*.tsx\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:ci": "prettier -c \"src/**/*.ts\"",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
@@ -52,7 +53,9 @@
     "@types/jest": "^26.0.21",
     "@types/styled-components": "^5.1.9",
     "@types/testing-library__jest-dom": "^5.9.5",
-    "msw": "^0.27.2"
+    "msw": "^0.27.2",
+    "prettier": "^2.2.1",
+    "pretty-quick": "^3.1.0"
   },
   "optionalDependencies": {
     "fsevents": "*"
