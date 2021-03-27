@@ -166,7 +166,7 @@ describe('TournamentTree', () => {
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      expect(tournamentTree.getMatchesQueueReadyToBegin()).toIncludeSameMembers(expectedMatchesQueue);
+      expect(tournamentTree.getMatchesQueueReadyToStart()).toIncludeSameMembers(expectedMatchesQueue);
     });
 
     it('from 6 teams tree', async () => {
@@ -200,7 +200,7 @@ describe('TournamentTree', () => {
         },
       ].map((item) => FightingTeamsGroup.fromObj(item));
 
-      expect(tournamentTree.getMatchesQueueReadyToBegin()).toIncludeSameMembers(expectedMatchesQueue);
+      expect(tournamentTree.getMatchesQueueReadyToStart()).toIncludeSameMembers(expectedMatchesQueue);
     });
   });
 

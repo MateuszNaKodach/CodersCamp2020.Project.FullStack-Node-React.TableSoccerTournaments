@@ -6,6 +6,8 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
 import { TournamentTreeWasCreated } from './event/TournamentTreeWasCreated';
 import { TournamentTeamId } from './TournamentTeamId';
+import {MatchReadyToStart} from "./MatchReadyToStart";
+import {isDefined} from "../../../../common/Defined";
 
 export class TournamentTree {
   readonly tournamentTeams: TournamentTeam[];
@@ -72,8 +74,13 @@ export class TournamentTree {
     return [...this.tournamentTreeArray];
   }
 
-  public getMatchesQueueReadyToBegin(): FightingTeamsGroup[] {
-    return this.tournamentTreeArray.filter(({ firstTeam, secondTeam }) => firstTeam && secondTeam);
+  public getMatchesQueueReadyToStart(): MatchReadyToStart[] {
+    return this.tournamentTreeArray.filter(({ firstTeam, secondTeam }) => firstTeam && secondTeam).map((match) => {
+        return new MatchReadyToStart(
+            { firstTeam: match.firstTeam, secondTeam: match.secondTeam, matchNumber: match.matchNumberInSequence }
+        )
+      }
+    );
   }
 
   public getTournamentTreeIdArray(): string[] {
