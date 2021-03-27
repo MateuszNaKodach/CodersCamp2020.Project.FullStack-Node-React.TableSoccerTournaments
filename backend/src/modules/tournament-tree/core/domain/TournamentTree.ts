@@ -77,7 +77,7 @@ export class TournamentTree {
   public getMatchesQueueReadyToStart(): MatchReadyToStart[] {
     return this.tournamentTreeArray.filter(({ firstTeam, secondTeam }) => firstTeam && secondTeam).map((match) => {
         return new MatchReadyToStart(
-            { firstTeam: match.firstTeam, secondTeam: match.secondTeam, matchNumber: match.matchNumberInSequence }
+            { firstTeam: match.firstTeam as TournamentTeam, secondTeam: match.secondTeam as TournamentTeam, matchNumber: match.matchNumberInSequence as number }
         )
       }
     );
