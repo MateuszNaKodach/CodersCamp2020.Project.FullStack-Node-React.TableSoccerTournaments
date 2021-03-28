@@ -36,9 +36,9 @@ function TourDeFoos() {
                         <Route path={PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW} exact>
                             PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW
                         </Route>
-                        <Route path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW} exact>
+                        <Route path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/:tournamentId`}>
                             <Centered>
-                                <TournamentRegistrations tournamentId="sampleTournamentId" />
+                                <TournamentRegistrations/>
                             </Centered>
                         </Route>
                         <Route path={PATH_FOR_PLAYERS_PROFILES_VIEW} exact>
