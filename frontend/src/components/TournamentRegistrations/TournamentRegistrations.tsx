@@ -15,7 +15,6 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-  MuiThemeProvider,
   OutlinedInput,
   Typography,
 } from "@material-ui/core";
@@ -32,14 +31,13 @@ import {
 import { Centered } from "../Shared/Centered";
 import { VerticalSpace } from "../Shared/VerticalSpace";
 import AddingPlayerForm from "../AddingPlayerForm/AddingPlayerForm";
+import {useRouteMatch} from "react-router-dom";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
 };
 
-export const TournamentRegistrations = (
-  props: TournamentRegistrationsProps
-) => {
+export const TournamentRegistrations = () => {
   const [initPlayers, setInitPlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
@@ -56,6 +54,12 @@ export const TournamentRegistrations = (
         setPlayers(playerProfilesList.items);
       });
   }, []);
+
+  interface MatchParams {
+    tournamentId: string;
+  }
+  const match = useRouteMatch<MatchParams>('/tournament-registration/:tournamentId');
+  const touranmentId = match?.params.tournamentId;
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {
