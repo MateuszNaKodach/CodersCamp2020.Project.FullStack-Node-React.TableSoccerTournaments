@@ -1,13 +1,12 @@
-import { TournamentTeam } from './TournamentTeam';
-import { FightingTeamsGroup } from './FightingTeamsGroup';
-import { WinnerTree } from './WinnerTree';
-import { EntityIdGenerator } from '../../../../shared/core/application/EntityIdGenerator';
-import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
-import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
-import { TournamentTreeWasCreated } from './event/TournamentTreeWasCreated';
-import { TournamentTeamId } from './TournamentTeamId';
-import { MatchReadyToStart } from './MatchReadyToStart';
-import { isDefined } from '../../../../common/Defined';
+import {TournamentTeam} from './TournamentTeam';
+import {FightingTeamsGroup} from './FightingTeamsGroup';
+import {WinnerTree} from './WinnerTree';
+import {EntityIdGenerator} from '../../../../shared/core/application/EntityIdGenerator';
+import {DomainCommandResult} from '../../../../shared/core/domain/DomainCommandResult';
+import {CurrentTimeProvider} from '../../../../shared/core/CurrentTimeProvider';
+import {TournamentTreeWasCreated} from './event/TournamentTreeWasCreated';
+import {TournamentTeamId} from './TournamentTeamId';
+import {MatchReadyToStart} from './MatchReadyToStart';
 
 export class TournamentTree {
   readonly tournamentTeams: TournamentTeam[];
