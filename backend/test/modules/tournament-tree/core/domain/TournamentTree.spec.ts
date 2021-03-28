@@ -3,6 +3,7 @@ import { createTournamentTree, TournamentTree } from '../../../../../src/modules
 import { generateTournamentTeamsList } from './TouramentTeamsListGenerator';
 import { FightingTeamsGroup } from '../../../../../src/modules/tournament-tree/core/domain/FightingTeamsGroup';
 import { FightingTeamsGroupId } from '../../../../../src/modules/tournament-tree/core/domain/FightingTeamsGroupId';
+import { MatchReadyToStart } from '../../../../../src/modules/tournament-tree/core/domain/MatchReadyToStart';
 
 describe('TournamentTree', () => {
   describe('Single Tournament Tree', () => {
@@ -145,26 +146,18 @@ describe('TournamentTree', () => {
         entityIdGenerator: matchEntityIdGen,
       });
 
-      const expectedMatchesQueue: FightingTeamsGroup[] = [
+      const expectedMatchesQueue: MatchReadyToStart[] = [
         {
-          fightingTeamsGroupId: FightingTeamsGroupId.from('match_3'),
           firstTeam: tournamentTeamsList[0],
           secondTeam: tournamentTeamsList[3],
-          fightingTeamsGroupLevel: 0,
-          nextMatchId: FightingTeamsGroupId.from('match_1'),
-          matchNumberInSequence: 1,
-          isMatchFinished: false,
+          matchNumber: 1,
         },
         {
-          fightingTeamsGroupId: FightingTeamsGroupId.from('match_2'),
           firstTeam: tournamentTeamsList[2],
           secondTeam: tournamentTeamsList[1],
-          fightingTeamsGroupLevel: 0,
-          nextMatchId: FightingTeamsGroupId.from('match_1'),
-          matchNumberInSequence: 2,
-          isMatchFinished: false,
+          matchNumber: 2,
         },
-      ].map((item) => FightingTeamsGroup.fromObj(item));
+      ];
 
       expect(tournamentTree.getMatchesQueueReadyToStart()).toIncludeSameMembers(expectedMatchesQueue);
     });
@@ -179,26 +172,18 @@ describe('TournamentTree', () => {
         tournamentTeams: tournamentTeamsList,
         entityIdGenerator: matchEntityIdGen,
       });
-      const expectedMatchesQueue: FightingTeamsGroup[] = [
+      const expectedMatchesQueue: MatchReadyToStart[] = [
         {
-          fightingTeamsGroupId: FightingTeamsGroupId.from('match_6'),
           firstTeam: tournamentTeamsList[4],
           secondTeam: tournamentTeamsList[3],
-          fightingTeamsGroupLevel: 0,
-          nextMatchId: FightingTeamsGroupId.from('match_3'),
-          matchNumberInSequence: 2,
-          isMatchFinished: false,
+          matchNumber: 2,
         },
         {
-          fightingTeamsGroupId: FightingTeamsGroupId.from('match_5'),
           firstTeam: tournamentTeamsList[2],
           secondTeam: tournamentTeamsList[5],
-          fightingTeamsGroupLevel: 0,
-          nextMatchId: FightingTeamsGroupId.from('match_2'),
-          matchNumberInSequence: 3,
-          isMatchFinished: false,
+          matchNumber: 3,
         },
-      ].map((item) => FightingTeamsGroup.fromObj(item));
+      ];
 
       expect(tournamentTree.getMatchesQueueReadyToStart()).toIncludeSameMembers(expectedMatchesQueue);
     });
