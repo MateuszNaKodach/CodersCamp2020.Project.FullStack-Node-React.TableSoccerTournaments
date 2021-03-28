@@ -10,6 +10,7 @@ import {
     PATH_FOR_TOURNAMENTS_SELECTION_VIEW
 } from "../../constants/paths";
 import {HomeMenu} from "../HomeMenu/HomeMenu";
+import {TournamentRegistrations} from "../TournamentRegistrations";
 
 const theme = createMuiTheme({
     palette: {
@@ -35,8 +36,10 @@ function TourDeFoos() {
                         <Route path={PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW} exact>
                             PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW
                         </Route>
-                        <Route path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW} exact>
-                            PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW
+                        <Route path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/:tournamentId`}>
+                            <Centered>
+                                <TournamentRegistrations/>
+                            </Centered>
                         </Route>
                         <Route path={PATH_FOR_PLAYERS_PROFILES_VIEW} exact>
                             PATH_FOR_PLAYERS_PROFILES_VIEW

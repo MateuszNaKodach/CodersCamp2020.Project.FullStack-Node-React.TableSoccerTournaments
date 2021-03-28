@@ -8,6 +8,8 @@ import { rest } from "msw";
 import { server } from "../../mocks/msw/server";
 import { PlayerProfileDto } from "../../restapi/players-profiles";
 import userEvent from "@testing-library/user-event";
+import {BrowserRouter as Router} from "react-router-dom";
+
 
 describe("Tournament Registrations", () => {
   it(`should show title "Zapisy na turniej"`, () => {
@@ -15,7 +17,7 @@ describe("Tournament Registrations", () => {
     getPlayersProfilesIsLoading();
 
     //When
-    render(<TournamentRegistrations tournamentId="sampleTournamentId" />);
+    render(<Router><TournamentRegistrations/></Router>);
 
     //Then
     expect(screen.getByText("Zapisy na turniej")).toBeInTheDocument();
@@ -26,7 +28,7 @@ describe("Tournament Registrations", () => {
     getPlayersProfilesIsLoading();
 
     //When
-    render(<TournamentRegistrations tournamentId="sampleTournamentId" />);
+    render(<Router><TournamentRegistrations/></Router>);
 
     //Then
     expect(
@@ -55,7 +57,7 @@ describe("Tournament Registrations", () => {
     getPlayersProfilesWillReturn(playersProfiles);
 
     //When
-    render(<TournamentRegistrations tournamentId="sampleTournamentId" />);
+    render(<Router><TournamentRegistrations/></Router>);
 
     //Then
     await waitForElementToBeRemoved(() =>
@@ -94,7 +96,7 @@ describe("Tournament Registrations", () => {
     getPlayersProfilesWillReturn(playersProfiles);
 
     //When
-    render(<TournamentRegistrations tournamentId="sampleTournamentId" />);
+    render(<Router><TournamentRegistrations/></Router>);
     await waitForElementToBeRemoved(() =>
       screen.getByTestId("TournamentRegistrationsLoadingIndicator")
     );
