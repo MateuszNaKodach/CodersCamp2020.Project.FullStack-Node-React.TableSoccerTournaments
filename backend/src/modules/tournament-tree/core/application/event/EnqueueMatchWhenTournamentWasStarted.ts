@@ -2,6 +2,7 @@ import { EventHandler } from '../../../../../shared/core/application/event/Event
 import { CommandPublisher } from '../../../../../shared/core/application/command/CommandBus';
 import { EnqueueMatch } from '../../../../doubles-tournament/core/application/command/EnqueueMatch';
 import { TournamentTreeRepository } from '../TournamentTreeRepository';
+import {TournamentWasStarted} from "../../../../doubles-tournament/core/domain/event/TournamentWasStarted";
 
 export class EnqueueMatchWhenTournamentWasStarted implements EventHandler<TournamentWasStarted> {
   constructor(private readonly commandPublisher: CommandPublisher, private readonly repository: TournamentTreeRepository) {}
