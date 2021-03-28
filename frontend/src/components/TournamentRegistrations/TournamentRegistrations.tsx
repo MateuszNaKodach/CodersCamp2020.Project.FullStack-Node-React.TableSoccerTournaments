@@ -35,7 +35,9 @@ export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
 };
 
-export const TournamentRegistrations = () => {
+export const TournamentRegistrations = (
+    props: TournamentRegistrationsProps
+) => {
   const [initPlayers, setInitPlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
