@@ -12,11 +12,13 @@ describe("Menu Component", () => {
     const menuButtonsListProps = [
         {
             textName: "Turniej",
-            onClick: mockCallback_1
+            onClick: mockCallback_1,
+            onLink: ""
         },
         {
             textName: "Zawodnicy",
-            onClick: mockCallback_2
+            onClick: mockCallback_2,
+            onLink: "",
         }
     ];
 
