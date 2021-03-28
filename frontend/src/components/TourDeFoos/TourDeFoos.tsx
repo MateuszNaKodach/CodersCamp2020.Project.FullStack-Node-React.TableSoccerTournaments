@@ -1,10 +1,7 @@
 import React from "react";
 import {Button, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
-import {Menu} from '../Menu';
 import {grey} from "@material-ui/core/colors";
 import {Centered} from "../Shared/Centered";
-import {VerticalSpace} from "../Shared/VerticalSpace";
-import {APP_NAME} from "../../constants/names";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {
     PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
@@ -12,6 +9,7 @@ import {
     PATH_FOR_HOME_VIEW, PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
     PATH_FOR_TOURNAMENTS_SELECTION_VIEW
 } from "../../constants/paths";
+import {HomeMenu} from "../HomeMenu/HomeMenu";
 
 const theme = createMuiTheme({
     palette: {
@@ -23,23 +21,6 @@ const theme = createMuiTheme({
 });
 
 function TourDeFoos() {
-    const menuButtonsListProps = [
-        {
-            textName: "Turniej",
-            onClick: () => {
-                console.log("Menu button was clicked!")
-            },
-            onLink: PATH_FOR_TOURNAMENTS_SELECTION_VIEW
-        },
-        {
-            textName: "Zawodnicy",
-            onClick: () => {
-                console.log("Menu button was clicked!")
-            },
-            onLink: PATH_FOR_PLAYERS_PROFILES_VIEW
-        }
-    ];
-
     return (
         <Router>
             <MuiThemeProvider theme={theme}>
@@ -65,11 +46,8 @@ function TourDeFoos() {
                         </Route>
 
                         <Route path={PATH_FOR_HOME_VIEW} exact>
-                            <VerticalSpace height="1rem"/>
-                            <Menu title={APP_NAME} menuButtonsList={menuButtonsListProps}/>
-                            <VerticalSpace height="1rem"/>
+                            <HomeMenu/>
                         </Route>
-
                     </Switch>
                 </Centered>
             </MuiThemeProvider>
