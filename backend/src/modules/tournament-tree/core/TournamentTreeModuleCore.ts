@@ -11,6 +11,7 @@ import { CreateTournamentTreeWhenTournamentWithTeamsWasCreated } from './applica
 import { CreateTournamentTree } from './application/command/CreateTournamentTree';
 import { DomainEventPublisher } from '../../../shared/core/application/event/DomainEventBus';
 import { EnqueueMatchWhenTournamentWasStarted } from './application/event/EnqueueMatchWhenTournamentWasStarted';
+import {TournamentWasStarted} from "../../doubles-tournament/core/domain/event/TournamentWasStarted";
 
 export function TournamentTreeModuleCore(
   eventPublisher: DomainEventPublisher,
