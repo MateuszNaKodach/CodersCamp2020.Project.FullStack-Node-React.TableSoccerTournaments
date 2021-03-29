@@ -30,8 +30,8 @@ import {
 } from "../../../restapi/players-profiles";
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import AddingPlayerForm from "../AddingPlayerForm/AddingPlayerForm";
-import {useRouteMatch} from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
+import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
@@ -58,7 +58,9 @@ export const TournamentRegistrations = () => {
   interface MatchParams {
     tournamentId: string;
   }
-  const match = useRouteMatch<MatchParams>('/tournament-registration/:tournamentId');
+  const match = useRouteMatch<MatchParams>(
+    "/tournament-registration/:tournamentId"
+  );
   const touranmentId = match?.params.tournamentId;
 
   function onPlayerSearch(searchInput: string) {

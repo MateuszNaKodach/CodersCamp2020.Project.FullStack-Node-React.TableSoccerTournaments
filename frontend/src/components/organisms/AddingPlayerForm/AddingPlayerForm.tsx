@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, TextField, Typography } from "@material-ui/core";
-import { Centered } from "../Shared/Centered";
-import { VerticalSpace } from "../Shared/VerticalSpace";
+import { Centered } from "../../atoms/Shared/Centered";
+import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 
 function AddingPlayerForm() {
   return (
