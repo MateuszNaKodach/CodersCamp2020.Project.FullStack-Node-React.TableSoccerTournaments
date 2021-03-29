@@ -3,6 +3,7 @@ import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import { Centered } from "../Shared/Centered";
 import { TournamentRegistrations } from "../TournamentRegistrations";
+import Footer from "../Footer/Footer";
 
 const theme = createMuiTheme({
   palette: {
@@ -17,9 +18,11 @@ function TourDeFoos() {
   return (
     <MuiThemeProvider theme={theme}>
       <Centered>
-        <TournamentRegistrations tournamentId="sampleTournamentId" />
+        {/* <TournamentRegistrations tournamentId="sampleTournamentId" /> */}
       </Centered>
+      <Footer />
     </MuiThemeProvider>
+    
   );
 }
 
