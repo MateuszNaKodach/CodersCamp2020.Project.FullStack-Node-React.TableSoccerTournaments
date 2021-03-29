@@ -31,7 +31,7 @@ import {
 import { Centered } from "../Shared/Centered";
 import { VerticalSpace } from "../Shared/VerticalSpace";
 import AddingPlayerForm from "../AddingPlayerForm/AddingPlayerForm";
-import {useRouteMatch} from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
@@ -58,7 +58,9 @@ export const TournamentRegistrations = () => {
   interface MatchParams {
     tournamentId: string;
   }
-  const match = useRouteMatch<MatchParams>('/tournament-registration/:tournamentId');
+  const match = useRouteMatch<MatchParams>(
+    "/tournament-registration/:tournamentId"
+  );
   const touranmentId = match?.params.tournamentId;
 
   function onPlayerSearch(searchInput: string) {
@@ -117,7 +119,7 @@ const RegistrationsCard = styled(Card)({
 type PlayersListProps = { players: PlayerProfileDto[] };
 const PlayersList = (props: PlayersListProps) => {
   if (props.players.length === 0) {
-    return PlayerNotFound();
+    return <PlayerNotFound />;
   }
   return (
     <List>
@@ -129,10 +131,10 @@ const PlayersList = (props: PlayersListProps) => {
 };
 
 const PlayerNotFound = () => {
-  const [drawerState, setDrawerState] = useState<boolean>(false);
+  const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
   const toggleDrawer = (open: boolean) => () => {
-    setDrawerState(open);
+    setDrawerOpened(open);
   };
 
   return (
@@ -147,7 +149,7 @@ const PlayerNotFound = () => {
       </Button>
       <Drawer
         anchor={"bottom"}
-        open={drawerState}
+        open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
         <AddingPlayerForm
