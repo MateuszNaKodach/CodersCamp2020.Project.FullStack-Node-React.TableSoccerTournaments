@@ -5,7 +5,6 @@ import { TournamentId } from '../../domain/TournamentId';
 import { TournamentTableWasBooked } from '../../../../tournament-tables/core/domain/event/TournamentTableWasBooked';
 
 export class BookTableInQueue implements EventHandler<TournamentTableWasBooked> {
-
   constructor(private readonly tablesQueueRepository: TablesQueueRepository) {}
 
   async handle(event: TournamentTableWasBooked): Promise<void> {
