@@ -4,8 +4,6 @@ import { MatchesQueueRepository } from '../MatchesQueueRepository';
 import { TablesQueueRepository } from '../TablesQueueRepository';
 import { TournamentTableWasReleased } from '../../../../tournament-tables/core/domain/event/TournamentTableWasReleased';
 import { CallMatch } from '../command/CallMatch';
-import { TournamentId } from '../../domain/TournamentId';
-import { pushTableToQueue } from '../../domain/QueuedTable';
 import { QueuedMatch } from '../../domain/QueuedMatch';
 import { MatchesQueue } from '../../domain/MatchesQueue';
 
@@ -26,8 +24,6 @@ export class CallMatchWhenTournamentTableWasReleased implements EventHandler<Tou
 
   async handle(event: TournamentTableWasReleased): Promise<void> {
     const tournamentId = event.tournamentId;
-    await this.releaseTableInQueue({ tournamentId: tournamentId, tableNumber: event.tableNumber });
-
     const matches = await this.matchesQueueRepository.findByTournamentId(tournamentId);
     const matchToCall = matches ? this.findFirstMatchToCall(matches) : undefined;
     if (matchToCall) {
@@ -43,17 +39,6 @@ export class CallMatchWhenTournamentTableWasReleased implements EventHandler<Tou
         }),
       );
     }
-  }
-
-  private async releaseTableInQueue(props: { tournamentId: string; tableNumber: number }): Promise<void> {
-    const tournamentId = TournamentId.from(props.tournamentId);
-    const tournamentTable = {
-      tableNumber: props.tableNumber,
-      isFree: true,
-    };
-    const tablesQueue = await this.tablesQueueRepository.findByTournamentId(props.tournamentId);
-    const queue = pushTableToQueue(tournamentId, tournamentTable, tablesQueue);
-    await this.tablesQueueRepository.save(queue);
   }
 
   private findFirstMatchToCall(matches: MatchesQueue): QueuedMatch {
