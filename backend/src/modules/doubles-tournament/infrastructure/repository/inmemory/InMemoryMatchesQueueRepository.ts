@@ -14,6 +14,6 @@ export class InMemoryMatchesQueueRepository implements MatchesQueueRepository {
   }
 
   findNotStartedMatchesByTournamentId(tournamentId: string): Promise<QueuedMatch[]> {
-    return Promise.resolve(this.entities[tournamentId].queuedMatches.filter((match) => !match.started));
+    return Promise.resolve(this.entities[tournamentId]?.queuedMatches.filter((match) => !match.started));
   }
 }

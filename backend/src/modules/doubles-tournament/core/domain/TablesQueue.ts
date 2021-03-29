@@ -11,9 +11,10 @@ export class TablesQueue {
   }
 
   withEnqueuedTables(table: QueuedTable): TablesQueue {
+    const queue = this.queuedTables.filter(queuedTable => queuedTable.tableNumber !== table.tableNumber);
     return new TablesQueue({
       tournamentId: this.tournamentId,
-      queuedTables: [...this.queuedTables, table],
+      queuedTables: [...queue, table],
     });
   }
 }

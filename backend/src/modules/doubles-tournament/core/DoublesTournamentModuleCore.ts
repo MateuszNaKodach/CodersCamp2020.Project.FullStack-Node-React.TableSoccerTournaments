@@ -25,11 +25,10 @@ import { TablesQueueRepository } from './application/TablesQueueRepository';
 import { MatchWasQueued } from './domain/event/MatchWasQueued';
 import { TournamentTableWasReleased } from '../../tournament-tables/core/domain/event/TournamentTableWasReleased';
 import { MatchWasCalled } from './domain/event/MatchWasCalled';
-import { ReleaseTableInQueue } from './application/event/ReleaseTableInQueue';
 import { BookTableInQueue } from './application/event/BookTableInQueue';
 import { TournamentTableWasBooked } from '../../tournament-tables/core/domain/event/TournamentTableWasBooked';
 import { CallMatchWhenTournamentTableWasReleased } from './application/event/CallMatchWhenTournamentTableWasReleased';
-import { UpdateStartedMatchInQueueWhenMatchWasCalled } from './application/event/UpdateStartedMatchInQueueWhenMatchWasCalled';
+import { ReleaseTableInQueue } from './application/event/ReleaseTableInQueue';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -66,11 +65,7 @@ export function DoublesTournamentModuleCore(
       },
       {
         eventType: MatchWasCalled,
-        handler: new StartMatchAfterItsCalling(commandPublisher),
-      },
-      {
-        eventType: MatchWasCalled,
-        handler: new UpdateStartedMatchInQueueWhenMatchWasCalled(matchesQueue),
+        handler: new StartMatchAfterItsCalling(commandPublisher, matchesQueue),
       },
       {
         eventType: TournamentTableWasReleased,

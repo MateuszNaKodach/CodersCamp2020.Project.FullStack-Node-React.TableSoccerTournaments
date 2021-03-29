@@ -1,6 +1,5 @@
 import { TeamId } from './TeamId';
 import { TournamentId } from './TournamentId';
-import { DoublesTournament } from './DoublesTournament';
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { MatchesQueue } from './MatchesQueue';
 import { MatchWasQueued } from './event/MatchWasQueued';
@@ -24,7 +23,6 @@ export class QueuedMatch {
 }
 
 export function pushMatchToQueue(
-  tournament: DoublesTournament | undefined,
   queue: MatchesQueue | undefined,
   command: {
     tournamentId: TournamentId;
@@ -34,9 +32,6 @@ export function pushMatchToQueue(
   },
   currentTime: Date,
 ): DomainCommandResult<MatchesQueue> {
-  if (tournament === undefined) {
-    throw new Error("This tournament doesn't exists.");
-  }
   if (queue === undefined) {
     queue = new MatchesQueue({
       tournamentId: command.tournamentId,
@@ -64,20 +59,22 @@ export function pushMatchToQueue(
   };
 }
 
-export function updateStartedMatchInQueue(
+export function startMatchInMatchesQueue(
   tournamentId: TournamentId,
   match: QueuedMatch,
   matchesQueue: MatchesQueue | undefined,
 ): MatchesQueue {
   if (!tournamentId || !matchesQueue) {
-    throw new Error("Tournament or its queue doesn't exists.");
+    throw new Error("Queue for this tournament doesn't exists.");
   }
 
   const startedMatch = new QueuedMatch({
     matchNumber: match.matchNumber,
     team1Id: match.team1Id,
     team2Id: match.team2Id,
+    tableNumber: match.tableNumber,
+    started: match.started
   });
 
-  return matchesQueue.withUpdatedMatch(startedMatch);
+  return matchesQueue.withStartedMatch(startedMatch);
 }

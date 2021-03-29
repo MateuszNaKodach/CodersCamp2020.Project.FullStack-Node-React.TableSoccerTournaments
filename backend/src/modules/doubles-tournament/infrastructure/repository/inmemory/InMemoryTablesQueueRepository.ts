@@ -14,6 +14,6 @@ export class InMemoryTablesQueueRepository implements TablesQueueRepository {
   }
 
   findFreeTablesByTournamentId(tournamentId: string): Promise<QueuedTable[] | undefined> {
-    return Promise.resolve(this.entities[tournamentId].queuedTables.filter((table) => table.isFree));
+    return Promise.resolve(this.entities[tournamentId]?.queuedTables.filter((table) => table.isFree));
   }
 }
