@@ -48,6 +48,7 @@ describe('Calling Enqueued Matches', () => {
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
     await doublesTournament.executeCommand(enqueueMatch2);
     await doublesTournament.executeCommand(enqueueMatch);
+    spy.mockClear();
 
     //When
     await doublesTournament.publishEvent(table1Booked);
