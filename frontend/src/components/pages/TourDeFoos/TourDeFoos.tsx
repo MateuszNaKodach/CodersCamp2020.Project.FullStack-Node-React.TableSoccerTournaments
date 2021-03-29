@@ -1,20 +1,17 @@
 import React from "react";
-import { Button, MuiThemeProvider } from "@material-ui/core";
+import {Button, MuiThemeProvider} from "@material-ui/core";
 import { unstable_createMuiStrictModeTheme as createMuiTheme } from "@material-ui/core";
-import { grey } from "@material-ui/core/colors";
-import { Centered } from "../Shared/Centered";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {grey} from "@material-ui/core/colors";
+import {Centered} from "../../atoms/Shared/Centered";
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {
-  PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
-  PATH_FOR_LOGIN_VIEW,
-  PATH_FOR_PLAYER_PROFILE_CREATION_VIEW,
-  PATH_FOR_PLAYERS_PROFILES_VIEW,
-  PATH_FOR_HOME_VIEW,
-  PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
-  PATH_FOR_TOURNAMENTS_SELECTION_VIEW,
-} from "../../constants/paths";
-import { HomeMenu } from "../HomeMenu/HomeMenu";
-import { TournamentRegistrations } from "../TournamentRegistrations";
+    PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
+    PATH_FOR_LOGIN_VIEW, PATH_FOR_PLAYER_PROFILE_CREATION_VIEW, PATH_FOR_PLAYERS_PROFILES_VIEW,
+    PATH_FOR_HOME_VIEW, PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
+    PATH_FOR_TOURNAMENTS_SELECTION_VIEW
+} from "../../atoms/constants/paths";
+import {HomeMenu} from "../HomeMenu/HomeMenu";
+import {TournamentRegistrations} from "../TournamentRegistrations";
 
 const theme = createMuiTheme({
   palette: {
