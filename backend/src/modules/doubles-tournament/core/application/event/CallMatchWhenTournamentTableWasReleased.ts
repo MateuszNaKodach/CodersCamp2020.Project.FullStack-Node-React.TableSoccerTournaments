@@ -4,6 +4,8 @@ import { MatchesQueueRepository } from '../MatchesQueueRepository';
 import { TablesQueueRepository } from '../TablesQueueRepository';
 import { TournamentTableWasReleased } from '../../../../tournament-tables/core/domain/event/TournamentTableWasReleased';
 import { CallMatch } from '../command/CallMatch';
+import { QueuedMatch } from '../../domain/QueuedMatch';
+import { MatchesQueue } from '../../domain/MatchesQueue';
 
 export class CallMatchWhenTournamentTableWasReleased implements EventHandler<TournamentTableWasReleased> {
   private readonly commandPublisher: CommandPublisher;
@@ -22,21 +24,26 @@ export class CallMatchWhenTournamentTableWasReleased implements EventHandler<Tou
 
   async handle(event: TournamentTableWasReleased): Promise<void> {
     const tournamentId = event.tournamentId;
-    const notStartedMatches = await this.matchesQueueRepository.findNotStartedMatchesByTournamentId(event.tournamentId);
-    if (notStartedMatches.length > 0) {
-      const lowestMatchNumber = Math.min(...notStartedMatches.map((match) => match.matchNumber.raw));
-      const firstMatchToCall = notStartedMatches.filter((match) => match.matchNumber.raw === lowestMatchNumber)[0];
+    const matches = await this.matchesQueueRepository.findByTournamentId(tournamentId);
+    const matchToCall = matches ? this.findFirstMatchToCall(matches) : undefined;
+    if (matchToCall) {
       await this.commandPublisher.execute(
         new CallMatch({
           tournamentId: tournamentId,
           calledMatch: {
-            matchNumber: firstMatchToCall.matchNumber.raw,
-            team1Id: firstMatchToCall.team1Id.raw,
-            team2Id: firstMatchToCall.team2Id.raw,
+            matchNumber: matchToCall.matchNumber.raw,
+            team1Id: matchToCall.team1Id.raw,
+            team2Id: matchToCall.team2Id.raw,
           },
           tableNumber: event.tableNumber,
         }),
       );
     }
+  }
+
+  private findFirstMatchToCall(matches: MatchesQueue): QueuedMatch {
+    const notStartedMatches = matches.queuedMatches.filter((match) => !match.started);
+    const lowestMatchNumber = Math.min(...notStartedMatches.map((match) => match.matchNumber.raw));
+    return notStartedMatches.filter((match) => match.matchNumber.raw === lowestMatchNumber)[0];
   }
 }
