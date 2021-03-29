@@ -65,46 +65,5 @@ export function TablesQueueRepositoryTestCases(props: {
       const notSavedTournamentId = entityIdGenerator.generate();
       expect(await repository.findByTournamentId(notSavedTournamentId)).toBeUndefined();
     });
-
-    test('When some tables were released then findFreeTablesByTournamentId returns free tables in the given tournament', async () => {
-      //Given
-      const bookedTable = new QueuedTable({
-        tableNumber: 1,
-        isFree: false,
-      });
-      const freeTable = new QueuedTable({
-        tableNumber: 2,
-        isFree: true,
-      });
-      const tablesQueue = new TablesQueue({ tournamentId: tournamentId, queuedTables: [bookedTable, freeTable] });
-
-      //When
-      await repository.save(tablesQueue);
-
-      //Then
-      expect(await repository.findFreeTablesByTournamentId(tournamentId.raw)).toStrictEqual([freeTable]);
-    });
-
-    test('When all tables are booked then findFreeTablesByTournamentId returns empty array', async () => {
-      //Given
-      const tablesQueue = new TablesQueue({
-        tournamentId: tournamentId,
-        queuedTables: [
-          new QueuedTable({
-            tableNumber: 1,
-            isFree: false,
-          }),
-          new QueuedTable({
-            tableNumber: 2,
-            isFree: false,
-          }),
-        ],
-      });
-      //When
-      await repository.save(tablesQueue);
-
-      //Then
-      expect(await repository.findFreeTablesByTournamentId(tournamentId.raw)).toStrictEqual([]);
-    });
   });
 }

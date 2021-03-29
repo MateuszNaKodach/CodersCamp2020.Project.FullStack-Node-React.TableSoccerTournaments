@@ -6,8 +6,10 @@ import { TournamentTableWasReleased } from '../../../../tournament-tables/core/d
 import { CallMatch } from '../command/CallMatch';
 import { QueuedMatch } from '../../domain/QueuedMatch';
 import { MatchesQueue } from '../../domain/MatchesQueue';
+import { MatchWasQueued } from '../../domain/event/MatchWasQueued';
+import { QueuedTable } from '../../domain/QueuedTable';
 
-export class CallMatchWhenTournamentTableWasReleased implements EventHandler<TournamentTableWasReleased> {
+export class CallMatchWhenTournamentTableWasReleasedAndMatchWasQueued implements EventHandler<TournamentTableWasReleased | MatchWasQueued> {
   private readonly commandPublisher: CommandPublisher;
   private readonly matchesQueueRepository: MatchesQueueRepository;
   private readonly tablesQueueRepository: TablesQueueRepository;
@@ -22,11 +24,12 @@ export class CallMatchWhenTournamentTableWasReleased implements EventHandler<Tou
     this.tablesQueueRepository = tablesQueueRepository;
   }
 
-  async handle(event: TournamentTableWasReleased): Promise<void> {
+  async handle(event: TournamentTableWasReleased | MatchWasQueued): Promise<void> {
     const tournamentId = event.tournamentId;
+    const freeTable = await this.findFreeTables(tournamentId);
     const matches = await this.matchesQueueRepository.findByTournamentId(tournamentId);
     const matchToCall = matches ? this.findFirstMatchToCall(matches) : undefined;
-    if (matchToCall) {
+    if (freeTable && matchToCall) {
       await this.commandPublisher.execute(
         new CallMatch({
           tournamentId: tournamentId,
@@ -35,10 +38,15 @@ export class CallMatchWhenTournamentTableWasReleased implements EventHandler<Tou
             team1Id: matchToCall.team1Id.raw,
             team2Id: matchToCall.team2Id.raw,
           },
-          tableNumber: event.tableNumber,
+          tableNumber: freeTable.tableNumber,
         }),
       );
     }
+  }
+
+  private async findFreeTables(tournamentId: string): Promise<QueuedTable | undefined> {
+    const tournamentTables = await this.tablesQueueRepository.findByTournamentId(tournamentId);
+    return tournamentTables?.queuedTables.filter((table) => table.isFree)[0];
   }
 
   private findFirstMatchToCall(matches: MatchesQueue): QueuedMatch {

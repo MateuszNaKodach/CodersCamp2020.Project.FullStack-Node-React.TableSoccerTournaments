@@ -20,14 +20,13 @@ import { FindMatchesQueueByTournamentIdQueryHandler } from './application/query/
 import { CallMatch } from './application/command/CallMatch';
 import { CallMatchCommandHandler } from './application/command/CallMatchCommandHandler';
 import { StartMatchAfterItsCalling } from './application/event/StartMatchAfterItsCalling';
-import { CallMatchWhenMatchWasQueued } from './application/event/CallMatchWhenMatchWasQueued';
 import { TablesQueueRepository } from './application/TablesQueueRepository';
 import { MatchWasQueued } from './domain/event/MatchWasQueued';
 import { TournamentTableWasReleased } from '../../tournament-tables/core/domain/event/TournamentTableWasReleased';
 import { MatchWasCalled } from './domain/event/MatchWasCalled';
 import { BookTableInQueue } from './application/event/BookTableInQueue';
 import { TournamentTableWasBooked } from '../../tournament-tables/core/domain/event/TournamentTableWasBooked';
-import { CallMatchWhenTournamentTableWasReleased } from './application/event/CallMatchWhenTournamentTableWasReleased';
+import { CallMatchWhenTournamentTableWasReleasedAndMatchWasQueued } from './application/event/CallMatchWhenTournamentTableWasReleasedAndMatchWasQueued';
 import { ReleaseTableInQueue } from './application/event/ReleaseTableInQueue';
 
 export function DoublesTournamentModuleCore(
@@ -61,7 +60,7 @@ export function DoublesTournamentModuleCore(
       },
       {
         eventType: MatchWasQueued,
-        handler: new CallMatchWhenMatchWasQueued(commandPublisher, matchesQueue, tablesQueue),
+        handler: new CallMatchWhenTournamentTableWasReleasedAndMatchWasQueued(commandPublisher, matchesQueue, tablesQueue),
       },
       {
         eventType: MatchWasCalled,
@@ -73,7 +72,7 @@ export function DoublesTournamentModuleCore(
       },
       {
         eventType: TournamentTableWasReleased,
-        handler: new CallMatchWhenTournamentTableWasReleased(commandPublisher, matchesQueue, tablesQueue),
+        handler: new CallMatchWhenTournamentTableWasReleasedAndMatchWasQueued(commandPublisher, matchesQueue, tablesQueue),
       },
       {
         eventType: TournamentTableWasBooked,

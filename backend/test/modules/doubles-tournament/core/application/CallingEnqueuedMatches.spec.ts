@@ -14,9 +14,9 @@ describe('Calling Enqueued Matches', () => {
   const matchNumber = 3;
   const team1Id = 'Team1Id';
   const team2Id = 'Team2Id';
-  const matchNumber_2 = 5;
-  const team1Id_2 = 'team1Id_2';
-  const team2Id_2 = 'team2Id_2';
+  const matchNumber2 = 5;
+  const team1Id2 = 'team1Id2';
+  const team2Id2 = 'team2Id2';
   const enqueueMatch = new EnqueueMatch({
     tournamentId: tournamentId,
     matchNumber: matchNumber,
@@ -25,26 +25,26 @@ describe('Calling Enqueued Matches', () => {
   });
   const enqueueMatch2 = new EnqueueMatch({
     tournamentId: tournamentId,
-    matchNumber: matchNumber_2,
-    team1Id: team1Id_2,
-    team2Id: team2Id_2,
+    matchNumber: matchNumber2,
+    team1Id: team1Id2,
+    team2Id: team2Id2,
   });
   const tableNumber = 1;
-  const tableNumber_2 = 2;
+  const tableNumber2 = 2;
   const table1Booked = new TournamentTableWasBooked({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: tableNumber });
   const table1Released = new TournamentTableWasReleased({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: tableNumber });
-  const table2Booked = new TournamentTableWasBooked({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: tableNumber_2 });
+  const table2Booked = new TournamentTableWasBooked({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: tableNumber2 });
   const table2Released = new TournamentTableWasReleased({
     occurredAt: currentTime,
     tournamentId: tournamentId,
-    tableNumber: tableNumber_2,
+    tableNumber: tableNumber2,
   });
 
   it('When matches were enqueued and only one table was released then call the match with lower matchNumber', async () => {
     //Given
     const commandBus: CommandBus = new InMemoryCommandBus();
     const spy = jest.spyOn(commandBus, 'execute');
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id_2, team2Id_2]);
+    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
     await doublesTournament.executeCommand(enqueueMatch2);
     await doublesTournament.executeCommand(enqueueMatch);
@@ -57,7 +57,7 @@ describe('Calling Enqueued Matches', () => {
     const callMatch = new CallMatch({
       tournamentId: tournamentId,
       calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
-      tableNumber: tableNumber_2,
+      tableNumber: tableNumber2,
     });
     expect(spy).toHaveBeenCalledWith(callMatch);
   });
@@ -66,7 +66,7 @@ describe('Calling Enqueued Matches', () => {
     //Given
     const commandBus: CommandBus = new InMemoryCommandBus();
     const spy = jest.spyOn(commandBus, 'execute');
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id_2, team2Id_2]);
+    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
     await doublesTournament.publishEvent(table2Released);
     await doublesTournament.publishEvent(table1Released);
@@ -78,8 +78,8 @@ describe('Calling Enqueued Matches', () => {
     expect(spy).toHaveBeenCalledWith(
       new CallMatch({
         tournamentId: tournamentId,
-        calledMatch: { matchNumber: matchNumber_2, team1Id: team1Id_2, team2Id: team2Id_2 },
-        tableNumber: tableNumber_2,
+        calledMatch: { matchNumber: matchNumber2, team1Id: team1Id2, team2Id: team2Id2 },
+        tableNumber: tableNumber2,
       }),
     );
 
@@ -89,11 +89,11 @@ describe('Calling Enqueued Matches', () => {
         occurredAt: currentTime,
         tournamentId: tournamentId,
         calledMatch: {
-          matchNumber: matchNumber_2,
-          team1Id: team1Id_2,
-          team2Id: team2Id_2,
+          matchNumber: matchNumber2,
+          team1Id: team1Id2,
+          team2Id: team2Id2,
         },
-        tableNumber: tableNumber_2,
+        tableNumber: tableNumber2,
       }),
     );
     await doublesTournament.publishEvent(table2Booked);
@@ -113,7 +113,7 @@ describe('Calling Enqueued Matches', () => {
     //Given
     const commandBus: CommandBus = new InMemoryCommandBus();
     const spy = jest.spyOn(commandBus, 'execute');
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id_2, team2Id_2]);
+    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
 
     //When
@@ -129,7 +129,7 @@ describe('Calling Enqueued Matches', () => {
     //Given
     const commandBus: CommandBus = new InMemoryCommandBus();
     const spy = jest.spyOn(commandBus, 'execute');
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id_2, team2Id_2]);
+    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
     await doublesTournament.executeCommand(enqueueMatch);
 
@@ -154,7 +154,7 @@ describe('Calling Enqueued Matches', () => {
       new CallMatch({
         tournamentId: tournamentId,
         calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
-        tableNumber: tableNumber_2,
+        tableNumber: tableNumber2,
       }),
     );
   });
