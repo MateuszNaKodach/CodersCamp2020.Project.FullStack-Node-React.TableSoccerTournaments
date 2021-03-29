@@ -1,4 +1,3 @@
-import React from "react";
 import {Button, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
 import {grey} from "@material-ui/core/colors";
 import {Centered} from "../Shared/Centered";
@@ -11,6 +10,7 @@ import {
 } from "../../constants/paths";
 import {HomeMenu} from "../HomeMenu/HomeMenu";
 import {TournamentRegistrations} from "../TournamentRegistrations";
+import Footer from "../Footer/Footer"; 
 
 const theme = createMuiTheme({
     palette: {
@@ -52,6 +52,7 @@ function TourDeFoos() {
                             <HomeMenu/>
                         </Route>
                     </Switch>
+                    <Footer />
                 </Centered>
             </MuiThemeProvider>
         </Router>
