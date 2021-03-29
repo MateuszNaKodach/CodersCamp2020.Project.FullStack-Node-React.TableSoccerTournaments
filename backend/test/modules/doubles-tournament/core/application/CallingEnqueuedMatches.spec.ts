@@ -7,6 +7,11 @@ import { MatchWasCalled } from '../../../../../src/modules/doubles-tournament/co
 import { CommandBus } from '../../../../../src/shared/core/application/command/CommandBus';
 import { EnqueueMatch } from '../../../../../src/modules/doubles-tournament/core/application/command/EnqueueMatch';
 import { InMemoryCommandBus } from '../../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus';
+import { CommandHandler } from '../../../../../src/shared/core/application/command/CommandHandler';
+import { BookTournamentTable } from '../../../../../src/modules/tournament-tables/core/application/command/BookTournamentTable';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import { StartMatch } from '../../../../../src/modules/match-module/core/application/command/StartMatch';
+import { TestModuleCore } from '../../../../test-support/shared/core/TestModuleCore';
 
 describe('Calling Enqueued Matches', () => {
   const currentTime = new Date();
@@ -39,13 +44,30 @@ describe('Calling Enqueued Matches', () => {
     tournamentId: tournamentId,
     tableNumber: tableNumber2,
   });
+  let spy: jest.SpyInstance;
+  let doublesTournament: TestModuleCore;
+
+  beforeEach(() => {
+    const commandBus: CommandBus = new InMemoryCommandBus();
+    spy = jest.spyOn(commandBus, 'execute');
+    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
+    doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
+    const alwaysSuccessStartMatchCommandHandler: CommandHandler<StartMatch> = {
+      async execute(command: StartMatch): Promise<CommandResult> {
+        return CommandResult.success();
+      },
+    };
+    commandBus.registerHandler(StartMatch, alwaysSuccessStartMatchCommandHandler);
+    const alwaysSuccessBookTournamentTableCommandHandler: CommandHandler<BookTournamentTable> = {
+      async execute(command: BookTournamentTable): Promise<CommandResult> {
+        return CommandResult.success();
+      },
+    };
+    commandBus.registerHandler(BookTournamentTable, alwaysSuccessBookTournamentTableCommandHandler);
+  });
 
   it('When matches were enqueued and only one table was released then call the match with lower matchNumber', async () => {
     //Given
-    const commandBus: CommandBus = new InMemoryCommandBus();
-    const spy = jest.spyOn(commandBus, 'execute');
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
     await doublesTournament.executeCommand(enqueueMatch2);
     await doublesTournament.executeCommand(enqueueMatch);
     spy.mockClear();
@@ -65,10 +87,6 @@ describe('Calling Enqueued Matches', () => {
 
   it('When tables are free and new matches were enqueued then call both matches', async () => {
     //Given
-    const commandBus: CommandBus = new InMemoryCommandBus();
-    const spy = jest.spyOn(commandBus, 'execute');
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
     await doublesTournament.publishEvent(table2Released);
     await doublesTournament.publishEvent(table1Released);
 
@@ -112,10 +130,6 @@ describe('Calling Enqueued Matches', () => {
 
   it('When match was enqueued and no table was released then do not call the match', async () => {
     //Given
-    const commandBus: CommandBus = new InMemoryCommandBus();
-    const spy = jest.spyOn(commandBus, 'execute');
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
 
     //When
     await doublesTournament.executeCommand(enqueueMatch);
@@ -128,10 +142,6 @@ describe('Calling Enqueued Matches', () => {
 
   it('When match was already called then do not call the match again', async () => {
     //Given
-    const commandBus: CommandBus = new InMemoryCommandBus();
-    const spy = jest.spyOn(commandBus, 'execute');
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
     await doublesTournament.executeCommand(enqueueMatch);
 
     //When
@@ -147,7 +157,6 @@ describe('Calling Enqueued Matches', () => {
         tableNumber: tableNumber,
       }),
     );
-    spy.mockClear();
     await doublesTournament.publishEvent(table2Released);
 
     //Then

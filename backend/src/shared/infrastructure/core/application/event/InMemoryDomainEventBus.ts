@@ -8,12 +8,9 @@ type EventListener = { readonly eventType: string; readonly handler: EventHandle
 export class InMemoryDomainEventBus implements DomainEventBus {
   private readonly listeners: EventListener[] = [];
 
-  async publish(event: DomainEvent): Promise<any> {
+  publish(event: DomainEvent): any {
     const eventTypeName: string = Object.getPrototypeOf(event).constructor.name;
-    const eventListeners = this.listeners.filter((it) => it.eventType === eventTypeName);
-    for (const listener of eventListeners) {
-      await listener.handler.handle(event);
-    }
+    this.listeners.filter((it) => it.eventType === eventTypeName).forEach((it) => it.handler.handle(event));
   }
 
   publishAll(events: DomainEvent[]): any {
