@@ -34,7 +34,11 @@ describe('Calling Enqueued Matches', () => {
   const table1Booked = new TournamentTableWasBooked({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: tableNumber });
   const table1Released = new TournamentTableWasReleased({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: tableNumber });
   const table2Booked = new TournamentTableWasBooked({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: tableNumber_2 });
-  const table2Released = new TournamentTableWasReleased({ occurredAt: currentTime, tournamentId: tournamentId, tableNumber: tableNumber_2 });
+  const table2Released = new TournamentTableWasReleased({
+    occurredAt: currentTime,
+    tournamentId: tournamentId,
+    tableNumber: tableNumber_2,
+  });
 
   it('When matches were enqueued and only one table was released then call the match with lower matchNumber', async () => {
     //Given
@@ -71,11 +75,13 @@ describe('Calling Enqueued Matches', () => {
     await doublesTournament.executeCommand(enqueueMatch2);
 
     //Then
-    expect(spy).toHaveBeenCalledWith(new CallMatch({
-      tournamentId: tournamentId,
-      calledMatch: { matchNumber: matchNumber_2, team1Id: team1Id_2, team2Id: team2Id_2 },
-      tableNumber: tableNumber_2,
-    }));
+    expect(spy).toHaveBeenCalledWith(
+      new CallMatch({
+        tournamentId: tournamentId,
+        calledMatch: { matchNumber: matchNumber_2, team1Id: team1Id_2, team2Id: team2Id_2 },
+        tableNumber: tableNumber_2,
+      }),
+    );
 
     //When
     await doublesTournament.publishEvent(
@@ -88,16 +94,19 @@ describe('Calling Enqueued Matches', () => {
           team2Id: team2Id_2,
         },
         tableNumber: tableNumber_2,
-      }));
+      }),
+    );
     await doublesTournament.publishEvent(table2Booked);
     await doublesTournament.executeCommand(enqueueMatch);
 
     //Then
-    expect(spy).toHaveBeenCalledWith(new CallMatch({
-      tournamentId: tournamentId,
-      calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
-      tableNumber: tableNumber,
-    }));
+    expect(spy).toHaveBeenCalledWith(
+      new CallMatch({
+        tournamentId: tournamentId,
+        calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
+        tableNumber: tableNumber,
+      }),
+    );
   });
 
   it('When match was enqueued and no table was released then do not call the match', async () => {
@@ -141,10 +150,12 @@ describe('Calling Enqueued Matches', () => {
     await doublesTournament.publishEvent(table2Released);
 
     //Then
-    expect(spy).not.toHaveBeenCalledWith(new CallMatch({
-      tournamentId: tournamentId,
-      calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
-      tableNumber: tableNumber_2,
-    }));
+    expect(spy).not.toHaveBeenCalledWith(
+      new CallMatch({
+        tournamentId: tournamentId,
+        calledMatch: { matchNumber: matchNumber, team1Id: team1Id, team2Id: team2Id },
+        tableNumber: tableNumber_2,
+      }),
+    );
   });
 });

@@ -73,7 +73,7 @@ export function startMatchInMatchesQueue(
     team1Id: match.team1Id,
     team2Id: match.team2Id,
     tableNumber: match.tableNumber,
-    started: match.started
+    started: match.started,
   });
 
   return matchesQueue.withStartedMatch(startedMatch);
