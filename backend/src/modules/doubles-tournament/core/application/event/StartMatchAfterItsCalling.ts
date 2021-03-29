@@ -20,7 +20,7 @@ export class StartMatchAfterItsCalling implements EventHandler<MatchWasCalled> {
 
   async handle(event: MatchWasCalled): Promise<void> {
     const tournamentId = TournamentId.from(event.tournamentId);
-    const startedMatch = new QueuedMatch ({
+    const startedMatch = new QueuedMatch({
       matchNumber: MatchNumber.from(event.calledMatch.matchNumber),
       team1Id: TeamId.from(event.calledMatch.team1Id),
       team2Id: TeamId.from(event.calledMatch.team2Id),
