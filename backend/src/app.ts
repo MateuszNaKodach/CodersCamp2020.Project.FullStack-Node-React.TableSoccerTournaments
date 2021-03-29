@@ -51,6 +51,7 @@ import { MongoTournamentTablesRepository } from './modules/tournament-tables/inf
 import { TournamentTreeModuleCore } from './modules/tournament-tree/core/TournamentTreeModuleCore';
 import { InMemoryTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/inmemory/InMemoryTournamentTreeRepository';
 import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentation/rest-api/TournamentTreeRestApiModule';
+import { InMemoryTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryTablesQueueRepository';
 
 config();
 
@@ -89,6 +90,7 @@ export async function TableSoccerTournamentsApplication(
 
   const doublesTournamentRepository = DoublesTournamentRepository();
   const matchesQueueRepository = MatchesQueueRepository();
+  const tablesQueueRepository = TablesQueueRepository();
   const doublesTournamentModule: Module = {
     core: DoublesTournamentModuleCore(
       eventBus,
@@ -97,6 +99,7 @@ export async function TableSoccerTournamentsApplication(
       entityIdGenerator,
       doublesTournamentRepository,
       matchesQueueRepository,
+      tablesQueueRepository,
     ),
     restApi: DoublesTournamentRestApiModule(commandBus, eventBus, queryBus),
   };
@@ -244,6 +247,15 @@ function MatchesQueueRepository() {
     return new MongoMatchesQueueRepository();
   }
   return new InMemoryMatchesQueueRepository();
+}
+
+function TablesQueueRepository() {
+  /*
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.DOUBLES_TOURNAMENT_DATABASE === 'MONGO') {
+    return new MongoMatchesQueueRepository();
+  }
+  */
+  return new InMemoryTablesQueueRepository();
 }
 
 function TournamentTreeRepository() {
