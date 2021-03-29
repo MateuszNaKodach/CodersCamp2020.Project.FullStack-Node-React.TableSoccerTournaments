@@ -13,5 +13,6 @@
  3. [The best learning link](https://atomicdesign.bradfrost.com/chapter-2/)
  3. [Examples](https://demo.patternlab.io/?p=templates-blog-index)
     
-![img.png](img.png)
+![img.png](readmeAtomicDesignImage.png)
+_Źródło zdjęć w tekście: http://bradfrost.com._
 
