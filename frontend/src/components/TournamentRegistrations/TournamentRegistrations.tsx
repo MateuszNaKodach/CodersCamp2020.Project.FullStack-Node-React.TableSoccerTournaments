@@ -58,6 +58,7 @@ export const TournamentRegistrations = () => {
   interface MatchParams {
     tournamentId: string;
   }
+
   const match = useRouteMatch<MatchParams>(
     "/tournament-registration/:tournamentId"
   );
@@ -152,11 +153,7 @@ const PlayerNotFound = () => {
         open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
-        <AddingPlayerForm
-          key={"Adding player form"}
-          title={"Nowy zawodnik"}
-          inputs={["Imię", "Nazwisko", "Adres e-mail", "Numer telefonu"]}
-        />
+        <AddingPlayerForm />
       </Drawer>
     </Centered>
   );

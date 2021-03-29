@@ -3,27 +3,50 @@ import { Button, TextField, Typography } from "@material-ui/core";
 import { Centered } from "../Shared/Centered";
 import { VerticalSpace } from "../Shared/VerticalSpace";
 
-function AddingPlayerForm(props: { title: string; inputs: string[] }) {
+function AddingPlayerForm() {
   return (
     <Centered>
       <VerticalSpace height="1rem" />
       <Typography component="h6" variant="h6">
-        {props.title}
+        Nowy zawodnik
       </Typography>
       <VerticalSpace height="1rem" />
 
       <form>
-        {props.inputs.map((inputName) => (
-          <Centered>
-            <TextField
-              key={inputName}
-              id={`outlined-${inputName}`}
-              label={`${inputName}`}
-              variant={`outlined`}
-            />
-            <VerticalSpace height="1rem" />
-          </Centered>
-        ))}
+        <Centered>
+          <TextField
+            key={"name"}
+            id={`outlined-name`}
+            label={"Imię"}
+            variant={`outlined`}
+          />
+          <VerticalSpace height="1rem" />
+
+          <TextField
+            key={"surname"}
+            id={`outlined-surname`}
+            label={"Nazwisko"}
+            variant={`outlined`}
+          />
+          <VerticalSpace height="1rem" />
+
+          <TextField
+            key={"email"}
+            id={`outlined-email`}
+            label={"Adres e-mail"}
+            variant={`outlined`}
+          />
+          <VerticalSpace height="1rem" />
+
+          <TextField
+            key={"phone"}
+            id={`outlined-phone`}
+            label={"Numer telefonu"}
+            variant={`outlined`}
+          />
+          <VerticalSpace height="1rem" />
+        </Centered>
+
         <Centered>
           <Button
             variant="contained"
