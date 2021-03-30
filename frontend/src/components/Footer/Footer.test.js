@@ -10,12 +10,12 @@ it("renders without crashing", ()=> {
     ReactDOM.render(<Footer />, div);
 });
 
-it("renders Footer correctly", ()=> {
-    const {getByTestId} = render(<Footer text="Copyright © TourDeFoos 2021"/>)
+it("renders Footer correctly with default text", ()=> {
+    const {getByTestId} = render(<Footer />)
     expect(getByTestId('footer')).toHaveTextContent("Copyright © TourDeFoos 2021")
 });
 
-it("renders Footer correctly", ()=> {
+it("renders Footer correctly with given text", ()=> {
     const {getByTestId} = render(<Footer text="Footer test text"/>)
     expect(getByTestId('footer')).toHaveTextContent("Footer test text")
 });

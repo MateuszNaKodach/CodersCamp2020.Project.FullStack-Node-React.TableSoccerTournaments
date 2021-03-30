@@ -5,7 +5,7 @@ import useStyles from './styles'
 const Footer = ({text=`Copyright \u00a9 TourDeFoos 2021`}) => {
     const classes = useStyles();
     return (
-        <Box className={classes.title} data-testid="footer">
+        <Box className={classes.footer} data-testid="footer">
             <Typography variant='body2' align='center'>
             {text}
             </Typography>
