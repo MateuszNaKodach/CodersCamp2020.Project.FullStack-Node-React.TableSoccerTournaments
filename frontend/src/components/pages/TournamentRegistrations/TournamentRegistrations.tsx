@@ -26,9 +26,9 @@ import {
 import {
   PlayerProfileDto,
   UserProfileRestApi,
-} from "../../restapi/players-profiles";
-import { Centered } from "../Shared/Centered";
-import { VerticalSpace } from "../Shared/VerticalSpace";
+} from "../../../restapi/players-profiles";
+import { Centered } from "../../atoms/Shared/Centered";
+import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import {useRouteMatch} from "react-router-dom";
 
 export type TournamentRegistrationsProps = {

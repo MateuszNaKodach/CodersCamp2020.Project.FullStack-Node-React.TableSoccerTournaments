@@ -1,9 +1,9 @@
 import React from 'react';
 import {Button, Card, CardContent, List, makeStyles,} from "@material-ui/core";
 import styled from "styled-components";
-import CardTitle from "../CardTitle/CardTitle";
-import {VerticalSpace} from "../Shared/VerticalSpace";
-import {Centered} from "../Shared/Centered";
+import CardTitle from "../../molecules/CardTitle/CardTitle";
+import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
+import {Centered} from "../../atoms/Shared/Centered";
 import {Link} from "react-router-dom";
 
 type MenuButtonsProps = {
