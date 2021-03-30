@@ -1,12 +1,13 @@
-import { TournamentWasStarted } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWasStarted';
-import { testTournamentTreeModule } from './TestTournamentTreeModule';
-import { NumberIdGeneratorStub } from '../../../../test-support/shared/core/NumberIdGeneratorStub';
-import { CreateTournamentTree } from '../../../../../src/modules/tournament-tree/core/application/command/CreateTournamentTree';
-import { testDoublesTournamentsModule } from '../../../doubles-tournament/core/application/TestDoublesTournamentsModule';
-import { InMemoryCommandBus } from '../../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus';
-import { FromListIdGeneratorStub } from '../../../../test-support/shared/core/FromListIdGeneratorStub';
-import { EnqueueMatch } from '../../../../../src/modules/doubles-tournament/core/application/command/EnqueueMatch';
-import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
+import {TournamentWasStarted} from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWasStarted';
+import {testTournamentTreeModule} from './TestTournamentTreeModule';
+import {NumberIdGeneratorStub} from '../../../../test-support/shared/core/NumberIdGeneratorStub';
+import {CreateTournamentTree} from '../../../../../src/modules/tournament-tree/core/application/command/CreateTournamentTree';
+import {testDoublesTournamentsModule} from '../../../doubles-tournament/core/application/TestDoublesTournamentsModule';
+import {FromListIdGeneratorStub} from '../../../../test-support/shared/core/FromListIdGeneratorStub';
+import {EnqueueMatch} from '../../../../../src/modules/doubles-tournament/core/application/command/EnqueueMatch';
+import {CreateTournamentWithTeams} from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
+import {CommandBus} from "../../../../../src/shared/core/application/command/CommandBus";
+import {InMemoryCommandBus} from "../../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus";
 
 describe('Automated match enqueueing', () => {
   it('When tournament was started, then enqueue all ready to start matches', async () => {
@@ -14,21 +15,27 @@ describe('Automated match enqueueing', () => {
     const currentTime = new Date();
     const entityIdGenFromList = FromListIdGeneratorStub(['team1', 'team2', 'team3', 'team4']);
     const entityIdGen = NumberIdGeneratorStub(100, 'entityId');
-    const commandBus = new InMemoryCommandBus();
+    const commandBus: CommandBus = new InMemoryCommandBus();
 
-    const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen);
-    await tournamentTree.executeCommand(createTestTournamentTreeWithFourTeams('SampleTournamentId'));
+    const spy = jest.spyOn(commandBus, `execute`)
 
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGenFromList, commandBus);
     const tournament = new CreateTournamentWithTeams('SampleTournamentId', [
       { player1: 'player1', player2: 'player2' },
       { player1: 'player3', player2: 'player4' },
+      { player1: 'player5', player2: 'player6' },
+      { player1: 'player7', player2: 'player8' },
     ]);
     await doublesTournament.executeCommand(tournament);
 
+    const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen, commandBus);
+    await tournamentTree.executeCommand(createTestTournamentTreeWithFourTeams('SampleTournamentId'));
+
+    spy.mockClear();
+
     //When
     const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: 'SampleTournamentId' });
-    doublesTournament.publishEvent(startedTournament);
+    await tournamentTree.publishEvent(startedTournament);
 
     //Then
     const firstMatchToEnqueue = new EnqueueMatch({
@@ -36,10 +43,17 @@ describe('Automated match enqueueing', () => {
       matchNumber: 1,
       team1Id: 'team1',
       team2Id: 'team4',
+    })
+    const secondMatchToEnqueue = new EnqueueMatch({
+      tournamentId: 'SampleTournamentId',
+      matchNumber: 2,
+      team1Id: 'team3',
+      team2Id: 'team2',
     });
-    const commandResult = await doublesTournament.executeCommand(firstMatchToEnqueue);
 
-    expect(commandResult.isSuccess()).toBeTruthy();
+    expect(spy).toBeCalledWith(firstMatchToEnqueue);
+    expect(spy).toBeCalledWith(secondMatchToEnqueue);
+    expect(spy).toHaveBeenCalledTimes(2);
   });
 });
 

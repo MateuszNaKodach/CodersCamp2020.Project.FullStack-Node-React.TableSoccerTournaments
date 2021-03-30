@@ -12,7 +12,7 @@ export class EnqueueMatchWhenTournamentWasStarted implements EventHandler<Tourna
 
     const matchesToEnqueue = tournamentTree?.getMatchesQueueReadyToStart();
 
-    matchesToEnqueue?.forEach((matchToEnqueue) => {
+    await matchesToEnqueue?.forEach((matchToEnqueue) => {
       this.commandPublisher.execute(
         new EnqueueMatch({
           tournamentId: event.tournamentId,
