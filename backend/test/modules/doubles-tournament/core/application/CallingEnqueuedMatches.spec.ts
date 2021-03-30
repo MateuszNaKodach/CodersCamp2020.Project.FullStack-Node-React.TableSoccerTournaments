@@ -8,10 +8,12 @@ import { CommandBus } from '../../../../../src/shared/core/application/command/C
 import { EnqueueMatch } from '../../../../../src/modules/doubles-tournament/core/application/command/EnqueueMatch';
 import { InMemoryCommandBus } from '../../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus';
 import { CommandHandler } from '../../../../../src/shared/core/application/command/CommandHandler';
-import { BookTournamentTable } from '../../../../../src/modules/tournament-tables/core/application/command/BookTournamentTable';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
 import { StartMatch } from '../../../../../src/modules/match-module/core/application/command/StartMatch';
 import { TestModuleCore } from '../../../../test-support/shared/core/TestModuleCore';
+import { testTournamentTablesModule } from '../../../tournament-tables/core/application/TestTournamentTablesModule';
+import { StoreAndForwardDomainEventBus } from '../../../../../src/shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus';
+import { InMemoryDomainEventBus } from '../../../../../src/shared/infrastructure/core/application/event/InMemoryDomainEventBus';
 
 describe('Calling Enqueued Matches', () => {
   const currentTime = new Date();
@@ -46,24 +48,21 @@ describe('Calling Enqueued Matches', () => {
   });
   let spy: jest.SpyInstance;
   let doublesTournament: TestModuleCore;
+  let tournamentTablesModule: TestModuleCore;
 
   beforeEach(() => {
     const commandBus: CommandBus = new InMemoryCommandBus();
+    const eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus());
     spy = jest.spyOn(commandBus, 'execute');
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id, team1Id2, team2Id2]);
-    doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus);
+    doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus, eventBus);
+    tournamentTablesModule = testTournamentTablesModule(currentTime, commandBus, eventBus);
     const alwaysSuccessStartMatchCommandHandler: CommandHandler<StartMatch> = {
       async execute(command: StartMatch): Promise<CommandResult> {
         return CommandResult.success();
       },
     };
     commandBus.registerHandler(StartMatch, alwaysSuccessStartMatchCommandHandler);
-    const alwaysSuccessBookTournamentTableCommandHandler: CommandHandler<BookTournamentTable> = {
-      async execute(command: BookTournamentTable): Promise<CommandResult> {
-        return CommandResult.success();
-      },
-    };
-    commandBus.registerHandler(BookTournamentTable, alwaysSuccessBookTournamentTableCommandHandler);
   });
 
   it('When matches were enqueued and only one table was released then call the match with lower matchNumber', async () => {
@@ -73,8 +72,8 @@ describe('Calling Enqueued Matches', () => {
     spy.mockClear();
 
     //When
-    await doublesTournament.publishEvent(table1Booked);
-    await doublesTournament.publishEvent(table2Released);
+    await tournamentTablesModule.publishEvent(table1Booked);
+    await tournamentTablesModule.publishEvent(table2Released);
 
     //Then
     const callMatch = new CallMatch({
@@ -87,8 +86,8 @@ describe('Calling Enqueued Matches', () => {
 
   it('When tables are free and new matches were enqueued then call both matches', async () => {
     //Given
-    await doublesTournament.publishEvent(table2Released);
-    await doublesTournament.publishEvent(table1Released);
+    await tournamentTablesModule.publishEvent(table2Released);
+    await tournamentTablesModule.publishEvent(table1Released);
 
     //When
     await doublesTournament.executeCommand(enqueueMatch2);
@@ -115,7 +114,7 @@ describe('Calling Enqueued Matches', () => {
         tableNumber: tableNumber2,
       }),
     );
-    await doublesTournament.publishEvent(table2Booked);
+    await tournamentTablesModule.publishEvent(table2Booked);
     await doublesTournament.executeCommand(enqueueMatch);
 
     //Then
@@ -129,11 +128,9 @@ describe('Calling Enqueued Matches', () => {
   });
 
   it('When match was enqueued and no table was released then do not call the match', async () => {
-    //Given
-
     //When
     await doublesTournament.executeCommand(enqueueMatch);
-    await doublesTournament.publishEvent(table1Booked);
+    await tournamentTablesModule.publishEvent(table1Booked);
 
     //Then
     expect(spy).toHaveBeenCalledTimes(1);
@@ -157,7 +154,7 @@ describe('Calling Enqueued Matches', () => {
         tableNumber: tableNumber,
       }),
     );
-    await doublesTournament.publishEvent(table2Released);
+    await tournamentTablesModule.publishEvent(table2Released);
 
     //Then
     expect(spy).not.toHaveBeenCalledWith(
