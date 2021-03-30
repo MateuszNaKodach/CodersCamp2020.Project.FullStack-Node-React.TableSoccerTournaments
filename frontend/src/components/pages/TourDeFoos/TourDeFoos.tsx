@@ -12,6 +12,7 @@ import {
 } from "../../atoms/constants/paths";
 import {HomeMenu} from "../HomeMenu/HomeMenu";
 import {TournamentRegistrations} from "../TournamentRegistrations";
+import Footer from "../../molecules/Footer/Footer";
 
 const theme = createMuiTheme({
   palette: {
@@ -51,14 +52,15 @@ function TourDeFoos() {
               PATH_FOR_PLAYER_PROFILE_CREATION_VIEW
             </Route>
 
-            <Route path={PATH_FOR_HOME_VIEW} exact>
-              <HomeMenu />
-            </Route>
-          </Switch>
-        </Centered>
-      </MuiThemeProvider>
-    </Router>
-  );
+                        <Route path={PATH_FOR_HOME_VIEW} exact>
+                            <HomeMenu/>
+                        </Route>
+                    </Switch>
+                    <Footer />
+                </Centered>
+            </MuiThemeProvider>
+        </Router>
+    );
 }
 
 export default TourDeFoos;
