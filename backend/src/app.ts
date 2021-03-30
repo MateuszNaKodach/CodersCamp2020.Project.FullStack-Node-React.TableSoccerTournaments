@@ -52,6 +52,7 @@ import { TournamentTreeModuleCore } from './modules/tournament-tree/core/Tournam
 import { InMemoryTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/inmemory/InMemoryTournamentTreeRepository';
 import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentation/rest-api/TournamentTreeRestApiModule';
 import { InMemoryTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryTablesQueueRepository';
+import { MongoTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoTablesQueueRepository';
 
 config();
 
@@ -250,11 +251,9 @@ function MatchesQueueRepository() {
 }
 
 function TablesQueueRepository() {
-  /*
   if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.DOUBLES_TOURNAMENT_DATABASE === 'MONGO') {
-    return new MongoMatchesQueueRepository();
+    return new MongoTablesQueueRepository();
   }
-  */
   return new InMemoryTablesQueueRepository();
 }
 
