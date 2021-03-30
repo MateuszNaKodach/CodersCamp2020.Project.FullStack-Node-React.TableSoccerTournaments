@@ -1,66 +1,122 @@
 import React from "react";
-import { Button, TextField, Typography } from "@material-ui/core";
-import { Centered } from "../../atoms/Shared/Centered";
+import { Grid, Typography } from "@material-ui/core";
+import Controls from "../../atoms/Shared/controls/Controls";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import { useForm, Form } from "../useForm/useForm";
+
+const initialFormValues = {
+  name: "",
+  surname: "",
+  email: "",
+  phone: "",
+};
 
 function AddingPlayerForm() {
+  const validate = (fieldValues = values) => {
+    const temp = {
+      name: "",
+      surname: "",
+      email: "",
+      phone: "",
+    };
+    // const temp = { ...errors };
+    if ("name" in fieldValues) {
+      temp.name =
+        fieldValues.name.trim() !== "" ? "" : "To pole jest wymagane.";
+    }
+    if ("surname" in fieldValues) {
+      temp.surname =
+        fieldValues.surname.trim() !== "" ? "" : "To pole jest wymagane.";
+    }
+    if ("email" in fieldValues) {
+      temp.email = /\S+@\S+\.\S+/.test(fieldValues.email)
+        ? ""
+        : "Niepoprawny adres e-mail.";
+    }
+    if ("phone" in fieldValues) {
+      temp.phone =
+        fieldValues.phone.trim().length >= 9
+          ? ""
+          : "Numer telefonu powinien zawierać przynajmniej 9 znaków";
+    }
+    setErrors({ ...temp });
+
+    if (fieldValues === values) {
+      return Object.values(temp).every((value: string) => value === "");
+    }
+  };
+
+  const { values, setValues, errors, setErrors, handleInputChange } = useForm(
+    initialFormValues,
+    true,
+    validate
+  );
+
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+    if (validate()) {
+      window.alert("Form is valid!");
+    }
+  };
+
   return (
-    <Centered>
+    <Grid container direction={"column"} justify="center" alignItems="center">
       <VerticalSpace height="1rem" />
       <Typography component="h6" variant="h6">
         Nowy zawodnik
       </Typography>
-      <VerticalSpace height="1rem" />
 
-      <form>
-        <Centered>
-          <TextField
-            key={"name"}
-            id={`outlined-name`}
+      <Form onSubmit={handleSubmit}>
+        <Grid
+          container
+          direction={"column"}
+          justify="center"
+          alignItems="center"
+        >
+          <Controls.Input
+            value={values.name}
             label={"Imię"}
-            variant={`outlined`}
+            name={"name"}
+            onChange={handleInputChange}
+            error={errors.name}
           />
-          <VerticalSpace height="1rem" />
 
-          <TextField
-            key={"surname"}
-            id={`outlined-surname`}
+          <Controls.Input
+            value={values.surname}
             label={"Nazwisko"}
-            variant={`outlined`}
+            name={"surname"}
+            onChange={handleInputChange}
+            error={errors.surname}
           />
-          <VerticalSpace height="1rem" />
 
-          <TextField
-            key={"email"}
-            id={`outlined-email`}
+          <Controls.Input
+            value={values.email}
             label={"Adres e-mail"}
-            variant={`outlined`}
+            name={"email"}
+            onChange={handleInputChange}
+            error={errors.email}
           />
-          <VerticalSpace height="1rem" />
 
-          <TextField
-            key={"phone"}
-            id={`outlined-phone`}
+          <Controls.Input
+            value={values.phone}
             label={"Numer telefonu"}
-            variant={`outlined`}
+            name={"phone"}
+            onChange={handleInputChange}
+            error={errors.phone}
           />
-          <VerticalSpace height="1rem" />
-        </Centered>
 
-        <Centered>
-          <Button
-            variant="contained"
-            color="primary"
+          <VerticalSpace height="1rem" />
+          <Controls.Button
+            type={"submit"}
             onClick={() => {
               console.log("zapisz zawodnika");
             }}
-          >
-            Zapisz zawodnika
-          </Button>
+            text={"Zapisz zawodnika"}
+          />
           <VerticalSpace height="1rem" />
-        </Centered>
-      </form>
-    </Centered>
+        </Grid>
+      </Form>
+    </Grid>
   );
 }
 
