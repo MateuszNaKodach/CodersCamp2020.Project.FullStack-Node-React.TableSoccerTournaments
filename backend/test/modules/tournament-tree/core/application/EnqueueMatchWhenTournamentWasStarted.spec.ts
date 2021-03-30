@@ -8,6 +8,8 @@ import {EnqueueMatch} from '../../../../../src/modules/doubles-tournament/core/a
 import {CreateTournamentWithTeams} from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
 import {CommandBus} from "../../../../../src/shared/core/application/command/CommandBus";
 import {InMemoryCommandBus} from "../../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus";
+import {StoreAndForwardDomainEventBus} from "../../../../../src/shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus";
+import {InMemoryDomainEventBus} from "../../../../../src/shared/infrastructure/core/application/event/InMemoryDomainEventBus";
 
 describe('Automated match enqueueing', () => {
   it('When tournament was started, then enqueue all ready to start matches', async () => {
@@ -16,10 +18,11 @@ describe('Automated match enqueueing', () => {
     const entityIdGenFromList = FromListIdGeneratorStub(['team1', 'team2', 'team3', 'team4']);
     const entityIdGen = NumberIdGeneratorStub(100, 'entityId');
     const commandBus: CommandBus = new InMemoryCommandBus();
+    const eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus());
 
     const spy = jest.spyOn(commandBus, `execute`)
 
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGenFromList, commandBus);
+    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGenFromList, commandBus, eventBus);
     const tournament = new CreateTournamentWithTeams('SampleTournamentId', [
       { player1: 'player1', player2: 'player2' },
       { player1: 'player3', player2: 'player4' },
@@ -28,14 +31,14 @@ describe('Automated match enqueueing', () => {
     ]);
     await doublesTournament.executeCommand(tournament);
 
-    const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen, commandBus);
+    const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen, commandBus, eventBus);
     await tournamentTree.executeCommand(createTestTournamentTreeWithFourTeams('SampleTournamentId'));
 
     spy.mockClear();
 
     //When
     const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: 'SampleTournamentId' });
-    await tournamentTree.publishEvent(startedTournament);
+    await doublesTournament.publishEvent(startedTournament);
 
     //Then
     const firstMatchToEnqueue = new EnqueueMatch({

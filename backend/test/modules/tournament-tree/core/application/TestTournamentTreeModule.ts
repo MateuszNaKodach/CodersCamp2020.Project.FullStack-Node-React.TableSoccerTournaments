@@ -4,8 +4,11 @@ import {InMemoryTournamentTreeRepository} from '../../../../../src/modules/tourn
 import {TournamentTreeModuleCore} from '../../../../../src/modules/tournament-tree/core/TournamentTreeModuleCore';
 import {CommandBus} from "../../../../../src/shared/core/application/command/CommandBus";
 import {InMemoryCommandBus} from "../../../../../src/shared/infrastructure/core/application/command/InMemoryCommandBus";
+import {StoreAndForwardDomainEventBus} from "../../../../../src/shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus";
+import {InMemoryDomainEventBus} from "../../../../../src/shared/infrastructure/core/application/event/InMemoryDomainEventBus";
 
-export function testTournamentTreeModule(currentTime: Date, entityIdGenerator: EntityIdGenerator, commandBus: CommandBus = new InMemoryCommandBus()): TestModuleCore {
+export function testTournamentTreeModule(currentTime: Date, entityIdGenerator: EntityIdGenerator, commandBus: CommandBus = new InMemoryCommandBus(),
+                                         eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus()), ): TestModuleCore {
   const tournamentTreeRepository = new InMemoryTournamentTreeRepository();
   const moduleCoreFactory: ModuleCoreFactory = (commandBus, eventBus, queryBus) =>
       TournamentTreeModuleCore(
@@ -15,5 +18,5 @@ export function testTournamentTreeModule(currentTime: Date, entityIdGenerator: E
           entityIdGenerator,
           tournamentTreeRepository
       );
-  return testModuleCore(moduleCoreFactory, commandBus);
+  return testModuleCore(moduleCoreFactory, commandBus, eventBus);
 }
