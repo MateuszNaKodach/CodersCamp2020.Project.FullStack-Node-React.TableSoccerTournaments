@@ -5,8 +5,8 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import { rest } from "msw";
-import { server } from "../../mocks/msw/server";
-import { PlayerProfileDto } from "../../restapi/players-profiles";
+import { server } from "../../../mocks/msw/server";
+import { PlayerProfileDto } from "../../../restapi/players-profiles";
 import userEvent from "@testing-library/user-event";
 import {BrowserRouter as Router} from "react-router-dom";
 
