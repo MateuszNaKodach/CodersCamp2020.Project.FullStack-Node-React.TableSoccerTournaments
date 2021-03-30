@@ -19,7 +19,6 @@ function AddingPlayerForm() {
       email: "",
       phone: "",
     };
-    // const temp = { ...errors };
     if ("name" in fieldValues) {
       temp.name =
         fieldValues.name.trim() !== "" ? "" : "To pole jest wymagane.";
