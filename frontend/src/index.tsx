@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import TourDeFoos from "./components/TourDeFoos/TourDeFoos";
+import TourDeFoos from "./components/pages/TourDeFoos/TourDeFoos";
 import './index.css';
 
 //Disable when you want to interact with real REST API server
