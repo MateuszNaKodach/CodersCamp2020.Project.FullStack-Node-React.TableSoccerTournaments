@@ -34,6 +34,7 @@ describe('Matches queue | Write Side', () => {
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
       new MatchWasQueued({
         occurredAt: currentTime,
+        tournamentId: tournamentId,
         matchNumber: matchNumber,
         team1Id: team1Id,
         team2Id: team2Id,
@@ -63,22 +64,5 @@ describe('Matches queue | Write Side', () => {
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Such match is already waiting in matches queue!'));
-  });
-
-  it('when enqueue the match with wrong tournament id, then an error should appear', async () => {
-    //Given
-
-    //When
-    const enqueueMatch = new EnqueueMatch({
-      tournamentId: 'wrongId',
-      matchNumber: matchNumber,
-      team1Id: team1Id,
-      team2Id: team2Id,
-    });
-    const commandResult = await doublesTournament.executeCommand(enqueueMatch);
-
-    //Then
-    expect(commandResult.isSuccess()).toBeFalsy();
-    expect((commandResult as Failure).reason).toStrictEqual(new Error("This tournament doesn't exists."));
   });
 });
