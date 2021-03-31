@@ -27,7 +27,7 @@ export const UserProfileRestApi = (
         .get<PlayerProfilesListDto>(`${currentConfig.baseUrl}/players-profiles`)
         .then((response) => response.data);
     },
-    async addPlayersProfile(playerProfile: PlayerProfileDto): Promise<void> {
+    async postPlayersProfile(playerProfile: PlayerProfileDto): Promise<void> {
       await axios.post<PlayerProfileDto>(
         `${currentConfig.baseUrl}/players-profiles`,
         playerProfile

@@ -57,7 +57,7 @@ function AddingPlayerForm() {
     e.preventDefault();
     if (validate()) {
       //TODO refresh page - close form and go back to tournament players list
-      await UserProfileRestApi().addPlayersProfile({
+      await UserProfileRestApi().postPlayersProfile({
         playerId: EntityIdGenerator.generate(),
         firstName: values.name,
         lastName: values.surname,
