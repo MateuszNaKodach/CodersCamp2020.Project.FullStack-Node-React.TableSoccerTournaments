@@ -125,7 +125,6 @@ function AddingPlayerForm() {
           </Button>
           <VerticalSpace height="1rem" />
         </Grid>
-        {/*</form>*/}
       </form>
     </Grid>
   );
