@@ -4,6 +4,7 @@ import Controls from "../../atoms/Shared/controls/Controls";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { useForm, Form } from "../useForm/useForm";
 import { UserProfileRestApi } from "../../../restapi/players-profiles";
+import { EntityIdGenerator } from "../../idGenerator/EntityIdGenerator";
 
 const initialFormValues = {
   name: "",
@@ -55,9 +56,9 @@ function AddingPlayerForm() {
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
     if (validate()) {
-      //TODO what is going on with playerId? + refresh page - close form and go back to tournament players list
+      //TODO refresh page - close form and go back to tournament players list
       await UserProfileRestApi().addPlayersProfile({
-        playerId: "1231233423",
+        playerId: EntityIdGenerator.generate(),
         firstName: values.name,
         lastName: values.surname,
         phoneNumber: values.phone,
