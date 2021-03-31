@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import {
-  PlayerProfileDto,
-  UserProfileRestApi,
-} from "../../../restapi/players-profiles";
+import { UserProfileRestApi } from "../../../restapi/players-profiles";
 import { EntityIdGenerator } from "../../idGenerator/EntityIdGenerator";
 
 const validationSchema = yup.object({
@@ -23,20 +20,6 @@ const validationSchema = yup.object({
 });
 
 function AddingPlayerForm() {
-  const [players, setPlayers] = useState<PlayerProfileDto[]>([]);
-
-  useEffect(() => {
-    UserProfileRestApi()
-      .getPlayersProfiles()
-      .then((playerProfilesList) => {
-        setPlayers(playerProfilesList.items);
-      });
-  }, []);
-
-  function checkIfExists(email: string): boolean {
-    return players.some((player) => player.emailAddress === email);
-  }
-
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -46,7 +29,7 @@ function AddingPlayerForm() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      if (!checkIfExists(values.email)) {
+      try {
         await UserProfileRestApi().postPlayersProfile({
           playerId: EntityIdGenerator.generate(),
           firstName: values.name,
@@ -54,9 +37,9 @@ function AddingPlayerForm() {
           phoneNumber: values.phone,
           emailAddress: values.email,
         });
-      } else {
-        //TODO throw error or do sth
-        alert("cos");
+        //TODO go back to the view with this tournament players
+      } catch (error) {
+        alert(error.response.data.message);
       }
     },
   });

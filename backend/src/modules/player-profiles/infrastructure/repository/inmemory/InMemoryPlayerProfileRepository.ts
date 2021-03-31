@@ -10,7 +10,11 @@ export class InMemoryPlayerProfileRepository implements PlayerProfilesRepository
   }
 
   async save(playerProfile: PlayerProfile): Promise<void> {
-    this.entities[playerProfile.playerId.raw] = playerProfile;
+    if (Object.values(this.entities).some((player) => player.emailAddress === playerProfile.emailAddress)) {
+      throw new Error('Podany e-mail już istnieje.');
+    } else {
+      this.entities[playerProfile.playerId.raw] = playerProfile;
+    }
   }
 
   findAll(): Promise<PlayerProfile[]> {
