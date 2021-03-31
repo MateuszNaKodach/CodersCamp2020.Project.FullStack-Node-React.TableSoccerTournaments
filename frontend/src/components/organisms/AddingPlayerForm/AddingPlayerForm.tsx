@@ -3,6 +3,7 @@ import { Grid, Typography } from "@material-ui/core";
 import Controls from "../../atoms/Shared/controls/Controls";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { useForm, Form } from "../useForm/useForm";
+import { UserProfileRestApi } from "../../../restapi/players-profiles";
 
 const initialFormValues = {
   name: "",
@@ -51,10 +52,17 @@ function AddingPlayerForm() {
     validate
   );
 
-  const handleSubmit = (e: Event) => {
+  const handleSubmit = async (e: Event) => {
     e.preventDefault();
     if (validate()) {
-      window.alert("Form is valid!");
+      //TODO what is going on with playerId? + refresh page - close form and go back to tournament players list
+      await UserProfileRestApi().addPlayersProfile({
+        playerId: "1231233423",
+        firstName: values.name,
+        lastName: values.surname,
+        phoneNumber: values.phone,
+        emailAddress: values.email,
+      });
     }
   };
 
@@ -105,13 +113,7 @@ function AddingPlayerForm() {
           />
 
           <VerticalSpace height="1rem" />
-          <Controls.Button
-            type={"submit"}
-            onClick={() => {
-              console.log("zapisz zawodnika");
-            }}
-            text={"Zapisz zawodnika"}
-          />
+          <Controls.Button type={"submit"} text={"Zapisz zawodnika"} />
           <VerticalSpace height="1rem" />
         </Grid>
       </Form>
