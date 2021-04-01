@@ -19,8 +19,16 @@ import { FindMatchesQueueByTournamentId } from './application/query/FindMatchesQ
 import { FindMatchesQueueByTournamentIdQueryHandler } from './application/query/FindMatchesQueueByTournamentIdQueryHandler';
 import { CallMatch } from './application/command/CallMatch';
 import { CallMatchCommandHandler } from './application/command/CallMatchCommandHandler';
-import { MatchWasCalled } from './domain/event/MatchWasCalled';
 import { StartMatchAfterItsCalling } from './application/event/StartMatchAfterItsCalling';
+import { TablesQueueRepository } from './application/TablesQueueRepository';
+import { MatchWasQueued } from './domain/event/MatchWasQueued';
+import { TournamentTableWasReleased } from '../../tournament-tables/core/domain/event/TournamentTableWasReleased';
+import { MatchWasCalled } from './domain/event/MatchWasCalled';
+import { BookTableInQueue } from './application/event/BookTableInQueue';
+import { TournamentTableWasBooked } from '../../tournament-tables/core/domain/event/TournamentTableWasBooked';
+import { ReleaseTableInQueue } from './application/event/ReleaseTableInQueue';
+import { CallMatchWhenTournamentTableWasReleased } from './application/event/CallMatchWhenTournamentTableWasReleased';
+import { CallMatchWhenMatchWasQueued } from './application/event/CallMatchWhenMatchWasQueued';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -29,6 +37,7 @@ export function DoublesTournamentModuleCore(
   entityIdGenerator: EntityIdGenerator,
   repository: DoublesTournamentRepository,
   matchesQueue: MatchesQueueRepository,
+  tablesQueue: TablesQueueRepository,
 ): ModuleCore {
   return {
     commandHandlers: [
@@ -51,8 +60,24 @@ export function DoublesTournamentModuleCore(
         handler: new CreateTournamentWhenPlayersWereMatchedIntoTeams(commandPublisher),
       },
       {
+        eventType: MatchWasQueued,
+        handler: new CallMatchWhenMatchWasQueued(commandPublisher, matchesQueue, tablesQueue),
+      },
+      {
         eventType: MatchWasCalled,
-        handler: new StartMatchAfterItsCalling(commandPublisher),
+        handler: new StartMatchAfterItsCalling(commandPublisher, matchesQueue),
+      },
+      {
+        eventType: TournamentTableWasReleased,
+        handler: new ReleaseTableInQueue(tablesQueue),
+      },
+      {
+        eventType: TournamentTableWasReleased,
+        handler: new CallMatchWhenTournamentTableWasReleased(commandPublisher, matchesQueue, tablesQueue),
+      },
+      {
+        eventType: TournamentTableWasBooked,
+        handler: new BookTableInQueue(tablesQueue),
       },
     ],
     queryHandlers: [
