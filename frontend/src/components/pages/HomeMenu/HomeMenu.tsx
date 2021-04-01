@@ -6,7 +6,7 @@ import {APP_NAME} from "../../atoms/constants/names";
 
 const homeMenuButtonsListProps = [
     {
-        textName: "Turniej",
+        textName: "Turnieje",
         onClick: () => {
             console.log("Menu button was clicked!")
         },
