@@ -13,22 +13,7 @@ import userEvent from "@testing-library/user-event";
 describe("Adding player form", () => {
   it("after clicking button form should be shown and display title, inputs and button", async () => {
     //Given
-    const playersProfiles: PlayerProfileDto[] = [
-      {
-        playerId: "2173fa23-8361-48a3-aadb-eceb1e9eca45",
-        firstName: "Jan",
-        lastName: "Kowalski",
-        phoneNumber: "123321333",
-        emailAddress: "jan.kowalski@test.pl",
-      },
-      {
-        playerId: "2175fa23-8361-48a3-aadb-eceb1e9eca46",
-        firstName: "Janina",
-        lastName: "Kowalska",
-        phoneNumber: "123321333",
-        emailAddress: "jagienka12@niepodam.pl",
-      },
-    ];
+    const playersProfiles: PlayerProfileDto[] = [];
     getPlayersProfilesWillReturn(playersProfiles);
 
     render(
@@ -56,9 +41,17 @@ describe("Adding player form", () => {
     const savePlayerButton = await screen.findByText("Zapisz zawodnika");
     expect(savePlayerButton).toBeInTheDocument();
 
-    //How to get inputs?
-    // const nameInput = await screen.findByLabelText("Imię");
-    // expect(nameInput).toBeInTheDocument();
+    const nameInput = await screen.findByLabelText("Imię");
+    expect(nameInput).toBeInTheDocument();
+
+    const surnameInput = await screen.findByLabelText("Nazwisko");
+    expect(surnameInput).toBeInTheDocument();
+
+    const email = await screen.findByLabelText("Adres e-mail");
+    expect(email).toBeInTheDocument();
+
+    const phone = await screen.findByLabelText("Numer telefonu");
+    expect(phone).toBeInTheDocument();
   });
 });
 

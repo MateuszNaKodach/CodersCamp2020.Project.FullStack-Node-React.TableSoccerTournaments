@@ -69,6 +69,7 @@ function AddingPlayerForm() {
           alignItems="center"
         >
           <TextField
+            id="Imię"
             value={formik.values.name}
             label="Imię"
             name="name"
@@ -80,6 +81,7 @@ function AddingPlayerForm() {
           <VerticalSpace height="10px" />
 
           <TextField
+            id="Nazwisko"
             value={formik.values.surname}
             label="Nazwisko"
             name="surname"
@@ -91,6 +93,7 @@ function AddingPlayerForm() {
           <VerticalSpace height="10px" />
 
           <TextField
+            id="Adres e-mail"
             value={formik.values.email}
             label="Adres e-mail"
             name="email"
@@ -102,6 +105,7 @@ function AddingPlayerForm() {
           <VerticalSpace height="10px" />
 
           <TextField
+            id="Numer telefonu"
             value={formik.values.phone}
             label="Numer telefonu"
             name="phone"
