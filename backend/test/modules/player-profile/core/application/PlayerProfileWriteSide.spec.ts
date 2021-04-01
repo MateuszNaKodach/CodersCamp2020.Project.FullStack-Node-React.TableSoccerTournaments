@@ -5,15 +5,16 @@ import { CommandResult } from '../../../../../src/shared/core/application/comman
 import Failure = CommandResult.Failure;
 
 describe('Player profile | Write Side', () => {
+  const playerId = 'PlayerId';
+  const firstName = 'Johnny';
+  const lastName = 'Bravo';
+  const emailAddress = 'bravo@gmail.com';
+  const phoneNumber = '123456789';
+
   it('Given data of not yet created player profile, when create player profile, then new player profile was created', async () => {
     //Given
     const currentTime = new Date();
     const playerProfileModuleCore = testPlayerProfileModule(currentTime);
-    const playerId = 'PlayerId';
-    const firstName = 'Johnny';
-    const lastName = 'Bravo';
-    const emailAddress = 'bravo@gmail.com';
-    const phoneNumber = '123456789';
 
     //When
     const createPlayerProfileCommand = new CreatePlayerProfile({
@@ -44,11 +45,6 @@ describe('Player profile | Write Side', () => {
     //Given
     const currentTime = new Date();
     const playerProfileModuleCore = testPlayerProfileModule(currentTime);
-    const playerId = 'PlayerId';
-    const firstName = 'Johnny';
-    const lastName = 'Bravo';
-    const emailAddress = 'bravo@gmail.com';
-    const phoneNumber = '123456789';
 
     const createPlayerProfileCommand = new CreatePlayerProfile({
       playerId,
@@ -80,11 +76,6 @@ describe('Player profile | Write Side', () => {
     //Given
     const currentTime = new Date();
     const playerProfileModuleCore = testPlayerProfileModule(currentTime);
-    const playerId = 'PlayerId';
-    const firstName = 'Johnny';
-    const lastName = 'Bravo';
-    const emailAddress = 'bravo@gmail.com';
-    const phoneNumber = '123456789';
 
     const createPlayerProfileCommand = new CreatePlayerProfile({
       playerId,
