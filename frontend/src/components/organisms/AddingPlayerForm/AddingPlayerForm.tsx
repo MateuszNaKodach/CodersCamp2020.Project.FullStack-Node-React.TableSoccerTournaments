@@ -21,6 +21,7 @@ const validationSchema = yup.object({
 
 function AddingPlayerForm() {
   //TODO dead code below might be used for TODO below
+  //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/131
   // const tournamentId = useParams();
   // console.log(tournamentId);
   // const tourIdString: string = (Object.values(
@@ -46,7 +47,9 @@ function AddingPlayerForm() {
           emailAddress: values.email,
         });
         window.location.reload();
-        //TODO add modal window with confirmation AND add
+        //TODO add modal window with confirmation AND add player to this tournament
+        //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/131
+        //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/129https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/129
       } catch (error) {
         alert(error.response.data.message);
       }
