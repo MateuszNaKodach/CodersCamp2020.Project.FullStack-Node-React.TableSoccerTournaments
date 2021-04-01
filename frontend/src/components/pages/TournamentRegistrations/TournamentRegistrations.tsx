@@ -61,7 +61,7 @@ export const TournamentRegistrations = () => {
   const match = useRouteMatch<MatchParams>(
     "/tournament-registration/:tournamentId"
   );
-  const touranmentId = match?.params.tournamentId;
+  const tournamentId = match?.params.tournamentId;
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {

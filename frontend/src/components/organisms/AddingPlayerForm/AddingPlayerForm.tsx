@@ -20,6 +20,14 @@ const validationSchema = yup.object({
 });
 
 function AddingPlayerForm() {
+  //TODO dead code below might be used for TODO below
+  // const tournamentId = useParams();
+  // console.log(tournamentId);
+  // const tourIdString: string = (Object.values(
+  //   tournamentId
+  // )[0] as string).substring(1);
+  // console.log(tourIdString);
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -37,7 +45,8 @@ function AddingPlayerForm() {
           phoneNumber: values.phone,
           emailAddress: values.email,
         });
-        //TODO go back to the view with this tournament players
+        window.location.reload();
+        //TODO add modal window with confirmation AND add
       } catch (error) {
         alert(error.response.data.message);
       }
