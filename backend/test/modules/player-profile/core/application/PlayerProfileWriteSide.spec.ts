@@ -67,4 +67,41 @@ describe('Player profile | Write Side', () => {
 
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Such player already exists!'));
   });
+
+  it('given new player profile data (such player email already exists), when create player profile, then command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const playerProfileModuleCore = testPlayerProfileModule(currentTime);
+    const playerId = 'PlayerId';
+    const firstName = 'Johnny';
+    const lastName = 'Bravo';
+    const emailAddress = 'bravo@gmail.com';
+    const phoneNumber = '123456789';
+
+    const createPlayerProfileCommand = new CreatePlayerProfile({
+      playerId,
+      firstName,
+      lastName,
+      emailAddress,
+      phoneNumber,
+    });
+
+    const createPlayerProfileCommand2 = new CreatePlayerProfile({
+      playerId: 'PlayerId1',
+      firstName: firstName,
+      lastName: lastName,
+      emailAddress: emailAddress,
+      phoneNumber: '1234567890',
+    });
+
+    await playerProfileModuleCore.executeCommand(createPlayerProfileCommand);
+
+    //When
+    const commandResult = await playerProfileModuleCore.executeCommand(createPlayerProfileCommand2);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalse();
+
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Such e-mail already exists!'));
+  });
 });
