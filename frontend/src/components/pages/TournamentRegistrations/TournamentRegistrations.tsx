@@ -137,6 +137,10 @@ const PlayerNotFound = () => {
     setDrawerOpened(open);
   };
 
+  const playerAdded = () => {
+    setDrawerOpened(false);
+  };
+
   return (
     <Centered>
       <Alert severity="info">
@@ -152,7 +156,7 @@ const PlayerNotFound = () => {
         open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
-        <AddingPlayerForm />
+        <AddingPlayerForm onPlayerAdded={playerAdded} />
       </Drawer>
     </Centered>
   );

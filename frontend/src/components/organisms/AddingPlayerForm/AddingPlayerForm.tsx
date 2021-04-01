@@ -19,7 +19,7 @@ const validationSchema = yup.object({
     .required("To pole jest wymagane."),
 });
 
-function AddingPlayerForm() {
+function AddingPlayerForm(props: { onPlayerAdded: () => void }) {
   //TODO dead code below might be used for TODO below
   //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/131
   // const tournamentId = useParams();
@@ -46,7 +46,7 @@ function AddingPlayerForm() {
           phoneNumber: values.phone,
           emailAddress: values.email,
         });
-        window.location.reload();
+        props.onPlayerAdded();
         //TODO add modal window with confirmation AND add player to this tournament
         //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/131
         //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/129https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/129
