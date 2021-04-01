@@ -38,6 +38,7 @@ export type TournamentRegistrationsProps = {
 };
 
 export const TournamentRegistrations = () => {
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [initPlayers, setInitPlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
@@ -77,6 +78,11 @@ export const TournamentRegistrations = () => {
     }
   }
 
+  const resetInput = () => {
+    //TODO dochodzę tutaj i oficjalnie czyszczę input, ale problem jest taki, że nie mogę w nim nic pisać (input jest cały czas pusty), bo cały czas na nowo się renderuje ten kompoennt
+    setSearchInputValue("");
+  };
+
   //TODO: Add REST API error handling
   const isLoading = initPlayers === undefined;
   return (
@@ -95,13 +101,14 @@ export const TournamentRegistrations = () => {
                 <InputLabel htmlFor="player-search-input">Zawodnik</InputLabel>
                 <OutlinedInput
                   id="player-search-input"
+                  value={searchInputValue}
                   onChange={(event) => onPlayerSearch(event.target.value)}
                   endAdornment={<Search />}
                   labelWidth={70}
                 />
               </FormControl>
               <VerticalSpace height="1rem" />
-              <PlayersList players={players} />
+              <PlayersList players={players} clearSearchInput={resetInput} />
             </>
           )}
         </Centered>
@@ -116,10 +123,16 @@ const RegistrationsCard = styled(Card)({
   minHeight: "500px",
 });
 
-type PlayersListProps = { players: PlayerProfileDto[] };
-const PlayersList = (props: PlayersListProps) => {
+const PlayersList = (props: {
+  players: PlayerProfileDto[];
+  clearSearchInput: () => void;
+}) => {
+  const clearSearchInput = () => {
+    props.clearSearchInput();
+  };
+
   if (props.players.length === 0) {
-    return <PlayerNotFound />;
+    return <PlayerNotFound clearInput={clearSearchInput} />;
   }
   return (
     <List>
@@ -130,7 +143,7 @@ const PlayersList = (props: PlayersListProps) => {
   );
 };
 
-const PlayerNotFound = () => {
+const PlayerNotFound = (props: { clearInput: () => void }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
   const toggleDrawer = (open: boolean) => () => {
@@ -139,6 +152,7 @@ const PlayerNotFound = () => {
 
   const playerAdded = () => {
     setDrawerOpened(false);
+    props.clearInput();
   };
 
   return (
