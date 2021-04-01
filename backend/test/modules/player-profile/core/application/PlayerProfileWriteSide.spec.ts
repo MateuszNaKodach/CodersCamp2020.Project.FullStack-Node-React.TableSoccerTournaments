@@ -57,10 +57,18 @@ describe('Player profile | Write Side', () => {
       emailAddress,
       phoneNumber,
     });
+
+    const createPlayerProfileCommand2 = new CreatePlayerProfile({
+      playerId: playerId,
+      firstName: firstName,
+      lastName: lastName,
+      emailAddress: 'bravo2@gmail.com',
+      phoneNumber: phoneNumber,
+    });
     await playerProfileModuleCore.executeCommand(createPlayerProfileCommand);
 
     //When
-    const commandResult = await playerProfileModuleCore.executeCommand(createPlayerProfileCommand);
+    const commandResult = await playerProfileModuleCore.executeCommand(createPlayerProfileCommand2);
 
     //Then
     expect(commandResult.isSuccess()).toBeFalse();
