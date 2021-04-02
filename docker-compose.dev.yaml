@@ -21,7 +21,15 @@ services:
       PORT: 5000
       MONGO_HOST: coderscamp_table_soccer_database_mongodb
       POSTGRES_HOST: coderscamp_table_soccer_database_postgres
-      EMAIL_SENDER: console
+      EMAIL_SENDER: NODE_MAILER
+      MONGO_REPOSITORIES: ENABLED
+      TOURNAMENTS_REGISTRATIONS_DATABASE: MONGO
+      PLAYERS_MATCHING_MODULE_DATABASE: MONGO
+      PLAYER_PROFILES_DATABASE: MONGO
+      DOUBLES_TOURNAMENT_DATABASE: MONGO
+      MATCH_DATABASE: MONGO
+      TOURNAMENTS_TABLES_MODULE_DATABASE: MONGO
+      TOURNAMENT_TREE_DATABASE: MONGO
     volumes:
       - ./backend:/app
       - /app/node_modules
