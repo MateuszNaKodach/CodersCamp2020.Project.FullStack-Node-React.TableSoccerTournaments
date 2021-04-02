@@ -27,4 +27,12 @@ export class MatchesQueue {
   get queuedMatches(): QueuedMatch[] {
     return [...this.queue];
   }
+
+  withStartedMatch(match: QueuedMatch): MatchesQueue {
+    const queue = this.queuedMatches.filter((queuedMatch) => queuedMatch.matchNumber.raw !== match.matchNumber.raw);
+    return new MatchesQueue({
+      tournamentId: this.tournamentId,
+      queuedMatches: [...queue, match],
+    });
+  }
 }

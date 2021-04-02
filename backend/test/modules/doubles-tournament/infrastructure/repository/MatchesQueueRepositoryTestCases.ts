@@ -15,6 +15,7 @@ export function MatchesQueueRepositoryTestCases(props: {
 }): void {
   return describe(props.name, () => {
     const entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator();
+    const tournamentId = TournamentId.from(entityIdGenerator.generate());
     let repository: MatchesQueueRepository;
 
     beforeAll(async () => {
@@ -25,7 +26,6 @@ export function MatchesQueueRepositoryTestCases(props: {
     afterAll(async () => await props.databaseTestSupport.closeConnection());
 
     test('findByTournamentId returns matches queue with given tournament id when it was created and saved', async () => {
-      const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const queue: QueuedMatch[] = [
         new QueuedMatch({
           matchNumber: MatchNumber.from(1),
@@ -49,7 +49,6 @@ export function MatchesQueueRepositoryTestCases(props: {
     });
 
     test('findByTournamentId returns undefined when given tournament id when it was not found', async () => {
-      const tournamentId = TournamentId.from(entityIdGenerator.generate());
       const queue: QueuedMatch[] = [
         new QueuedMatch({
           matchNumber: MatchNumber.from(1),
