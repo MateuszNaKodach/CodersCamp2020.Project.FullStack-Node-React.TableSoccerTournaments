@@ -6,7 +6,6 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         bottom: '0',
         width: '100%',
-        marginTop: '10px',
         padding: '10px 0',
         color: theme.palette.primary.contrastText,
         backgroundColor: theme.palette.primary.main,
