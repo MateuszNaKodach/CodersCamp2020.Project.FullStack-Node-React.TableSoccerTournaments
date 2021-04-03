@@ -29,13 +29,22 @@ import {
 } from "../../../restapi/players-profiles";
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import {useRouteMatch} from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
+import Notification from "../../organisms/Notification/Notification";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
 };
 
 export const TournamentRegistrations = () => {
+  {
+    /*to remove later - only for test purpose*/
+  }
+  const [open, setOpen] = useState(false);
+  {
+    /*to remove later - only for test purpose*/
+  }
+
   const [initPlayers, setInitPlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
@@ -56,7 +65,9 @@ export const TournamentRegistrations = () => {
   interface MatchParams {
     tournamentId: string;
   }
-  const match = useRouteMatch<MatchParams>('/tournament-registration/:tournamentId');
+  const match = useRouteMatch<MatchParams>(
+    "/tournament-registration/:tournamentId"
+  );
   const touranmentId = match?.params.tournamentId;
 
   function onPlayerSearch(searchInput: string) {
@@ -71,6 +82,26 @@ export const TournamentRegistrations = () => {
         )
       );
     }
+  }
+
+  {
+    /*to remove later - only for test purpose*/
+  }
+  const onNotificationClose = (
+    event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const onNotificationOpen = () => {
+    setOpen(true);
+  };
+  {
+    /*to remove later - only for test purpose*/
   }
 
   //TODO: Add REST API error handling
@@ -100,6 +131,17 @@ export const TournamentRegistrations = () => {
               <PlayersList players={players} />
             </>
           )}
+
+          {/*to remove later - only for test purpose*/}
+          <Button variant="outlined" onClick={onNotificationOpen}>
+            Test notification button
+          </Button>
+          <Notification
+            text="some text to display"
+            open={open}
+            handleClose={onNotificationClose}
+          />
+          {/*to remove later - only for test purpose*/}
         </Centered>
       </CardContent>
     </RegistrationsCard>
