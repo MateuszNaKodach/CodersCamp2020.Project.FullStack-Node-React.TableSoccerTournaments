@@ -12,7 +12,9 @@ import {
 } from "../../atoms/constants/paths";
 import {HomeMenu} from "../HomeMenu/HomeMenu";
 import {TournamentRegistrations} from "../TournamentRegistrations";
-import Footer from "../../molecules/Footer/Footer";
+import Footer from "../../organisms/Footer/Footer";
+import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
+import React from "react";
 
 const theme = createMuiTheme({
   palette: {
@@ -56,6 +58,7 @@ function TourDeFoos() {
                             <HomeMenu/>
                         </Route>
                     </Switch>
+                    <VerticalSpace height="35px"/>
                     <Footer />
                 </Centered>
             </MuiThemeProvider>
