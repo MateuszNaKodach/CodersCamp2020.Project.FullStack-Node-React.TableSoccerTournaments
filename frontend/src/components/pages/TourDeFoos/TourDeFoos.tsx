@@ -1,20 +1,22 @@
 import React from "react";
-import {Button, MuiThemeProvider} from "@material-ui/core";
+import { Button, MuiThemeProvider } from "@material-ui/core";
 import { unstable_createMuiStrictModeTheme as createMuiTheme } from "@material-ui/core";
-import {grey} from "@material-ui/core/colors";
-import {Centered} from "../../atoms/Shared/Centered";
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import { grey } from "@material-ui/core/colors";
+import { Centered } from "../../atoms/Shared/Centered";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {
-    PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
-    PATH_FOR_LOGIN_VIEW, PATH_FOR_PLAYER_PROFILE_CREATION_VIEW, PATH_FOR_PLAYERS_PROFILES_VIEW,
-    PATH_FOR_HOME_VIEW, PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
-    PATH_FOR_TOURNAMENTS_SELECTION_VIEW
+  PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
+  PATH_FOR_LOGIN_VIEW,
+  PATH_FOR_PLAYER_PROFILE_CREATION_VIEW,
+  PATH_FOR_PLAYERS_PROFILES_VIEW,
+  PATH_FOR_HOME_VIEW,
+  PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
+  PATH_FOR_TOURNAMENTS_SELECTION_VIEW,
 } from "../../atoms/constants/paths";
-import {HomeMenu} from "../HomeMenu/HomeMenu";
-import {TournamentRegistrations} from "../TournamentRegistrations";
+import { HomeMenu } from "../HomeMenu/HomeMenu";
+import { TournamentRegistrations } from "../TournamentRegistrations";
 import Footer from "../../organisms/Footer/Footer";
-import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
-import React from "react";
+import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 
 const theme = createMuiTheme({
   palette: {
@@ -54,16 +56,16 @@ function TourDeFoos() {
               PATH_FOR_PLAYER_PROFILE_CREATION_VIEW
             </Route>
 
-                        <Route path={PATH_FOR_HOME_VIEW} exact>
-                            <HomeMenu/>
-                        </Route>
-                    </Switch>
-                    <VerticalSpace height="35px"/>
-                    <Footer />
-                </Centered>
-            </MuiThemeProvider>
-        </Router>
-    );
+            <Route path={PATH_FOR_HOME_VIEW} exact>
+              <HomeMenu />
+            </Route>
+          </Switch>
+          <VerticalSpace height="35px" />
+          <Footer />
+        </Centered>
+      </MuiThemeProvider>
+    </Router>
+  );
 }
 
 export default TourDeFoos;
