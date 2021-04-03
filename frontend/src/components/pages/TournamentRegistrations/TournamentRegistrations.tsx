@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Button,
@@ -38,7 +38,7 @@ export type TournamentRegistrationsProps = {
 };
 
 export const TournamentRegistrations = () => {
-  const [searchInputValue, setSearchInputValue] = useState("");
+  const searchInput = useRef<HTMLInputElement>(null);
   const [initPlayers, setInitPlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
@@ -59,6 +59,7 @@ export const TournamentRegistrations = () => {
   interface MatchParams {
     tournamentId: string;
   }
+
   const match = useRouteMatch<MatchParams>(
     "/tournament-registration/:tournamentId"
   );
@@ -79,8 +80,16 @@ export const TournamentRegistrations = () => {
   }
 
   const resetInput = () => {
-    //TODO dochodzę tutaj i oficjalnie czyszczę input, ale problem jest taki, że nie mogę w nim nic pisać (input jest cały czas pusty), bo cały czas na nowo się renderuje ten kompoennt
-    setSearchInputValue("");
+    UserProfileRestApi()
+      .getPlayersProfiles()
+      .then((playerProfilesList) => {
+        setInitPlayers(playerProfilesList.items);
+        setPlayers(playerProfilesList.items);
+      });
+
+    if (searchInput && searchInput.current) {
+      searchInput.current.value = "";
+    }
   };
 
   //TODO: Add REST API error handling
@@ -101,7 +110,7 @@ export const TournamentRegistrations = () => {
                 <InputLabel htmlFor="player-search-input">Zawodnik</InputLabel>
                 <OutlinedInput
                   id="player-search-input"
-                  value={searchInputValue}
+                  inputRef={searchInput}
                   onChange={(event) => onPlayerSearch(event.target.value)}
                   endAdornment={<Search />}
                   labelWidth={70}
@@ -122,7 +131,6 @@ const RegistrationsCard = styled(Card)({
   maxWidth: "500px",
   minHeight: "500px",
 });
-
 const PlayersList = (props: {
   players: PlayerProfileDto[];
   clearSearchInput: () => void;
@@ -142,7 +150,6 @@ const PlayersList = (props: {
     </List>
   );
 };
-
 const PlayerNotFound = (props: { clearInput: () => void }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
@@ -175,8 +182,9 @@ const PlayerNotFound = (props: { clearInput: () => void }) => {
     </Centered>
   );
 };
-
-type PlayersListItemProps = { player: PlayerProfileDto };
+type PlayersListItemProps = {
+  player: PlayerProfileDto;
+};
 const PlayersListItem = (props: PlayersListItemProps) => (
   <ListItem>
     <ListItemAvatar>
