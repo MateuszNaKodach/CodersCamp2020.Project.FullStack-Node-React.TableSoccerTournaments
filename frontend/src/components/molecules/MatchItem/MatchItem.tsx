@@ -79,6 +79,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+function onClick(){
+    console.log("aaa");
+}
+
 const MatchItem = (props: MatchItemProps) => {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState<string | boolean>(false);
@@ -87,9 +92,7 @@ const MatchItem = (props: MatchItemProps) => {
         setExpanded(isExpanded ? panel : false);
     };
 
-    function onClick(){
-        console.log("aaa");
-    }
+
 
     return (
         <>
@@ -145,7 +148,107 @@ const MatchItem = (props: MatchItemProps) => {
                     </AccordionDetails>
                 </Accordion>
 
+                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1bh-content"
+                        id="panel1bh-header"
+                        className={classes.header}
+                    >
+                        <ListItemAvatar >
+                            <Avatar className={classes.orange}>1</Avatar>
+                        </ListItemAvatar>
 
+                        <ListItemText
+                            primary="Mecz - aktywny"
+                            secondary={
+                                <React.Fragment>
+                                    <Typography
+                                        component="span"
+                                        variant="body2"
+                                        className={classes.inline}
+                                        color="textPrimary"
+                                    >
+                                        Numer meczu:
+                                    </Typography>
+                                    {" 1"}
+                                    <br/>
+                                    <Typography
+                                        component="span"
+                                        variant="body2"
+                                        className={classes.inline}
+                                        color="textPrimary"
+                                    >
+                                        Poziom:
+                                    </Typography>
+                                    {" 0"}
+                                </React.Fragment>
+                            }
+                        />
+                    </AccordionSummary>
+                    <AccordionDetails
+                        className={classes.teamItemList}>
+                        <div onClick={()=>onClick()}>
+                            <MatchTeam  />
+                        </div>
+                        <Divider variant="inset"/>
+
+                        <MatchTeam/>
+
+
+                    </AccordionDetails>
+                </Accordion>
+
+                <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon/>}
+                        aria-controls="panel1bh-content"
+                        id="panel1bh-header"
+                        className={classes.header}
+                    >
+                        <ListItemAvatar >
+                            <Avatar className={classes.orange}>1</Avatar>
+                        </ListItemAvatar>
+
+                        <ListItemText
+                            primary="Mecz - aktywny"
+                            secondary={
+                                <React.Fragment>
+                                    <Typography
+                                        component="span"
+                                        variant="body2"
+                                        className={classes.inline}
+                                        color="textPrimary"
+                                    >
+                                        Numer meczu:
+                                    </Typography>
+                                    {" 1"}
+                                    <br/>
+                                    <Typography
+                                        component="span"
+                                        variant="body2"
+                                        className={classes.inline}
+                                        color="textPrimary"
+                                    >
+                                        Poziom:
+                                    </Typography>
+                                    {" 0"}
+                                </React.Fragment>
+                            }
+                        />
+                    </AccordionSummary>
+                    <AccordionDetails
+                        className={classes.teamItemList}>
+                        <div onClick={()=>onClick()}>
+                            <MatchTeam  />
+                        </div>
+                        <Divider variant="inset"/>
+
+                        <MatchTeam/>
+
+
+                    </AccordionDetails>
+                </Accordion>
             </Card>
 
 

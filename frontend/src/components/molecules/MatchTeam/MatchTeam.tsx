@@ -45,8 +45,8 @@ const useStyles = makeStyles((theme) => ({
         display: "inline-flex",
         width: '100%',
         paddingLeft: "30px",
-        marginTop: "10px",
-        marginBottom: "0",
+        marginTop: "3px",
+        marginBottom: "3px",
 
         "&:hover":{
             backgroundColor:"rgba(0,255,0,0.2)",
