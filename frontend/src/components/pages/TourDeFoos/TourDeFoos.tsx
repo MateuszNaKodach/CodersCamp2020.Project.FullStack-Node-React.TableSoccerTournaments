@@ -11,6 +11,9 @@ import {
 import {HomeMenu} from "../HomeMenu/HomeMenu";
 import {TournamentRegistrations} from "../TournamentRegistrations";
 import Footer from "../../molecules/Footer/Footer";
+// import MatchItem from "../../molecules/MatchItem/MatchItem";
+import {MatchTeam} from "../../molecules/MatchTeam/MatchTeam";
+import MatchItem from "../../molecules/MatchItem/MatchItem";
 
 const theme = createMuiTheme({
     palette: {
@@ -23,8 +26,15 @@ const theme = createMuiTheme({
 
 function TourDeFoos() {
     return (
+
         <Router>
-            <MuiThemeProvider theme={theme}>
+            <Centered>
+            <MatchItem/>
+            {/*<MatchTeam/>*/}
+            {/*<MatchTeam/>*/}
+            </Centered>
+
+                <MuiThemeProvider theme={theme}>
                 <Centered>
                     <Switch>
                         <Route path={PATH_FOR_LOGIN_VIEW} exact>
