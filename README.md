@@ -75,3 +75,9 @@ Running this project locally
 1. Clone this project locally
 2. Run `npm install` in your bash/command line
 3. Run `npm run start:dev` in your bash/command line
+
+## Development
+1. Execute `docker-compose -f docker-compose.dev.yaml up` in main project catalog -  this will run the application in watch mode and all required dependencies.
+2. Now following urls should be available:
+    - REST API SWAGGER  |   http://localhost:5000/rest-api-docs/
+    - FRONTEND (REACT)  |   https://localhost:3000

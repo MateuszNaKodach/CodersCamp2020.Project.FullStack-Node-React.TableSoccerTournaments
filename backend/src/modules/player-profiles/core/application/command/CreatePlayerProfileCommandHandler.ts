@@ -25,6 +25,11 @@ export class CreatePlayerProfileCommandHandler implements CommandHandler<CreateP
       phoneNumber: command.phoneNumber,
     };
 
+    const allPlayers = await this.repository.findAll();
+    if (allPlayers.some((player) => player.emailAddress === command.emailAddress)) {
+      return CommandResult.failureDueTo(new Error('Such e-mail already exists!'));
+    }
+
     const { state, events } = createPlayerProfile(playerProfile, newCommand, this.currentTimeProvider);
 
     await this.repository.save(state);
