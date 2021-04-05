@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Button,
   Card,
   CardContent,
   CircularProgress,
+  Drawer,
   FormControl,
   IconButton,
   InputLabel,
@@ -30,6 +31,7 @@ import {
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { useRouteMatch } from "react-router-dom";
+import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm";
 import Notification from "../../organisms/Notification/Notification";
 
 export type TournamentRegistrationsProps = {
@@ -37,6 +39,7 @@ export type TournamentRegistrationsProps = {
 };
 
 export const TournamentRegistrations = () => {
+  const searchInput = useRef<HTMLInputElement>(null);
   {
     /*to remove later - only for test purpose*/
   }
@@ -65,10 +68,11 @@ export const TournamentRegistrations = () => {
   interface MatchParams {
     tournamentId: string;
   }
+
   const match = useRouteMatch<MatchParams>(
     "/tournament-registration/:tournamentId"
   );
-  const touranmentId = match?.params.tournamentId;
+  const tournamentId = match?.params.tournamentId;
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {
@@ -83,6 +87,19 @@ export const TournamentRegistrations = () => {
       );
     }
   }
+
+  const resetInput = () => {
+    UserProfileRestApi()
+      .getPlayersProfiles()
+      .then((playerProfilesList) => {
+        setInitPlayers(playerProfilesList.items);
+        setPlayers(playerProfilesList.items);
+      });
+
+    if (searchInput && searchInput.current) {
+      searchInput.current.value = "";
+    }
+  };
 
   {
     /*to remove later - only for test purpose*/
@@ -122,13 +139,14 @@ export const TournamentRegistrations = () => {
                 <InputLabel htmlFor="player-search-input">Zawodnik</InputLabel>
                 <OutlinedInput
                   id="player-search-input"
+                  inputRef={searchInput}
                   onChange={(event) => onPlayerSearch(event.target.value)}
                   endAdornment={<Search />}
                   labelWidth={70}
                 />
               </FormControl>
               <VerticalSpace height="1rem" />
-              <PlayersList players={players} />
+              <PlayersList players={players} clearSearchInput={resetInput} />
             </>
           )}
 
@@ -153,11 +171,16 @@ const RegistrationsCard = styled(Card)({
   maxWidth: "500px",
   minHeight: "500px",
 });
+const PlayersList = (props: {
+  players: PlayerProfileDto[];
+  clearSearchInput: () => void;
+}) => {
+  const clearSearchInput = () => {
+    props.clearSearchInput();
+  };
 
-type PlayersListProps = { players: PlayerProfileDto[] };
-const PlayersList = (props: PlayersListProps) => {
   if (props.players.length === 0) {
-    return <PlayerNotFound />;
+    return <PlayerNotFound clearInput={clearSearchInput} />;
   }
   return (
     <List>
@@ -167,21 +190,41 @@ const PlayersList = (props: PlayersListProps) => {
     </List>
   );
 };
+const PlayerNotFound = (props: { clearInput: () => void }) => {
+  const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
-const PlayerNotFound = () => (
-  <Centered>
-    <Alert severity="info">
-      <AlertTitle>Nie znaleziono zawodnika?</AlertTitle>
-      Zapisz nowego poniżej.
-    </Alert>
-    <VerticalSpace height="1rem" />
-    <Button variant="contained" color="primary">
-      Dodaj i zapisz
-    </Button>
-  </Centered>
-);
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpened(open);
+  };
 
-type PlayersListItemProps = { player: PlayerProfileDto };
+  const playerAdded = () => {
+    setDrawerOpened(false);
+    props.clearInput();
+  };
+
+  return (
+    <Centered>
+      <Alert severity="info">
+        <AlertTitle>Nie znaleziono zawodnika?</AlertTitle>
+        Zapisz nowego poniżej.
+      </Alert>
+      <VerticalSpace height="1rem" />
+      <Button variant="contained" color="primary" onClick={toggleDrawer(true)}>
+        Dodaj i zapisz
+      </Button>
+      <Drawer
+        anchor={"bottom"}
+        open={drawerOpened}
+        onClose={toggleDrawer(false)}
+      >
+        <AddingPlayerForm onPlayerAdded={playerAdded} />
+      </Drawer>
+    </Centered>
+  );
+};
+type PlayersListItemProps = {
+  player: PlayerProfileDto;
+};
 const PlayersListItem = (props: PlayersListItemProps) => (
   <ListItem>
     <ListItemAvatar>
