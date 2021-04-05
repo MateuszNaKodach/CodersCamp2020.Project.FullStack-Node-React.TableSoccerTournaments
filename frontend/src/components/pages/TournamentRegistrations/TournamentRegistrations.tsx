@@ -40,13 +40,7 @@ export type TournamentRegistrationsProps = {
 
 export const TournamentRegistrations = () => {
   const searchInput = useRef<HTMLInputElement>(null);
-  {
-    /*to remove later - only for test purpose*/
-  }
-  const [open, setOpen] = useState(false);
-  {
-    /*to remove later - only for test purpose*/
-  }
+  const [openAlert, setOpenAlert] = useState(false);
 
   const [initPlayers, setInitPlayers] = useState<
     PlayerProfileDto[] | undefined
@@ -99,11 +93,10 @@ export const TournamentRegistrations = () => {
     if (searchInput && searchInput.current) {
       searchInput.current.value = "";
     }
+
+    setOpenAlert(true);
   };
 
-  {
-    /*to remove later - only for test purpose*/
-  }
   const onNotificationClose = (
     event?: React.SyntheticEvent,
     reason?: string
@@ -111,15 +104,8 @@ export const TournamentRegistrations = () => {
     if (reason === "clickaway") {
       return;
     }
-    setOpen(false);
+    setOpenAlert(false);
   };
-
-  const onNotificationOpen = () => {
-    setOpen(true);
-  };
-  {
-    /*to remove later - only for test purpose*/
-  }
 
   //TODO: Add REST API error handling
   const isLoading = initPlayers === undefined;
@@ -150,16 +136,11 @@ export const TournamentRegistrations = () => {
             </>
           )}
 
-          {/*to remove later - only for test purpose*/}
-          <Button variant="outlined" onClick={onNotificationOpen}>
-            Test notification button
-          </Button>
           <Notification
-            text="some text to display"
-            open={open}
+            text="Player profile was created"
+            open={openAlert}
             handleClose={onNotificationClose}
           />
-          {/*to remove later - only for test purpose*/}
         </Centered>
       </CardContent>
     </RegistrationsCard>
