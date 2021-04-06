@@ -2,6 +2,7 @@ import {
   render,
   screen,
   waitForElementToBeRemoved,
+  waitFor,
 } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { TournamentRegistrations } from "../../pages/TournamentRegistrations";
@@ -52,6 +53,59 @@ describe("Adding player form", () => {
 
     const phone = await screen.findByLabelText("Numer telefonu");
     expect(phone).toBeInTheDocument();
+  });
+
+  it("after submitting form, notification should be displayed | happy path", async () => {
+    //Given
+    const playersProfiles: PlayerProfileDto[] = [];
+    getPlayersProfilesWillReturn(playersProfiles);
+
+    render(
+      <Router>
+        <TournamentRegistrations />
+      </Router>
+    );
+    await waitForElementToBeRemoved(() =>
+      screen.getByTestId("TournamentRegistrationsLoadingIndicator")
+    );
+    const searchPlayerInput = await screen.findByLabelText("Zawodnik");
+    userEvent.clear(searchPlayerInput);
+    userEvent.type(searchPlayerInput, "Mufasa");
+
+    const registerNewPlayerForTournamentButton = await screen.findByText(
+      "Dodaj i zapisz"
+    );
+    userEvent.click(registerNewPlayerForTournamentButton);
+
+    const nameInput = await screen.findByLabelText("Imię");
+    userEvent.clear(nameInput);
+    userEvent.type(nameInput, "Test name");
+
+    const surnameInput = await screen.findByLabelText("Nazwisko");
+    userEvent.clear(surnameInput);
+    userEvent.type(surnameInput, "Test surname");
+
+    const email = await screen.findByLabelText("Adres e-mail");
+    userEvent.clear(email);
+    userEvent.type(email, "testEmail@gmail.com");
+
+    const phone = await screen.findByLabelText("Numer telefonu");
+    userEvent.clear(phone);
+    userEvent.type(phone, "123456789");
+
+    //When
+    const savePlayerButton = await screen.findByText("Zapisz zawodnika");
+    userEvent.click(savePlayerButton);
+
+    //Then
+    // const notification = await screen.findByDisplayValue(
+    //   "Player profile was created"
+    // );
+    await waitFor(async () =>
+      expect(
+        await screen.findByDisplayValue("Player profile was created")
+      ).toBeInTheDocument()
+    );
   });
 });
 
