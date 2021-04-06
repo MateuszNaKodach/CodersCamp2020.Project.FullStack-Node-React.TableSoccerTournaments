@@ -19,16 +19,9 @@ const validationSchema = yup.object({
     .required("To pole jest wymagane."),
 });
 
-function AddingPlayerForm(props: { onPlayerAdded: () => void }) {
-  //TODO dead code below might be used for TODO below
-  //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/131
-  // const tournamentId = useParams();
-  // console.log(tournamentId);
-  // const tourIdString: string = (Object.values(
-  //   tournamentId
-  // )[0] as string).substring(1);
-  // console.log(tourIdString);
-
+function AddingPlayerForm(props: {
+  onPlayerAdded: (playerId: string) => void;
+}) {
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -39,17 +32,15 @@ function AddingPlayerForm(props: { onPlayerAdded: () => void }) {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
+        const playerId = EntityIdGenerator.generate();
         await UserProfileRestApi().postPlayersProfile({
-          playerId: EntityIdGenerator.generate(),
+          playerId: playerId,
           firstName: values.name,
           lastName: values.surname,
           phoneNumber: values.phone,
           emailAddress: values.email,
         });
-        props.onPlayerAdded();
-        //TODO add modal window with confirmation AND add player to this tournament
-        //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/131
-        //https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/129https://github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/issues/129
+        props.onPlayerAdded(playerId);
       } catch (error) {
         alert(error.response.data.message);
       }

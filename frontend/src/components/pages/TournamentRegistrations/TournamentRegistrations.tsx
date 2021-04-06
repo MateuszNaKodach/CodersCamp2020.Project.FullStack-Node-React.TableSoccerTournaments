@@ -1,5 +1,11 @@
 import styled from "styled-components";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import {
   Avatar,
   Button,
@@ -32,20 +38,46 @@ import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { useRouteMatch } from "react-router-dom";
 import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm";
+import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
 };
 
+const defaultStateValue: string[] = [];
+const defaultDispatchValue: { type: string; playerId: string } = {
+  type: "",
+  playerId: "",
+};
+export const RegisteredPlayersStateContext = createContext(defaultStateValue);
+export const RegisteredPlayersDispatchContext = createContext(
+  defaultDispatchValue
+);
+
+const initialState: string[] = [];
+function reducer(state: string[], action: { type: string; playerId: string }) {
+  switch (action.type) {
+    case "addPlayer":
+      state.push(action.playerId);
+      console.log("State: ", state);
+      return state;
+    default:
+      throw new Error("Unexpected action");
+  }
+}
+
 export const TournamentRegistrations = () => {
   const searchInput = useRef<HTMLInputElement>(null);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [initPlayers, setInitPlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
   const [players, setPlayers] = useState<PlayerProfileDto[]>([]);
-  const [registeredPlayers, setRegisteredPlayers] = useState<
-    { playerId: string }[]
-  >([]); //TODO: Fetch already registered players
+  const [registeredPlayersIds, setRegisteredPlayersIds] = useState<string[]>(
+    []
+  );
+  const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
     UserProfileRestApi()
@@ -63,7 +95,14 @@ export const TournamentRegistrations = () => {
   const match = useRouteMatch<MatchParams>(
     "/tournament-registration/:tournamentId"
   );
-  const tournamentId = match?.params.tournamentId;
+  const tournamentId = match?.params.tournamentId as string;
+  useEffect(() => {
+    TournamentRegistrationsRestApi()
+      .getRegisteredPlayersIds(tournamentId)
+      .then((tournamentRegistrations) => {
+        setRegisteredPlayersIds(tournamentRegistrations.registeredPlayersIds);
+      });
+  }, [isUpdate]);
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {
@@ -92,6 +131,14 @@ export const TournamentRegistrations = () => {
     }
   };
 
+  const registerPlayer = async (playerId: string) => {
+    await TournamentRegistrationsRestApi().postPlayersForTournament({
+      tournamentId: tournamentId,
+      playerId: playerId,
+    });
+    setIsUpdate(!isUpdate);
+  };
+
   //TODO: Add REST API error handling
   const isLoading = initPlayers === undefined;
   return (
@@ -117,7 +164,16 @@ export const TournamentRegistrations = () => {
                 />
               </FormControl>
               <VerticalSpace height="1rem" />
-              <PlayersList players={players} clearSearchInput={resetInput} />
+              {/*<RegisteredPlayersDispatchContext.Provider value={dispatch}>*/}
+              {/*  <RegisteredPlayersStateContext.Provider value={state}>*/}
+              <PlayersList
+                players={players}
+                registeredPlayersIds={registeredPlayersIds}
+                clearSearchInput={resetInput}
+                registerPlayer={registerPlayer}
+              />
+              {/*  </RegisteredPlayersStateContext.Provider>*/}
+              {/*</RegisteredPlayersDispatchContext.Provider>*/}
             </>
           )}
         </Centered>
@@ -133,33 +189,54 @@ const RegistrationsCard = styled(Card)({
 });
 const PlayersList = (props: {
   players: PlayerProfileDto[];
+  registeredPlayersIds: string[];
   clearSearchInput: () => void;
+  registerPlayer: (playerId: string) => void;
 }) => {
-  const clearSearchInput = () => {
+  const clearSearchInputAndAddPlayer = (playerId: string) => {
     props.clearSearchInput();
+    props.registerPlayer(playerId);
   };
 
   if (props.players.length === 0) {
-    return <PlayerNotFound clearInput={clearSearchInput} />;
+    return (
+      <PlayerNotFound clearInputAndAddPlayer={clearSearchInputAndAddPlayer} />
+    );
   }
+
+  const registerPlayer = (playerId: string) => {
+    props.registerPlayer(playerId);
+  };
   return (
     <List>
-      {props.players.map((player) => (
-        <PlayersListItem key={player.playerId} player={player} />
-      ))}
+      {props.players.map((player) => {
+        const isRegistered: boolean = props.registeredPlayersIds.includes(
+          player.playerId
+        );
+        return (
+          <PlayersListItem
+            key={player.playerId}
+            player={player}
+            isRegistered={isRegistered}
+            registerPlayer={registerPlayer}
+          />
+        );
+      })}
     </List>
   );
 };
-const PlayerNotFound = (props: { clearInput: () => void }) => {
+const PlayerNotFound = (props: {
+  clearInputAndAddPlayer: (playerId: string) => void;
+}) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpened(open);
   };
 
-  const playerAdded = () => {
+  const playerAdded = (playerId: string) => {
     setDrawerOpened(false);
-    props.clearInput();
+    props.clearInputAndAddPlayer(playerId);
   };
 
   return (
@@ -182,28 +259,40 @@ const PlayerNotFound = (props: { clearInput: () => void }) => {
     </Centered>
   );
 };
-type PlayersListItemProps = {
+
+const PlayersListItem = (props: {
   player: PlayerProfileDto;
+  isRegistered: boolean;
+  registerPlayer: (playerId: string) => void;
+}) => {
+  const registerPlayer = (playerId: string) => {
+    props.registerPlayer(playerId);
+  };
+
+  return (
+    <ListItem>
+      <ListItemAvatar>
+        <Avatar>
+          <SupervisedUserCircle />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={`${props.player.firstName} ${props.player.lastName}`}
+        secondary={props.player.emailAddress}
+      />
+      <ListItemSecondaryAction>
+        {props.isRegistered ? (
+          <CheckCircleIcon color="action" aria-label="registered-player" />
+        ) : (
+          <IconButton
+            edge="end"
+            aria-label="register-player"
+            onClick={() => registerPlayer(props.player.playerId)}
+          >
+            <AddCircleOutline />
+          </IconButton>
+        )}
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
 };
-const PlayersListItem = (props: PlayersListItemProps) => (
-  <ListItem>
-    <ListItemAvatar>
-      <Avatar>
-        <SupervisedUserCircle />
-      </Avatar>
-    </ListItemAvatar>
-    <ListItemText
-      primary={`${props.player.firstName} ${props.player.lastName}`}
-      secondary={props.player.emailAddress}
-    />
-    <ListItemSecondaryAction>
-      <IconButton
-        edge="end"
-        aria-label="register-player"
-        onClick={() => console.log("Register player clicked!")}
-      >
-        <AddCircleOutline />
-      </IconButton>
-    </ListItemSecondaryAction>
-  </ListItem>
-);
