@@ -1,11 +1,5 @@
 import styled from "styled-components";
-import React, {
-  createContext,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Button,
@@ -54,7 +48,6 @@ export const TournamentRegistrations = () => {
   const [registeredPlayersIds, setRegisteredPlayersIds] = useState<string[]>(
     []
   );
-  const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
     UserProfileRestApi()
@@ -74,12 +67,16 @@ export const TournamentRegistrations = () => {
   );
   const tournamentId = match?.params.tournamentId as string;
   useEffect(() => {
-    TournamentRegistrationsRestApi()
+    reloadRegisteredPlayers().then();
+  }, [tournamentId]);
+
+  function reloadRegisteredPlayers() {
+    return TournamentRegistrationsRestApi()
       .getRegisteredPlayersIds(tournamentId)
       .then((tournamentRegistrations) => {
         setRegisteredPlayersIds(tournamentRegistrations.registeredPlayersIds);
       });
-  }, [isUpdate]);
+  }
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {
@@ -113,7 +110,7 @@ export const TournamentRegistrations = () => {
       tournamentId: tournamentId,
       playerId: playerId,
     });
-    setIsUpdate(!isUpdate);
+    await reloadRegisteredPlayers();
   };
 
   //TODO: Add REST API error handling
