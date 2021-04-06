@@ -1,5 +1,6 @@
 import axios from "axios";
 import { PlayerProfilesListDto } from "./PlayerProfilesListDto";
+import { PlayerProfileDto } from "./PlayerProfileDto";
 
 export type UserProfilesRestApiConfig = {
   readonly baseUrl: string;
@@ -25,6 +26,12 @@ export const UserProfileRestApi = (
       return axios
         .get<PlayerProfilesListDto>(`${currentConfig.baseUrl}/players-profiles`)
         .then((response) => response.data);
+    },
+    async postPlayersProfile(playerProfile: PlayerProfileDto): Promise<void> {
+      await axios.post<PlayerProfileDto>(
+        `${currentConfig.baseUrl}/players-profiles`,
+        playerProfile
+      );
     },
   };
 };
