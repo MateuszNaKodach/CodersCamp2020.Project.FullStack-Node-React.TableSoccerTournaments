@@ -9,7 +9,7 @@ import {Card} from '@material-ui/core';
 export type MatchTeamProps = {
     readonly player1: string | undefined;
     readonly player2: string | undefined;
-    readonly teamNumber: string | undefined;
+    readonly teamNumber: number | string | undefined;
     readonly currentPlayerLevel: string | undefined;
     readonly currentMatchNumber: string | undefined;
 };
@@ -18,11 +18,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
         backgroundColor: theme.palette.background.paper,
-    },
-
-    teamItemList: {
-        display: "flex",
-        flexDirection: "column"
     },
 
     teamItem: {
@@ -34,10 +29,8 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: "3px",
     },
 
-    background: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: theme.palette.background.default,
+    avatar: {
+        padding: "15px 0"
     },
 
     avatarColor: {
@@ -48,10 +41,6 @@ const useStyles = makeStyles((theme) => ({
     inline: {
         display: 'inline',
     },
-
-    avatar: {
-        padding: "15px 0"
-    },
 }));
 
 export  const  MatchTeam = (props: MatchTeamProps ) => {
@@ -60,7 +49,8 @@ export  const  MatchTeam = (props: MatchTeamProps ) => {
     const noNumber = "NN";
     const player1 = props.player1 || "player1";
     const player2 = props.player1 || "player2";
-    const teamNumber = props.player1 || noNumber;
+    const avatarSymbol = (typeof props.teamNumber==="string" ? props.teamNumber[0]: props.teamNumber)
+    const teamNumber = avatarSymbol || noNumber;
     const currentPlayerLevel = props.player1 || noNumber;
     const currentMatchNumber = props.player1 || noNumber;
     const teamNameText = "Team " + teamNumber ;
