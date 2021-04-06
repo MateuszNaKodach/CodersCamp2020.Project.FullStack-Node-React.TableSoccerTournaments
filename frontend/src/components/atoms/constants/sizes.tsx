@@ -1,0 +1,1 @@
+export  const MIN_CARD_COMPONENT_WIDTH : string = "360px";
