@@ -17,12 +17,17 @@ import { HomeMenu } from "../HomeMenu/HomeMenu";
 import { TournamentRegistrations } from "../TournamentRegistrations";
 import Footer from "../../organisms/Footer/Footer";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import Header from '../../organisms/Header/Header';
 
 const theme = createMuiTheme({
   palette: {
     primary: {
       main: grey[800],
       contrastText: "#E3E152",
+    },
+    secondary: {
+      main: "#FFD100",
+      contrastText: "#000000",
     },
   },
 });
@@ -32,6 +37,7 @@ function TourDeFoos() {
     <Router>
       <MuiThemeProvider theme={theme}>
         <Centered>
+          <Header />
           <Switch>
             <Route path={PATH_FOR_LOGIN_VIEW} exact>
               <Button>PATH_FOR_LOGIN_VIEW</Button>
