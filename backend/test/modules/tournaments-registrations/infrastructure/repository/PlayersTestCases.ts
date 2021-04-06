@@ -2,8 +2,8 @@ import { DatabaseTestSupport } from '../../../../test-support/shared/infrastruct
 import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
 import { UuidEntityIdGenerator } from '../../../../../src/shared/infrastructure/core/application/UuidEntityIdGenerator';
 import { PlayerId } from '../../../../../src/shared/core/domain/PlayerId';
-import {Players} from "../../../../../src/modules/tournaments-registrations/core/application/command/Players";
-import {AvailablePlayersForTournament} from "../../../../../src/modules/tournaments-registrations/core/application/command/AvailablePlayersForTournament";
+import { Players } from '../../../../../src/modules/tournaments-registrations/core/application/command/Players';
+import { AvailablePlayersForTournament } from '../../../../../src/modules/tournaments-registrations/core/application/command/AvailablePlayersForTournament';
 
 export function PlayersTestCases(props: {
   name: string;
@@ -26,8 +26,8 @@ export function PlayersTestCases(props: {
       const playerId2 = PlayerId.from(entityIdGenerator.generate());
       const playerId3 = PlayerId.from(entityIdGenerator.generate());
 
-      await repository.save({playerId: playerId1});
-      await repository.save({playerId: playerId2});
+      await repository.save({ playerId: playerId1 });
+      await repository.save({ playerId: playerId2 });
 
       expect(await repository.canPlay(playerId1)).toBeTruthy();
       expect(await repository.canPlay(playerId2)).toBeTruthy();
