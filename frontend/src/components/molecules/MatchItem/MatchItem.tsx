@@ -40,10 +40,9 @@ export type MatchItemProps = {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        position: "relative",
-
+        // position: "relative",
         width: '100%',
-        maxWidth: '36ch',
+        // maxWidth: '36ch',
         backgroundColor: theme.palette.background.paper,
     },
 
@@ -56,12 +55,12 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor:"rgba(0,0,0,0.05)",
         // marginBottom: "30px",
     },
-    teamItem: {
-        position: "relative",
+    // teamItem: {
+        // position: "relative",
 // zIndex: 5,
 //         "&:hover": {opacity: 0,}
 
-    },
+    // },
 
 
 
