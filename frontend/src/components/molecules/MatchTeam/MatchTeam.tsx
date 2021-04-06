@@ -10,8 +10,8 @@ export type MatchTeamProps = {
     readonly player1: string | undefined;
     readonly player2: string | undefined;
     readonly teamNumber: number | string | undefined;
-    readonly currentPlayerLevel: string | undefined;
-    readonly currentMatchNumber: string | undefined;
+    readonly currentPlayerLevel: number | undefined;
+    readonly currentMatchNumber: number |  undefined;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -48,11 +48,11 @@ export  const  MatchTeam = (props: MatchTeamProps ) => {
 
     const noNumber = "NN";
     const player1 = props.player1 || "player1";
-    const player2 = props.player1 || "player2";
+    const player2 = props.player2 || "player2";
     const avatarSymbol = (typeof props.teamNumber==="string" ? props.teamNumber[0]: props.teamNumber)
     const teamNumber = avatarSymbol || noNumber;
-    const currentPlayerLevel = props.player1 || noNumber;
-    const currentMatchNumber = props.player1 || noNumber;
+    const currentPlayerLevel = props.currentPlayerLevel || noNumber;
+    const currentMatchNumber = props.currentMatchNumber || noNumber;
     const teamNameText = "Team " + teamNumber ;
     const playersNameText = `${player1} & ${player2}`;
 

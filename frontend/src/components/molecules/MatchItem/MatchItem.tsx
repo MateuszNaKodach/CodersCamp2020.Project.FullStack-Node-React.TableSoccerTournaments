@@ -24,18 +24,42 @@ import {Card} from '@material-ui/core';
 import {deepOrange, deepPurple} from "@material-ui/core/colors";
 
 
-const exampleDataBase = [{
+const exampleDataBase = {
+    meczNumber:0,
     level: 0,
-    number: 1,
-    status: "active",
-    teamName1: "team1",
-    teamNumber1: "1",
-    teamName2: "team2",
-    teamNumber2: "2",
-}]
+    team1: {
+player1: "Lord Json",
+player2: "Waszmość Brzuszek",
+teamNumber: "xyz",
+currentPlayerLevel: 0,
+currentMatchNumber: 0,
+},
+team2: {
+    player1: "Lord Json",
+    player2: "Waszmość Brzuszek",
+    teamNumber: "xyz",
+    currentPlayerLevel: 0,
+    currentMatchNumber: 0,
+}
+};
 
 export type MatchItemProps = {
-    readonly title: string;
+    mechNumber:number,
+    level: number,
+    team1: {
+        readonly player1: string | undefined;
+        readonly player2: string | undefined;
+        readonly teamNumber: number |  string | undefined;
+        readonly currentPlayerLevel: number  | undefined;
+        readonly currentMatchNumber: number |  undefined;
+    },
+    team2: {
+        readonly player1: string | undefined;
+        readonly player2: string | undefined;
+        readonly teamNumber: string | undefined;
+        readonly currentPlayerLevel: number | undefined;
+        readonly currentMatchNumber: number | undefined;
+    }
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -137,114 +161,40 @@ const MatchItem = (props: MatchItemProps) => {
                     <AccordionDetails
                         className={classes.teamItemList}>
                         <div onClick={()=>onClick()}>
-                            <MatchTeam  />
+
+                            {/*<MatchTeam*/}
+                            {/*currentMatchNumber={props.team1.currentMatchNumber}*/}
+                            {/*teamNumber={props.team1.teamNumber}*/}
+                            {/*currentPlayerLevel={props.team1.currentPlayerLevel}*/}
+                            {/*player1={props.team1.player1}*/}
+                            {/*player2={props.team1.player2}*/}
+                            {/*/>*/}
+
+                            <MatchTeam
+                            currentMatchNumber={exampleDataBase.team1.currentMatchNumber}
+                            teamNumber={exampleDataBase.team1.teamNumber}
+                            currentPlayerLevel={exampleDataBase.team1.currentPlayerLevel}
+                            player1={exampleDataBase.team1.player1}
+                            player2={exampleDataBase.team1.player2}
+                            />
+
                         </div>
-                        <Divider variant="inset"/>
 
-                        <MatchTeam/>
+                        {/*<MatchTeam*/}
+                        {/*    currentMatchNumber={props.team2.currentMatchNumber}*/}
+                        {/*    teamNumber={props.team2.teamNumber}*/}
+                        {/*    currentPlayerLevel={props.team2.currentPlayerLevel}*/}
+                        {/*    player1={props.team2.player1}*/}
+                        {/*    player2={props.team2.player2}*/}
+                        {/*/>*/}
 
-
-                    </AccordionDetails>
-                </Accordion>
-
-                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon/>}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                        className={classes.header}
-                    >
-                        <ListItemAvatar >
-                            <Avatar className={classes.orange}>1</Avatar>
-                        </ListItemAvatar>
-
-                        <ListItemText
-                            primary="Mecz - aktywny"
-                            secondary={
-                                <React.Fragment>
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        className={classes.inline}
-                                        color="textPrimary"
-                                    >
-                                        Numer meczu:
-                                    </Typography>
-                                    {" 1"}
-                                    <br/>
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        className={classes.inline}
-                                        color="textPrimary"
-                                    >
-                                        Poziom:
-                                    </Typography>
-                                    {" 0"}
-                                </React.Fragment>
-                            }
+                        <MatchTeam
+                            currentMatchNumber={exampleDataBase.team1.currentMatchNumber}
+                            teamNumber={exampleDataBase.team1.teamNumber}
+                            currentPlayerLevel={exampleDataBase.team1.currentPlayerLevel}
+                            player1={exampleDataBase.team1.player1}
+                            player2={exampleDataBase.team1.player2}
                         />
-                    </AccordionSummary>
-                    <AccordionDetails
-                        className={classes.teamItemList}>
-                        <div onClick={()=>onClick()}>
-                            <MatchTeam  />
-                        </div>
-                        <Divider variant="inset"/>
-
-                        <MatchTeam/>
-
-
-                    </AccordionDetails>
-                </Accordion>
-
-                <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon/>}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                        className={classes.header}
-                    >
-                        <ListItemAvatar >
-                            <Avatar className={classes.orange}>1</Avatar>
-                        </ListItemAvatar>
-
-                        <ListItemText
-                            primary="Mecz - aktywny"
-                            secondary={
-                                <React.Fragment>
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        className={classes.inline}
-                                        color="textPrimary"
-                                    >
-                                        Numer meczu:
-                                    </Typography>
-                                    {" 1"}
-                                    <br/>
-                                    <Typography
-                                        component="span"
-                                        variant="body2"
-                                        className={classes.inline}
-                                        color="textPrimary"
-                                    >
-                                        Poziom:
-                                    </Typography>
-                                    {" 0"}
-                                </React.Fragment>
-                            }
-                        />
-                    </AccordionSummary>
-                    <AccordionDetails
-                        className={classes.teamItemList}>
-                        <div onClick={()=>onClick()}>
-                            <MatchTeam  />
-                        </div>
-                        <Divider variant="inset"/>
-
-                        <MatchTeam/>
-
 
                     </AccordionDetails>
                 </Accordion>
