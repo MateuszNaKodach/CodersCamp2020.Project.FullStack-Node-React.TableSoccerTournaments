@@ -45,31 +45,8 @@ export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
 };
 
-const defaultStateValue: string[] = [];
-const defaultDispatchValue: { type: string; playerId: string } = {
-  type: "",
-  playerId: "",
-};
-export const RegisteredPlayersStateContext = createContext(defaultStateValue);
-export const RegisteredPlayersDispatchContext = createContext(
-  defaultDispatchValue
-);
-
-const initialState: string[] = [];
-function reducer(state: string[], action: { type: string; playerId: string }) {
-  switch (action.type) {
-    case "addPlayer":
-      state.push(action.playerId);
-      console.log("State: ", state);
-      return state;
-    default:
-      throw new Error("Unexpected action");
-  }
-}
-
 export const TournamentRegistrations = () => {
   const searchInput = useRef<HTMLInputElement>(null);
-  const [state, dispatch] = useReducer(reducer, initialState);
   const [initPlayers, setInitPlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
@@ -164,16 +141,12 @@ export const TournamentRegistrations = () => {
                 />
               </FormControl>
               <VerticalSpace height="1rem" />
-              {/*<RegisteredPlayersDispatchContext.Provider value={dispatch}>*/}
-              {/*  <RegisteredPlayersStateContext.Provider value={state}>*/}
               <PlayersList
                 players={players}
                 registeredPlayersIds={registeredPlayersIds}
                 clearSearchInput={resetInput}
                 registerPlayer={registerPlayer}
               />
-              {/*  </RegisteredPlayersStateContext.Provider>*/}
-              {/*</RegisteredPlayersDispatchContext.Provider>*/}
             </>
           )}
         </Centered>
