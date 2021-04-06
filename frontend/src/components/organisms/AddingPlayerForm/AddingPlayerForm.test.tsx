@@ -16,6 +16,7 @@ describe("Adding player form", () => {
     //Given
     const playersProfiles: PlayerProfileDto[] = [];
     getPlayersProfilesWillReturn(playersProfiles);
+    postPlayerProfilesWillAlwaysSuccess();
 
     render(
       <Router>
@@ -59,6 +60,7 @@ describe("Adding player form", () => {
     //Given
     const playersProfiles: PlayerProfileDto[] = [];
     getPlayersProfilesWillReturn(playersProfiles);
+    postPlayerProfilesWillAlwaysSuccess();
 
     render(
       <Router>
@@ -98,14 +100,7 @@ describe("Adding player form", () => {
     userEvent.click(savePlayerButton);
 
     //Then
-    // const notification = await screen.findByDisplayValue(
-    //   "Player profile was created"
-    // );
-    await waitFor(async () =>
-      expect(
-        await screen.findByDisplayValue("Player profile was created")
-      ).toBeInTheDocument()
-    );
+    await waitFor( () => expect(screen.getByText("Player profile was created")).toBeInTheDocument());
   });
 });
 
@@ -119,5 +114,15 @@ function getPlayersProfilesWillReturn(playersProfiles: PlayerProfileDto[]) {
         })
       );
     })
+  );
+}
+
+function postPlayerProfilesWillAlwaysSuccess() {
+  server.use(
+      rest.post("*/rest-api/players-profiles", (req, res, ctx) => {
+        return res(
+            ctx.status(200),
+        );
+      })
   );
 }
