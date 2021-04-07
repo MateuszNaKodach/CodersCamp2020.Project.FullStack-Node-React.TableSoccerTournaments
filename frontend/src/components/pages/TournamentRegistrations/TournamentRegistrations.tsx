@@ -30,7 +30,6 @@ import {
 } from "../../../restapi/players-profiles";
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import { useRouteMatch } from "react-router-dom";
 import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
@@ -40,7 +39,9 @@ export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
 };
 
-export const TournamentRegistrations = () => {
+export const TournamentRegistrations = (
+  props: TournamentRegistrationsProps
+) => {
   const searchInput = useRef<HTMLInputElement>(null);
   const [openAlert, setOpenAlert] = useState(false);
   const [textAlert, setTextAlert] = useState("");
@@ -64,44 +65,21 @@ export const TournamentRegistrations = () => {
       });
   }, []);
 
-  //TODO insted of matchParams create new file and add tournament registrations like below
-  // export interface RepositorySettingsRouteParams {
-  //   readonly owner: string;
-  //   readonly repository: string;
+  // interface MatchParams {
+  //   tournamentId: string;
   // }
   //
-  // export const RepositorySettingsRoute = () => {
-  //   const match = useRouteMatch<RepositorySettingsRouteParams>("/:owner/:repository/settings");
-  //   const owner = match?.params.owner;
-  //   const repository = match?.params.repository;
-  //   if (!owner || !repository) {
-  //     return null;
-  //   }
-  //   return <RepositorySettings owner={owner} repository={repository} />
-  // }
-  //
-  // export type RepositorySettingsProps = {
-  //   readonly owner: string;
-  //   readonly repository: string;
-  // }
-  //
-  // export const RepositorySettings = (props: RepositorySettingsProps) => (
-
-  interface MatchParams {
-    tournamentId: string;
-  }
-
-  const match = useRouteMatch<MatchParams>(
-    "/tournament-registration/:tournamentId"
-  );
-  const tournamentId = match?.params.tournamentId as string;
+  // const match = useRouteMatch<MatchParams>(
+  //   "/tournament-registration/:tournamentId"
+  // );
+  // const tournamentId = match?.params.tournamentId as string;
   useEffect(() => {
     reloadRegisteredPlayers().then();
-  }, [tournamentId]);
+  }, [props.tournamentId]);
 
   function reloadRegisteredPlayers() {
     return TournamentRegistrationsRestApi()
-      .getRegisteredPlayersIds(tournamentId)
+      .getRegisteredPlayersIds(props.tournamentId)
       .then((tournamentRegistrations) => {
         setRegisteredPlayersIds(tournamentRegistrations.registeredPlayersIds);
       });
@@ -150,7 +128,7 @@ export const TournamentRegistrations = () => {
     surname: string = ""
   ) => {
     await TournamentRegistrationsRestApi().postPlayersForTournament({
-      tournamentId: tournamentId,
+      tournamentId: props.tournamentId,
       playerId: playerId,
     });
     await reloadRegisteredPlayers();

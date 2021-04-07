@@ -17,7 +17,8 @@ import { HomeMenu } from "../HomeMenu/HomeMenu";
 import { TournamentRegistrations } from "../TournamentRegistrations";
 import Footer from "../../organisms/Footer/Footer";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import Header from '../../organisms/Header/Header';
+import Header from "../../organisms/Header/Header";
+import { TournamentSettingsRoute } from "../Routes/TournamentRegistrationsRoutes";
 
 const theme = createMuiTheme({
   palette: {
@@ -52,7 +53,7 @@ function TourDeFoos() {
               path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/:tournamentId`}
             >
               <Centered>
-                <TournamentRegistrations />
+                <TournamentSettingsRoute />
               </Centered>
             </Route>
             <Route path={PATH_FOR_PLAYERS_PROFILES_VIEW} exact>
