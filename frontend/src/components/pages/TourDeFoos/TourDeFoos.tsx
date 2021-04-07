@@ -10,8 +10,8 @@ import {
 import {HomeMenu} from "../HomeMenu/HomeMenu";
 import {TournamentRegistrations} from "../TournamentRegistrations";
 import Footer from "../../molecules/Footer/Footer";
-import {THEME_MUI} from "../../atoms/constants/ThemeMUI";
 import {MatchesList} from "../../organisms/MatchesList";
+import {THEME} from "../../atoms/constants/ThemeMUI";
 
 function TourDeFoos() {
     return (
@@ -21,7 +21,7 @@ function TourDeFoos() {
                 <MatchesList/>
             </Centered>
 
-            <MuiThemeProvider theme={THEME_MUI}>
+            <MuiThemeProvider theme={THEME}>
                 <Centered>
                     <Switch>
                         <Route path={PATH_FOR_LOGIN_VIEW} exact>

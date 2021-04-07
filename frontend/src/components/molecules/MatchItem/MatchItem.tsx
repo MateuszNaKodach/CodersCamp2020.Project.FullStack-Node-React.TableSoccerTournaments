@@ -8,7 +8,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {THEME_MUI} from "../../atoms/constants/ThemeMUI";
+import {THEME} from "../../atoms/constants/ThemeMUI";
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import MatchWinnerDeterminationDialog from "../MatchWinnerDeterminationDialog/MatchWinnerDeterminationDialog";
 
@@ -48,7 +48,7 @@ const TeamHoverButton = styled("div")({
     "justify-content": "center",
     "align-items": "center",
     fontSize: "65px",
-    backgroundColor: THEME_MUI.palette.success.light,
+    backgroundColor: THEME.palette.success.light,
     opacity: 0,
     cursor: "pointer",
     transition: "opacity 1s",
@@ -65,13 +65,13 @@ const MatchTeamWrapper = styled(Card)({
 const StyledAccordionDetails = styled(AccordionDetails)({
     display: "flex",
     flexDirection: "column",
-    backgroundColor: THEME_MUI.palette.background.default,
+    backgroundColor: THEME.palette.background.default,
 });
 
 const StyledAvatar = withStyles({
     root: {
-        color: THEME_MUI.palette.getContrastText(THEME_MUI.palette.secondary.main),
-        backgroundColor: THEME_MUI.palette.secondary.main,
+        color: THEME.palette.getContrastText(THEME.palette.secondary.main),
+        backgroundColor: THEME.palette.secondary.main,
     },
 })(Avatar);
 
