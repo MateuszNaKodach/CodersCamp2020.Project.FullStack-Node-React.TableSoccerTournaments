@@ -1,5 +1,4 @@
-import {Button, createMuiTheme, MuiThemeProvider} from "@material-ui/core";
-import {grey} from "@material-ui/core/colors";
+import {Button, MuiThemeProvider} from "@material-ui/core";
 import {Centered} from "../../atoms/Shared/Centered";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {
@@ -11,22 +10,18 @@ import {
 import {HomeMenu} from "../HomeMenu/HomeMenu";
 import {TournamentRegistrations} from "../TournamentRegistrations";
 import Footer from "../../molecules/Footer/Footer";
-// import MatchItem from "../../molecules/MatchItem/MatchItem";
-import {MatchTeam} from "../../molecules/MatchTeam/MatchTeam";
-import MatchItem from "../../molecules/MatchItem/MatchItem";
 import {THEME_MUI} from "../../atoms/constants/ThemeMUI";
+import {MatchesList} from "../../organisms/MatchesList";
 
 function TourDeFoos() {
     return (
 
         <Router>
             <Centered>
-            <MatchItem/>
-            {/*<MatchTeam/>*/}
-            {/*<MatchTeam/>*/}
+                <MatchesList/>
             </Centered>
 
-                <MuiThemeProvider theme={THEME_MUI}>
+            <MuiThemeProvider theme={THEME_MUI}>
                 <Centered>
                     <Switch>
                         <Route path={PATH_FOR_LOGIN_VIEW} exact>
@@ -54,7 +49,7 @@ function TourDeFoos() {
                             <HomeMenu/>
                         </Route>
                     </Switch>
-                    <Footer />
+                    <Footer/>
                 </Centered>
             </MuiThemeProvider>
         </Router>

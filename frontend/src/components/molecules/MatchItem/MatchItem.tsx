@@ -1,58 +1,18 @@
 import React from 'react';
 import styled from "styled-components";
-import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import {Avatar, withStyles} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import FolderIcon from '@material-ui/icons/Folder';
-import DeleteIcon from '@material-ui/icons/Delete';
-import {Divider, List, Typography, useTheme} from "@material-ui/core";
-// import {makeStyles} from "@material-ui/core/styles";
+import {Avatar, Card, Typography, withStyles} from '@material-ui/core';
 import {MatchTeam} from "../MatchTeam/MatchTeam";
-import {MDCRipple} from '@material/ripple';
-// import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
-// import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
-import {Card} from '@material-ui/core';
-import {deepOrange, deepPurple,green, lightGreen ,yellow,grey} from "@material-ui/core/colors";
 import {THEME_MUI} from "../../atoms/constants/ThemeMUI";
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
-import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 
-const exampleDataBase = {
-    onClickTeam: () => {
-    },
-    matchNumber: 0,
-    level: 1,
-    matchStatus: "aktywny",
-    team1: {
-        player1: "Lord Json",
-        player2: "Waszmość Brzuszek",
-        teamNumber: "xyz",
-        currentPlayerLevel: 0,
-        currentMatchNumber: 0,
-    },
-    team2: {
-        player1: "Lord Json",
-        player2: "Waszmość Brzuszek",
-        teamNumber: "xyz",
-        currentPlayerLevel: 0,
-        currentMatchNumber: 0,
-    }
-};
-
 export type MatchItemProps = {
-    onClickTeam: () => {},
+    onClickTeam: ()=>void,
     matchNumber: number | undefined,
     level: number | undefined,
     matchStatus: string | undefined
@@ -102,7 +62,6 @@ const StyledAccordionDetails = styled(AccordionDetails)({
     display: "flex",
     flexDirection: "column",
     backgroundColor: THEME_MUI.palette.background.default,
-    // marginBottom: "30px",
 });
 
 const StyledAvatar = withStyles({
@@ -117,6 +76,8 @@ const MatchItemWrapper = withStyles({
         width: "100%"
     }
 })(Card);
+
+
 
 export const MatchItem = (props: MatchItemProps) => {
     const [expanded, setExpanded] = React.useState<string | boolean>(false);
@@ -139,8 +100,7 @@ export const MatchItem = (props: MatchItemProps) => {
                         </ListItemAvatar>
 
                         <ListItemText
-                            primary={`Mecz ${exampleDataBase.matchStatus ? ` - ${exampleDataBase.matchStatus}` : '-'}`}
-                            // primary={`Mecz - ${props.matchStatus}`}
+                            primary={`Mecz ${props.matchStatus ? ` - ${props.matchStatus}` : '-'}`}
                             secondary={
                                 <React.Fragment>
                                     <Typography
@@ -151,7 +111,7 @@ export const MatchItem = (props: MatchItemProps) => {
                                     >
                                         {`Numer meczu: `}
                                     </Typography>
-                                    {(exampleDataBase.matchNumber || exampleDataBase.matchNumber === 0)  ? exampleDataBase.matchNumber : "-"}
+                                    {(props.matchNumber || props.matchNumber === 0)  ? props.matchNumber : "-"}
                                     {/*{props.mechNumber}*/}
                                     <br/>
                                     <Typography
@@ -162,7 +122,7 @@ export const MatchItem = (props: MatchItemProps) => {
                                     >
                                         {`Poziom: `}
                                     </Typography>
-                                    {(exampleDataBase.level || exampleDataBase.level === 0  ) ? exampleDataBase.level : "-"}
+                                    {(props.level || props.level === 0  ) ? props.level : "-"}
                                     {/*{props.level}*/}
                                 </React.Fragment>
                             }
@@ -171,46 +131,32 @@ export const MatchItem = (props: MatchItemProps) => {
                     <StyledAccordionDetails>
 
                         <MatchTeamWrapper>
-                            <TeamHover onClick={() => exampleDataBase.onClickTeam()}>
+                            <TeamHover onClick={() => props.onClickTeam()}>
                                 <AddCircleTwoToneIcon fontSize="inherit" />
                             </TeamHover>
-                            {/*<MatchTeam*/}
-                            {/*currentMatchNumber={props.team1.currentMatchNumber}*/}
-                            {/*teamNumber={props.team1.teamNumber}*/}
-                            {/*currentPlayerLevel={props.team1.currentPlayerLevel}*/}
-                            {/*player1={props.team1.player1}*/}
-                            {/*player2={props.team1.player2}*/}
-                            {/*/>*/}
 
                             <MatchTeam
-                                currentMatchNumber={exampleDataBase.team1.currentMatchNumber}
-                                teamNumber={exampleDataBase.team1.teamNumber}
-                                currentPlayerLevel={exampleDataBase.team1.currentPlayerLevel}
-                                player1={exampleDataBase.team1.player1}
-                                player2={exampleDataBase.team1.player2}
+                                currentMatchNumber={props.team1.currentMatchNumber}
+                                teamNumber={props.team1.teamNumber}
+                                currentPlayerLevel={props.team1.currentPlayerLevel}
+                                player1={props.team1.player1}
+                                player2={props.team1.player2}
                             />
 
                         </MatchTeamWrapper>
 
                         <MatchTeamWrapper>
 
-                            <TeamHover onClick={() => exampleDataBase.onClickTeam()}>
+                            <TeamHover onClick={() => props.onClickTeam()}>
                                 <AddCircleTwoToneIcon fontSize="inherit" />
                             </TeamHover>
-                            {/*<MatchTeam*/}
-                            {/*    currentMatchNumber={props.team2.currentMatchNumber}*/}
-                            {/*    teamNumber={props.team2.teamNumber}*/}
-                            {/*    currentPlayerLevel={props.team2.currentPlayerLevel}*/}
-                            {/*    player1={props.team2.player1}*/}
-                            {/*    player2={props.team2.player2}*/}
-                            {/*/>*/}
 
                             <MatchTeam
-                                currentMatchNumber={exampleDataBase.team1.currentMatchNumber}
-                                teamNumber={exampleDataBase.team1.teamNumber}
-                                currentPlayerLevel={exampleDataBase.team1.currentPlayerLevel}
-                                player1={exampleDataBase.team1.player1}
-                                player2={exampleDataBase.team1.player2}
+                                currentMatchNumber={props.team2.currentMatchNumber}
+                                teamNumber={props.team2.teamNumber}
+                                currentPlayerLevel={props.team2.currentPlayerLevel}
+                                player1={props.team2.player1}
+                                player2={props.team2.player2}
                             />
                         </MatchTeamWrapper>
 
@@ -220,10 +166,3 @@ export const MatchItem = (props: MatchItemProps) => {
         </>
     )
 };
-
-// export default styled(({...otherProps}) => (
-//     <MatchItem {...otherProps}   />
-// ))`
-//      margin: "200px",
-//      background: "b",
-// `;
