@@ -32,6 +32,7 @@ import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { useRouteMatch } from "react-router-dom";
 import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm";
+import Notification from "../../organisms/Notification/Notification";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
@@ -39,10 +40,12 @@ export type TournamentRegistrationsProps = {
 
 export const TournamentRegistrations = () => {
   const searchInput = useRef<HTMLInputElement>(null);
-  const [initPlayers, setInitPlayers] = useState<
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const [availablePlayers, setAvailablePlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
-  const [players, setPlayers] = useState<PlayerProfileDto[]>([]);
+  const [filteredPlayers, setFilteredPlayers] = useState<PlayerProfileDto[]>([]);
   const [registeredPlayers, setRegisteredPlayers] = useState<
     { playerId: string }[]
   >([]); //TODO: Fetch already registered players
@@ -51,8 +54,8 @@ export const TournamentRegistrations = () => {
     UserProfileRestApi()
       .getPlayersProfiles()
       .then((playerProfilesList) => {
-        setInitPlayers(playerProfilesList.items);
-        setPlayers(playerProfilesList.items);
+        setAvailablePlayers(playerProfilesList.items);
+        setFilteredPlayers(playerProfilesList.items);
       });
   }, []);
 
@@ -67,10 +70,10 @@ export const TournamentRegistrations = () => {
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {
-      setPlayers(initPlayers ?? []);
+      setFilteredPlayers(availablePlayers ?? []);
     } else {
-      setPlayers(
-        players.filter((player) =>
+      setFilteredPlayers(
+          (availablePlayers ?? []).filter((player) =>
           `${player.firstName} ${player.lastName} ${player.emailAddress}`.includes(
             searchInput.trim()
           )
@@ -83,17 +86,29 @@ export const TournamentRegistrations = () => {
     UserProfileRestApi()
       .getPlayersProfiles()
       .then((playerProfilesList) => {
-        setInitPlayers(playerProfilesList.items);
-        setPlayers(playerProfilesList.items);
+        setAvailablePlayers(playerProfilesList.items);
+        setFilteredPlayers(playerProfilesList.items);
       });
 
     if (searchInput && searchInput.current) {
       searchInput.current.value = "";
     }
+
+    setOpenAlert(true);
+  };
+
+  const onNotificationClose = (
+    event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
   };
 
   //TODO: Add REST API error handling
-  const isLoading = initPlayers === undefined;
+  const isLoading = availablePlayers === undefined;
   return (
     <RegistrationsCard>
       <CardContent>
@@ -117,9 +132,15 @@ export const TournamentRegistrations = () => {
                 />
               </FormControl>
               <VerticalSpace height="1rem" />
-              <PlayersList players={players} clearSearchInput={resetInput} />
+              <PlayersList players={filteredPlayers} clearSearchInput={resetInput} />
             </>
           )}
+
+          <Notification
+            text="Player profile was created"
+            open={openAlert}
+            handleClose={onNotificationClose}
+          />
         </Centered>
       </CardContent>
     </RegistrationsCard>
