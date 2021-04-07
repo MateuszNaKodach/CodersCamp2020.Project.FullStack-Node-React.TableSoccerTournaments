@@ -118,9 +118,7 @@ const MatchItemWrapper = withStyles({
     }
 })(Card);
 
-
-
-const MatchItem = (props: MatchItemProps) => {
+export const MatchItem = (props: MatchItemProps) => {
     const [expanded, setExpanded] = React.useState<string | boolean>(false);
 
     const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
@@ -219,16 +217,13 @@ const MatchItem = (props: MatchItemProps) => {
                     </StyledAccordionDetails>
                 </Accordion>
             </MatchItemWrapper>
-
-
         </>
     )
 };
 
-
-export default styled(({...otherProps}) => (
-    <MatchItem {...otherProps}   />
-))`
-     marginBottom: "20px",
-     backGround: "black",
-`;
+// export default styled(({...otherProps}) => (
+//     <MatchItem {...otherProps}   />
+// ))`
+//      margin: "200px",
+//      background: "b",
+// `;
