@@ -72,7 +72,7 @@ export default function MatchWinnerDeterminationDialog(props: MatchWinnerDetermi
                     <Button onClick={handleClose} color="primary">
                         Odrzuć
                     </Button>
-                    <Button onClick={handleAgreeAndClose} color="secondary">
+                    <Button onClick={handleAgreeAndClose} color="primary">
                         Zaakceptuj
                     </Button>
                 </DialogActions>
