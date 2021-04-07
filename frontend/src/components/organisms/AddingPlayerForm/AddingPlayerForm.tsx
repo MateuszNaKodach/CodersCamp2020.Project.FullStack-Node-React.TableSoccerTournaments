@@ -20,7 +20,7 @@ const validationSchema = yup.object({
 });
 
 function AddingPlayerForm(props: {
-  onPlayerAdded: (playerId: string) => void;
+  onPlayerAdded: (playerId: string, name: string, surname: string) => void;
 }) {
   const formik = useFormik({
     initialValues: {
@@ -40,7 +40,7 @@ function AddingPlayerForm(props: {
           phoneNumber: values.phone,
           emailAddress: values.email,
         });
-        props.onPlayerAdded(playerId);
+        props.onPlayerAdded(playerId, values.name, values.surname);
       } catch (error) {
         alert(error.response.data.message);
       }

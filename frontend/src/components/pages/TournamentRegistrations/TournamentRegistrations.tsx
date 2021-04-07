@@ -43,11 +43,14 @@ export type TournamentRegistrationsProps = {
 export const TournamentRegistrations = () => {
   const searchInput = useRef<HTMLInputElement>(null);
   const [openAlert, setOpenAlert] = useState(false);
+  const [textAlert, setTextAlert] = useState("");
 
   const [availablePlayers, setAvailablePlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
-  const [filteredPlayers, setFilteredPlayers] = useState<PlayerProfileDto[]>([]);
+  const [filteredPlayers, setFilteredPlayers] = useState<PlayerProfileDto[]>(
+    []
+  );
   const [registeredPlayersIds, setRegisteredPlayersIds] = useState<string[]>(
     []
   );
@@ -60,6 +63,29 @@ export const TournamentRegistrations = () => {
         setFilteredPlayers(playerProfilesList.items);
       });
   }, []);
+
+  //TODO insted of matchParams create new file and add tournament registrations like below
+  // export interface RepositorySettingsRouteParams {
+  //   readonly owner: string;
+  //   readonly repository: string;
+  // }
+  //
+  // export const RepositorySettingsRoute = () => {
+  //   const match = useRouteMatch<RepositorySettingsRouteParams>("/:owner/:repository/settings");
+  //   const owner = match?.params.owner;
+  //   const repository = match?.params.repository;
+  //   if (!owner || !repository) {
+  //     return null;
+  //   }
+  //   return <RepositorySettings owner={owner} repository={repository} />
+  // }
+  //
+  // export type RepositorySettingsProps = {
+  //   readonly owner: string;
+  //   readonly repository: string;
+  // }
+  //
+  // export const RepositorySettings = (props: RepositorySettingsProps) => (
 
   interface MatchParams {
     tournamentId: string;
@@ -86,7 +112,7 @@ export const TournamentRegistrations = () => {
       setFilteredPlayers(availablePlayers ?? []);
     } else {
       setFilteredPlayers(
-          (availablePlayers ?? []).filter((player) =>
+        (availablePlayers ?? []).filter((player) =>
           `${player.firstName} ${player.lastName} ${player.emailAddress}`.includes(
             searchInput.trim()
           )
@@ -106,8 +132,6 @@ export const TournamentRegistrations = () => {
     if (searchInput && searchInput.current) {
       searchInput.current.value = "";
     }
-
-    setOpenAlert(true);
   };
 
   const onNotificationClose = (
@@ -120,12 +144,22 @@ export const TournamentRegistrations = () => {
     setOpenAlert(false);
   };
 
-  const registerPlayer = async (playerId: string) => {
+  const registerPlayer = async (
+    playerId: string,
+    name: string = "",
+    surname: string = ""
+  ) => {
     await TournamentRegistrationsRestApi().postPlayersForTournament({
       tournamentId: tournamentId,
       playerId: playerId,
     });
     await reloadRegisteredPlayers();
+    name && surname
+      ? setTextAlert(
+          `Pomyślnie utworzono konto ${name} ${surname} oraz zapisano na turniej`
+        )
+      : setTextAlert("Pomyślnie zapisano zawodniczkę / zawodnika na turniej");
+    setOpenAlert(true);
   };
 
   //TODO: Add REST API error handling
@@ -163,7 +197,7 @@ export const TournamentRegistrations = () => {
           )}
 
           <Notification
-            text="Player profile was created"
+            text={textAlert}
             open={openAlert}
             handleClose={onNotificationClose}
           />
@@ -182,11 +216,15 @@ const PlayersList = (props: {
   players: PlayerProfileDto[];
   registeredPlayersIds: string[];
   clearSearchInput: () => void;
-  registerPlayer: (playerId: string) => void;
+  registerPlayer: (playerId: string, name?: string, surname?: string) => void;
 }) => {
-  const clearSearchInputAndAddPlayer = (playerId: string) => {
+  const clearSearchInputAndAddPlayer = (
+    playerId: string,
+    name: string,
+    surname: string
+  ) => {
     props.clearSearchInput();
-    props.registerPlayer(playerId);
+    props.registerPlayer(playerId, name, surname);
   };
 
   if (props.players.length === 0) {
@@ -217,7 +255,11 @@ const PlayersList = (props: {
   );
 };
 const PlayerNotFound = (props: {
-  clearInputAndAddPlayer: (playerId: string) => void;
+  clearInputAndAddPlayer: (
+    playerId: string,
+    name: string,
+    surname: string
+  ) => void;
 }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
@@ -225,9 +267,9 @@ const PlayerNotFound = (props: {
     setDrawerOpened(open);
   };
 
-  const playerAdded = (playerId: string) => {
+  const playerAdded = (playerId: string, name: string, surname: string) => {
     setDrawerOpened(false);
-    props.clearInputAndAddPlayer(playerId);
+    props.clearInputAndAddPlayer(playerId, name, surname);
   };
 
   return (
