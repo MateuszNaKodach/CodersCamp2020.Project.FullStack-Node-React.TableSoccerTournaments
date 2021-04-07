@@ -3,6 +3,7 @@ services:
   coderscamp_table_soccer_frontend:
     build:
       context: .
+      dockerfile: dev.Dockerfile
     ports:
       - 3000:3000
     volumes:
