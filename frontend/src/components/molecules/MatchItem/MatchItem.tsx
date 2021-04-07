@@ -10,9 +10,10 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {THEME_MUI} from "../../atoms/constants/ThemeMUI";
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
+import MatchWinnerDeterminationDialog from "../MatchWinnerDeterminationDialog/MatchWinnerDeterminationDialog";
 
 export type MatchItemProps = {
-    onClickTeam: ()=>void,
+    onClickTeam: () => void,
     matchNumber: number | undefined,
     level: number | undefined,
     matchStatus: string | undefined
@@ -35,8 +36,8 @@ export type MatchItemProps = {
     handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void,
 };
 
-const TeamHover = styled("div")({
-    "zIndex" : 1,
+const TeamHoverButton = styled("div")({
+    "zIndex": 1,
     boxSizing: "border-box",
     display: 'inline-flex',
     position: "absolute",
@@ -44,8 +45,8 @@ const TeamHover = styled("div")({
     height: "100%",
     margin: 0,
     padding: 0,
-    "justify-content": "center" ,
-    "align-items": "center" ,
+    "justify-content": "center",
+    "align-items": "center",
     fontSize: "65px",
     backgroundColor: THEME_MUI.palette.success.light,
     opacity: 0,
@@ -84,8 +85,9 @@ export const MatchItem = (props: MatchItemProps,) => {
 
     return (
         <>
-            <MatchItemWrapper elevation={3} >
-                <Accordion expanded={props.expanded === `panel${props.matchNumber}`} onChange={props.handleChangeExpander(`panel${props.matchNumber}`)}>
+            <MatchItemWrapper elevation={3}>
+                <Accordion expanded={props.expanded === `panel${props.matchNumber}`}
+                           onChange={props.handleChangeExpander(`panel${props.matchNumber}`)}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon/>}
                         aria-controls="panel1bh-content"
@@ -107,7 +109,7 @@ export const MatchItem = (props: MatchItemProps,) => {
                                     >
                                         {`Numer meczu: `}
                                     </Typography>
-                                    {(props.matchNumber || props.matchNumber === 0)  ? props.matchNumber + 1 : "-"}
+                                    {(props.matchNumber || props.matchNumber === 0) ? props.matchNumber : "-"}
                                     {/*{props.mechNumber}*/}
                                     <br/>
                                     <Typography
@@ -118,7 +120,7 @@ export const MatchItem = (props: MatchItemProps,) => {
                                     >
                                         {`Poziom: `}
                                     </Typography>
-                                    {(props.level || props.level === 0  ) ? props.level : "-"}
+                                    {(props.level || props.level === 0) ? props.level : "-"}
                                     {/*{props.level}*/}
                                 </React.Fragment>
                             }
@@ -127,9 +129,15 @@ export const MatchItem = (props: MatchItemProps,) => {
                     <StyledAccordionDetails>
 
                         <MatchTeamWrapper>
-                            <TeamHover onClick={() => props.onClickTeam()}>
-                                <AddCircleTwoToneIcon fontSize="inherit" />
-                            </TeamHover>
+                            <TeamHoverButton>
+                                <AddCircleTwoToneIcon fontSize="inherit"/>
+                                <MatchWinnerDeterminationDialog
+                                    agreeCallback={() => agreeDialogCallback(props.team1.teamNumber)}
+                                    isOpen={false}
+                                    teamName={props.team1.teamNumber}
+                                />
+                            </TeamHoverButton>
+
 
                             <MatchTeam
                                 currentMatchNumber={props.team1.currentMatchNumber}
@@ -143,9 +151,14 @@ export const MatchItem = (props: MatchItemProps,) => {
 
                         <MatchTeamWrapper>
 
-                            <TeamHover onClick={() => props.onClickTeam()}>
-                                <AddCircleTwoToneIcon fontSize="inherit" />
-                            </TeamHover>
+                            <TeamHoverButton>
+                                <AddCircleTwoToneIcon fontSize="inherit"/>
+                                <MatchWinnerDeterminationDialog
+                                    agreeCallback={() => agreeDialogCallback(props.team2.teamNumber)}
+                                    isOpen={false}
+                                    teamName={props.team2.teamNumber}
+                                />
+                            </TeamHoverButton>
 
                             <MatchTeam
                                 currentMatchNumber={props.team2.currentMatchNumber}
@@ -162,3 +175,7 @@ export const MatchItem = (props: MatchItemProps,) => {
         </>
     )
 };
+
+const agreeDialogCallback = (teamName: string | number | undefined): void => {
+console.log(teamName);
+}

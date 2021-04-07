@@ -70,7 +70,7 @@ export type MatchListProps = {
     }
 };
 const StyledMatchesList = styled(Card)({
-    minWidth: MIN_CARD_COMPONENT_WIDTH,
+    width: MIN_CARD_COMPONENT_WIDTH,
 });
 
 export const MatchesList = () => {
