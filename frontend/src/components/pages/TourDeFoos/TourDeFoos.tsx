@@ -14,15 +14,7 @@ import Footer from "../../molecules/Footer/Footer";
 // import MatchItem from "../../molecules/MatchItem/MatchItem";
 import {MatchTeam} from "../../molecules/MatchTeam/MatchTeam";
 import MatchItem from "../../molecules/MatchItem/MatchItem";
-
-const theme = createMuiTheme({
-    palette: {
-        primary: {
-            main: grey[800],
-            contrastText: "#E3E152",
-        },
-    },
-});
+import {THEME_MUI} from "../../atoms/constants/ThemeMUI";
 
 function TourDeFoos() {
     return (
@@ -34,7 +26,7 @@ function TourDeFoos() {
             {/*<MatchTeam/>*/}
             </Centered>
 
-                <MuiThemeProvider theme={theme}>
+                <MuiThemeProvider theme={THEME_MUI}>
                 <Centered>
                     <Switch>
                         <Route path={PATH_FOR_LOGIN_VIEW} exact>

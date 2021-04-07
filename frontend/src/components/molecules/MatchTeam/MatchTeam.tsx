@@ -25,8 +25,6 @@ const useStyles = makeStyles((theme) => ({
         display: "inline-flex",
         width: '100%',
         paddingLeft: "30px",
-        marginTop: "3px",
-        marginBottom: "3px",
     },
 
     avatar: {
