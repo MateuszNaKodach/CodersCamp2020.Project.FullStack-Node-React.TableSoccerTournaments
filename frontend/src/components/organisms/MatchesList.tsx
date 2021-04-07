@@ -29,7 +29,7 @@ const exampleDataBase: MatchListProps[] = [
         onClickTeam: () => {
             console.log("AaaBbbCcc")
         },
-        matchNumber: 0,
+        matchNumber: 1,
         level: 1,
         matchStatus: "aktywny",
         team1: {
@@ -75,23 +75,31 @@ const StyledMatchesList = styled(Card)({
 
 export const MatchesList = () => {
 
+    const [expanded, setExpanded] = React.useState<string | boolean>(false);
+    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
+        setExpanded(isExpanded ? panel : false);
+    };
+
     return (
         <>
             <StyledMatchesList>
-                {exampleDataBase.map(generateMatchItem)}
+                {exampleDataBase.map((item, index) => generateMatchItem(item, index, expanded, handleChangeExpander))}
             </StyledMatchesList>
         </>
     )
 };
 
-const generateMatchItem = (matchItem: MatchListProps, index: number) => (<MatchItem
+const generateMatchItem = (matchItem: MatchListProps, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
+    <MatchItem
         level={matchItem.level}
         matchNumber={matchItem.matchNumber}
         matchStatus={matchItem.matchStatus}
         onClickTeam={matchItem.onClickTeam}
         team1={matchItem.team1}
         team2={matchItem.team2}
-        key={index}
+        key={matchItem.matchNumber}
+        expanded={expanded}
+        handleChangeExpander={handleChangeExpander}
     />
 )
 

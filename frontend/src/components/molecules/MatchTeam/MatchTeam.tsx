@@ -54,7 +54,6 @@ export const MatchTeam = (props: MatchTeamProps) => {
         : noNumber;
     const teamNameText = "Team " + teamNumber;
     const playersNameText = <span> {player1} <br/> & {player2} </span>
-    // = `${player1} & ${player2}`;
 
     return (
         <>

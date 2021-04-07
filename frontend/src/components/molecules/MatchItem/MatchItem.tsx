@@ -29,7 +29,10 @@ export type MatchItemProps = {
         readonly teamNumber: string | undefined;
         readonly currentPlayerLevel: number | undefined;
         readonly currentMatchNumber: number | undefined;
-    }
+    },
+
+    expanded: string | boolean,
+    handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void,
 };
 
 const TeamHover = styled("div")({
@@ -77,19 +80,12 @@ const MatchItemWrapper = withStyles({
     }
 })(Card);
 
-
-
-export const MatchItem = (props: MatchItemProps) => {
-    const [expanded, setExpanded] = React.useState<string | boolean>(false);
-
-    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
-        setExpanded(isExpanded ? panel : false);
-    };
+export const MatchItem = (props: MatchItemProps,) => {
 
     return (
         <>
             <MatchItemWrapper elevation={3} >
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChangeExpander('panel1')}>
+                <Accordion expanded={props.expanded === `panel${props.matchNumber}`} onChange={props.handleChangeExpander(`panel${props.matchNumber}`)}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon/>}
                         aria-controls="panel1bh-content"
@@ -111,7 +107,7 @@ export const MatchItem = (props: MatchItemProps) => {
                                     >
                                         {`Numer meczu: `}
                                     </Typography>
-                                    {(props.matchNumber || props.matchNumber === 0)  ? props.matchNumber : "-"}
+                                    {(props.matchNumber || props.matchNumber === 0)  ? props.matchNumber + 1 : "-"}
                                     {/*{props.mechNumber}*/}
                                     <br/>
                                     <Typography
