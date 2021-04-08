@@ -4,11 +4,14 @@ import {
   screen,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
-import { rest } from "msw";
-import { server } from "../../../mocks/msw/server";
 import { PlayerProfileDto } from "../../../restapi/players-profiles";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter as Router } from "react-router-dom";
+import {
+  getPlayersProfilesIsLoading,
+  getPlayersProfilesWillReturn,
+} from "../../../restapi/players-profiles/PlayersProfilesRestApiMockEndpoints";
+import { getRegisteredPlayersIdsWillReturn } from "../../../restapi/tournament-registrations/TournamentRegistrationsRestApiMockEndpoints";
 
 describe("Tournament Registrations", () => {
   const tournamentId = "tournamentId";
@@ -136,46 +139,3 @@ describe("Tournament Registrations", () => {
     expect(registerNewPlayerForTournamentButton).toBeInTheDocument();
   });
 });
-
-function getPlayersProfilesWillReturn(playersProfiles: PlayerProfileDto[]) {
-  server.use(
-    rest.get("*/rest-api/players-profiles", (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          items: playersProfiles,
-        })
-      );
-    })
-  );
-}
-
-function getPlayersProfilesIsLoading() {
-  server.use(
-    rest.get("*/rest-api/players-profiles", (req, res, ctx) => {
-      return res(ctx.delay("infinite"));
-    })
-  );
-}
-
-function getRegisteredPlayersIdsWillReturn(
-  tournamentId: string,
-  status: string,
-  registeredPlayersIds: string[]
-) {
-  server.use(
-    rest.get(
-      `*/rest-api/tournament-registrations/${tournamentId}`,
-      (req, res, ctx) => {
-        return res(
-          ctx.status(200),
-          ctx.json({
-            tournamentId: tournamentId,
-            status: status,
-            registeredPlayersIds: registeredPlayersIds,
-          })
-        );
-      }
-    )
-  );
-}

@@ -65,9 +65,7 @@ export const TournamentRegistrations = (
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      await reloadRegisteredPlayers().then();
-    }
+    reloadRegisteredPlayers().then();
   }, [props.tournamentId]);
 
   function reloadRegisteredPlayers() {
@@ -286,11 +284,16 @@ const PlayersListItem = (props: {
       />
       <ListItemSecondaryAction>
         {props.isRegistered ? (
-          <CheckCircleIcon color="action" aria-label="registered-player" />
+          <CheckCircleIcon
+            color="action"
+            aria-label="registered-player"
+            data-testid="registered-player"
+          />
         ) : (
           <IconButton
             edge="end"
             aria-label="register-player"
+            data-testid="register-player"
             onClick={() => registerPlayer(props.player.playerId)}
           >
             <AddCircleOutline />
