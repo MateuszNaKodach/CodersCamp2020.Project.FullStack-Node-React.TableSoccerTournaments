@@ -65,7 +65,9 @@ export const TournamentRegistrations = (
   }, []);
 
   useEffect(() => {
-    reloadRegisteredPlayers().then();
+    async function fetchData() {
+      await reloadRegisteredPlayers().then();
+    }
   }, [props.tournamentId]);
 
   function reloadRegisteredPlayers() {
