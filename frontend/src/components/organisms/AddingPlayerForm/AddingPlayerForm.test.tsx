@@ -19,6 +19,7 @@ describe("Adding player form", () => {
     getPlayersProfilesWillReturn(playersProfiles);
     postPlayerProfilesWillAlwaysSuccess();
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
+    postPlayerForTournamentWillAlwaysSuccess(tournamentId);
 
     render(
       <Router>
@@ -64,6 +65,7 @@ describe("Adding player form", () => {
     getPlayersProfilesWillReturn(playersProfiles);
     postPlayerProfilesWillAlwaysSuccess();
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
+    postPlayerForTournamentWillAlwaysSuccess(tournamentId);
 
     render(
       <Router>
@@ -133,6 +135,17 @@ function postPlayerProfilesWillAlwaysSuccess() {
     rest.post("*/rest-api/players-profiles", (req, res, ctx) => {
       return res(ctx.status(200));
     })
+  );
+}
+
+function postPlayerForTournamentWillAlwaysSuccess(tournamentId: string) {
+  server.use(
+    rest.post(
+      `*/rest-api/tournament-registrations/${tournamentId}/players`,
+      (req, res, ctx) => {
+        return res(ctx.status(200));
+      }
+    )
   );
 }
 
