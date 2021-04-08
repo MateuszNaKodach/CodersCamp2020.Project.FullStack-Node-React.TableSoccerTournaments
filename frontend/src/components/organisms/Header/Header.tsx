@@ -10,7 +10,7 @@ const Header = ({ text = 'Wrocławski Klub Piłki Stołowej' }) => {
     <AppBar position='static'>
       <Toolbar className={classes.header} data-testid='header'>
         <Box flexGrow={1}>
-          <img src='./logo.png' alt='logo' className={classes.logo} />
+          <img src='/logo.png' alt='logo' className={classes.logo} />
         </Box>
         <Box flexGrow={2}>
           <Centered>

@@ -5,6 +5,7 @@ import CardTitle from "../../molecules/CardTitle/CardTitle";
 import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
 import {Centered} from "../../atoms/Shared/Centered";
 import {Link} from "react-router-dom";
+import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 
 type MenuButtonsProps = {
     readonly textName: string;
@@ -31,7 +32,7 @@ export const Menu = (props: MenuComponentProps) => (
 const StartMenuCard = styled(Card)({
     display: "block",
     boxSizing: "border-box",
-    minWidth: "300px",
+    minWidth: MIN_CARD_COMPONENT_WIDTH,
     paddingTop: "40px",
     paddingBottom: "40px",
 });
