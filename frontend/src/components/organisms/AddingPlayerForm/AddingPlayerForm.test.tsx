@@ -12,15 +12,17 @@ import { rest } from "msw";
 import userEvent from "@testing-library/user-event";
 
 describe("Adding player form", () => {
+  const tournamentId = "tournamentId";
   it("after clicking button form should be shown and display title, inputs and button", async () => {
     //Given
     const playersProfiles: PlayerProfileDto[] = [];
     getPlayersProfilesWillReturn(playersProfiles);
     postPlayerProfilesWillAlwaysSuccess();
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     render(
       <Router>
-        <TournamentRegistrations />
+        <TournamentRegistrations tournamentId={tournamentId} />
       </Router>
     );
     await waitForElementToBeRemoved(() =>
@@ -61,10 +63,11 @@ describe("Adding player form", () => {
     const playersProfiles: PlayerProfileDto[] = [];
     getPlayersProfilesWillReturn(playersProfiles);
     postPlayerProfilesWillAlwaysSuccess();
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     render(
       <Router>
-        <TournamentRegistrations />
+        <TournamentRegistrations tournamentId={tournamentId} />
       </Router>
     );
     await waitForElementToBeRemoved(() =>
@@ -79,13 +82,15 @@ describe("Adding player form", () => {
     );
     userEvent.click(registerNewPlayerForTournamentButton);
 
+    const name = "Test name";
     const nameInput = await screen.findByLabelText("Imię");
     userEvent.clear(nameInput);
-    userEvent.type(nameInput, "Test name");
+    userEvent.type(nameInput, name);
 
+    const surname = "Test surname";
     const surnameInput = await screen.findByLabelText("Nazwisko");
     userEvent.clear(surnameInput);
-    userEvent.type(surnameInput, "Test surname");
+    userEvent.type(surnameInput, surname);
 
     const email = await screen.findByLabelText("Adres e-mail");
     userEvent.clear(email);
@@ -100,7 +105,13 @@ describe("Adding player form", () => {
     userEvent.click(savePlayerButton);
 
     //Then
-    await waitFor( () => expect(screen.getByText("Player profile was created")).toBeInTheDocument());
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          `Pomyślnie utworzono konto ${name} ${surname} oraz zapisano na turniej`
+        )
+      ).toBeInTheDocument()
+    );
   });
 });
 
@@ -119,10 +130,30 @@ function getPlayersProfilesWillReturn(playersProfiles: PlayerProfileDto[]) {
 
 function postPlayerProfilesWillAlwaysSuccess() {
   server.use(
-      rest.post("*/rest-api/players-profiles", (req, res, ctx) => {
+    rest.post("*/rest-api/players-profiles", (req, res, ctx) => {
+      return res(ctx.status(200));
+    })
+  );
+}
+
+function getRegisteredPlayersIdsWillReturn(
+  tournamentId: string,
+  status: string,
+  registeredPlayersIds: string[]
+) {
+  server.use(
+    rest.get(
+      `*/rest-api/tournament-registrations/${tournamentId}`,
+      (req, res, ctx) => {
         return res(
-            ctx.status(200),
+          ctx.status(200),
+          ctx.json({
+            tournamentId: tournamentId,
+            status: status,
+            registeredPlayersIds: registeredPlayersIds,
+          })
         );
-      })
+      }
+    )
   );
 }

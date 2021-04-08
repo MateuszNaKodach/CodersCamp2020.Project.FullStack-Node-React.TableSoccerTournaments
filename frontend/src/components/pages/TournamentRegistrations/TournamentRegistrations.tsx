@@ -45,7 +45,6 @@ export const TournamentRegistrations = (
   const searchInput = useRef<HTMLInputElement>(null);
   const [openAlert, setOpenAlert] = useState(false);
   const [textAlert, setTextAlert] = useState("");
-
   const [availablePlayers, setAvailablePlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
@@ -65,14 +64,6 @@ export const TournamentRegistrations = (
       });
   }, []);
 
-  // interface MatchParams {
-  //   tournamentId: string;
-  // }
-  //
-  // const match = useRouteMatch<MatchParams>(
-  //   "/tournament-registration/:tournamentId"
-  // );
-  // const tournamentId = match?.params.tournamentId as string;
   useEffect(() => {
     reloadRegisteredPlayers().then();
   }, [props.tournamentId]);
