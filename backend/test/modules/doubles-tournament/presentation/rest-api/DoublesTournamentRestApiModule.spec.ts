@@ -107,7 +107,6 @@ describe('Doubles Tournament REST API', () => {
           matchNumber: 2,
           team1Id: 'sampleTeam3',
           team2Id: 'sampleTeam4',
-          tableNumber: undefined,
           started: false,
         },
       ],
