@@ -30,25 +30,30 @@ import {
 } from "../../../restapi/players-profiles";
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import { useRouteMatch } from "react-router-dom";
 import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm";
+import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Notification from "../../organisms/Notification/Notification";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
 };
 
-export const TournamentRegistrations = () => {
+export const TournamentRegistrations = (
+  props: TournamentRegistrationsProps
+) => {
   const searchInput = useRef<HTMLInputElement>(null);
   const [openAlert, setOpenAlert] = useState(false);
-
+  const [textAlert, setTextAlert] = useState("");
   const [availablePlayers, setAvailablePlayers] = useState<
     PlayerProfileDto[] | undefined
   >(undefined);
-  const [filteredPlayers, setFilteredPlayers] = useState<PlayerProfileDto[]>([]);
-  const [registeredPlayers, setRegisteredPlayers] = useState<
-    { playerId: string }[]
-  >([]); //TODO: Fetch already registered players
+  const [filteredPlayers, setFilteredPlayers] = useState<PlayerProfileDto[]>(
+    []
+  );
+  const [registeredPlayersIds, setRegisteredPlayersIds] = useState<string[]>(
+    []
+  );
 
   useEffect(() => {
     UserProfileRestApi()
@@ -59,21 +64,24 @@ export const TournamentRegistrations = () => {
       });
   }, []);
 
-  interface MatchParams {
-    tournamentId: string;
-  }
+  useEffect(() => {
+    reloadRegisteredPlayers().then();
+  }, [props.tournamentId]);
 
-  const match = useRouteMatch<MatchParams>(
-    "/tournament-registration/:tournamentId"
-  );
-  const tournamentId = match?.params.tournamentId;
+  function reloadRegisteredPlayers() {
+    return TournamentRegistrationsRestApi()
+      .getRegisteredPlayersIds(props.tournamentId)
+      .then((tournamentRegistrations) => {
+        setRegisteredPlayersIds(tournamentRegistrations.registeredPlayersIds);
+      });
+  }
 
   function onPlayerSearch(searchInput: string) {
     if (searchInput.trim() === "") {
       setFilteredPlayers(availablePlayers ?? []);
     } else {
       setFilteredPlayers(
-          (availablePlayers ?? []).filter((player) =>
+        (availablePlayers ?? []).filter((player) =>
           `${player.firstName} ${player.lastName} ${player.emailAddress}`.includes(
             searchInput.trim()
           )
@@ -82,7 +90,7 @@ export const TournamentRegistrations = () => {
     }
   }
 
-  const resetInput = () => {
+  const refreshPlayersAndResetInput = () => {
     UserProfileRestApi()
       .getPlayersProfiles()
       .then((playerProfilesList) => {
@@ -90,10 +98,23 @@ export const TournamentRegistrations = () => {
         setFilteredPlayers(playerProfilesList.items);
       });
 
+    TournamentRegistrationsRestApi()
+      .getRegisteredPlayersIds(props.tournamentId)
+      .then((tournamentRegistrations) => {
+        setRegisteredPlayersIds(tournamentRegistrations.registeredPlayersIds);
+      });
+
     if (searchInput && searchInput.current) {
       searchInput.current.value = "";
     }
+  };
 
+  const onNotificationOpen = (name: string = "", surname: string = "") => {
+    name && surname
+      ? setTextAlert(
+          `Pomyślnie utworzono konto ${name} ${surname} oraz zapisano na turniej`
+        )
+      : setTextAlert("Pomyślnie zapisano zawodniczkę / zawodnika na turniej");
     setOpenAlert(true);
   };
 
@@ -105,6 +126,16 @@ export const TournamentRegistrations = () => {
       return;
     }
     setOpenAlert(false);
+  };
+
+  const registerPlayer = async (playerId: string) => {
+    await TournamentRegistrationsRestApi().postPlayersForTournament({
+      tournamentId: props.tournamentId,
+      playerId: playerId,
+    });
+    await reloadRegisteredPlayers();
+
+    onNotificationOpen();
   };
 
   //TODO: Add REST API error handling
@@ -132,12 +163,19 @@ export const TournamentRegistrations = () => {
                 />
               </FormControl>
               <VerticalSpace height="1rem" />
-              <PlayersList players={filteredPlayers} clearSearchInput={resetInput} />
+              <PlayersList
+                players={filteredPlayers}
+                registeredPlayersIds={registeredPlayersIds}
+                refreshPlayersAndResetInput={refreshPlayersAndResetInput}
+                registerPlayer={registerPlayer}
+                tournamentId={props.tournamentId}
+                notification={onNotificationOpen}
+              />
             </>
           )}
 
           <Notification
-            text="Player profile was created"
+            text={textAlert}
             open={openAlert}
             handleClose={onNotificationClose}
           />
@@ -154,33 +192,60 @@ const RegistrationsCard = styled(Card)({
 });
 const PlayersList = (props: {
   players: PlayerProfileDto[];
-  clearSearchInput: () => void;
+  registeredPlayersIds: string[];
+  refreshPlayersAndResetInput: () => void;
+  registerPlayer: (playerId: string, name?: string, surname?: string) => void;
+  notification: (name: string, surname: string) => void;
+  tournamentId: string;
 }) => {
-  const clearSearchInput = () => {
-    props.clearSearchInput();
+  const clearSearchInputAndAddPlayer = (name: string, surname: string) => {
+    props.refreshPlayersAndResetInput();
+    props.notification(name, surname);
   };
 
   if (props.players.length === 0) {
-    return <PlayerNotFound clearInput={clearSearchInput} />;
+    return (
+      <PlayerNotFound
+        clearInputAndAddPlayer={clearSearchInputAndAddPlayer}
+        tournamentId={props.tournamentId}
+      />
+    );
   }
+
+  const registerPlayer = (playerId: string) => {
+    props.registerPlayer(playerId);
+  };
   return (
     <List>
-      {props.players.map((player) => (
-        <PlayersListItem key={player.playerId} player={player} />
-      ))}
+      {props.players.map((player) => {
+        const isRegistered: boolean = props.registeredPlayersIds.includes(
+          player.playerId
+        );
+        return (
+          <PlayersListItem
+            key={player.playerId}
+            player={player}
+            isRegistered={isRegistered}
+            registerPlayer={registerPlayer}
+          />
+        );
+      })}
     </List>
   );
 };
-const PlayerNotFound = (props: { clearInput: () => void }) => {
+const PlayerNotFound = (props: {
+  clearInputAndAddPlayer: (name: string, surname: string) => void;
+  tournamentId: string;
+}) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpened(open);
   };
 
-  const playerAdded = () => {
+  const playerAdded = (name: string, surname: string) => {
     setDrawerOpened(false);
-    props.clearInput();
+    props.clearInputAndAddPlayer(name, surname);
   };
 
   return (
@@ -198,33 +263,53 @@ const PlayerNotFound = (props: { clearInput: () => void }) => {
         open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
-        <AddingPlayerForm onPlayerAdded={playerAdded} />
+        <AddingPlayerForm
+          onPlayerAdded={playerAdded}
+          tournamentId={props.tournamentId}
+        />
       </Drawer>
     </Centered>
   );
 };
-type PlayersListItemProps = {
+
+const PlayersListItem = (props: {
   player: PlayerProfileDto;
+  isRegistered: boolean;
+  registerPlayer: (playerId: string) => void;
+}) => {
+  const registerPlayer = (playerId: string) => {
+    props.registerPlayer(playerId);
+  };
+
+  return (
+    <ListItem>
+      <ListItemAvatar>
+        <Avatar>
+          <SupervisedUserCircle />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={`${props.player.firstName} ${props.player.lastName}`}
+        secondary={props.player.emailAddress}
+      />
+      <ListItemSecondaryAction>
+        {props.isRegistered ? (
+          <CheckCircleIcon
+            color="action"
+            aria-label="registered-player"
+            data-testid="registered-player"
+          />
+        ) : (
+          <IconButton
+            edge="end"
+            aria-label="register-player"
+            data-testid="register-player"
+            onClick={() => registerPlayer(props.player.playerId)}
+          >
+            <AddCircleOutline />
+          </IconButton>
+        )}
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
 };
-const PlayersListItem = (props: PlayersListItemProps) => (
-  <ListItem>
-    <ListItemAvatar>
-      <Avatar>
-        <SupervisedUserCircle />
-      </Avatar>
-    </ListItemAvatar>
-    <ListItemText
-      primary={`${props.player.firstName} ${props.player.lastName}`}
-      secondary={props.player.emailAddress}
-    />
-    <ListItemSecondaryAction>
-      <IconButton
-        edge="end"
-        aria-label="register-player"
-        onClick={() => console.log("Register player clicked!")}
-      >
-        <AddCircleOutline />
-      </IconButton>
-    </ListItemSecondaryAction>
-  </ListItem>
-);
