@@ -13,7 +13,7 @@ import {
   PATH_FOR_PLAYER_MATCHES_VIEW,
 } from "../../atoms/constants/paths";
 
-import { MatchesList } from "../../organisms/MatchesList";
+import { MatchesList } from "../../organisms/MatchesList/MatchesList";
 import { THEME } from "../../atoms/constants/ThemeMUI";
 import Footer from "../../organisms/Footer/Footer";
 import { HomeMenu } from "../HomeMenu/HomeMenu";

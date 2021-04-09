@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from "styled-components";
 import {Card} from '@material-ui/core';
-import {MatchItem} from "../molecules/MatchItem/MatchItem";
-import {MIN_CARD_COMPONENT_WIDTH} from "../atoms/constants/sizes";
+import {MatchItem} from "../../molecules/MatchItem/MatchItem";
+import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 
 const exampleDataBase: MatchListProps[] = [
     {
