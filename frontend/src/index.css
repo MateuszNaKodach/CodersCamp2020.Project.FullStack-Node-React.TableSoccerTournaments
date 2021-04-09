@@ -5,5 +5,7 @@ body{
     padding: 0;
     border: 0;
 
-    background: #659fc8;
+    /*background: #659fc8;*/
+    background: #659fc8 url('/background.png') no-repeat fixed center;
+
 }
