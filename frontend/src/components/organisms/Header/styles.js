@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
     height: '50px',
     display: 'flex',
     justifyContent: 'center',
+    boxSizing: 'border-box'
   },
   logo: {
     maxHeight: '50px',
