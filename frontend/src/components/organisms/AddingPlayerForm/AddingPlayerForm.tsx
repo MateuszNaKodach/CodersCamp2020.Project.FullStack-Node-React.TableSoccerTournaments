@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { UserProfileRestApi } from "../../../restapi/players-profiles";
 import { EntityIdGenerator } from "../../idGenerator/EntityIdGenerator";
+import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 
 const validationSchema = yup.object({
   name: yup.string().required("To pole jest wymagane."),
@@ -20,7 +21,8 @@ const validationSchema = yup.object({
 });
 
 function AddingPlayerForm(props: {
-  onPlayerAdded: (playerId: string, name: string, surname: string) => void;
+  onPlayerAdded: (name: string, surname: string) => void;
+  tournamentId: string;
 }) {
   const formik = useFormik({
     initialValues: {
@@ -40,7 +42,11 @@ function AddingPlayerForm(props: {
           phoneNumber: values.phone,
           emailAddress: values.email,
         });
-        props.onPlayerAdded(playerId, values.name, values.surname);
+        await TournamentRegistrationsRestApi().postPlayersForTournament({
+          tournamentId: props.tournamentId,
+          playerId: playerId,
+        });
+        props.onPlayerAdded(values.name, values.surname);
       } catch (error) {
         alert(error.response.data.message);
       }

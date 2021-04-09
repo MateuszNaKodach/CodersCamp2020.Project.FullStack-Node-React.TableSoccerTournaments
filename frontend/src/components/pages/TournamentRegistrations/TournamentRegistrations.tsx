@@ -90,7 +90,7 @@ export const TournamentRegistrations = (
     }
   }
 
-  const resetInput = () => {
+  const refreshPlayersAndResetInput = () => {
     UserProfileRestApi()
       .getPlayersProfiles()
       .then((playerProfilesList) => {
@@ -98,9 +98,24 @@ export const TournamentRegistrations = (
         setFilteredPlayers(playerProfilesList.items);
       });
 
+    TournamentRegistrationsRestApi()
+      .getRegisteredPlayersIds(props.tournamentId)
+      .then((tournamentRegistrations) => {
+        setRegisteredPlayersIds(tournamentRegistrations.registeredPlayersIds);
+      });
+
     if (searchInput && searchInput.current) {
       searchInput.current.value = "";
     }
+  };
+
+  const onNotificationOpen = (name: string = "", surname: string = "") => {
+    name && surname
+      ? setTextAlert(
+          `Pomyślnie utworzono konto ${name} ${surname} oraz zapisano na turniej`
+        )
+      : setTextAlert("Pomyślnie zapisano zawodniczkę / zawodnika na turniej");
+    setOpenAlert(true);
   };
 
   const onNotificationClose = (
@@ -113,22 +128,14 @@ export const TournamentRegistrations = (
     setOpenAlert(false);
   };
 
-  const registerPlayer = async (
-    playerId: string,
-    name: string = "",
-    surname: string = ""
-  ) => {
+  const registerPlayer = async (playerId: string) => {
     await TournamentRegistrationsRestApi().postPlayersForTournament({
       tournamentId: props.tournamentId,
       playerId: playerId,
     });
     await reloadRegisteredPlayers();
-    name && surname
-      ? setTextAlert(
-          `Pomyślnie utworzono konto ${name} ${surname} oraz zapisano na turniej`
-        )
-      : setTextAlert("Pomyślnie zapisano zawodniczkę / zawodnika na turniej");
-    setOpenAlert(true);
+
+    onNotificationOpen();
   };
 
   //TODO: Add REST API error handling
@@ -159,8 +166,10 @@ export const TournamentRegistrations = (
               <PlayersList
                 players={filteredPlayers}
                 registeredPlayersIds={registeredPlayersIds}
-                clearSearchInput={resetInput}
+                refreshPlayersAndResetInput={refreshPlayersAndResetInput}
                 registerPlayer={registerPlayer}
+                tournamentId={props.tournamentId}
+                notification={onNotificationOpen}
               />
             </>
           )}
@@ -184,21 +193,22 @@ const RegistrationsCard = styled(Card)({
 const PlayersList = (props: {
   players: PlayerProfileDto[];
   registeredPlayersIds: string[];
-  clearSearchInput: () => void;
+  refreshPlayersAndResetInput: () => void;
   registerPlayer: (playerId: string, name?: string, surname?: string) => void;
+  notification: (name: string, surname: string) => void;
+  tournamentId: string;
 }) => {
-  const clearSearchInputAndAddPlayer = (
-    playerId: string,
-    name: string,
-    surname: string
-  ) => {
-    props.clearSearchInput();
-    props.registerPlayer(playerId, name, surname);
+  const clearSearchInputAndAddPlayer = (name: string, surname: string) => {
+    props.refreshPlayersAndResetInput();
+    props.notification(name, surname);
   };
 
   if (props.players.length === 0) {
     return (
-      <PlayerNotFound clearInputAndAddPlayer={clearSearchInputAndAddPlayer} />
+      <PlayerNotFound
+        clearInputAndAddPlayer={clearSearchInputAndAddPlayer}
+        tournamentId={props.tournamentId}
+      />
     );
   }
 
@@ -224,11 +234,8 @@ const PlayersList = (props: {
   );
 };
 const PlayerNotFound = (props: {
-  clearInputAndAddPlayer: (
-    playerId: string,
-    name: string,
-    surname: string
-  ) => void;
+  clearInputAndAddPlayer: (name: string, surname: string) => void;
+  tournamentId: string;
 }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
@@ -236,9 +243,9 @@ const PlayerNotFound = (props: {
     setDrawerOpened(open);
   };
 
-  const playerAdded = (playerId: string, name: string, surname: string) => {
+  const playerAdded = (name: string, surname: string) => {
     setDrawerOpened(false);
-    props.clearInputAndAddPlayer(playerId, name, surname);
+    props.clearInputAndAddPlayer(name, surname);
   };
 
   return (
@@ -256,7 +263,10 @@ const PlayerNotFound = (props: {
         open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
-        <AddingPlayerForm onPlayerAdded={playerAdded} />
+        <AddingPlayerForm
+          onPlayerAdded={playerAdded}
+          tournamentId={props.tournamentId}
+        />
       </Drawer>
     </Centered>
   );
