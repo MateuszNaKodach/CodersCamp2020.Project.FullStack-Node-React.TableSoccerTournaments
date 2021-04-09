@@ -19,7 +19,7 @@ import Footer from "../../organisms/Footer/Footer";
 import { HomeMenu } from "../HomeMenu/HomeMenu";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import Header from "../../organisms/Header/Header";
-import { TournamentSettingsRoute } from "../Routes/TournamentRegistrationsRoutes";
+import { TournamentRegistrationsRoute } from "../Routes/TournamentRegistrationsRoutes";
 
 function TourDeFoos() {
   return (
@@ -41,7 +41,7 @@ function TourDeFoos() {
               path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/:tournamentId`}
             >
               <Centered>
-                <TournamentSettingsRoute />
+                <TournamentRegistrationsRoute />
               </Centered>
             </Route>
             <Route path={PATH_FOR_PLAYERS_PROFILES_VIEW} exact>
