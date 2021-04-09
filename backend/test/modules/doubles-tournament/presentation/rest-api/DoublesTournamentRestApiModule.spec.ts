@@ -70,6 +70,8 @@ describe('Doubles Tournament REST API', () => {
         matchNumber: MatchNumber.from(1),
         team1Id: TeamId.from('sampleTeam1'),
         team2Id: TeamId.from('sampleTeam2'),
+        tableNumber: 3,
+        started: true,
       }),
       new QueuedMatch({
         matchNumber: MatchNumber.from(2),
@@ -98,11 +100,14 @@ describe('Doubles Tournament REST API', () => {
           matchNumber: 1,
           team1Id: 'sampleTeam1',
           team2Id: 'sampleTeam2',
+          tableNumber: 3,
+          started: true,
         },
         {
           matchNumber: 2,
           team1Id: 'sampleTeam3',
           team2Id: 'sampleTeam4',
+          started: false,
         },
       ],
     });
