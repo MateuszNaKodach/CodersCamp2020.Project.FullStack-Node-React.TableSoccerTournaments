@@ -34,8 +34,6 @@ import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm"
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Notification from "../../organisms/Notification/Notification";
-import { MIN_CARD_COMPONENT_WIDTH } from "../../atoms/constants/sizes";
-import useStyles from "./styles";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
@@ -92,7 +90,7 @@ export const TournamentRegistrations = (
     }
   }
 
-  const resetInput = () => {
+  const refreshPlayersAndResetInput = () => {
     UserProfileRestApi()
       .getPlayersProfiles()
       .then((playerProfilesList) => {
@@ -100,9 +98,24 @@ export const TournamentRegistrations = (
         setFilteredPlayers(playerProfilesList.items);
       });
 
+    TournamentRegistrationsRestApi()
+      .getRegisteredPlayersIds(props.tournamentId)
+      .then((tournamentRegistrations) => {
+        setRegisteredPlayersIds(tournamentRegistrations.registeredPlayersIds);
+      });
+
     if (searchInput && searchInput.current) {
       searchInput.current.value = "";
     }
+  };
+
+  const onNotificationOpen = (name: string = "", surname: string = "") => {
+    name && surname
+      ? setTextAlert(
+          `Pomyślnie utworzono konto ${name} ${surname} oraz zapisano na turniej`
+        )
+      : setTextAlert("Pomyślnie zapisano zawodniczkę / zawodnika na turniej");
+    setOpenAlert(true);
   };
 
   const onNotificationClose = (
@@ -115,29 +128,20 @@ export const TournamentRegistrations = (
     setOpenAlert(false);
   };
 
-  const registerPlayer = async (
-    playerId: string,
-    name: string = "",
-    surname: string = ""
-  ) => {
+  const registerPlayer = async (playerId: string) => {
     await TournamentRegistrationsRestApi().postPlayersForTournament({
       tournamentId: props.tournamentId,
       playerId: playerId,
     });
     await reloadRegisteredPlayers();
-    name && surname
-      ? setTextAlert(
-          `Pomyślnie utworzono konto ${name} ${surname} oraz zapisano na turniej`
-        )
-      : setTextAlert("Pomyślnie zapisano zawodniczkę / zawodnika na turniej");
-    setOpenAlert(true);
+
+    onNotificationOpen();
   };
 
   //TODO: Add REST API error handling
   const isLoading = availablePlayers === undefined;
-  const classes = useStyles();
   return (
-    <Card className={classes.root}>
+    <RegistrationsCard>
       <CardContent>
         <Centered>
           <Typography component="h6" variant="h6">
@@ -162,8 +166,10 @@ export const TournamentRegistrations = (
               <PlayersList
                 players={filteredPlayers}
                 registeredPlayersIds={registeredPlayersIds}
-                clearSearchInput={resetInput}
+                refreshPlayersAndResetInput={refreshPlayersAndResetInput}
                 registerPlayer={registerPlayer}
+                tournamentId={props.tournamentId}
+                notification={onNotificationOpen}
               />
             </>
           )}
@@ -175,28 +181,34 @@ export const TournamentRegistrations = (
           />
         </Centered>
       </CardContent>
-    </Card>
+    </RegistrationsCard>
   );
 };
 
+//TODO: Use something responsive instead of setting card maxWidth/Height (for example Grid from MaterialUI)
+const RegistrationsCard = styled(Card)({
+  maxWidth: "500px",
+  minHeight: "500px",
+});
 const PlayersList = (props: {
   players: PlayerProfileDto[];
   registeredPlayersIds: string[];
-  clearSearchInput: () => void;
+  refreshPlayersAndResetInput: () => void;
   registerPlayer: (playerId: string, name?: string, surname?: string) => void;
+  notification: (name: string, surname: string) => void;
+  tournamentId: string;
 }) => {
-  const clearSearchInputAndAddPlayer = (
-    playerId: string,
-    name: string,
-    surname: string
-  ) => {
-    props.clearSearchInput();
-    props.registerPlayer(playerId, name, surname);
+  const clearSearchInputAndAddPlayer = (name: string, surname: string) => {
+    props.refreshPlayersAndResetInput();
+    props.notification(name, surname);
   };
 
   if (props.players.length === 0) {
     return (
-      <PlayerNotFound clearInputAndAddPlayer={clearSearchInputAndAddPlayer} />
+      <PlayerNotFound
+        clearInputAndAddPlayer={clearSearchInputAndAddPlayer}
+        tournamentId={props.tournamentId}
+      />
     );
   }
 
@@ -222,11 +234,8 @@ const PlayersList = (props: {
   );
 };
 const PlayerNotFound = (props: {
-  clearInputAndAddPlayer: (
-    playerId: string,
-    name: string,
-    surname: string
-  ) => void;
+  clearInputAndAddPlayer: (name: string, surname: string) => void;
+  tournamentId: string;
 }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
@@ -234,9 +243,9 @@ const PlayerNotFound = (props: {
     setDrawerOpened(open);
   };
 
-  const playerAdded = (playerId: string, name: string, surname: string) => {
+  const playerAdded = (name: string, surname: string) => {
     setDrawerOpened(false);
-    props.clearInputAndAddPlayer(playerId, name, surname);
+    props.clearInputAndAddPlayer(name, surname);
   };
 
   return (
@@ -254,7 +263,10 @@ const PlayerNotFound = (props: {
         open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
-        <AddingPlayerForm onPlayerAdded={playerAdded} />
+        <AddingPlayerForm
+          onPlayerAdded={playerAdded}
+          tournamentId={props.tournamentId}
+        />
       </Drawer>
     </Centered>
   );

@@ -6,7 +6,7 @@ export interface TournamentRegistrationsRouteParams {
   readonly tournamentId: string;
 }
 
-export const TournamentSettingsRoute = () => {
+export const TournamentRegistrationsRoute = () => {
   const match = useRouteMatch<TournamentRegistrationsRouteParams>(
     "/tournament-registration/:tournamentId"
   );

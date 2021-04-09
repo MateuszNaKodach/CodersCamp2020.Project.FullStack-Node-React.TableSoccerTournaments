@@ -23,11 +23,8 @@ describe("Adding player form", () => {
     postPlayerProfilesWillAlwaysSuccess();
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
     postPlayerForTournamentWillAlwaysSuccess(tournamentId);
-    render(
-      <Router>
-        <TournamentRegistrations tournamentId={tournamentId} />
-      </Router>
-    );
+
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
 
     await waitForElementToBeRemoved(() =>
       screen.getByTestId("TournamentRegistrationsLoadingIndicator")

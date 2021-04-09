@@ -21,11 +21,7 @@ describe("Tournament Registrations", () => {
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     //When
-    render(
-      <Router>
-        <TournamentRegistrations tournamentId={tournamentId} />
-      </Router>
-    );
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
 
     //Then
     expect(screen.getByText("Zapisy na turniej")).toBeInTheDocument();
@@ -37,11 +33,7 @@ describe("Tournament Registrations", () => {
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     //When
-    render(
-      <Router>
-        <TournamentRegistrations tournamentId={tournamentId} />
-      </Router>
-    );
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
 
     //Then
     expect(
@@ -71,11 +63,7 @@ describe("Tournament Registrations", () => {
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     //When
-    render(
-      <Router>
-        <TournamentRegistrations tournamentId={tournamentId} />
-      </Router>
-    );
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
 
     //Then
     await waitForElementToBeRemoved(() =>
@@ -115,11 +103,7 @@ describe("Tournament Registrations", () => {
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     //When
-    render(
-      <Router>
-        <TournamentRegistrations tournamentId={tournamentId} />
-      </Router>
-    );
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
     await waitForElementToBeRemoved(() =>
       screen.getByTestId("TournamentRegistrationsLoadingIndicator")
     );
