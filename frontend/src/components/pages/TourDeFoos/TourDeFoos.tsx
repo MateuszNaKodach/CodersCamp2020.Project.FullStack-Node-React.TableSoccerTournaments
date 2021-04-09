@@ -20,10 +20,12 @@ import { HomeMenu } from "../HomeMenu/HomeMenu";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import Header from "../../organisms/Header/Header";
 import { TournamentRegistrationsRoute } from "../Routes/TournamentRegistrationsRoutes";
+import { StyledBackground } from "../../atoms/Background/StyledBackground";
 
 function TourDeFoos() {
   return (
     <Router>
+      <StyledBackground />
       <MuiThemeProvider theme={THEME}>
         <Centered>
           <Header />
@@ -34,7 +36,7 @@ function TourDeFoos() {
             direction="column"
             alignItems="center"
             justify="center"
-            style={{ minHeight: "70vh" }}
+            style={{ minHeight: "75vh" }}
           >
             <Switch>
               <Route path={PATH_FOR_LOGIN_VIEW} exact>
