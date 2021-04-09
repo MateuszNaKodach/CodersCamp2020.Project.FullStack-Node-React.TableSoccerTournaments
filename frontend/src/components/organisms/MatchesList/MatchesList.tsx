@@ -73,7 +73,11 @@ const StyledMatchesList = styled(Card)({
     width: MIN_CARD_COMPONENT_WIDTH,
 });
 
-export const MatchesList = () => {
+export type MatchesListProps = {
+    readonly tournamentId: string;
+};
+
+export const MatchesList = (props: MatchesListProps) => {
 
     const [expanded, setExpanded] = React.useState<string | boolean>(false);
     const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {

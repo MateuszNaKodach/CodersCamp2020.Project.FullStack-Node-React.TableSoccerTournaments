@@ -13,13 +13,13 @@ import {
   PATH_FOR_PLAYER_MATCHES_VIEW,
 } from "../../atoms/constants/paths";
 
-import { MatchesList } from "../../organisms/MatchesList/MatchesList";
 import { THEME } from "../../atoms/constants/ThemeMUI";
 import Footer from "../../organisms/Footer/Footer";
 import { HomeMenu } from "../HomeMenu/HomeMenu";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import Header from "../../organisms/Header/Header";
 import { TournamentRegistrationsRoute } from "../Routes/TournamentRegistrationsRoutes";
+import {MatchesListRoute} from "../Routes/MatchesListRoutes";
 
 function TourDeFoos() {
   return (
@@ -52,7 +52,8 @@ function TourDeFoos() {
             </Route>
             <Route path={PATH_FOR_PLAYER_MATCHES_VIEW} exact>
               <Centered>
-                <MatchesList />
+                <MatchesListRoute/>
+                {/*<MatchesList />*/}
               </Centered>
             </Route>
 
