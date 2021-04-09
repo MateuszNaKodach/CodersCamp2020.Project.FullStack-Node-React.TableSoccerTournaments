@@ -1,4 +1,4 @@
-import { Button, MuiThemeProvider } from "@material-ui/core";
+import { Button, Grid, MuiThemeProvider } from "@material-ui/core";
 import { Centered } from "../../atoms/Shared/Centered";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import React from "react";
@@ -27,40 +27,50 @@ function TourDeFoos() {
       <MuiThemeProvider theme={THEME}>
         <Centered>
           <Header />
-          <Switch>
-            <Route path={PATH_FOR_LOGIN_VIEW} exact>
-              <Button>PATH_FOR_LOGIN_VIEW</Button>
-            </Route>
-            <Route path={PATH_FOR_TOURNAMENTS_SELECTION_VIEW} exact>
-              PATH_FOR_TOURNAMENTS_SELECTION_VIEW
-            </Route>
-            <Route path={PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW} exact>
-              PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW
-            </Route>
-            <Route
-              path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/:tournamentId`}
-            >
-              <Centered>
-                <TournamentRegistrationsRoute />
-              </Centered>
-            </Route>
-            <Route path={PATH_FOR_PLAYERS_PROFILES_VIEW} exact>
-              PATH_FOR_PLAYERS_PROFILES_VIEW
-            </Route>
-            <Route path={PATH_FOR_PLAYER_PROFILE_CREATION_VIEW} exact>
-              PATH_FOR_PLAYER_PROFILE_CREATION_VIEW
-            </Route>
-            <Route path={PATH_FOR_PLAYER_MATCHES_VIEW} exact>
-              <Centered>
-                <MatchesList />
-              </Centered>
-            </Route>
+          <VerticalSpace height="20px" />
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: "70vh" }}
+          >
+            <Switch>
+              <Route path={PATH_FOR_LOGIN_VIEW} exact>
+                <Button>PATH_FOR_LOGIN_VIEW</Button>
+              </Route>
+              <Route path={PATH_FOR_TOURNAMENTS_SELECTION_VIEW} exact>
+                PATH_FOR_TOURNAMENTS_SELECTION_VIEW
+              </Route>
+              <Route path={PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW} exact>
+                PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW
+              </Route>
+              <Route
+                path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/:tournamentId`}
+              >
+                <Centered>
+                  <TournamentRegistrationsRoute />
+                </Centered>
+              </Route>
+              <Route path={PATH_FOR_PLAYERS_PROFILES_VIEW} exact>
+                PATH_FOR_PLAYERS_PROFILES_VIEW
+              </Route>
+              <Route path={PATH_FOR_PLAYER_PROFILE_CREATION_VIEW} exact>
+                PATH_FOR_PLAYER_PROFILE_CREATION_VIEW
+              </Route>
+              <Route path={PATH_FOR_PLAYER_MATCHES_VIEW} exact>
+                <Centered>
+                  <MatchesList />
+                </Centered>
+              </Route>
 
-            <Route path={PATH_FOR_HOME_VIEW} exact>
-              <HomeMenu />
-            </Route>
-          </Switch>
-          <VerticalSpace height="35px" />
+              <Route path={PATH_FOR_HOME_VIEW} exact>
+                <HomeMenu />
+              </Route>
+            </Switch>
+          </Grid>
+          <VerticalSpace height="55px" />
           <Footer />
         </Centered>
       </MuiThemeProvider>
