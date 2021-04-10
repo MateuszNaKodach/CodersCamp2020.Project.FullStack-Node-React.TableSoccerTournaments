@@ -5,7 +5,7 @@ import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { CreateTournamentWithTeams } from './application/command/CreateTournamentWithTeams';
 import { CreateTournamentWithTeamsCommandHandler } from './application/command/CreateTournamentWithTeamsCommandHandler';
 import { PlayersWereMatchedIntoTeams } from '../../players-matching/core/domain/PlayersWereMatchedIntoTeams';
-import { CreateTournamentWhenPlayersWereMatchedIntoTeams } from './application/event/CreateTournamentWhenPlayersWereMatchedIntoTeams';
+import { CreateTournamentWhenPlayersWereMatchedIntoTeams } from '../../players-matching/core/application/CreateTournamentWhenPlayersWereMatchedIntoTeams';
 import { EntityIdGenerator } from '../../../shared/core/application/EntityIdGenerator';
 import { DoublesTournamentRepository } from './application/DoublesTournamentRepository';
 import { FindAllDoublesTournaments } from './application/query/FindAllDoublesTournaments';
@@ -31,6 +31,8 @@ import { CallMatchWhenTournamentTableWasReleased } from './application/event/Cal
 import { CallMatchWhenMatchWasQueued } from './application/event/CallMatchWhenMatchWasQueued';
 import { StartTournament } from './application/command/StartTournament';
 import { StartTournamentCommandHandler } from './application/command/StartTournamentCommandHandler';
+import { MatchHasEnded } from '../../match-module/core/domain/event/MatchHasEnded';
+import { MatchHasEndedImpliesTournamentMatchWasEnded } from './application/event/MatchHasEndedImpliesTournamentMatchWasEnded';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -84,6 +86,10 @@ export function DoublesTournamentModuleCore(
       {
         eventType: TournamentTableWasBooked,
         handler: new BookTableInQueue(tablesQueue),
+      },
+      {
+        eventType: MatchHasEnded,
+        handler: new MatchHasEndedImpliesTournamentMatchWasEnded(eventPublisher, currentTimeProvider),
       },
     ],
     queryHandlers: [
