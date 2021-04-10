@@ -2,12 +2,17 @@ import {Card, CardActions, CardContent, CardMedia, Typography} from "@material-u
 import TextButton from "../../atoms/Shared/TextButton/TextButton";
 import {makeStyles} from "@material-ui/core/styles";
 import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
-import PlusButton from "../../atoms/Shared/PlusButton/PlusButton";
+import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
+
+type TournamentCardProps = {
+    readonly tournamentName: string,
+    readonly registrationStatus: string,
+}
 
 
 const useStyles = makeStyles({
     root: {
-        minWidth: 300,
+        maxWidth: MIN_CARD_COMPONENT_WIDTH,
     },
     media: {
         height: 150,
@@ -17,7 +22,7 @@ const useStyles = makeStyles({
     }
 });
 
-const TournamentCard = () => {
+const TournamentCard = ({tournamentName, registrationStatus}: TournamentCardProps) => {
     const classes = useStyles();
 
     return (
@@ -28,18 +33,17 @@ const TournamentCard = () => {
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                    {/*{tournamentName}*/}
-                    Major Wrocław
+                    {tournamentName}
+                    {/*Major Wrocław*/}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    ZAPISY: Zakończone {/*{registrationsStatus}*/}
+                    ZAPISY: {registrationStatus}
                 </Typography>
             </CardContent>
             <VerticalSpace height={"20px"}/>
             <CardActions disableSpacing={true} className={classes.cardActions}>
                 <TextButton text={"Zapisy"} onLink={''}/>
                 <TextButton text={"Mecze i wyniki"} onLink={''}/>
-                <PlusButton onLink={''}/>
             </CardActions>
         </Card>
     );
