@@ -9,4 +9,9 @@ export class MatchId {
     }
     return new MatchId(tournamentId + '_' + matchNumber);
   }
+
+  static fromRaw(matchId: string): { tournamentId: string; matchNumber: number } {
+    const [tournamentId, matchNumber] = matchId.split('_');
+    return { tournamentId, matchNumber: Number(matchNumber) };
+  }
 }

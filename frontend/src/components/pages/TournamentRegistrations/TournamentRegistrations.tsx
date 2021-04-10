@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
@@ -34,6 +33,7 @@ import CreatePlayerProfileForm from "../../organisms/CreatePlayerProfileForm/Cre
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Notification from "../../organisms/Notification/Notification";
+import useStyles from "./styles";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
@@ -140,8 +140,9 @@ export const TournamentRegistrations = (
 
   //TODO: Add REST API error handling
   const isLoading = availablePlayers === undefined;
+  const classes = useStyles();
   return (
-    <RegistrationsCard>
+    <Card className={classes.root}>
       <CardContent>
         <Centered>
           <Typography component="h6" variant="h6">
@@ -181,15 +182,10 @@ export const TournamentRegistrations = (
           />
         </Centered>
       </CardContent>
-    </RegistrationsCard>
+    </Card>
   );
 };
 
-//TODO: Use something responsive instead of setting card maxWidth/Height (for example Grid from MaterialUI)
-const RegistrationsCard = styled(Card)({
-  maxWidth: "500px",
-  minHeight: "500px",
-});
 const PlayersList = (props: {
   players: PlayerProfileDto[];
   registeredPlayersIds: string[];
