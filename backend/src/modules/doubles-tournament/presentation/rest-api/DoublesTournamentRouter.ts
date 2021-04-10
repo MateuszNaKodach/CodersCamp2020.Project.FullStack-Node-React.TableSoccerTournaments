@@ -72,7 +72,7 @@ export function doublesTournamentRouter(
 
   const router = express.Router();
   router.get('', getAllTournaments);
-  router.post(':/tournamentId/start', startTournament);
+  router.post('/:tournamentId/start', startTournament);
   router.get('/:tournamentId/teams', getTournamentTeamsByTournamentId);
   router.get('/:tournamentId/matches', getMatchesQueueByTournamentId);
   return router;
