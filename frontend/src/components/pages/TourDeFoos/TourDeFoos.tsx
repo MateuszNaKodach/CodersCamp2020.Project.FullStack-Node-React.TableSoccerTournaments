@@ -20,8 +20,7 @@ import {HomeMenu} from "../HomeMenu/HomeMenu";
 import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
 import Header from "../../organisms/Header/Header";
 import {TournamentRegistrationsRoute} from "../Routes/TournamentRegistrationsRoutes";
-import CardTitleWithNavButton from "../../molecules/CardTitleWithNavButton/CardTitleWithNavButton";
-import TournamentCard from "../../molecules/TournamentCard/TournamentCard";
+import TournamentsList from "../TournamentsList/TournamentsList";
 
 function TourDeFoos() {
   return (
@@ -34,9 +33,7 @@ function TourDeFoos() {
               <Button>PATH_FOR_LOGIN_VIEW</Button>
             </Route>
             <Route path={PATH_FOR_TOURNAMENTS_SELECTION_VIEW} exact>
-              PATH_FOR_TOURNAMENTS_SELECTION_VIEW
-              <CardTitleWithNavButton title={"Turnieje"} />
-              <TournamentCard />
+              <TournamentsList/>
             </Route>
             <Route path={PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW} exact>
               PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW
