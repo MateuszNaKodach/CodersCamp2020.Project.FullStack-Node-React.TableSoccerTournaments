@@ -37,7 +37,7 @@ describe('End tournament match', () => {
       new TournamentMatchWasEnded({
         occurredAt: currentTime,
         tournamentId: tournamentId,
-        matchId: `${tournamentId}_${matchNumber}`,
+        matchNumber: matchNumber,
         winnerId: team1Id,
       }),
     );
