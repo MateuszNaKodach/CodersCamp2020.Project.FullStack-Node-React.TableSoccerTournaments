@@ -5,10 +5,7 @@ import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvi
 import { TournamentMatchWasEnded } from '../../domain/event/TournamentMatchWasEnded';
 
 export class EndTournamentMatchWhenMatchHasEnded implements EventHandler<MatchHasEnded> {
-  constructor(
-    private readonly eventPublisher: DomainEventPublisher,
-    private readonly currentTimeProvider: CurrentTimeProvider,
-  ) {}
+  constructor(private readonly eventPublisher: DomainEventPublisher, private readonly currentTimeProvider: CurrentTimeProvider) {}
 
   async handle(event: MatchHasEnded): Promise<void> {
     const [tournamentId, matchNumber] = event.matchId.split('_');
