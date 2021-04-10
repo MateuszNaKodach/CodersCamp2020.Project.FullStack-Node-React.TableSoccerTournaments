@@ -5,7 +5,7 @@ import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { CreateTournamentWithTeams } from './application/command/CreateTournamentWithTeams';
 import { CreateTournamentWithTeamsCommandHandler } from './application/command/CreateTournamentWithTeamsCommandHandler';
 import { PlayersWereMatchedIntoTeams } from '../../players-matching/core/domain/PlayersWereMatchedIntoTeams';
-import { CreateTournamentWhenPlayersWereMatchedIntoTeams } from './application/event/CreateTournamentWhenPlayersWereMatchedIntoTeams';
+import { CreateTournamentWhenPlayersWereMatchedIntoTeams } from '../../players-matching/core/application/CreateTournamentWhenPlayersWereMatchedIntoTeams';
 import { EntityIdGenerator } from '../../../shared/core/application/EntityIdGenerator';
 import { DoublesTournamentRepository } from './application/DoublesTournamentRepository';
 import { FindAllDoublesTournaments } from './application/query/FindAllDoublesTournaments';
