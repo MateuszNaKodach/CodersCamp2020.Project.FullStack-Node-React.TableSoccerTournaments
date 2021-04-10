@@ -2,31 +2,43 @@ import {
   render,
   screen,
   waitForElementToBeRemoved,
+  waitFor,
 } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { TournamentRegistrations } from "../../pages/TournamentRegistrations";
 import { PlayerProfileDto } from "../../../restapi/players-profiles";
-import { server } from "../../../mocks/msw/server";
-import { rest } from "msw";
 import userEvent from "@testing-library/user-event";
+import {
+  getPlayersProfilesWillReturn,
+  postPlayerProfilesWillAlwaysSuccess,
+} from "../../../restapi/players-profiles/PlayersProfilesRestApiMockEndpoints";
+import {
+  getRegisteredPlayersIdsWillReturn,
+  postPlayerForTournamentWillAlwaysSuccess,
+} from "../../../restapi/tournament-registrations/TournamentRegistrationsRestApiMockEndpoints";
 
 describe("Adding player form", () => {
-  it("after clicking button form should be shown and display title, inputs and button", async () => {
-    //Given
-    const playersProfiles: PlayerProfileDto[] = [];
+  beforeEach(async () => {
     getPlayersProfilesWillReturn(playersProfiles);
+    postPlayerProfilesWillAlwaysSuccess();
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
+    postPlayerForTournamentWillAlwaysSuccess(tournamentId);
 
-    render(
-      <Router>
-        <TournamentRegistrations />
-      </Router>
-    );
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
+
     await waitForElementToBeRemoved(() =>
       screen.getByTestId("TournamentRegistrationsLoadingIndicator")
     );
     const searchPlayerInput = await screen.findByLabelText("Zawodnik");
     userEvent.clear(searchPlayerInput);
     userEvent.type(searchPlayerInput, "Mufasa");
+  });
+
+  const tournamentId = "tournamentId";
+  const playersProfiles: PlayerProfileDto[] = [];
+
+  it("after clicking button form should be shown and display title, inputs and button", async () => {
+    //Given
 
     //When
     const registerNewPlayerForTournamentButton = await screen.findByText(
@@ -53,17 +65,43 @@ describe("Adding player form", () => {
     const phone = await screen.findByLabelText("Numer telefonu");
     expect(phone).toBeInTheDocument();
   });
-});
 
-function getPlayersProfilesWillReturn(playersProfiles: PlayerProfileDto[]) {
-  server.use(
-    rest.get("*/rest-api/players-profiles", (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          items: playersProfiles,
-        })
-      );
-    })
-  );
-}
+  it("after submitting form, notification should be displayed | happy path", async () => {
+    //Given
+    const registerNewPlayerForTournamentButton = await screen.findByText(
+      "Dodaj i zapisz"
+    );
+    userEvent.click(registerNewPlayerForTournamentButton);
+
+    const name = "Test name";
+    const nameInput = await screen.findByLabelText("Imię");
+    userEvent.clear(nameInput);
+    userEvent.type(nameInput, name);
+
+    const surname = "Test surname";
+    const surnameInput = await screen.findByLabelText("Nazwisko");
+    userEvent.clear(surnameInput);
+    userEvent.type(surnameInput, surname);
+
+    const email = await screen.findByLabelText("Adres e-mail");
+    userEvent.clear(email);
+    userEvent.type(email, "testEmail@gmail.com");
+
+    const phone = await screen.findByLabelText("Numer telefonu");
+    userEvent.clear(phone);
+    userEvent.type(phone, "123456789");
+
+    //When
+    const savePlayerButton = await screen.findByText("Zapisz zawodnika");
+    userEvent.click(savePlayerButton);
+
+    //Then
+    await waitFor(() =>
+      expect(
+        screen.getByText(
+          `Pomyślnie utworzono konto ${name} ${surname} oraz zapisano na turniej`
+        )
+      ).toBeInTheDocument()
+    );
+  });
+});
