@@ -1,6 +1,6 @@
 import { useRouteMatch } from "react-router-dom";
 import React from "react";
-import {PATH_FOR_PLAYER_MATCHES_VIEW} from "../../atoms/constants/paths";
+import {PATH_FOR_PLAYER_MATCHES_VIEW} from "../../atoms/constants/routerPaths";
 import {MatchesList} from "../../organisms/MatchesList/MatchesList";
 
 export interface MatchesListRouteParams {

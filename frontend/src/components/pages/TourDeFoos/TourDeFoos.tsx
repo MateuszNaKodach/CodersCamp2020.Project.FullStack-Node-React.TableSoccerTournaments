@@ -11,7 +11,7 @@ import {
   PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
   PATH_FOR_TOURNAMENTS_SELECTION_VIEW,
   PATH_FOR_PLAYER_MATCHES_VIEW,
-} from "../../atoms/constants/paths";
+} from "../../atoms/constants/routerPaths";
 
 import { THEME } from "../../atoms/constants/ThemeMUI";
 import Footer from "../../organisms/Footer/Footer";
