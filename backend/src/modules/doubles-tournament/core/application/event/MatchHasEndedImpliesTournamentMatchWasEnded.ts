@@ -3,12 +3,15 @@ import { MatchHasEnded } from '../../../../match-module/core/domain/event/MatchH
 import { DomainEventPublisher } from '../../../../../shared/core/application/event/DomainEventBus';
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 import { TournamentMatchWasEnded } from '../../domain/event/TournamentMatchWasEnded';
+import { MatchId } from '../../domain/MatchId';
 
-export class EndTournamentMatchWhenMatchHasEnded implements EventHandler<MatchHasEnded> {
+export class MatchHasEndedImpliesTournamentMatchWasEnded implements EventHandler<MatchHasEnded> {
   constructor(private readonly eventPublisher: DomainEventPublisher, private readonly currentTimeProvider: CurrentTimeProvider) {}
 
   async handle(event: MatchHasEnded): Promise<void> {
-    const [tournamentId, matchNumber] = event.matchId.split('_');
+    const matchId = MatchId.fromRaw(event.matchId);
+    const tournamentId = matchId.tournamentId;
+    const matchNumber = matchId.matchNumber;
 
     const tournamentMatchWasEnded = new TournamentMatchWasEnded({
       occurredAt: this.currentTimeProvider(),

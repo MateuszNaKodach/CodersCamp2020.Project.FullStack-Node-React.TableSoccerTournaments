@@ -30,7 +30,7 @@ import { ReleaseTableInQueue } from './application/event/ReleaseTableInQueue';
 import { CallMatchWhenTournamentTableWasReleased } from './application/event/CallMatchWhenTournamentTableWasReleased';
 import { CallMatchWhenMatchWasQueued } from './application/event/CallMatchWhenMatchWasQueued';
 import { MatchHasEnded } from '../../match-module/core/domain/event/MatchHasEnded';
-import { EndTournamentMatchWhenMatchHasEnded } from './application/event/EndTournamentMatchWhenMatchHasEnded';
+import { MatchHasEndedImpliesTournamentMatchWasEnded } from './application/event/MatchHasEndedImpliesTournamentMatchWasEnded';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -83,7 +83,7 @@ export function DoublesTournamentModuleCore(
       },
       {
         eventType: MatchHasEnded,
-        handler: new EndTournamentMatchWhenMatchHasEnded(eventPublisher, currentTimeProvider),
+        handler: new MatchHasEndedImpliesTournamentMatchWasEnded(eventPublisher, currentTimeProvider),
       },
     ],
     queryHandlers: [
