@@ -4,20 +4,24 @@ import {
   screen,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
-import { rest } from "msw";
-import { server } from "../../../mocks/msw/server";
 import { PlayerProfileDto } from "../../../restapi/players-profiles";
 import userEvent from "@testing-library/user-event";
-import {BrowserRouter as Router} from "react-router-dom";
-
+import { BrowserRouter as Router } from "react-router-dom";
+import {
+  getPlayersProfilesIsLoading,
+  getPlayersProfilesWillReturn,
+} from "../../../restapi/players-profiles/PlayersProfilesRestApiMockEndpoints";
+import { getRegisteredPlayersIdsWillReturn } from "../../../restapi/tournament-registrations/TournamentRegistrationsRestApiMockEndpoints";
 
 describe("Tournament Registrations", () => {
+  const tournamentId = "tournamentId";
   it(`should show title "Zapisy na turniej"`, () => {
     //Given
     getPlayersProfilesIsLoading();
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     //When
-    render(<Router><TournamentRegistrations/></Router>);
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
 
     //Then
     expect(screen.getByText("Zapisy na turniej")).toBeInTheDocument();
@@ -26,9 +30,10 @@ describe("Tournament Registrations", () => {
   it("when players profiles are loading, then show loading indicator", async () => {
     //Given
     getPlayersProfilesIsLoading();
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     //When
-    render(<Router><TournamentRegistrations/></Router>);
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
 
     //Then
     expect(
@@ -55,9 +60,10 @@ describe("Tournament Registrations", () => {
       },
     ];
     getPlayersProfilesWillReturn(playersProfiles);
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     //When
-    render(<Router><TournamentRegistrations/></Router>);
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
 
     //Then
     await waitForElementToBeRemoved(() =>
@@ -94,9 +100,10 @@ describe("Tournament Registrations", () => {
       },
     ];
     getPlayersProfilesWillReturn(playersProfiles);
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
 
     //When
-    render(<Router><TournamentRegistrations/></Router>);
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
     await waitForElementToBeRemoved(() =>
       screen.getByTestId("TournamentRegistrationsLoadingIndicator")
     );
@@ -116,24 +123,3 @@ describe("Tournament Registrations", () => {
     expect(registerNewPlayerForTournamentButton).toBeInTheDocument();
   });
 });
-
-function getPlayersProfilesWillReturn(playersProfiles: PlayerProfileDto[]) {
-  server.use(
-    rest.get("*/rest-api/players-profiles", (req, res, ctx) => {
-      return res(
-        ctx.status(200),
-        ctx.json({
-          items: playersProfiles,
-        })
-      );
-    })
-  );
-}
-
-function getPlayersProfilesIsLoading() {
-  server.use(
-    rest.get("*/rest-api/players-profiles", (req, res, ctx) => {
-      return res(ctx.delay("infinite"));
-    })
-  );
-}
