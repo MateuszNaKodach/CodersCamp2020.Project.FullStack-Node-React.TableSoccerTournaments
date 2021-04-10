@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {Card} from '@material-ui/core';
 import {MatchItem} from "../../molecules/MatchItem/MatchItem";
 import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
+import {MatchListProps} from "./MatchesListProps";
 
 const exampleDataBase: MatchListProps[] = [
     {
@@ -49,26 +50,6 @@ const exampleDataBase: MatchListProps[] = [
     }
 ];
 
-export type MatchListProps = {
-    onClickTeam: () => void,
-    matchNumber: number | undefined,
-    level: number | undefined,
-    matchStatus: string | undefined
-    team1: {
-        readonly player1: string | undefined;
-        readonly player2: string | undefined;
-        readonly teamNumber: number | string | undefined;
-        readonly currentPlayerLevel: number | undefined;
-        readonly currentMatchNumber: number | undefined;
-    },
-    team2: {
-        readonly player1: string | undefined;
-        readonly player2: string | undefined;
-        readonly teamNumber: string | undefined;
-        readonly currentPlayerLevel: number | undefined;
-        readonly currentMatchNumber: number | undefined;
-    }
-};
 const StyledMatchesList = styled(Card)({
     width: MIN_CARD_COMPONENT_WIDTH,
 });
