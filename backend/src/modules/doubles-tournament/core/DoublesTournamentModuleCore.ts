@@ -29,6 +29,8 @@ import { TournamentTableWasBooked } from '../../tournament-tables/core/domain/ev
 import { ReleaseTableInQueue } from './application/event/ReleaseTableInQueue';
 import { CallMatchWhenTournamentTableWasReleased } from './application/event/CallMatchWhenTournamentTableWasReleased';
 import { CallMatchWhenMatchWasQueued } from './application/event/CallMatchWhenMatchWasQueued';
+import { MatchHasEnded } from '../../match-module/core/domain/event/MatchHasEnded';
+import { MatchHasEndedImpliesTournamentMatchWasEnded } from './application/event/MatchHasEndedImpliesTournamentMatchWasEnded';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -78,6 +80,10 @@ export function DoublesTournamentModuleCore(
       {
         eventType: TournamentTableWasBooked,
         handler: new BookTableInQueue(tablesQueue),
+      },
+      {
+        eventType: MatchHasEnded,
+        handler: new MatchHasEndedImpliesTournamentMatchWasEnded(eventPublisher, currentTimeProvider),
       },
     ],
     queryHandlers: [
