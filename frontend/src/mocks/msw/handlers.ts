@@ -49,4 +49,40 @@ export const handlers = [
       })
     );
   }),
+
+  rest.get("*/rest-api/doubles-tournaments/:tournamentId/matches", (req, res, ctx) => {
+    return res(
+        ctx.status(200),
+        ctx.json({
+          "tournamentId": "094469cf-6fcc-4947-a5c0-be1e94f54855",
+          "queue": [
+            {
+              "matchNumber": 0,
+              "team1Id": "eleHasCat-a9a5-4296-a319-ebdfbadec6ba",
+              "team12d": "LordJsonII-a9a5-4296-a319-ebdfbadec6ba",
+              "tableNumber": 1,
+              "started": true
+            },{
+              "matchNumber": 1,
+              "team1Id": "NoEyesGuy-a9a5-4296-a319-ebdfbadec6ba",
+              "team12d": "moldFear-a9a5-4296-a319-ebdfbadec6ba",
+              "tableNumber": 1,
+              "started": true
+            },{
+              "matchNumber": 2,
+              "team1Id": "lameHamster-a9a5-4296-a319-ebdfbadec6ba",
+              "team12d": "NonLameDuck-a9a5-4296-a319-ebdfbadec6ba",
+              "tableNumber": 1,
+              "started": true
+            },{
+              "matchNumber": 3,
+              "team1Id": "butterMonster-429-ebdfbadec6ba",
+              "team12d": "HorseWithoutTeeth-ebdfbadec6ba",
+              "tableNumber": 1,
+              "started": true
+            }
+          ],
+        })
+    );
+  }),
 ];
