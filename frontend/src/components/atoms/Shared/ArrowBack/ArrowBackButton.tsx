@@ -9,14 +9,13 @@ const style = {
 }
 
 type ArrowBackButtonProps = {
-    readonly onClick: () => void;
     readonly onLink: string;
 }
 
-const ArrowBackButton = ({onClick, onLink}: ArrowBackButtonProps) => {
+const ArrowBackButton = ({onLink}: ArrowBackButtonProps) => {
     return (
         <Link to={onLink}>
-            <IconButton onClick={onClick}>
+            <IconButton>
                 <NavigateBeforeIcon style={style}/>
             </IconButton>
         </Link>
