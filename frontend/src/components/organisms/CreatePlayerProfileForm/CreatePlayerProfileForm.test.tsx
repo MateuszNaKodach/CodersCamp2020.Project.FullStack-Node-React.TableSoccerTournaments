@@ -4,7 +4,6 @@ import {
   waitForElementToBeRemoved,
   waitFor,
 } from "@testing-library/react";
-import { BrowserRouter as Router } from "react-router-dom";
 import { TournamentRegistrations } from "../../pages/TournamentRegistrations";
 import { PlayerProfileDto } from "../../../restapi/players-profiles";
 import userEvent from "@testing-library/user-event";

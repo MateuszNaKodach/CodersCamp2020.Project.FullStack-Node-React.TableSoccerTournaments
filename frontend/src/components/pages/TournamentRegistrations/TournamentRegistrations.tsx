@@ -30,7 +30,7 @@ import {
 } from "../../../restapi/players-profiles";
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import RegisterPlayerProfileForm from "../../organisms/RegisterPlayerProfileForm/RegisterPlayerProfileForm";
+import CreatePlayerProfileForm from "../../organisms/CreatePlayerProfileForm/CreatePlayerProfileForm";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Notification from "../../organisms/Notification/Notification";
@@ -198,7 +198,7 @@ const PlayersList = (props: {
   notification: (name: string, surname: string) => void;
   tournamentId: string;
 }) => {
-  const clearInputAddAndRegisterPlayer = (name: string, surname: string) => {
+  const clearInputCreateAndRegisterPlayer = (name: string, surname: string) => {
     props.refreshPlayersAndResetInput();
     props.notification(name, surname);
   };
@@ -206,7 +206,7 @@ const PlayersList = (props: {
   if (props.players.length === 0) {
     return (
       <PlayerNotFound
-        clearInputAddAndRegisterPlayer={clearInputAddAndRegisterPlayer}
+        clearInputCreateAndRegisterPlayer={clearInputCreateAndRegisterPlayer}
         tournamentId={props.tournamentId}
       />
     );
@@ -234,7 +234,7 @@ const PlayersList = (props: {
   );
 };
 const PlayerNotFound = (props: {
-  clearInputAddAndRegisterPlayer: (name: string, surname: string) => void;
+  clearInputCreateAndRegisterPlayer: (name: string, surname: string) => void;
   tournamentId: string;
 }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
@@ -243,9 +243,9 @@ const PlayerNotFound = (props: {
     setDrawerOpened(open);
   };
 
-  const onPlayerProfileRegistered = (name: string, surname: string) => {
+  const onPlayerProfileCreated = (name: string, surname: string) => {
     setDrawerOpened(false);
-    props.clearInputAddAndRegisterPlayer(name, surname);
+    props.clearInputCreateAndRegisterPlayer(name, surname);
   };
 
   return (
@@ -263,8 +263,8 @@ const PlayerNotFound = (props: {
         open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
-        <RegisterPlayerProfileForm
-          onPlayerProfileRegistered={onPlayerProfileRegistered}
+        <CreatePlayerProfileForm
+          onPlayerProfileCreated={onPlayerProfileCreated}
           tournamentId={props.tournamentId}
         />
       </Drawer>
