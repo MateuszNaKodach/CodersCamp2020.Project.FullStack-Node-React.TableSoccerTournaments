@@ -1,36 +1,27 @@
-import { Button, MuiThemeProvider } from "@material-ui/core";
-import { Centered } from "../../atoms/Shared/Centered";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {Button, MuiThemeProvider} from "@material-ui/core";
+import {Centered} from "../../atoms/Shared/Centered";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import React from "react";
 import {
   PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
+  PATH_FOR_HOME_VIEW,
   PATH_FOR_LOGIN_VIEW,
+  PATH_FOR_PLAYER_MATCHES_VIEW,
   PATH_FOR_PLAYER_PROFILE_CREATION_VIEW,
   PATH_FOR_PLAYERS_PROFILES_VIEW,
-  PATH_FOR_HOME_VIEW,
   PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
   PATH_FOR_TOURNAMENTS_SELECTION_VIEW,
-  PATH_FOR_PLAYER_MATCHES_VIEW,
 } from "../../atoms/constants/paths";
 
-import { MatchesList } from "../../organisms/MatchesList";
-import { THEME } from "../../atoms/constants/ThemeMUI";
+import {MatchesList} from "../../organisms/MatchesList";
+import {THEME} from "../../atoms/constants/ThemeMUI";
 import Footer from "../../organisms/Footer/Footer";
-import { HomeMenu } from "../HomeMenu/HomeMenu";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import {HomeMenu} from "../HomeMenu/HomeMenu";
+import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
 import Header from "../../organisms/Header/Header";
-import { TournamentRegistrationsRoute } from "../Routes/TournamentRegistrationsRoutes";
+import {TournamentRegistrationsRoute} from "../Routes/TournamentRegistrationsRoutes";
 import CardTitleWithNavButton from "../../molecules/CardTitleWithNavButton/CardTitleWithNavButton";
 import TournamentCard from "../../molecules/TournamentCard/TournamentCard";
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: grey[800],
-      contrastText: "#E3E152",
-    },
-  },
-});
 
 function TourDeFoos() {
   return (
