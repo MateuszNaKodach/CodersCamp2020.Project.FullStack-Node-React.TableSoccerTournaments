@@ -20,8 +20,8 @@ const validationSchema = yup.object({
     .required("To pole jest wymagane."),
 });
 
-function AddingPlayerForm(props: {
-  onPlayerAdded: (name: string, surname: string) => void;
+function CreatePlayerProfileForm(props: {
+  onPlayerProfileCreated: (name: string, surname: string) => void;
   tournamentId: string;
 }) {
   const formik = useFormik({
@@ -46,7 +46,7 @@ function AddingPlayerForm(props: {
           tournamentId: props.tournamentId,
           playerId: playerId,
         });
-        props.onPlayerAdded(values.name, values.surname);
+        props.onPlayerProfileCreated(values.name, values.surname);
       } catch (error) {
         alert(error.response.data.message);
       }
@@ -126,4 +126,4 @@ function AddingPlayerForm(props: {
   );
 }
 
-export default AddingPlayerForm;
+export default CreatePlayerProfileForm;
