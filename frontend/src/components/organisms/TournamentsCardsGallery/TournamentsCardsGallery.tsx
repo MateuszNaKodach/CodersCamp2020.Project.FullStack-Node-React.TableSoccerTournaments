@@ -8,22 +8,22 @@ const loadedTournamentsCards = [
     {
         id: 1,
         tournamentName: 'Turniej z jajem',
-        tournamentRegistrationsStatus: 'Otwarte',
+        tournamentRegistrationsStatus: 'OPENED',
     },
     {
         id: 2,
         tournamentName: 'Turniej bez jaja',
-        tournamentRegistrationsStatus: 'Zakończone',
+        tournamentRegistrationsStatus: 'CLOSED',
     },
     {
         id: 3,
         tournamentName: 'Turniej wrocławski',
-        tournamentRegistrationsStatus: 'Otwarte',
+        tournamentRegistrationsStatus: 'OPENED',
     },
     {
         id: 4,
         tournamentName: 'Turniej kaliski',
-        tournamentRegistrationsStatus: 'Otwarte',
+        tournamentRegistrationsStatus: 'CLOSED',
     },
 ]
 
@@ -33,12 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'space-around',
-            overflow: 'visible',
-            boxSizing: "border-box",
-            margin: 0,
-            padding: 0,
-            maxWidth: MIN_CARD_COMPONENT_WIDTH,
-            width: MIN_CARD_COMPONENT_WIDTH,
         },
         gridList: {
             flexWrap: 'nowrap',
@@ -59,11 +53,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 backgroundColor: theme.palette.primary.main,
             }
         },
-        listTile: {
-            minWidth: 300,
-            height: 400,
-            margin: '10 0 10 0',
-        }
     }),
 );
 

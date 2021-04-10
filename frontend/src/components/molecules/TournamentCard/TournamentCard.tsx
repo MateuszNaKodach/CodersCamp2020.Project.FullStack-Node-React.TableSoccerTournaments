@@ -34,7 +34,6 @@ const TournamentCard = ({tournamentName, registrationStatus}: TournamentCardProp
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
                     {tournamentName}
-                    {/*Major Wrocław*/}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
                     ZAPISY: {registrationStatus}
@@ -42,8 +41,14 @@ const TournamentCard = ({tournamentName, registrationStatus}: TournamentCardProp
             </CardContent>
             <VerticalSpace height={"20px"}/>
             <CardActions disableSpacing={true} className={classes.cardActions}>
-                <TextButton text={"Zapisy"} onLink={''}/>
-                <TextButton text={"Mecze i wyniki"} onLink={''}/>
+                <>
+                {registrationStatus === "OPENED"
+                    ?
+                    <TextButton text={"Zapisy"} onLink={''}/>
+                    :
+                    <TextButton text={"Mecze i wyniki"} onLink={''}/>
+                }
+                </>
             </CardActions>
         </Card>
     );

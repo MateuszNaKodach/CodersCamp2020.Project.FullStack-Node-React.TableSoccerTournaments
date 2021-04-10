@@ -12,7 +12,9 @@ const useStyles = makeStyles({
             textDecoration: "none"
         },
         fab: {
-            padding: 10
+            padding: 10,
+            position: 'absolute',
+            right: 0,
         },
         icon: {
             paddingRight: 7
