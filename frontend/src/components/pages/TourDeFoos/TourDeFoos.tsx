@@ -17,6 +17,8 @@ import { HomeMenu } from "../HomeMenu/HomeMenu";
 import { TournamentRegistrations } from "../TournamentRegistrations";
 import Footer from "../../organisms/Footer/Footer";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import CardTitleWithNavButton from "../../molecules/CardTitleWithNavButton/CardTitleWithNavButton";
+import TournamentCard from "../../molecules/TournamentCard/TournamentCard";
 
 const theme = createMuiTheme({
   palette: {
@@ -38,6 +40,8 @@ function TourDeFoos() {
             </Route>
             <Route path={PATH_FOR_TOURNAMENTS_SELECTION_VIEW} exact>
               PATH_FOR_TOURNAMENTS_SELECTION_VIEW
+              <CardTitleWithNavButton title={"Turnieje"} />
+              <TournamentCard />
             </Route>
             <Route path={PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW} exact>
               PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW
