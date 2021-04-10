@@ -6,9 +6,6 @@ import React from "react";
 import {Centered} from "../../atoms/Shared/Centered";
 
 const arrowBackButtonProps = {
-    onClick: () => {
-        console.log("Menu button was clicked!")
-    },
     onLink: PATH_FOR_HOME_VIEW
 }
 
@@ -20,7 +17,7 @@ const CardTitleWithNavButton = (props: cardTitleWithNavButtonProps) => {
     return (
         <PageTitleBox>
             <Grid item xs={3}>
-                <ArrowBackButton onClick={arrowBackButtonProps.onClick} onLink={arrowBackButtonProps.onLink}/>
+                <ArrowBackButton onLink={arrowBackButtonProps.onLink}/>
             </Grid>
             <Grid item xs={6}>
                 <Centered>
