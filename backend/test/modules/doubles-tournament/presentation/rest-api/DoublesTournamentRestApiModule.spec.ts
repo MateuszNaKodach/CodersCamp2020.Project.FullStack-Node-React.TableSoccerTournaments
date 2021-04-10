@@ -12,6 +12,7 @@ import { QueuedMatch } from '../../../../../src/modules/doubles-tournament/core/
 import { MatchNumber } from '../../../../../src/modules/doubles-tournament/core/domain/MatchNumber';
 import { MatchesQueue } from '../../../../../src/modules/doubles-tournament/core/domain/MatchesQueue';
 import { TournamentId } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentId';
+import { FindAllDoublesTournaments } from '../../../../../src/modules/doubles-tournament/core/application/query/FindAllDoublesTournaments';
 
 describe('Doubles Tournament REST API', () => {
   it('GET /rest-api/doubles-tournaments/:tournamentId/teams | when tournament with given id found', async () => {
@@ -126,6 +127,106 @@ describe('Doubles Tournament REST API', () => {
     expect(status).toBe(StatusCodes.NOT_FOUND);
     expect(body).toStrictEqual({
       message: "Such Matches queue doesn't exist because doubles tournament with id = sampleTournamentId is not found!",
+    });
+  });
+
+  it('GET /rest-api/doubles-tournaments | return message when there are not any existing tournaments ready to start', async () => {
+    //Given
+    const queryPublisher = QueryPublisherMock(undefined);
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+
+    //When
+    const { body, status } = await agent.get('/rest-api/doubles-tournaments').send();
+
+    //Then
+    expect(queryPublisher.executeCalls).toBeCalledWith(new FindAllDoublesTournaments());
+    expect(status).toBe(StatusCodes.NOT_FOUND);
+    expect(body).toStrictEqual({
+      message: "There aren't any tournaments ready to start",
+    });
+  });
+
+  it('GET /rest-api/doubles-tournaments | return array with tournaments when there are some existing tournaments ready to start', async () => {
+    //Given
+    const queryPublisher = QueryPublisherMock([
+      new DoublesTournament({
+        tournamentId: 'sampleTournament1Id',
+        tournamentTeams: [
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId1'),
+            firstTeamPlayer: 'samplePlayer1',
+            secondTeamPlayer: 'samplePlayer2',
+          }),
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId2'),
+            firstTeamPlayer: 'samplePlayer3',
+            secondTeamPlayer: 'samplePlayer4',
+          }),
+        ],
+      }),
+      new DoublesTournament({
+        tournamentId: 'sampleTournament2Id',
+        tournamentTeams: [
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId1'),
+            firstTeamPlayer: 'samplePlayer1',
+            secondTeamPlayer: 'samplePlayer2',
+          }),
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId2'),
+            firstTeamPlayer: 'samplePlayer3',
+            secondTeamPlayer: 'samplePlayer4',
+          }),
+        ],
+      }),
+    ]);
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+
+    //When
+    const { body, status } = await agent.get('/rest-api/doubles-tournaments').send();
+
+    //Then
+    expect(queryPublisher.executeCalls).toBeCalledWith(new FindAllDoublesTournaments());
+    expect(status).toBe(StatusCodes.OK);
+    expect(body).toStrictEqual({
+      items: [
+        {
+          tournamentId: 'sampleTournament1Id',
+          tournamentTeams: {
+            items: [
+              {
+                teamId: 'sampleTeamId1',
+                firstTeamPlayer: 'samplePlayer1',
+                secondTeamPlayer: 'samplePlayer2',
+              },
+              {
+                teamId: 'sampleTeamId2',
+                firstTeamPlayer: 'samplePlayer3',
+                secondTeamPlayer: 'samplePlayer4',
+              },
+            ],
+          },
+          status: 'NOT_STARTED',
+        },
+        {
+          tournamentId: 'sampleTournament2Id',
+          tournamentTeams: {
+            items: [
+              {
+                teamId: 'sampleTeamId1',
+                firstTeamPlayer: 'samplePlayer1',
+                secondTeamPlayer: 'samplePlayer2',
+              },
+              {
+                teamId: 'sampleTeamId2',
+                firstTeamPlayer: 'samplePlayer3',
+                secondTeamPlayer: 'samplePlayer4',
+              },
+            ],
+          },
+          status: 'NOT_STARTED',
+        },
+      ],
     });
   });
 });

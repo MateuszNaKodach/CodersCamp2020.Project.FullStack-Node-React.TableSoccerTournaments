@@ -55,6 +55,9 @@ export function doublesTournamentRouter(
 
   const getAllTournaments = async (request: Request, response: Response) => {
     const queryResult = await queryPublisher.execute<FindAllDoublesTournamentsResult>(new FindAllDoublesTournaments());
+    if (!queryResult) {
+      return response.status(StatusCodes.NOT_FOUND).json({ message: "There aren't any tournaments ready to start" });
+    }
     return response.status(StatusCodes.OK).json(new TournamentListDto(queryResult.map(toTournamentDto)));
   };
 

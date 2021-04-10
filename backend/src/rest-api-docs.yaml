@@ -371,7 +371,7 @@ components:
           enum:
             - NOT_STARTED
             - STARTED
-          example: NOT_STARTED
+          example: STARTED
     DoubleTournamentListDto:
       type: array
       items:

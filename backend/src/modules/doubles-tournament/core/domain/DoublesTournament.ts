@@ -78,7 +78,7 @@ function fromTournamentTeam(tournamentTeam: TournamentTeam) {
 
 export function startTournament(tournament: DoublesTournament | undefined, currentTime: Date): DomainCommandResult<DoublesTournament> {
   if (tournament === undefined) {
-    throw new Error('This tournament does not exists.');
+    throw new Error('Such tournament does not exists.');
   }
 
   const startedTournament = new DoublesTournament({
