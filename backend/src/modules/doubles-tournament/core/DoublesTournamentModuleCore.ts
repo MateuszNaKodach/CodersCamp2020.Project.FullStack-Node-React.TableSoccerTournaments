@@ -29,6 +29,8 @@ import { TournamentTableWasBooked } from '../../tournament-tables/core/domain/ev
 import { ReleaseTableInQueue } from './application/event/ReleaseTableInQueue';
 import { CallMatchWhenTournamentTableWasReleased } from './application/event/CallMatchWhenTournamentTableWasReleased';
 import { CallMatchWhenMatchWasQueued } from './application/event/CallMatchWhenMatchWasQueued';
+import { StartTournament } from './application/command/StartTournament';
+import { StartTournamentCommandHandler } from './application/command/StartTournamentCommandHandler';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -52,6 +54,10 @@ export function DoublesTournamentModuleCore(
       {
         commandType: CallMatch,
         handler: new CallMatchCommandHandler(eventPublisher, currentTimeProvider, commandPublisher),
+      },
+      {
+        commandType: StartTournament,
+        handler: new StartTournamentCommandHandler(eventPublisher, currentTimeProvider, repository),
       },
     ],
     eventHandlers: [
