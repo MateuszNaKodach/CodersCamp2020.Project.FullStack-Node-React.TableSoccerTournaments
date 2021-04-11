@@ -12,6 +12,11 @@ import { QueuedMatch } from '../../../../../src/modules/doubles-tournament/core/
 import { MatchNumber } from '../../../../../src/modules/doubles-tournament/core/domain/MatchNumber';
 import { MatchesQueue } from '../../../../../src/modules/doubles-tournament/core/domain/MatchesQueue';
 import { TournamentId } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentId';
+import { FindAllDoublesTournaments } from '../../../../../src/modules/doubles-tournament/core/application/query/FindAllDoublesTournaments';
+import { StartTournament } from '../../../../shared/infrastructure/command/CommandsTestFixtures';
+import { CommandPublisherMock } from '../../../../test-support/shared/core/CommandPublisherMock';
+import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import { TournamentRegistrationsRestApiModule } from '../../../../../src/modules/tournaments-registrations/presentation/rest-api/TournamentRegistrationsRestApiModule';
 
 describe('Doubles Tournament REST API', () => {
   it('GET /rest-api/doubles-tournaments/:tournamentId/teams | when tournament with given id found', async () => {
@@ -127,5 +132,121 @@ describe('Doubles Tournament REST API', () => {
     expect(body).toStrictEqual({
       message: "Such Matches queue doesn't exist because doubles tournament with id = sampleTournamentId is not found!",
     });
+  });
+
+  it('GET /rest-api/doubles-tournaments | return message when there are not any existing tournaments ready to start', async () => {
+    //Given
+    const queryPublisher = QueryPublisherMock(undefined);
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+
+    //When
+    const { body, status } = await agent.get('/rest-api/doubles-tournaments').send();
+
+    //Then
+    expect(queryPublisher.executeCalls).toBeCalledWith(new FindAllDoublesTournaments());
+    expect(status).toBe(StatusCodes.NOT_FOUND);
+    expect(body).toStrictEqual({
+      message: "There aren't any tournaments ready to start",
+    });
+  });
+
+  it('GET /rest-api/doubles-tournaments | return array with tournaments when there are some existing tournaments ready to start | Happy path', async () => {
+    //Given
+    const queryPublisher = QueryPublisherMock([
+      new DoublesTournament({
+        tournamentId: 'sampleTournament1Id',
+        tournamentTeams: [
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId1'),
+            firstTeamPlayer: 'samplePlayer1',
+            secondTeamPlayer: 'samplePlayer2',
+          }),
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId2'),
+            firstTeamPlayer: 'samplePlayer3',
+            secondTeamPlayer: 'samplePlayer4',
+          }),
+        ],
+      }),
+      new DoublesTournament({
+        tournamentId: 'sampleTournament2Id',
+        tournamentTeams: [
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId1'),
+            firstTeamPlayer: 'samplePlayer1',
+            secondTeamPlayer: 'samplePlayer2',
+          }),
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId2'),
+            firstTeamPlayer: 'samplePlayer3',
+            secondTeamPlayer: 'samplePlayer4',
+          }),
+        ],
+      }),
+    ]);
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+
+    //When
+    const { body, status } = await agent.get('/rest-api/doubles-tournaments').send();
+
+    //Then
+    expect(queryPublisher.executeCalls).toBeCalledWith(new FindAllDoublesTournaments());
+    expect(status).toBe(StatusCodes.OK);
+    expect(body).toStrictEqual({
+      items: [
+        {
+          tournamentId: 'sampleTournament1Id',
+          tournamentTeams: {
+            items: [
+              {
+                teamId: 'sampleTeamId1',
+                firstTeamPlayer: 'samplePlayer1',
+                secondTeamPlayer: 'samplePlayer2',
+              },
+              {
+                teamId: 'sampleTeamId2',
+                firstTeamPlayer: 'samplePlayer3',
+                secondTeamPlayer: 'samplePlayer4',
+              },
+            ],
+          },
+          status: 'NOT_STARTED',
+        },
+        {
+          tournamentId: 'sampleTournament2Id',
+          tournamentTeams: {
+            items: [
+              {
+                teamId: 'sampleTeamId1',
+                firstTeamPlayer: 'samplePlayer1',
+                secondTeamPlayer: 'samplePlayer2',
+              },
+              {
+                teamId: 'sampleTeamId2',
+                firstTeamPlayer: 'samplePlayer3',
+                secondTeamPlayer: 'samplePlayer4',
+              },
+            ],
+          },
+          status: 'NOT_STARTED',
+        },
+      ],
+    });
+  });
+
+  it('POST /rest-api/doubles-tournaments/:tournamentId/start | start tournament | Happy path', async () => {
+    //Given
+    const tournamentId = 'sampleTournament1Id';
+
+    const commandPublisher = CommandPublisherMock(CommandResult.success());
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { commandPublisher });
+
+    //When
+    const { body, status } = await agent.post(`/rest-api/doubles-tournaments/${tournamentId}/start`).send();
+
+    //Then
+    expect(commandPublisher.executeCalls).toBeCalledWith(new StartTournament({ tournamentId: tournamentId }));
+    expect(status).toBe(StatusCodes.ACCEPTED);
+    expect(body).toStrictEqual({ message: 'Tournament was started.' });
   });
 });

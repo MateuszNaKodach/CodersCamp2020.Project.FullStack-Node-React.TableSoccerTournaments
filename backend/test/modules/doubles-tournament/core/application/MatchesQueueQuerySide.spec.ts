@@ -31,8 +31,8 @@ describe('Matches queue | Query Side', () => {
     team2Id: team2Id_2,
   });
 
-  beforeEach(() => {
-    doublesTournament = createTournamentForTests(tournamentId, currentTime, team1Id, team2Id);
+  beforeEach(async () => {
+    doublesTournament = await createTournamentForTests(tournamentId, currentTime, team1Id, team2Id);
   });
 
   it('FindMatchesQueueByTournamentId | match was added to queue - get the queue', async () => {
