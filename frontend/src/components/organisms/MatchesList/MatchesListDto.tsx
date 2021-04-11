@@ -4,7 +4,7 @@ export type MatchesListDto = {
     {
       readonly matchNumber: number;
       readonly team1Id: string | undefined;
-      readonly team12d: string | undefined;
+      readonly team2Id: string | undefined;
       readonly tableNumber: number | undefined;
       readonly started: boolean;
     }
