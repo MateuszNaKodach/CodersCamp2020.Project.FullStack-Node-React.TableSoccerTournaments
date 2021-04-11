@@ -13,6 +13,7 @@ import { MatchNumber } from '../../../../../src/modules/doubles-tournament/core/
 import { MatchesQueue } from '../../../../../src/modules/doubles-tournament/core/domain/MatchesQueue';
 import { TournamentId } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentId';
 import { FindAllDoublesTournaments } from '../../../../../src/modules/doubles-tournament/core/application/query/FindAllDoublesTournaments';
+import { StartTournament } from '../../../../shared/infrastructure/command/CommandsTestFixtures';
 
 describe('Doubles Tournament REST API', () => {
   it('GET /rest-api/doubles-tournaments/:tournamentId/teams | when tournament with given id found', async () => {
@@ -146,7 +147,7 @@ describe('Doubles Tournament REST API', () => {
     });
   });
 
-  it('GET /rest-api/doubles-tournaments | return array with tournaments when there are some existing tournaments ready to start', async () => {
+  it('GET /rest-api/doubles-tournaments | return array with tournaments when there are some existing tournaments ready to start | Happy path', async () => {
     //Given
     const queryPublisher = QueryPublisherMock([
       new DoublesTournament({
@@ -229,4 +230,105 @@ describe('Doubles Tournament REST API', () => {
       ],
     });
   });
+
+  it('POST /rest-api/doubles-tournaments/:tournamentId/start | start tournament | Happy path', async () => {
+    //Given
+    const tournamentId = 'sampleTournament1Id';
+    const queryPublisher = QueryPublisherMock([
+      new DoublesTournament({
+        tournamentId: tournamentId,
+        tournamentTeams: [
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId1'),
+            firstTeamPlayer: 'samplePlayer1',
+            secondTeamPlayer: 'samplePlayer2',
+          }),
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId2'),
+            firstTeamPlayer: 'samplePlayer3',
+            secondTeamPlayer: 'samplePlayer4',
+          }),
+        ],
+      }),
+    ]);
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+
+    //When
+    const { body, status } = await agent
+      .post(`/rest-api/doubles-tournaments/${tournamentId}/start`)
+      .send({ tournamentId: 'sampleTournament1Id' });
+
+    //Then
+    expect(queryPublisher.executeCalls).toBeCalledWith(new StartTournament({ tournamentId: tournamentId }));
+    expect(status).toBe(StatusCodes.ACCEPTED);
+    expect(body).toStrictEqual({ message: 'Tournament was started.' });
+  });
+
+  //TODO check tests below
+  // it('POST /rest-api/doubles-tournaments/:tournamentId/start | tournament with such id is not ready to start', async () => {
+  //   //Given
+  //   const tournamentId = 'sampleTournament1Id';
+  //   const tournamentId2 = 'sampleTournament2Id';
+  //   const queryPublisher = QueryPublisherMock([
+  //     new DoublesTournament({
+  //       tournamentId: tournamentId,
+  //       tournamentTeams: [
+  //         new TournamentTeam({
+  //           teamId: TeamId.from('sampleTeamId1'),
+  //           firstTeamPlayer: 'samplePlayer1',
+  //           secondTeamPlayer: 'samplePlayer2',
+  //         }),
+  //         new TournamentTeam({
+  //           teamId: TeamId.from('sampleTeamId2'),
+  //           firstTeamPlayer: 'samplePlayer3',
+  //           secondTeamPlayer: 'samplePlayer4',
+  //         }),
+  //       ],
+  //     }),
+  //   ]);
+  //   const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+  //
+  //   //When
+  //   const { body, status } = await agent.post(`/rest-api/doubles-tournaments/${tournamentId2}/start`).send({ tournamentId: tournamentId2 });
+  //
+  //   //Then
+  //   expect(queryPublisher.executeCalls).toBeCalledWith(new StartTournament({ tournamentId: tournamentId2 }));
+  //   expect(status).toBe(StatusCodes.NOT_FOUND);
+  //   expect(body).toStrictEqual({ message: "There aren't any tournaments ready to start dupa" });
+  // });
+  //
+  // it('POST /rest-api/doubles-tournaments/:tournamentId/start | when try to start twice the same tournament, then get error', async () => {
+  //   //Given
+  //   const tournamentId = 'sampleTournament1Id';
+  //   const queryPublisher = QueryPublisherMock([
+  //     new DoublesTournament({
+  //       tournamentId: tournamentId,
+  //       tournamentTeams: [
+  //         new TournamentTeam({
+  //           teamId: TeamId.from('sampleTeamId1'),
+  //           firstTeamPlayer: 'samplePlayer1',
+  //           secondTeamPlayer: 'samplePlayer2',
+  //         }),
+  //         new TournamentTeam({
+  //           teamId: TeamId.from('sampleTeamId2'),
+  //           firstTeamPlayer: 'samplePlayer3',
+  //           secondTeamPlayer: 'samplePlayer4',
+  //         }),
+  //       ],
+  //     }),
+  //   ]);
+  //   const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+  //
+  //   //When
+  //   await agent.post(`/rest-api/doubles-tournaments/${tournamentId}/start`).send({ tournamentId: tournamentId });
+  //
+  //   const { body, status } = await agent
+  //     .post(`/rest-api/doubles-tournaments/${tournamentId}/start`)
+  //     .send({ tournamentId: tournamentId });
+  //
+  //   //Then
+  //   expect(queryPublisher.executeCalls).toBeCalledWith(new StartTournament({ tournamentId: tournamentId }));
+  //   expect(status).toBe(StatusCodes.BAD_REQUEST);
+  //   expect(body).toStrictEqual({ message: 'Such tournament was already started' });
+  // });
 });
