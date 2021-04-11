@@ -1,13 +1,14 @@
 import axios from "axios";
 import { PlayerProfilesListDto } from "./PlayerProfilesListDto";
 import { PlayerProfileDto } from "./PlayerProfileDto";
+import { PATH_BASE_URL } from "../../components/atoms/constants/apiPaths";
 
 export type UserProfilesRestApiConfig = {
   readonly baseUrl: string;
 };
 
 const defaultConfig: UserProfilesRestApiConfig = {
-  baseUrl: "http://localhost:5000/rest-api",
+  baseUrl: PATH_BASE_URL,
 };
 
 export const UserProfileRestApi = (
