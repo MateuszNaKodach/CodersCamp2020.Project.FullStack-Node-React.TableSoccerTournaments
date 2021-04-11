@@ -28,15 +28,11 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
                 const newMatchesListItems = createMatchListItemsFromMatchesListDto(matchesListDto);
                 setMatchesListItems(newMatchesListItems)
             });
-    }, []);
-
-    console.log("matchesListItems -->>");
-    console.log(matchesListItems);
+    }, [tournamentId]);
 
     const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
         setExpanded(isExpanded ? panel : false);
     };
-
 
     return (
         <>
@@ -71,9 +67,9 @@ const createMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
     return matchesListDto.queue.map((matchesItem) => {
         function findStatus(): string | undefined {
             if (matchesItem.started) return MatchStatus.FINISHED;
-            if (!(matchesItem.team1Id && matchesItem.team2Id)) return MatchStatus.NON_PLAYERS;
+            if (!(matchesItem.team1Id && matchesItem.team2Id)) return MatchStatus.NO_PLAYERS;
             // TODO: jeśli brak stołu - proponowane rozszerzenie w przyszłości
-            if (false) return MatchStatus.NOT_TABLE;
+            if (false) return MatchStatus.NO_TABLE;
             return MatchStatus.CALLED;
         }
 

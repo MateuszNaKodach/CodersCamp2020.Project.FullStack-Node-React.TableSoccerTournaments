@@ -39,32 +39,39 @@ const useStyles = makeStyles((theme) => ({
     inline: {
         display: 'inline',
     },
+
+    waitingForTeam: {
+        display: 'inline',
+        color: 'red'
+    },
+
 }));
 
 export const MatchTeam = (props: MatchTeamProps) => {
     const classes = useStyles();
 
-    const noNumber = "NN";
+    const noInformation = "Brak danych";
+    const WaitingForTeam = <span className={classes.waitingForTeam}>"Oczekiwanie"</span>;
     const player1 = props.player1 || "player1";
     const player2 = props.player2 || "player2";
     const avatarSymbol = (typeof props.teamNumber === "string" ? props.teamNumber[0] : props.teamNumber)
-    const teamNumber = avatarSymbol || noNumber;
-    const currentPlayerLevel = (props.currentPlayerLevel || props.currentPlayerLevel === 0) ? props.currentPlayerLevel : noNumber;
+    const teamName = props.teamNumber;
+    const currentPlayerLevel = (props.currentPlayerLevel || props.currentPlayerLevel === 0) ? props.currentPlayerLevel : noInformation;
     const currentMatchNumber = (props.currentMatchNumber || props.currentMatchNumber === 0) ? props.currentPlayerLevel
-        : noNumber;
-    const teamNameText = "Team " + teamNumber;
-    const playersNameText = <span> {player1} <br/> & {player2} </span>
+        : noInformation;
+    const teamNameTitle = <span>Team: <br/> {teamName ? teamName?.toString().slice(0,15):WaitingForTeam }...</span>;
+    const playersNameText = <><span className={classes.inline}>{player1}</span><br/><span className={classes.inline}> & {player2} </span></>;
 
     return (
         <>
             <Card className={classes.teamItem}>
 
                 <ListItemAvatar className={classes.avatar}>
-                    <Avatar className={classes.avatarColor}>{teamNumber}</Avatar>
+                    <Avatar className={classes.avatarColor}>{avatarSymbol}</Avatar>
                 </ListItemAvatar>
 
                 <ListItemText
-                    primary={teamNameText}
+                    primary={teamNameTitle}
                     secondary={
                         <React.Fragment>
                             {playersNameText}
@@ -95,4 +102,4 @@ export const MatchTeam = (props: MatchTeamProps) => {
             </Card>
         </>
     )
-};
+}
