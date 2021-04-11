@@ -82,7 +82,7 @@ export const MatchTeam = ({
       </>
    )
 
-   const isStartedMatchDescription =  matchStatus === MatchStatus.STARTED;
+   const isStartedMatchDescription = matchStatus === MatchStatus.STARTED;
    const ReadyToStartMatchDescription = (
       <>
          Aby ustawić zwycięzcę -

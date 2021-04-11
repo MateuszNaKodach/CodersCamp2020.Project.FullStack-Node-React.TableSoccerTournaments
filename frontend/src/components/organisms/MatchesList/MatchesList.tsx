@@ -9,94 +9,94 @@ import {MatchesListDto} from "./MatchesListDto";
 import {MatchStatus} from "../../atoms/MatchStatus";
 
 const StyledMatchesList = styled(Card)({
-    width: MIN_CARD_COMPONENT_WIDTH,
+   width: MIN_CARD_COMPONENT_WIDTH,
 });
 
 export type MatchesListProps = {
-    readonly tournamentId: string;
+   readonly tournamentId: string;
 };
 
 export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
-    const [expanded, setExpanded] = React.useState<string | boolean>(false);
-    const [matchesListItems, setMatchesListItems] = React.useState<MatchListItem[] | undefined>();
+   const [expanded, setExpanded] = React.useState<string | boolean>(false);
+   const [matchesListItems, setMatchesListItems] = React.useState<MatchListItem[] | undefined>();
 
-    useEffect(() => {
-        MatchesListRestApi()
-            .getMatchesList(tournamentId)
-            .then((matchesListDto) => {
-                const newMatchesListItems = returnMatchListItemsFromMatchesListDto(matchesListDto);
-                setMatchesListItems(newMatchesListItems)
-            });
-    }, [tournamentId]);
+   useEffect(() => {
+      MatchesListRestApi()
+         .getMatchesList(tournamentId)
+         .then((matchesListDto) => {
+            const newMatchesListItems = returnMatchListItemsFromMatchesListDto(matchesListDto);
+            setMatchesListItems(newMatchesListItems)
+         });
+   }, [tournamentId]);
 
-    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
-        setExpanded(isExpanded ? panel : false);
-    };
+   const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
+      setExpanded(isExpanded ? panel : false);
+   };
 
-    return (
-        <>
-            <StyledMatchesList>
-                {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie"}
-            </StyledMatchesList>
-        </>
-    )
+   return (
+      <>
+         <StyledMatchesList>
+            {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie"}
+         </StyledMatchesList>
+      </>
+   )
 };
 
 const returnMatchItem = (matchItem: MatchListItem, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
-    <MatchItem
-        level={matchItem.level}
-        matchNumber={matchItem.matchNumber}
-        matchStatus={matchItem.matchStatus}
-        onClickTeam={matchItem.onClickTeam}
-        team1={matchItem.team1}
-        team2={matchItem.team2}
-        winnerTeamId={"aa"}
-        key={matchItem.matchNumber}
-        expanded={expanded}
-        handleChangeExpander={handleChangeExpander}
-    />
+   <MatchItem
+      level={matchItem.level}
+      matchNumber={matchItem.matchNumber}
+      matchStatus={matchItem.matchStatus}
+      onClickTeam={matchItem.onClickTeam}
+      team1={matchItem.team1}
+      team2={matchItem.team2}
+      winnerTeamId={"aa"}
+      key={matchItem.matchNumber}
+      expanded={expanded}
+      handleChangeExpander={handleChangeExpander}
+   />
 )
 
 function callBackFunction() {
-    console.log("AaaBbbCcc")
+   console.log("AaaBbbCcc")
 }
 
 const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto): MatchListItem[] => {
-    return matchesListDto.queue.map((matchesItem) => {
+   return matchesListDto.queue.map((matchesItem) => {
 
-        function findStatus(): MatchStatus  {
-            if (matchesItem.status === "started") return MatchStatus.STARTED;
-            if (matchesItem.status === "ended") return MatchStatus.FINISHED;
-            if (matchesItem.status === "enqueued") return MatchStatus.NO_TABLE;
-            if (matchesItem.status === "noTeams") {
-                if(matchesItem.team1Id || matchesItem.team1Id)                return MatchStatus.NO_ONE_TEAM;
+      function findStatus(): MatchStatus {
+         if (matchesItem.status === "started") return MatchStatus.STARTED;
+         if (matchesItem.status === "ended") return MatchStatus.FINISHED;
+         if (matchesItem.status === "enqueued") return MatchStatus.NO_TABLE;
+         if (matchesItem.status === "noTeams") {
+            if (matchesItem.team1Id || matchesItem.team1Id) return MatchStatus.NO_ONE_TEAM;
 
-                return MatchStatus.NO_TEAMS;
-            }
-            return MatchStatus.STATUS_NOT_EXIST;
-        }
+            return MatchStatus.NO_TEAMS;
+         }
+         return MatchStatus.STATUS_NOT_EXIST;
+      }
 
-        return {
-            onClickTeam: callBackFunction,
-            matchNumber: matchesItem.matchNumber,
-            level: undefined,
-            matchStatus: findStatus(),
-            team1: {
-                player1: undefined,
-                player2: undefined,
-                teamId: matchesItem.team1Id,
-                currentPlayerLevel: undefined,
-                currentMatchNumber: undefined,
-            },
-            team2: {
-                player1: undefined,
-                player2: undefined,
-                teamId: matchesItem.team2Id,
-                currentPlayerLevel: undefined,
-                currentMatchNumber: undefined,
-            }
+      return {
+         onClickTeam: callBackFunction,
+         matchNumber: matchesItem.matchNumber,
+         level: undefined,
+         matchStatus: findStatus(),
+         team1: {
+            player1: undefined,
+            player2: undefined,
+            teamId: matchesItem.team1Id,
+            currentPlayerLevel: undefined,
+            currentMatchNumber: undefined,
+         },
+         team2: {
+            player1: undefined,
+            player2: undefined,
+            teamId: matchesItem.team2Id,
+            currentPlayerLevel: undefined,
+            currentMatchNumber: undefined,
+         }
 
-        } as MatchListItem
-    })
+      } as MatchListItem
+   })
 }
