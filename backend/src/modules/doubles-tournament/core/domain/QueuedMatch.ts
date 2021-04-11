@@ -4,21 +4,27 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 import { MatchesQueue } from './MatchesQueue';
 import { MatchWasQueued } from './event/MatchWasQueued';
 import { MatchNumber } from './MatchNumber';
-import { isDefined } from '../../../../common/Defined';
+import { MatchStatus } from './MatchStatus';
 
 export class QueuedMatch {
   readonly matchNumber: MatchNumber;
   readonly team1Id: TeamId;
   readonly team2Id: TeamId;
+  readonly status: MatchStatus;
   readonly tableNumber: number | undefined;
-  readonly started: boolean;
 
-  constructor(props: { matchNumber: MatchNumber; team1Id: TeamId; team2Id: TeamId; tableNumber?: number | undefined; started?: boolean }) {
+  constructor(props: {
+    matchNumber: MatchNumber;
+    team1Id: TeamId;
+    team2Id: TeamId;
+    status: MatchStatus;
+    tableNumber?: number | undefined;
+  }) {
     this.matchNumber = props.matchNumber;
     this.team1Id = props.team1Id;
     this.team2Id = props.team2Id;
+    this.status = props.status;
     this.tableNumber = props.tableNumber;
-    this.started = isDefined(props.started) ? props.started : false;
   }
 }
 
@@ -29,6 +35,7 @@ export function pushMatchToQueue(
     matchNumber: MatchNumber;
     team1Id: TeamId;
     team2Id: TeamId;
+    status: MatchStatus;
   },
   currentTime: Date,
 ): DomainCommandResult<MatchesQueue> {
@@ -43,6 +50,7 @@ export function pushMatchToQueue(
     matchNumber: command.matchNumber,
     team1Id: command.team1Id,
     team2Id: command.team2Id,
+    status: command.status,
   });
 
   const matchWasQueued = new MatchWasQueued({
@@ -72,9 +80,26 @@ export function startMatchInMatchesQueue(
     matchNumber: match.matchNumber,
     team1Id: match.team1Id,
     team2Id: match.team2Id,
+    status: match.status,
     tableNumber: match.tableNumber,
-    started: match.started,
   });
 
   return matchesQueue.withStartedMatch(startedMatch);
+}
+
+export function endMatchInMatchesQueue(tournamentId: TournamentId, matchNumber: MatchNumber, matchesQueue: MatchesQueue | undefined): void {
+  if (!tournamentId || !matchesQueue) {
+    throw new Error("Queue for this tournament doesn't exists.");
+  }
+  /*
+    const endedMatch = new QueuedMatch({
+      matchNumber: match.matchNumber,
+      team1Id: match.team1Id,
+      team2Id: match.team2Id,
+      status: match.status,
+      tableNumber: match.tableNumber,
+    });
+
+    return matchesQueue.withStartedMatch(endedMatch);
+   */
 }

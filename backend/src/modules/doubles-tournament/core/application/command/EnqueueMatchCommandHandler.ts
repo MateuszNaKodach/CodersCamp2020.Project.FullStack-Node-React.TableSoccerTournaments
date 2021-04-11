@@ -9,6 +9,7 @@ import { TeamId } from '../../domain/TeamId';
 import { MatchesQueueRepository } from '../MatchesQueueRepository';
 import { pushMatchToQueue } from '../../domain/QueuedMatch';
 import { MatchNumber } from '../../domain/MatchNumber';
+import { MatchStatus } from '../../domain/MatchStatus';
 
 export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> {
   constructor(
@@ -29,6 +30,7 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
       matchNumber: matchNumber,
       team1Id: team1Id,
       team2Id: team2Id,
+      status: MatchStatus.enqueued,
     };
 
     const { state, events } = pushMatchToQueue(matchesQueue, newCommand, this.currentTimeProvider());

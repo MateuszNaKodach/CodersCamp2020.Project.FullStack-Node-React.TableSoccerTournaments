@@ -8,6 +8,7 @@ import { QueuedMatch, startMatchInMatchesQueue } from '../../domain/QueuedMatch'
 import { MatchNumber } from '../../domain/MatchNumber';
 import { TeamId } from '../../domain/TeamId';
 import { MatchesQueueRepository } from '../MatchesQueueRepository';
+import { MatchStatus } from '../../domain/MatchStatus';
 
 export class StartMatchAfterItsCalling implements EventHandler<MatchWasCalled> {
   private readonly commandPublisher: CommandPublisher;
@@ -24,8 +25,8 @@ export class StartMatchAfterItsCalling implements EventHandler<MatchWasCalled> {
       matchNumber: MatchNumber.from(event.calledMatch.matchNumber),
       team1Id: TeamId.from(event.calledMatch.team1Id),
       team2Id: TeamId.from(event.calledMatch.team2Id),
+      status: MatchStatus.started,
       tableNumber: event.tableNumber,
-      started: true,
     });
     const matchesQueue = await this.matchesQueueRepository.findByTournamentId(tournamentId.raw);
     const queue = startMatchInMatchesQueue(tournamentId, startedMatch, matchesQueue);

@@ -7,6 +7,7 @@ import { MatchNumber } from '../../../../../src/modules/doubles-tournament/core/
 import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
 import { MatchesQueue } from '../../../../../src/modules/doubles-tournament/core/domain/MatchesQueue';
 import { TournamentId } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentId';
+import { MatchStatus } from '../../../../../src/modules/doubles-tournament/core/domain/MatchStatus';
 
 export function MatchesQueueRepositoryTestCases(props: {
   name: string;
@@ -17,6 +18,25 @@ export function MatchesQueueRepositoryTestCases(props: {
     const entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator();
     const tournamentId = TournamentId.from(entityIdGenerator.generate());
     let repository: MatchesQueueRepository;
+    const queue: QueuedMatch[] = [
+      new QueuedMatch({
+        matchNumber: MatchNumber.from(1),
+        team1Id: TeamId.from(entityIdGenerator.generate()),
+        team2Id: TeamId.from(entityIdGenerator.generate()),
+        status: MatchStatus.ended,
+        tableNumber: 5,
+      }),
+      new QueuedMatch({
+        matchNumber: MatchNumber.from(2),
+        team1Id: TeamId.from(entityIdGenerator.generate()),
+        team2Id: TeamId.from(entityIdGenerator.generate()),
+        status: MatchStatus.enqueued,
+      }),
+    ];
+    const matchesQueue = new MatchesQueue({
+      tournamentId: tournamentId,
+      queuedMatches: queue,
+    });
 
     beforeAll(async () => {
       await props.databaseTestSupport.openConnection();
@@ -26,48 +46,12 @@ export function MatchesQueueRepositoryTestCases(props: {
     afterAll(async () => await props.databaseTestSupport.closeConnection());
 
     test('findByTournamentId returns matches queue with given tournament id when it was created and saved', async () => {
-      const queue: QueuedMatch[] = [
-        new QueuedMatch({
-          matchNumber: MatchNumber.from(1),
-          team1Id: TeamId.from(entityIdGenerator.generate()),
-          team2Id: TeamId.from(entityIdGenerator.generate()),
-        }),
-        new QueuedMatch({
-          matchNumber: MatchNumber.from(2),
-          team1Id: TeamId.from(entityIdGenerator.generate()),
-          team2Id: TeamId.from(entityIdGenerator.generate()),
-        }),
-      ];
-      const matchesQueue = new MatchesQueue({
-        tournamentId: tournamentId,
-        queuedMatches: queue,
-      });
-
       await repository.save(matchesQueue);
-
       expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual(matchesQueue);
     });
 
     test('findByTournamentId returns undefined when given tournament id when it was not found', async () => {
-      const queue: QueuedMatch[] = [
-        new QueuedMatch({
-          matchNumber: MatchNumber.from(1),
-          team1Id: TeamId.from(entityIdGenerator.generate()),
-          team2Id: TeamId.from(entityIdGenerator.generate()),
-        }),
-        new QueuedMatch({
-          matchNumber: MatchNumber.from(2),
-          team1Id: TeamId.from(entityIdGenerator.generate()),
-          team2Id: TeamId.from(entityIdGenerator.generate()),
-        }),
-      ];
-      const matchesQueue = new MatchesQueue({
-        tournamentId: tournamentId,
-        queuedMatches: queue,
-      });
-
       await repository.save(matchesQueue);
-
       const notSavedTournamentId = entityIdGenerator.generate();
       expect(await repository.findByTournamentId(notSavedTournamentId)).toBeUndefined();
     });
