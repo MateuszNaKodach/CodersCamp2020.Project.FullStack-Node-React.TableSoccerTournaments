@@ -61,9 +61,8 @@ describe('Start tournament', () => {
     const currentTime = new Date();
     const team1Id = 'Team1Id';
     const team2Id = 'Team2Id';
-    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id]);
 
-    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
+    const doublesTournament = await createTournamentForTests(tournamentId, currentTime, team1Id, team2Id);
 
     //When
     const startTournament = new StartTournament({
@@ -75,6 +74,5 @@ describe('Start tournament', () => {
     //Then
     expect(commandResult.isSuccess()).not.toBeTruthy();
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Such tournament has been already started'));
-    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(undefined);
   });
 });
