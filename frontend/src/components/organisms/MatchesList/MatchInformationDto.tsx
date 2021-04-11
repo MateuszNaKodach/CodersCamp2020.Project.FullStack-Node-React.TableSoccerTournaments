@@ -1,6 +1,6 @@
 export type MatchInformationDto = {
-   "matchId": string,
-   "firstMatchSideId": string,
-   "secondMatchSideId": string,
-   "winnerId": string
+   matchId: string,
+   firstMatchSideId: string,
+   secondMatchSideId: string,
+   winnerId: string
 };
