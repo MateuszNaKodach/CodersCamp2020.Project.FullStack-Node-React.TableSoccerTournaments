@@ -86,100 +86,96 @@ export const MatchItem = (props: MatchItemProps,) => {
 
    const isMatchFinished = Boolean(props.matchStatus === MatchStatus.FINISHED);
    const isMatchStarted = Boolean(props.matchStatus === MatchStatus.STARTED);
-   const isMatchWaitingForTable = Boolean(props.matchStatus === MatchStatus.NO_TABLE);
-   const isMatchWaitingForPlayers = Boolean(props.matchStatus === MatchStatus.NO_TEAMS);
 
    return (
-      <>
-         <MatchItemWrapper elevation={3}>
-            <Accordion expanded={props.expanded === `panel${props.matchNumber}`}
-                       onChange={props.handleChangeExpander(`panel${props.matchNumber}`)}>
-               <AccordionSummary
-                  expandIcon={<ExpandMoreIcon/>}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-               >
-                  <ListItemAvatar>
-                     <StyledAvatar>{props.matchNumber}</StyledAvatar>
-                  </ListItemAvatar>
+      <MatchItemWrapper elevation={3}>
+         <Accordion expanded={props.expanded === `panel${props.matchNumber}`}
+                    onChange={props.handleChangeExpander(`panel${props.matchNumber}`)}>
+            <AccordionSummary
+               expandIcon={<ExpandMoreIcon/>}
+               aria-controls="panel1bh-content"
+               id="panel1bh-header"
+            >
+               <ListItemAvatar>
+                  <StyledAvatar>{props.matchNumber}</StyledAvatar>
+               </ListItemAvatar>
 
-                  <ListItemText
-                     primary={`- ${props.matchStatus} -`}
-                     secondary={
-                        <React.Fragment>
-                           <Typography
-                              component="span"
-                              variant="body2"
-                              display="inline"
-                              color="textPrimary"
-                           >
-                              {`Numer meczu: `}
-                           </Typography>
-                           {(props.matchNumber || props.matchNumber === 0) ? props.matchNumber : "-"}
-                           <br/>
-                           <Typography
-                              component="span"
-                              variant="body2"
-                              display="inline"
-                              color="textPrimary"
-                           >
-                              {`Poziom: `}
-                           </Typography>
-                           {(props.level || props.level === 0) ? props.level : "-"}
-                        </React.Fragment>
-                     }
+               <ListItemText
+                  primary={`- ${props.matchStatus} -`}
+                  secondary={
+                     <React.Fragment>
+                        <Typography
+                           component="span"
+                           variant="body2"
+                           display="inline"
+                           color="textPrimary"
+                        >
+                           {`Numer meczu: `}
+                        </Typography>
+                        {(props.matchNumber || props.matchNumber === 0) ? props.matchNumber : "-"}
+                        <br/>
+                        <Typography
+                           component="span"
+                           variant="body2"
+                           display="inline"
+                           color="textPrimary"
+                        >
+                           {`Poziom: `}
+                        </Typography>
+                        {(props.level || props.level === 0) ? props.level : "-"}
+                     </React.Fragment>
+                  }
+               />
+            </AccordionSummary>
+            <StyledAccordionDetails>
+
+               <MatchTeamWrapper>
+
+                  {!isMatchFinished && isMatchStarted &&
+                  (<TeamHoverButton>
+                     <AddCircleTwoToneIcon fontSize="inherit"/>
+                     <MatchWinnerDeterminationDialog
+                        agreeCallback={() => agreeDialogCallback(props.team1.teamId)}
+                        isOpen={false}
+                        teamName={props.team1.teamId}
+                     />
+                  </TeamHoverButton>)
+                  }
+
+                  <MatchTeam
+                     isWinnerTeam={isWinnerTeam1}
+                     matchStatus={props.matchStatus}
+                     teamId={props.team1.teamId}
+                     player1={props.team1.player1}
+                     player2={props.team1.player2}
                   />
-               </AccordionSummary>
-               <StyledAccordionDetails>
 
-                  <MatchTeamWrapper>
+               </MatchTeamWrapper>
 
-                     {!isMatchFinished && isMatchStarted &&
-                     (<TeamHoverButton>
-                        <AddCircleTwoToneIcon fontSize="inherit"/>
-                        <MatchWinnerDeterminationDialog
-                           agreeCallback={() => agreeDialogCallback(props.team1.teamId)}
-                           isOpen={false}
-                           teamName={props.team1.teamId}
-                        />
-                     </TeamHoverButton>)
-                     }
+               <MatchTeamWrapper>
 
-                     <MatchTeam
-                        isWinnerTeam={isWinnerTeam1}
-                        matchStatus={props.matchStatus}
-                        teamId={props.team1.teamId}
-                        player1={props.team1.player1}
-                        player2={props.team1.player2}
+                  {!isMatchFinished && isMatchStarted &&
+                  (<TeamHoverButton>
+                     <AddCircleTwoToneIcon fontSize="inherit"/>
+                     <MatchWinnerDeterminationDialog
+                        agreeCallback={() => agreeDialogCallback(props.team2.teamId)}
+                        isOpen={false}
+                        teamName={props.team2.teamId}
                      />
+                  </TeamHoverButton>)
+                  }
+                  <MatchTeam
+                     isWinnerTeam={isWinnerTeam2}
+                     matchStatus={props.matchStatus}
+                     teamId={props.team2.teamId}
+                     player1={props.team1.player1}
+                     player2={props.team1.player2}
+                  />
+               </MatchTeamWrapper>
 
-                  </MatchTeamWrapper>
-
-                  <MatchTeamWrapper>
-
-                     {!isMatchFinished && isMatchStarted &&
-                     (<TeamHoverButton>
-                        <AddCircleTwoToneIcon fontSize="inherit"/>
-                        <MatchWinnerDeterminationDialog
-                           agreeCallback={() => agreeDialogCallback(props.team2.teamId)}
-                           isOpen={false}
-                           teamName={props.team2.teamId}
-                        />
-                     </TeamHoverButton>)
-                     }
-                     <MatchTeam
-                        isWinnerTeam={isWinnerTeam2}
-                        matchStatus={props.matchStatus}
-                        teamId={props.team2.teamId}
-                        player1={props.team1.player1}
-                        player2={props.team1.player2}
-                     />
-                  </MatchTeamWrapper>
-
-               </StyledAccordionDetails>
-            </Accordion>
-         </MatchItemWrapper>
-      </>
+            </StyledAccordionDetails>
+         </Accordion>
+      </MatchItemWrapper>
    )
 };
 

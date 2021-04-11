@@ -57,7 +57,9 @@ export const MatchTeam = ({
                           }: MatchTeamProps) => {
    const classes = useStyles();
 
-   const isWaitingForTeam = !(teamId);
+   const isMatchWaitingForPlayers = Boolean(matchStatus === MatchStatus.NO_ONE_TEAM);
+
+   const isWaitingForThisTeam = !(teamId);
    const WaitingForTeam = <span className={classes.waitingForTeam}>"Oczekiwanie na drużynę"</span>;
 
    const player1Text = player1 || "player1";
@@ -66,19 +68,22 @@ export const MatchTeam = ({
    const playersNameText = <><span className={classes.inline}>{player1Text}</span><br/><span
       className={classes.inline}> & {player2Text} </span></>;
    const avatarSymbol = (player1Text[0].toUpperCase() + player2Text[0].toUpperCase())
-   const playersTitle = isWaitingForTeam ? WaitingForTeam : playersNameText;
+   const playersTitle = isWaitingForThisTeam ? WaitingForTeam : playersNameText;
 
-   const isWaitingForEnemyTeamDescription = matchStatus === MatchStatus.NO_ONE_TEAM;
+   const isWaitingForEnemyTeamDescription = (matchStatus === MatchStatus.NO_ONE_TEAM) && !isWaitingForThisTeam;
    const WaitingForEnemyTeamDescription = (
-      <>"Oczekiwanie na "
+      <>
+         "Oczekiwanie na
          <Typography
             component="span"
             variant="body2"
             className={classes.inline}
             color="textPrimary"
          >
-            `przeciwnika`
+            {isMatchWaitingForPlayers ? ` przeciwnika` : ` stół`}
+
          </Typography>
+         ".
       </>
    )
 
@@ -114,7 +119,7 @@ export const MatchTeam = ({
       <Card className={classes.teamItem}>
 
          <ListItemAvatar className={classes.avatar}>
-            <Avatar className={classes.avatarColor}>{isWaitingForTeam ? "..." : avatarSymbol}</Avatar>
+            <Avatar className={classes.avatarColor}>{isWaitingForThisTeam ? "..." : avatarSymbol}</Avatar>
          </ListItemAvatar>
 
          <ListItemText

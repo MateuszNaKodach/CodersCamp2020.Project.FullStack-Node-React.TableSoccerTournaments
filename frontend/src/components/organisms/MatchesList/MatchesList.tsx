@@ -35,11 +35,9 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    };
 
    return (
-      <>
-         <StyledMatchesList>
-            {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie"}
-         </StyledMatchesList>
-      </>
+      <StyledMatchesList>
+         {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie"}
+      </StyledMatchesList>
    )
 };
 
@@ -71,7 +69,6 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
          if (matchesItem.status === "enqueued") return MatchStatus.NO_TABLE;
          if (matchesItem.status === "noTeams") {
             if (matchesItem.team1Id || matchesItem.team1Id) return MatchStatus.NO_ONE_TEAM;
-
             return MatchStatus.NO_TEAMS;
          }
          return MatchStatus.STATUS_NOT_EXIST;
