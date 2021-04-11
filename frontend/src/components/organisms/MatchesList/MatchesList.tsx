@@ -93,7 +93,6 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
             currentPlayerLevel: undefined,
             currentMatchNumber: undefined,
          }
-
-      } as MatchListItem
+      }
    })
 }
