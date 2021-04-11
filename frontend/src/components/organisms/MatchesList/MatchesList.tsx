@@ -25,7 +25,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
         MatchesListRestApi()
             .getMatchesList(tournamentId)
             .then((matchesListDto) => {
-                const newMatchesListItems = createMatchListItemsFromMatchesListDto(matchesListDto);
+                const newMatchesListItems = returnMatchListItemsFromMatchesListDto(matchesListDto);
                 setMatchesListItems(newMatchesListItems)
             });
     }, [tournamentId]);
@@ -37,13 +37,13 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
     return (
         <>
             <StyledMatchesList>
-                {matchesListItems ? matchesListItems.map((item, index) => generateMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie"}
+                {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie"}
             </StyledMatchesList>
         </>
     )
 };
 
-const generateMatchItem = (matchItem: MatchListItem, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
+const returnMatchItem = (matchItem: MatchListItem, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
     <MatchItem
         level={matchItem.level}
         matchNumber={matchItem.matchNumber}
@@ -64,14 +64,14 @@ function callBackFunction() {
 
 
 
-const createMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto): MatchListItem[] => {
+const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto): MatchListItem[] => {
     return matchesListDto.queue.map((matchesItem) => {
-        function findStatus(): string | undefined {
-            if (matchesItem.started) return MatchStatus.FINISHED;
-            if (!(matchesItem.team1Id && matchesItem.team2Id)) return MatchStatus.NO_PLAYERS;
-            // TODO: jeśli brak stołu - proponowane rozszerzenie w przyszłości
-            if (false) return MatchStatus.NO_TABLE;
-            return MatchStatus.CALLED;
+
+        function findStatus(): MatchStatus  {
+            if (matchesItem.status === "started") return MatchStatus.STARTED;
+            if (matchesItem.status === "ended") return MatchStatus.FINISHED;
+            if (matchesItem.status === "enqueued") return MatchStatus.NO_TABLE;
+            return MatchStatus.NO_TEAMS;
         }
 
         return {

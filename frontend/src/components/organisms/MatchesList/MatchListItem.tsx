@@ -1,8 +1,10 @@
+import {MatchStatus} from "./MatchStatus";
+
 export type MatchListItem = {
     onClickTeam: () => void,
     matchNumber: number | undefined,
     level: number | undefined,
-    matchStatus: string | undefined
+    matchStatus: MatchStatus
     team1: {
         readonly player1: string | undefined;
         readonly player2: string | undefined;

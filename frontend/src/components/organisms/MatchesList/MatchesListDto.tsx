@@ -6,7 +6,7 @@ export type MatchesListDto = {
       readonly team1Id: string | undefined;
       readonly team2Id: string | undefined;
       readonly tableNumber: number | undefined;
-      readonly started: boolean;
+      readonly status: 'enqueued' | 'started' | 'ended';
     }
   ];
 };

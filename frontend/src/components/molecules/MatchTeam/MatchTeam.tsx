@@ -111,7 +111,6 @@ export const MatchTeam = ({
       </Typography>
    )
 
-
    return (
       <Card className={classes.teamItem}>
 
