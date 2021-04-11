@@ -29,7 +29,7 @@ const PlusButton = ({onLink}: PlusButtonProps) => {
         <Link to={onLink} className={classes.link}>
             <Fab variant="extended" color="secondary" aria-label="add" className={classes.fab}>
                 <Add className={classes.icon}/>
-                Tournament
+                Turniej
             </Fab>
         </Link>
     )
