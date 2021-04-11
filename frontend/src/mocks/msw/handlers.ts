@@ -66,20 +66,38 @@ export const handlers = [
               "matchNumber": 1,
               "team1Id": "NoEyesGuy-a9a5-4296-a319-ebdfbadec6ba",
               "team12d": "moldFear-a9a5-4296-a319-ebdfbadec6ba",
-              "tableNumber": 1,
+              "tableNumber": 2,
               "started": true
             },{
               "matchNumber": 2,
               "team1Id": "lameHamster-a9a5-4296-a319-ebdfbadec6ba",
               "team12d": "NonLameDuck-a9a5-4296-a319-ebdfbadec6ba",
-              "tableNumber": 1,
+              "tableNumber": 3,
               "started": true
             },{
               "matchNumber": 3,
               "team1Id": "butterMonster-429-ebdfbadec6ba",
               "team12d": "HorseWithoutTeeth-ebdfbadec6ba",
-              "tableNumber": 1,
+              "tableNumber": 4,
               "started": true
+            },{
+              "matchNumber": 4,
+              "team1Id": undefined,
+              "team12d": undefined,
+              "tableNumber": undefined,
+              "started": false
+            },{
+              "matchNumber": 5,
+              "team1Id": undefined,
+              "team12d": undefined,
+              "tableNumber": undefined,
+              "started": false
+            },{
+              "matchNumber": 6,
+              "team1Id": undefined,
+              "team12d": undefined,
+              "tableNumber": undefined,
+              "started": false
             }
           ],
         })
