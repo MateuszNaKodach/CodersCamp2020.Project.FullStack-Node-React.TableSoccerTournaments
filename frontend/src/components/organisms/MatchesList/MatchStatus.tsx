@@ -1,6 +1,6 @@
 export enum MatchStatus {
     FINISHED= "Zakończony",
-    CALLED= "Wywołany",
+    CALLED= "Podczas Gry",
     NO_TABLE= "Brak stołu",
     NO_PLAYERS= "Brak graczy",
 }
