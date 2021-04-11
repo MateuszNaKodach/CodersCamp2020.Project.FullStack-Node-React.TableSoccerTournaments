@@ -51,6 +51,7 @@ const generateMatchItem = (matchItem: MatchListItem, index: number, expanded: st
         onClickTeam={matchItem.onClickTeam}
         team1={matchItem.team1}
         team2={matchItem.team2}
+        winnerTeamId={"aa"}
         key={matchItem.matchNumber}
         expanded={expanded}
         handleChangeExpander={handleChangeExpander}
@@ -81,14 +82,14 @@ const createMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
             team1: {
                 player1: undefined,
                 player2: undefined,
-                teamNumber: matchesItem.team1Id,
+                teamId: matchesItem.team1Id,
                 currentPlayerLevel: undefined,
                 currentMatchNumber: undefined,
             },
             team2: {
                 player1: undefined,
                 player2: undefined,
-                teamNumber: matchesItem.team2Id,
+                teamId: matchesItem.team2Id,
                 currentPlayerLevel: undefined,
                 currentMatchNumber: undefined,
             }

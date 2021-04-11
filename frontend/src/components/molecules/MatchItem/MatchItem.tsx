@@ -17,19 +17,17 @@ export type MatchItemProps = {
     matchNumber: number | undefined,
     level: number | undefined,
     matchStatus: string | undefined
+    winnerTeamId: string | undefined;
     team1: {
         readonly player1: string | undefined;
         readonly player2: string | undefined;
-        readonly teamNumber: number | string | undefined;
-        readonly currentPlayerLevel: number | undefined;
-        readonly currentMatchNumber: number | undefined;
+        readonly teamId: number | string | undefined;
     },
     team2: {
         readonly player1: string | undefined;
         readonly player2: string | undefined;
-        readonly teamNumber: string | undefined;
-        readonly currentPlayerLevel: number | undefined;
-        readonly currentMatchNumber: number | undefined;
+        readonly teamId: string | undefined;
+
     },
 
     expanded: string | boolean,
@@ -83,6 +81,14 @@ const MatchItemWrapper = withStyles({
 
 export const MatchItem = (props: MatchItemProps,) => {
 
+
+  const  isWinnerTeam1=props.winnerTeamId === props.team1.teamId;
+  const  isWinnerTeam2=props.winnerTeamId === props.team1.teamId;
+    const isMatchFinished=Boolean(props.winnerTeamId);
+   const isMatchReadyToStart= Boolean(props.team1.teamId && props.team2.teamId);
+
+
+
     return (
         <>
             <MatchItemWrapper elevation={3}>
@@ -132,19 +138,20 @@ export const MatchItem = (props: MatchItemProps,) => {
                             <TeamHoverButton>
                                 <AddCircleTwoToneIcon fontSize="inherit"/>
                                 <MatchWinnerDeterminationDialog
-                                    agreeCallback={() => agreeDialogCallback(props.team1.teamNumber)}
+                                    agreeCallback={() => agreeDialogCallback(props.team1.teamId)}
                                     isOpen={false}
-                                    teamName={props.team1.teamNumber}
+                                    teamName={props.team1.teamId}
                                 />
                             </TeamHoverButton>
 
 
                             <MatchTeam
-                                currentMatchNumber={props.team1.currentMatchNumber}
-                                teamNumber={props.team1.teamNumber}
-                                currentPlayerLevel={props.team1.currentPlayerLevel}
+                                isWinnerTeam={isWinnerTeam1}
+                                isMatchFinished={isMatchFinished}
+                                teamId={props.team1.teamId}
                                 player1={props.team1.player1}
                                 player2={props.team1.player2}
+                                isMatchReadyToStart= {isMatchReadyToStart}
                             />
 
                         </MatchTeamWrapper>
@@ -154,18 +161,20 @@ export const MatchItem = (props: MatchItemProps,) => {
                             <TeamHoverButton>
                                 <AddCircleTwoToneIcon fontSize="inherit"/>
                                 <MatchWinnerDeterminationDialog
-                                    agreeCallback={() => agreeDialogCallback(props.team2.teamNumber)}
+                                    agreeCallback={() => agreeDialogCallback(props.team2.teamId)}
                                     isOpen={false}
-                                    teamName={props.team2.teamNumber}
+                                    teamName={props.team2.teamId}
                                 />
                             </TeamHoverButton>
 
                             <MatchTeam
-                                currentMatchNumber={props.team2.currentMatchNumber}
-                                teamNumber={props.team2.teamNumber}
-                                currentPlayerLevel={props.team2.currentPlayerLevel}
-                                player1={props.team2.player1}
-                                player2={props.team2.player2}
+                                isWinnerTeam={isWinnerTeam2}
+                                isMatchFinished={isMatchFinished}
+                                teamId={undefined}
+                                player1={props.team1.player1}
+                                player2={props.team1.player2}
+                                isMatchReadyToStart= {isMatchReadyToStart}
+
                             />
                         </MatchTeamWrapper>
 

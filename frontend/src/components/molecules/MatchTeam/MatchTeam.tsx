@@ -7,99 +7,128 @@ import {Typography} from "@material-ui/core";
 import {Card} from '@material-ui/core';
 
 export type MatchTeamProps = {
-    readonly player1: string | undefined;
-    readonly player2: string | undefined;
-    readonly teamNumber: number | string | undefined;
-    readonly currentPlayerLevel: number | undefined;
-    readonly currentMatchNumber: number | undefined;
+   readonly player1: string | undefined;
+   readonly player2: string | undefined;
+   readonly teamId: number | string | undefined;
+   readonly isWinnerTeam: boolean;
+   readonly isMatchFinished: boolean;
+   readonly   isMatchReadyToStart: boolean;
 };
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        backgroundColor: theme.palette.background.paper,
-    },
+   root: {
+      width: '100%',
+      backgroundColor: theme.palette.background.paper,
+   },
 
-    teamItem: {
-        boxSizing: "border-box",
-        display: "inline-flex",
-        width: '100%',
-        paddingLeft: "30px",
-    },
+   teamItem: {
+      boxSizing: "border-box",
+      display: "inline-flex",
+      width: '100%',
+      paddingLeft: "30px",
+   },
 
-    avatar: {
-        padding: "15px 0"
-    },
+   avatar: {
+      padding: "15px 0"
+   },
 
-    avatarColor: {
-        color: theme.palette.getContrastText(theme.palette.primary.main),
-        backgroundColor: theme.palette.primary.main,
-    },
+   avatarColor: {
+      color: theme.palette.getContrastText(theme.palette.primary.main),
+      backgroundColor: theme.palette.primary.main,
+   },
 
-    inline: {
-        display: 'inline',
-    },
+   inline: {
+      display: 'inline',
+   },
 
-    waitingForTeam: {
-        display: 'inline',
-        color: 'red'
-    },
+   waitingForTeam: {
+      display: 'inline',
+      color: 'red'
+   },
 
 }));
 
-export const MatchTeam = (props: MatchTeamProps) => {
-    const classes = useStyles();
+export const MatchTeam = ({
+                             player1,
+                             player2,
+                             isMatchFinished,
+                             isWinnerTeam,
+                             teamId,
+                             isMatchReadyToStart
+                          }: MatchTeamProps) => {
+   const classes = useStyles();
 
-    const noInformation = "Brak danych";
-    const WaitingForTeam = <span className={classes.waitingForTeam}>"Oczekiwanie"</span>;
-    const player1 = props.player1 || "player1";
-    const player2 = props.player2 || "player2";
-    const avatarSymbol = (typeof props.teamNumber === "string" ? props.teamNumber[0] : props.teamNumber)
-    const teamName = props.teamNumber;
-    const currentPlayerLevel = (props.currentPlayerLevel || props.currentPlayerLevel === 0) ? props.currentPlayerLevel : noInformation;
-    const currentMatchNumber = (props.currentMatchNumber || props.currentMatchNumber === 0) ? props.currentPlayerLevel
-        : noInformation;
-    const teamNameTitle = <span>Team: <br/> {teamName ? teamName?.toString().slice(0,15):WaitingForTeam }...</span>;
-    const playersNameText = <><span className={classes.inline}>{player1}</span><br/><span className={classes.inline}> & {player2} </span></>;
+   const isWaitingForTeam = !(teamId);
+   const WaitingForTeam = <span className={classes.waitingForTeam}>"Oczekiwanie na drużynę"</span>;
 
-    return (
-        <>
-            <Card className={classes.teamItem}>
+   const player1Text = player1 || "player1";
+   const player2Text = player2 || "player2";
 
-                <ListItemAvatar className={classes.avatar}>
-                    <Avatar className={classes.avatarColor}>{avatarSymbol}</Avatar>
-                </ListItemAvatar>
+   const playersNameText = <><span className={classes.inline}>{player1Text}</span><br/><span
+      className={classes.inline}> & {player2Text} </span></>;
+   const avatarSymbol = (player1Text[0].toUpperCase() + player2Text[0].toUpperCase())
+   const playersTitle = isWaitingForTeam ? WaitingForTeam : playersNameText;
 
-                <ListItemText
-                    primary={teamNameTitle}
-                    secondary={
-                        <React.Fragment>
-                            {playersNameText}
-                            <br/>
-                            <Typography
-                                component="span"
-                                variant="body2"
-                                className={classes.inline}
-                                color="textPrimary"
-                            >
-                                {`Aktualny Poziom: `}
-                            </Typography>
-                            {currentPlayerLevel}
-                            <br/>
-                            <Typography
-                                component="span"
-                                variant="body2"
-                                className={classes.inline}
-                                color="textPrimary"
-                            >
-                                {`Aktualny Mecz: `}
-                            </Typography>
-                            {currentMatchNumber}
-                        </React.Fragment>
-                    }
-                />
+   const isWaitingForEnemyTeamDescription = !(isMatchFinished || isMatchReadyToStart || isWaitingForTeam);
+   const WaitingForEnemyTeamDescription = (
+      <>"Oczekiwanie na "
+         <Typography
+            component="span"
+            variant="body2"
+            className={classes.inline}
+            color="textPrimary"
+         >
+            `przeciwnika`
+         </Typography>
+      </>
+   )
 
-            </Card>
-        </>
-    )
+   const isReadyToStartMatchDescription = !isMatchFinished && isMatchReadyToStart && !isWaitingForTeam;
+   const ReadyToStartMatchDescription = (
+      <>
+         "Aby ustawić zwycięzcę -"
+         <Typography
+            component="span"
+
+            variant="body2"
+            className={classes.inline}
+            color="textPrimary"
+         >
+            `Kliknij tu!`
+         </Typography>
+      </>
+   )
+
+   const isFinishedMatchDescription = isMatchFinished;
+   const FinishedMatchDescription = (
+      <Typography
+         component="span"
+         variant="body2"
+         className={classes.inline}
+         color="textPrimary"
+      >
+         {isWinnerTeam ? `Zwycięzca!` : `Przegrany!`}
+      </Typography>
+   )
+
+
+   return (
+      <Card className={classes.teamItem}>
+
+         <ListItemAvatar className={classes.avatar}>
+            <Avatar className={classes.avatarColor}>{isWaitingForTeam ? "..." : avatarSymbol}</Avatar>
+         </ListItemAvatar>
+
+         <ListItemText
+            primary={playersTitle}
+            secondary=
+               {<>
+                  {isFinishedMatchDescription && FinishedMatchDescription}
+                  {isReadyToStartMatchDescription && ReadyToStartMatchDescription}
+                  {isWaitingForEnemyTeamDescription && WaitingForEnemyTeamDescription}
+               </>}
+         />
+      </Card>
+   )
 }
+
