@@ -94,11 +94,11 @@ export const MatchItem = (props: MatchItemProps,) => {
                         id="panel1bh-header"
                     >
                         <ListItemAvatar>
-                            <StyledAvatar>1</StyledAvatar>
+                            <StyledAvatar>{props.matchNumber}</StyledAvatar>
                         </ListItemAvatar>
 
                         <ListItemText
-                            primary={`Mecz ${props.matchStatus ? ` - ${props.matchStatus}` : '-'}`}
+                            primary={`Mecz ${props.matchStatus}`}
                             secondary={
                                 <React.Fragment>
                                     <Typography
