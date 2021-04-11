@@ -1,4 +1,4 @@
-import {MatchStatus} from "./MatchStatus";
+import {MatchStatus} from "../../atoms/MatchStatus";
 
 export type MatchListItem = {
     onClickTeam: () => void,

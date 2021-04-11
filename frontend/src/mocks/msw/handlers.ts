@@ -84,7 +84,7 @@ export const handlers = [
               team1Id: "butterMonster-429-ebdfbadec6ba",
               team2Id: "HorseWithoutTeeth-ebdfbadec6ba",
               tableNumber: 4,
-              status: "finished",
+              status: "ended",
             },
             {
               matchNumber: 4,

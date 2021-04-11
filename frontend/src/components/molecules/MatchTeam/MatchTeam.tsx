@@ -5,14 +5,14 @@ import Avatar from '@material-ui/core/Avatar';
 import {makeStyles} from "@material-ui/core/styles";
 import {Typography} from "@material-ui/core";
 import {Card} from '@material-ui/core';
+import {MatchStatus} from "../../atoms/MatchStatus";
 
 export type MatchTeamProps = {
    readonly player1: string | undefined;
    readonly player2: string | undefined;
    readonly teamId: number | string | undefined;
    readonly isWinnerTeam: boolean;
-   readonly isMatchFinished: boolean;
-   readonly   isMatchReadyToStart: boolean;
+   readonly matchStatus: MatchStatus;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -51,10 +51,9 @@ const useStyles = makeStyles((theme) => ({
 export const MatchTeam = ({
                              player1,
                              player2,
-                             isMatchFinished,
                              isWinnerTeam,
                              teamId,
-                             isMatchReadyToStart
+                             matchStatus
                           }: MatchTeamProps) => {
    const classes = useStyles();
 
@@ -69,7 +68,7 @@ export const MatchTeam = ({
    const avatarSymbol = (player1Text[0].toUpperCase() + player2Text[0].toUpperCase())
    const playersTitle = isWaitingForTeam ? WaitingForTeam : playersNameText;
 
-   const isWaitingForEnemyTeamDescription = !(isMatchFinished || isMatchReadyToStart || isWaitingForTeam);
+   const isWaitingForEnemyTeamDescription = matchStatus === MatchStatus.NO_ONE_TEAM;
    const WaitingForEnemyTeamDescription = (
       <>"Oczekiwanie na "
          <Typography
@@ -83,10 +82,10 @@ export const MatchTeam = ({
       </>
    )
 
-   const isReadyToStartMatchDescription = !isMatchFinished && isMatchReadyToStart && !isWaitingForTeam;
+   const isStartedMatchDescription =  matchStatus === MatchStatus.STARTED;
    const ReadyToStartMatchDescription = (
       <>
-         "Aby ustawić zwycięzcę -"
+         Aby ustawić zwycięzcę -
          <Typography
             component="span"
 
@@ -94,12 +93,12 @@ export const MatchTeam = ({
             className={classes.inline}
             color="textPrimary"
          >
-            `Kliknij tu!`
+            Kliknij tu!
          </Typography>
       </>
    )
 
-   const isFinishedMatchDescription = isMatchFinished;
+   const isFinishedMatchDescription = matchStatus === MatchStatus.FINISHED;
    const FinishedMatchDescription = (
       <Typography
          component="span"
@@ -123,7 +122,7 @@ export const MatchTeam = ({
             secondary=
                {<>
                   {isFinishedMatchDescription && FinishedMatchDescription}
-                  {isReadyToStartMatchDescription && ReadyToStartMatchDescription}
+                  {isStartedMatchDescription && ReadyToStartMatchDescription}
                   {isWaitingForEnemyTeamDescription && WaitingForEnemyTeamDescription}
                </>}
          />

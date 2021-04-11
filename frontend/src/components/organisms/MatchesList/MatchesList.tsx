@@ -6,7 +6,7 @@ import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 import {MatchListItem} from "./MatchListItem";
 import {MatchesListRestApi} from "../../../restapi/matches-list";
 import {MatchesListDto} from "./MatchesListDto";
-import {MatchStatus} from "./MatchStatus";
+import {MatchStatus} from "../../atoms/MatchStatus";
 
 const StyledMatchesList = styled(Card)({
     width: MIN_CARD_COMPONENT_WIDTH,
@@ -62,8 +62,6 @@ function callBackFunction() {
     console.log("AaaBbbCcc")
 }
 
-
-
 const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto): MatchListItem[] => {
     return matchesListDto.queue.map((matchesItem) => {
 
@@ -71,7 +69,12 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
             if (matchesItem.status === "started") return MatchStatus.STARTED;
             if (matchesItem.status === "ended") return MatchStatus.FINISHED;
             if (matchesItem.status === "enqueued") return MatchStatus.NO_TABLE;
-            return MatchStatus.NO_TEAMS;
+            if (matchesItem.status === "noTeams") {
+                if(matchesItem.team1Id || matchesItem.team1Id)                return MatchStatus.NO_ONE_TEAM;
+
+                return MatchStatus.NO_TEAMS;
+            }
+            return MatchStatus.STATUS_NOT_EXIST;
         }
 
         return {

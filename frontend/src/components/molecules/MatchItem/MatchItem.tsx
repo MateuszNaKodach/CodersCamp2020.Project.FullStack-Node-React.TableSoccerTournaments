@@ -11,7 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {THEME} from "../../atoms/constants/ThemeMUI";
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import MatchWinnerDeterminationDialog from "../MatchWinnerDeterminationDialog/MatchWinnerDeterminationDialog";
-import {MatchStatus} from "./MatchStatus";
+import {MatchStatus} from "../../atoms/MatchStatus";
 
 export type MatchItemProps = {
    onClickTeam: () => void,
@@ -82,10 +82,12 @@ const MatchItemWrapper = withStyles({
 export const MatchItem = (props: MatchItemProps,) => {
 
    const isWinnerTeam1 = props.winnerTeamId === props.team1.teamId;
-   const isWinnerTeam2 = props.winnerTeamId === props.team1.teamId;
-   const isMatchFinished = Boolean(props.winnerTeamId);
-   const isMatchReadyToStart = Boolean(props.team1.teamId && props.team2.teamId);
+   const isWinnerTeam2 = props.winnerTeamId === props.team2.teamId;
 
+   const isMatchFinished = Boolean(props.matchStatus === MatchStatus.FINISHED);
+   const isMatchStarted = Boolean(props.matchStatus === MatchStatus.STARTED);
+   const isMatchWaitingForTable = Boolean(props.matchStatus === MatchStatus.NO_TABLE);
+   const isMatchWaitingForPlayers = Boolean(props.matchStatus === MatchStatus.NO_TEAMS);
 
    return (
       <>
@@ -102,7 +104,7 @@ export const MatchItem = (props: MatchItemProps,) => {
                   </ListItemAvatar>
 
                   <ListItemText
-                     primary={`Mecz ${props.matchStatus}`}
+                     primary={`- ${props.matchStatus} -`}
                      secondary={
                         <React.Fragment>
                            <Typography
@@ -132,7 +134,7 @@ export const MatchItem = (props: MatchItemProps,) => {
 
                   <MatchTeamWrapper>
 
-                     {!isMatchFinished && isMatchReadyToStart &&
+                     {!isMatchFinished && isMatchStarted &&
                      (<TeamHoverButton>
                         <AddCircleTwoToneIcon fontSize="inherit"/>
                         <MatchWinnerDeterminationDialog
@@ -145,18 +147,17 @@ export const MatchItem = (props: MatchItemProps,) => {
 
                      <MatchTeam
                         isWinnerTeam={isWinnerTeam1}
-                        isMatchFinished={isMatchFinished}
+                        matchStatus={props.matchStatus}
                         teamId={props.team1.teamId}
                         player1={props.team1.player1}
                         player2={props.team1.player2}
-                        isMatchReadyToStart={isMatchReadyToStart}
                      />
 
                   </MatchTeamWrapper>
 
                   <MatchTeamWrapper>
 
-                     {!isMatchFinished && isMatchReadyToStart &&
+                     {!isMatchFinished && isMatchStarted &&
                      (<TeamHoverButton>
                         <AddCircleTwoToneIcon fontSize="inherit"/>
                         <MatchWinnerDeterminationDialog
@@ -168,11 +169,10 @@ export const MatchItem = (props: MatchItemProps,) => {
                      }
                      <MatchTeam
                         isWinnerTeam={isWinnerTeam2}
-                        isMatchFinished={isMatchFinished}
+                        matchStatus={props.matchStatus}
                         teamId={props.team2.teamId}
                         player1={props.team1.player1}
                         player2={props.team1.player2}
-                        isMatchReadyToStart={isMatchReadyToStart}
                      />
                   </MatchTeamWrapper>
 
