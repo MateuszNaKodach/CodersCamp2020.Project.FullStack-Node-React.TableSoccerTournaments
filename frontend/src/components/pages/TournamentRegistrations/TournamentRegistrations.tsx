@@ -29,7 +29,7 @@ import {
 } from "../../../restapi/players-profiles";
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm";
+import CreatePlayerProfileForm from "../../organisms/CreatePlayerProfileForm/CreatePlayerProfileForm";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Notification from "../../organisms/Notification/Notification";
@@ -194,7 +194,7 @@ const PlayersList = (props: {
   notification: (name: string, surname: string) => void;
   tournamentId: string;
 }) => {
-  const clearSearchInputAndAddPlayer = (name: string, surname: string) => {
+  const clearInputCreateAndRegisterPlayer = (name: string, surname: string) => {
     props.refreshPlayersAndResetInput();
     props.notification(name, surname);
   };
@@ -202,7 +202,7 @@ const PlayersList = (props: {
   if (props.players.length === 0) {
     return (
       <PlayerNotFound
-        clearInputAndAddPlayer={clearSearchInputAndAddPlayer}
+        clearInputCreateAndRegisterPlayer={clearInputCreateAndRegisterPlayer}
         tournamentId={props.tournamentId}
       />
     );
@@ -230,7 +230,7 @@ const PlayersList = (props: {
   );
 };
 const PlayerNotFound = (props: {
-  clearInputAndAddPlayer: (name: string, surname: string) => void;
+  clearInputCreateAndRegisterPlayer: (name: string, surname: string) => void;
   tournamentId: string;
 }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
@@ -239,9 +239,9 @@ const PlayerNotFound = (props: {
     setDrawerOpened(open);
   };
 
-  const playerAdded = (name: string, surname: string) => {
+  const onPlayerProfileCreated = (name: string, surname: string) => {
     setDrawerOpened(false);
-    props.clearInputAndAddPlayer(name, surname);
+    props.clearInputCreateAndRegisterPlayer(name, surname);
   };
 
   return (
@@ -259,8 +259,8 @@ const PlayerNotFound = (props: {
         open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
-        <AddingPlayerForm
-          onPlayerAdded={playerAdded}
+        <CreatePlayerProfileForm
+          onPlayerProfileCreated={onPlayerProfileCreated}
           tournamentId={props.tournamentId}
         />
       </Drawer>
