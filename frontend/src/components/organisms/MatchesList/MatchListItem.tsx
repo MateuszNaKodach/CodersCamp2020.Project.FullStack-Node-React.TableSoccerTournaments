@@ -1,4 +1,4 @@
-export type MatchListProps = {
+export type MatchListItem = {
     onClickTeam: () => void,
     matchNumber: number | undefined,
     level: number | undefined,
