@@ -17,7 +17,6 @@ import { FindAllDoublesTournaments, FindAllDoublesTournamentsResult } from '../.
 import { TournamentListDto } from './response/TournamentListDto';
 import { TournamentDto } from './response/TournamentDto';
 import { StartTournament } from '../../core/application/command/StartTournament';
-import { PostTournamentStartRequestBody } from './request/PostTournamentStartRequestBody';
 
 export function doublesTournamentRouter(
   commandPublisher: CommandPublisher,
@@ -62,15 +61,8 @@ export function doublesTournamentRouter(
   };
 
   const startTournament = async (request: Request, response: Response) => {
-    const requestBody: PostTournamentStartRequestBody = request.body;
-    const queryResult = await queryPublisher.execute<FindDoublesTournamentByIdResult>(new FindDoublesTournamentById(requestBody));
-    if (!queryResult) {
-      return response.status(StatusCodes.NOT_FOUND).json({ message: "There aren't any tournaments ready to start" });
-    }
-    if (queryResult.status === 'STARTED') {
-      return response.status(StatusCodes.BAD_REQUEST).json({ message: 'Such tournament was already started' });
-    }
-    const commandResult = await commandPublisher.execute(new StartTournament(requestBody));
+    const { tournamentId } = request.params;
+    const commandResult = await commandPublisher.execute(new StartTournament({ tournamentId }));
     return commandResult.process(
       () => response.status(StatusCodes.ACCEPTED).json({ message: 'Tournament was started.' }).send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),

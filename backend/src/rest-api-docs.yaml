@@ -272,11 +272,15 @@ paths:
       tags:
         - Doubles Tournament
       description: Start tournament
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostDoubleTournamentStartRequestBody'
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
       responses:
         202:
           description: Tournament was started
@@ -377,14 +381,6 @@ components:
       items:
         $ref: '#/components/schemas/DoubleTournamentDto'
       uniqueItems: true
-    PostDoubleTournamentStartRequestBody:
-      type: object
-      properties:
-        tournamentId:
-          description: Identifier of the tournament
-          type: string
-          format: uuid
-          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
     QueuedMatchDto:
       type: object
       properties:

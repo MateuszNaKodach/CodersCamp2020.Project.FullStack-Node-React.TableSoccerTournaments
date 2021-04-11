@@ -76,9 +76,12 @@ function fromTournamentTeam(tournamentTeam: TournamentTeam) {
   };
 }
 
-export function startTournament(tournament: DoublesTournament | undefined, currentTime: Date): DomainCommandResult<DoublesTournament> {
+export function tournamentWasStarted(tournament: DoublesTournament | undefined, currentTime: Date): DomainCommandResult<DoublesTournament> {
   if (tournament === undefined) {
     throw new Error('Such tournament does not exists.');
+  }
+  if (tournament.status === 'STARTED') {
+    throw new Error('Such tournament has been already started');
   }
 
   const startedTournament = new DoublesTournament({

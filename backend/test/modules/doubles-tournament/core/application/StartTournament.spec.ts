@@ -54,4 +54,27 @@ describe('Start tournament', () => {
     expect((commandResult as Failure).reason).toStrictEqual(new Error('Such tournament does not exists.'));
     expect(doublesTournament.lastPublishedEvent()).toStrictEqual(undefined);
   });
+
+  it('When command start tournament was called, but tournament under given id was already started, then tournament was not started and command failed', async () => {
+    //Given
+    const tournamentId = 'TournamentId';
+    const currentTime = new Date();
+    const team1Id = 'Team1Id';
+    const team2Id = 'Team2Id';
+    const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id]);
+
+    const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGen);
+
+    //When
+    const startTournament = new StartTournament({
+      tournamentId: tournamentId,
+    });
+    await doublesTournament.executeCommand(startTournament);
+    const commandResult = await doublesTournament.executeCommand(startTournament);
+
+    //Then
+    expect(commandResult.isSuccess()).not.toBeTruthy();
+    expect((commandResult as Failure).reason).toStrictEqual(new Error('Such tournament has been already started'));
+    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(undefined);
+  });
 });
