@@ -237,33 +237,14 @@ describe('Doubles Tournament REST API', () => {
   it('POST /rest-api/doubles-tournaments/:tournamentId/start | start tournament | Happy path', async () => {
     //Given
     const tournamentId = 'sampleTournament1Id';
-    const queryPublisher = QueryPublisherMock([
-      new DoublesTournament({
-        tournamentId: tournamentId,
-        tournamentTeams: [
-          new TournamentTeam({
-            teamId: TeamId.from('sampleTeamId1'),
-            firstTeamPlayer: 'samplePlayer1',
-            secondTeamPlayer: 'samplePlayer2',
-          }),
-          new TournamentTeam({
-            teamId: TeamId.from('sampleTeamId2'),
-            firstTeamPlayer: 'samplePlayer3',
-            secondTeamPlayer: 'samplePlayer4',
-          }),
-        ],
-      }),
-    ]);
-    // const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
 
     const commandPublisher = CommandPublisherMock(CommandResult.success());
-    const { agent } = testModuleRestApi(TournamentRegistrationsRestApiModule, { commandPublisher });
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { commandPublisher });
 
     //When
     const { body, status } = await agent.post(`/rest-api/doubles-tournaments/${tournamentId}/start`).send();
 
     //Then
-    // expect(queryPublisher.executeCalls).toBeCalledWith(new StartTournament({ tournamentId: tournamentId }));
     expect(commandPublisher.executeCalls).toBeCalledWith(new StartTournament({ tournamentId: tournamentId }));
     expect(status).toBe(StatusCodes.ACCEPTED);
     expect(body).toStrictEqual({ message: 'Tournament was started.' });
