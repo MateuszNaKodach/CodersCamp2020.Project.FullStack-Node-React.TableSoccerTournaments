@@ -7,6 +7,7 @@ import {MatchListItem} from "./MatchListItem";
 import {MatchesListRestApi} from "../../../restapi/matches-list";
 import {MatchesListDto} from "./MatchesListDto";
 import {MatchStatus} from "../../atoms/MatchStatus";
+import {PlayerProfileDto} from "../../../restapi/players-profiles";
 
 const StyledMatchesList = styled(Card)({
    width: MIN_CARD_COMPONENT_WIDTH,
@@ -16,10 +17,18 @@ export type MatchesListProps = {
    readonly tournamentId: string;
 };
 
+export type TournamentTeamDto = {
+  readonly teamId: string;
+  readonly firstTeamPlayer: string;
+  readonly secondTeamPlayer: string;
+}
+
 export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
    const [expanded, setExpanded] = React.useState<string | boolean>(false);
    const [matchesListItems, setMatchesListItems] = React.useState<MatchListItem[] | undefined>();
+   const [tournamentTeams, setTournamentTeams] = React.useState<TournamentTeamDto[] | undefined>();
+   const [tournamentPlayersProfiles, setTournamentPlayersProfiles] = React.useState<PlayerProfileDto[] | undefined>(undefined);
 
    useEffect(() => {
       MatchesListRestApi()
@@ -29,6 +38,20 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
             setMatchesListItems(newMatchesListItems)
          });
    }, [tournamentId]);
+
+  useEffect(() => {
+    //TODO: Load tournamentTeams GET /doubles-tournaments/{tournamentId}/teams
+  }, [tournamentId]);
+
+  useEffect(() => {
+    if(matchesListItems === undefined || tournamentTeams === undefined){
+      return;
+    }
+    const tournamentPlayersIds: string[] = tournamentTeams
+        .map(team => [team.firstTeamPlayer, team.secondTeamPlayer])
+        .reduce((teamPlayers1, teamPlayers2) => [...teamPlayers1, ...teamPlayers2], [])
+    const tournamentPlayersProfiles: PlayerProfileDto[] = [] //TODO: Get Player Name for each player id and save in tournamentPlayersProfiles
+  }, [matchesListItems, tournamentTeams]);
 
    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
       setExpanded(isExpanded ? panel : false);
