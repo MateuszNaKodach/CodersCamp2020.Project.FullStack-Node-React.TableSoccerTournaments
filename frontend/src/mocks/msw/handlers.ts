@@ -125,6 +125,18 @@ export const handlers = [
     );
   }),
 
+  rest.get("*/rest-api/players-profiles/:playerId", (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        matchId: "2480fc2c-bbd7-427c-9439-02f76583aef5",
+        firstMatchSideId: "3510fc2c-bbd7-427c-9439-02f76583aef5",
+        secondMatchSideId: "8321fc2c-bbd7-427c-9439-02f76583aef7",
+        winnerId: "3510fc2c-bbd7-427c-9439-02f76583aef5",
+      })
+    );
+  }),
+
   rest.get(
     "*/rest-api/doubles-tournaments/:tournamentId/teams",
     (req, res, ctx) => {

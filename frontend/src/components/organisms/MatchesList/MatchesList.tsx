@@ -20,25 +20,13 @@ export type MatchesListProps = {
    readonly tournamentId: string;
 };
 
-export type TournamentTeamDto = {
-   readonly teamId: string;
-   readonly firstTeamPlayer: string;
-   readonly secondTeamPlayer: string;
-}
-
 export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
    const [expanded, setExpanded] = React.useState<string | boolean>(false);
    const [matchesListItems, setMatchesListItems] = React.useState<MatchListItem[] | undefined>();
-
    const [matchesInformationListDto, setMatchesInformationListDto] = React.useState<MatchInformationDto[] | undefined>(undefined);
-
    const [teamsListDto, setTeamsListDto] = React.useState<TeamsListDto | undefined>();
-   // const [tournamentPlayersProfiles, setTournamentPlayersProfiles] = React.useState<PlayerProfileDto[] | undefined>(undefined);
-
-   console.log("tuuuuuuu");
-   console.log(matchesInformationListDto)
-   console.log(teamsListDto)
+   const [playersProfilesList, setPlayersProfilesList] = React.useState<PlayerProfileDto[] | undefined>(undefined);
 
    useEffect(() => {
       MatchesListRestApi()
@@ -74,22 +62,21 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
    }, [matchesListItems]);
 
+   useEffect(() => {
+      async function setPlayersProfilesListDto(): Promise<void> {
+         if (!teamsListDto) return;
 
-   //TODO:
-//  useEffect(() => {
-//    async function setPlayersProfilesListDto(): Promise<void> {
-//       if (!matchesInformationListDto) return;
-//       const returnedPlayersProfilesListDto = await Promise.all(matchesListItems
-//          .map(async (matchInformationDto,index) => {
-//                // const matchId = tournamentId + matchListItem.matchNumber;
-//               return await getPlayerProfileDto(matchInformationDto.team1.player1)
-//             }
-//          ))
-//       await setMatchesInformationsListDto(returnedMatchesInformationListDto);
-//    }
-//     setPlayersProfilesListDto().then();
-// }, [matchesInformationListDto]);
+         const tournamentPlayersIds = teamsListDto.items
+            .map(({firstTeamPlayer, secondTeamPlayer}) =>
+               [firstTeamPlayer, secondTeamPlayer]
+            ).reduce((acc, teamPlayers) => acc.concat(teamPlayers))
 
+         const x = await Promise.all(tournamentPlayersIds.map((item) => getPlayerProfileDto(item)));
+         setPlayersProfilesList(x);
+      }
+
+      setPlayersProfilesListDto().then();
+   }, [teamsListDto]);
 
    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
       setExpanded(isExpanded ? panel : false);
