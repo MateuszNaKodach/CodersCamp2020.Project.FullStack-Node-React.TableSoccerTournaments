@@ -22,11 +22,10 @@ export const MatchInformationRestApi = (
       defaultConfig.baseUrl,
   };
   return {
-    getMatchInformation(matchId: string): Promise<MatchInformationDto> {
+    getMatchesList(matchId: string): Promise<MatchInformationDto> {
       return axios
         .get<MatchInformationDto>(`${currentConfig.baseUrl}/matches/${matchId}`)
         .then((res) => res.data);
     },
   };
 };
-

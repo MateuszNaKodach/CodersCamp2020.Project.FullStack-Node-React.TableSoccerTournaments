@@ -4,10 +4,9 @@ import {Card} from '@material-ui/core';
 import {MatchItem} from "../../molecules/MatchItem/MatchItem";
 import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 import {MatchListItem} from "./MatchListItem";
-import {MatchesListRestApi, MatchInformationRestApi} from "../../../restapi/matches-list";
+import {MatchesListRestApi} from "../../../restapi/matches-list";
 import {MatchesListDto} from "./MatchesListDto";
 import {MatchStatus} from "../../atoms/MatchStatus";
-import {UserProfileRestApi} from "../../../restapi/players-profiles";
 
 const StyledMatchesList = styled(Card)({
    width: MIN_CARD_COMPONENT_WIDTH,
@@ -27,47 +26,9 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
          .getMatchesList(tournamentId)
          .then((matchesListDto) => {
             const newMatchesListItems = returnMatchListItemsFromMatchesListDto(matchesListDto);
-            // aaa();
             setMatchesListItems(newMatchesListItems)
          });
    }, [tournamentId]);
-
-   useEffect(() => {
-
-      matchesListItems?.map((matchesListItem) => {
-            const matchId = `${tournamentId}_${matchesListItem.matchNumber}`;
-            MatchInformationRestApi()
-               .getMatchInformation(matchId)
-               .then((matchInformationDto) => {
-
-                     // matchesListItem.team1.playerName1 = getPlayerProfileName(matchInformationDto.firstMatchSideId);
-                  setMatchesListItems(prevState => {
-                     // matchesListItem.team1.playerName1 = getPlayerProfileName(matchInformationDto.firstMatchSideId);
-                     matchesListItem.team1.playerName1 = aaa(matchInformationDto.firstMatchSideId);
-
-                     return prevState;
-                  })
-               })
-         }
-      )
-
-   }, [matchesListItems])
-
- function getPlayerProfileName(playerId: string):Promise<string> {
-      // let playerName:string;
-    return  UserProfileRestApi()
-         .getPlayerProfile(playerId)
-         .then((playerProfile) => playerProfile.firstName + playerProfile.lastName)
-
-         // .finally();
-     // const playerName = playerProfile.firstName + playerProfile.lastName
-     //  return playerName;
-      // return playerName;
-   }
-
-   async function  aaa(playerId: string){
-      return await getPlayerProfileName(playerId);
-   }
 
    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
       setExpanded(isExpanded ? panel : false);
@@ -119,15 +80,15 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
          level: undefined,
          matchStatus: findStatus(),
          team1: {
-            playerName1: undefined,
-            playerName2: undefined,
+            player1: undefined,
+            player2: undefined,
             teamId: matchesItem.team1Id,
             currentPlayerLevel: undefined,
             currentMatchNumber: undefined,
          },
          team2: {
-            playerName1: undefined,
-            playerName2: undefined,
+            player1: undefined,
+            player2: undefined,
             teamId: matchesItem.team2Id,
             currentPlayerLevel: undefined,
             currentMatchNumber: undefined,
