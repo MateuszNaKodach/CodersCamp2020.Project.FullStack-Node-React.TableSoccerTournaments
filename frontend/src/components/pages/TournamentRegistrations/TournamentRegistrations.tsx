@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Avatar,
@@ -30,10 +29,11 @@ import {
 } from "../../../restapi/players-profiles";
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import AddingPlayerForm from "../../organisms/AddingPlayerForm/AddingPlayerForm";
+import CreatePlayerProfileForm from "../../organisms/CreatePlayerProfileForm/CreatePlayerProfileForm";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Notification from "../../organisms/Notification/Notification";
+import useStyles from "./styles";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
@@ -140,8 +140,9 @@ export const TournamentRegistrations = (
 
   //TODO: Add REST API error handling
   const isLoading = availablePlayers === undefined;
+  const classes = useStyles();
   return (
-    <RegistrationsCard>
+    <Card className={classes.root}>
       <CardContent>
         <Centered>
           <Typography component="h6" variant="h6">
@@ -181,15 +182,10 @@ export const TournamentRegistrations = (
           />
         </Centered>
       </CardContent>
-    </RegistrationsCard>
+    </Card>
   );
 };
 
-//TODO: Use something responsive instead of setting card maxWidth/Height (for example Grid from MaterialUI)
-const RegistrationsCard = styled(Card)({
-  maxWidth: "500px",
-  minHeight: "500px",
-});
 const PlayersList = (props: {
   players: PlayerProfileDto[];
   registeredPlayersIds: string[];
@@ -198,7 +194,7 @@ const PlayersList = (props: {
   notification: (name: string, surname: string) => void;
   tournamentId: string;
 }) => {
-  const clearSearchInputAndAddPlayer = (name: string, surname: string) => {
+  const clearInputCreateAndRegisterPlayer = (name: string, surname: string) => {
     props.refreshPlayersAndResetInput();
     props.notification(name, surname);
   };
@@ -206,7 +202,7 @@ const PlayersList = (props: {
   if (props.players.length === 0) {
     return (
       <PlayerNotFound
-        clearInputAndAddPlayer={clearSearchInputAndAddPlayer}
+        clearInputCreateAndRegisterPlayer={clearInputCreateAndRegisterPlayer}
         tournamentId={props.tournamentId}
       />
     );
@@ -234,7 +230,7 @@ const PlayersList = (props: {
   );
 };
 const PlayerNotFound = (props: {
-  clearInputAndAddPlayer: (name: string, surname: string) => void;
+  clearInputCreateAndRegisterPlayer: (name: string, surname: string) => void;
   tournamentId: string;
 }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
@@ -243,9 +239,9 @@ const PlayerNotFound = (props: {
     setDrawerOpened(open);
   };
 
-  const playerAdded = (name: string, surname: string) => {
+  const onPlayerProfileCreated = (name: string, surname: string) => {
     setDrawerOpened(false);
-    props.clearInputAndAddPlayer(name, surname);
+    props.clearInputCreateAndRegisterPlayer(name, surname);
   };
 
   return (
@@ -263,8 +259,8 @@ const PlayerNotFound = (props: {
         open={drawerOpened}
         onClose={toggleDrawer(false)}
       >
-        <AddingPlayerForm
-          onPlayerAdded={playerAdded}
+        <CreatePlayerProfileForm
+          onPlayerProfileCreated={onPlayerProfileCreated}
           tournamentId={props.tournamentId}
         />
       </Drawer>
