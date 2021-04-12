@@ -17,7 +17,6 @@ import { FindAllDoublesTournaments } from '../../../../../src/modules/doubles-to
 import { StartTournament } from '../../../../shared/infrastructure/command/CommandsTestFixtures';
 import { CommandPublisherMock } from '../../../../test-support/shared/core/CommandPublisherMock';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
-import { TournamentRegistrationsRestApiModule } from '../../../../../src/modules/tournaments-registrations/presentation/rest-api/TournamentRegistrationsRestApiModule';
 
 describe('Doubles Tournament REST API', () => {
   it('GET /rest-api/doubles-tournaments/:tournamentId/teams | when tournament with given id found', async () => {
@@ -76,14 +75,14 @@ describe('Doubles Tournament REST API', () => {
         matchNumber: MatchNumber.from(1),
         team1Id: TeamId.from('sampleTeam1'),
         team2Id: TeamId.from('sampleTeam2'),
-        status: MatchStatus.started,
+        status: MatchStatus.STARTED,
         tableNumber: 3,
       }),
       new QueuedMatch({
         matchNumber: MatchNumber.from(2),
         team1Id: TeamId.from('sampleTeam3'),
         team2Id: TeamId.from('sampleTeam4'),
-        status: MatchStatus.enqueued,
+        status: MatchStatus.ENQUEUED,
       }),
     ];
     const matchesQueue = new MatchesQueue({

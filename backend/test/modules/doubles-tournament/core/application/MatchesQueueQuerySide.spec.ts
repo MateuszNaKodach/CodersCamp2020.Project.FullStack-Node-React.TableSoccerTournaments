@@ -51,7 +51,7 @@ describe('Matches queue | Query Side', () => {
         matchNumber: MatchNumber.from(matchNumber),
         team1Id: TeamId.from(team1Id),
         team2Id: TeamId.from(team2Id),
-        status: MatchStatus.enqueued,
+        status: MatchStatus.ENQUEUED,
       }),
     ];
     const matchesQueue = new MatchesQueue({
@@ -78,13 +78,13 @@ describe('Matches queue | Query Side', () => {
         matchNumber: MatchNumber.from(matchNumber),
         team1Id: TeamId.from(team1Id),
         team2Id: TeamId.from(team2Id),
-        status: MatchStatus.enqueued,
+        status: MatchStatus.ENQUEUED,
       }),
       new QueuedMatch({
         matchNumber: MatchNumber.from(matchNumber_2),
         team1Id: TeamId.from(team1Id_2),
         team2Id: TeamId.from(team2Id_2),
-        status: MatchStatus.enqueued,
+        status: MatchStatus.ENQUEUED,
       }),
     ];
     const matchesQueue = new MatchesQueue({

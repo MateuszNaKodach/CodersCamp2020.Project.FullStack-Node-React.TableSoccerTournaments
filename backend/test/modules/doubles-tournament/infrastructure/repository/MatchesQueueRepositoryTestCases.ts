@@ -23,14 +23,14 @@ export function MatchesQueueRepositoryTestCases(props: {
         matchNumber: MatchNumber.from(1),
         team1Id: TeamId.from(entityIdGenerator.generate()),
         team2Id: TeamId.from(entityIdGenerator.generate()),
-        status: MatchStatus.ended,
+        status: MatchStatus.ENDED,
         tableNumber: 5,
       }),
       new QueuedMatch({
         matchNumber: MatchNumber.from(2),
         team1Id: TeamId.from(entityIdGenerator.generate()),
         team2Id: TeamId.from(entityIdGenerator.generate()),
-        status: MatchStatus.enqueued,
+        status: MatchStatus.ENQUEUED,
       }),
     ];
     const matchesQueue = new MatchesQueue({

@@ -30,7 +30,7 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
       matchNumber: matchNumber,
       team1Id: team1Id,
       team2Id: team2Id,
-      status: MatchStatus.enqueued,
+      status: MatchStatus.ENQUEUED,
     };
 
     const { state, events } = pushMatchToQueue(matchesQueue, newCommand, this.currentTimeProvider());

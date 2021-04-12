@@ -27,7 +27,7 @@ export class MatchHasEndedImpliesTournamentMatchWasEnded implements EventHandler
       TournamentId.from(tournamentId),
       MatchNumber.from(matchNumber),
       matchesQueue,
-      MatchStatus.ended,
+      MatchStatus.ENDED,
     );
     await this.matchesQueueRepository.save(queue);
 

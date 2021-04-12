@@ -43,7 +43,7 @@ export class CallMatchWhenTournamentTableWasReleased implements EventHandler<Tou
   }
 
   private findFirstMatchToCall(matches: MatchesQueue): QueuedMatch {
-    const notStartedMatches = matches.queuedMatches.filter((match) => match.status === MatchStatus.enqueued);
+    const notStartedMatches = matches.queuedMatches.filter((match) => match.status === MatchStatus.ENQUEUED);
     const lowestMatchNumber = Math.min(...notStartedMatches.map((match) => match.matchNumber.raw));
     return notStartedMatches.filter((match) => match.matchNumber.raw === lowestMatchNumber)[0];
   }

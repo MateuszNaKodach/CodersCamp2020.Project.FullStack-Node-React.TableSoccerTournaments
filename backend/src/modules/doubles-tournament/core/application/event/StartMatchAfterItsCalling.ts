@@ -23,7 +23,7 @@ export class StartMatchAfterItsCalling implements EventHandler<MatchWasCalled> {
     const matchNumber = MatchNumber.from(event.calledMatch.matchNumber);
     const tableNumber = event.tableNumber;
     const matchesQueue = await this.matchesQueueRepository.findByTournamentId(tournamentId.raw);
-    const queue = changeMatchStatusInMatchesQueue(tournamentId, matchNumber, matchesQueue, MatchStatus.started, tableNumber);
+    const queue = changeMatchStatusInMatchesQueue(tournamentId, matchNumber, matchesQueue, MatchStatus.STARTED, tableNumber);
     await this.matchesQueueRepository.save(queue);
 
     const matchId = MatchId.from(event.tournamentId, event.calledMatch.matchNumber);
