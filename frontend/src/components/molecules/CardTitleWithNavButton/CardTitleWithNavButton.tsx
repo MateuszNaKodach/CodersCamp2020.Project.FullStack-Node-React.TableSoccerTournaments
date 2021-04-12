@@ -1,9 +1,9 @@
 import ArrowBackButton from "../../atoms/Shared/ArrowBack/ArrowBackButton";
-import {PATH_FOR_HOME_VIEW} from "../../atoms/constants/paths";
 import {Card, Grid, Typography} from "@material-ui/core";
 import styled from "styled-components";
 import React from "react";
 import {Centered} from "../../atoms/Shared/Centered";
+import {PATH_FOR_HOME_VIEW} from "../../atoms/constants/routerPaths";
 
 const arrowBackButtonProps = {
     onLink: PATH_FOR_HOME_VIEW
