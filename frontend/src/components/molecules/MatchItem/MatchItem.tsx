@@ -20,13 +20,13 @@ export type MatchItemProps = {
    matchStatus: MatchStatus,
    winnerTeamId: string | undefined;
    team1: {
-      readonly player1: string | undefined;
-      readonly player2: string | undefined;
+      readonly playerName1: string | undefined;
+      readonly playerName2: string | undefined;
       readonly teamId: number | string | undefined;
    },
    team2: {
-      readonly player1: string | undefined;
-      readonly player2: string | undefined;
+      readonly playerName1: string | undefined;
+      readonly playerName2: string | undefined;
       readonly teamId: string | undefined;
    },
 
@@ -146,8 +146,8 @@ export const MatchItem = (props: MatchItemProps,) => {
                      isWinnerTeam={isWinnerTeam1}
                      matchStatus={props.matchStatus}
                      teamId={props.team1.teamId}
-                     player1={props.team1.player1}
-                     player2={props.team1.player2}
+                     player1={props.team1.playerName1}
+                     player2={props.team1.playerName2}
                   />
 
                </MatchTeamWrapper>
@@ -168,8 +168,8 @@ export const MatchItem = (props: MatchItemProps,) => {
                      isWinnerTeam={isWinnerTeam2}
                      matchStatus={props.matchStatus}
                      teamId={props.team2.teamId}
-                     player1={props.team1.player1}
-                     player2={props.team1.player2}
+                     player1={props.team1.playerName1}
+                     player2={props.team1.playerName2}
                   />
                </MatchTeamWrapper>
 

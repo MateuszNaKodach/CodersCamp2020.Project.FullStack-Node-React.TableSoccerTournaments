@@ -28,6 +28,13 @@ export const UserProfileRestApi = (
         .get<PlayerProfilesListDto>(`${currentConfig.baseUrl}/players-profiles`)
         .then((response) => response.data);
     },
+
+    getPlayerProfile(playerId:string): Promise<PlayerProfileDto> {
+      return axios
+        .get<PlayerProfileDto>(`${currentConfig.baseUrl}/players-profiles`)
+        .then((response) => response.data);
+    },
+
     async postPlayersProfile(playerProfile: PlayerProfileDto): Promise<void> {
       await axios.post<PlayerProfileDto>(
         `${currentConfig.baseUrl}/players-profiles`,

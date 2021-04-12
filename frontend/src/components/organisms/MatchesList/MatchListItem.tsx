@@ -6,13 +6,13 @@ export type MatchListItem = {
    level: number | undefined,
    matchStatus: MatchStatus
    team1: {
-      readonly player1: string | undefined;
-      readonly player2: string | undefined;
-      readonly teamId: number | string | undefined;
+       playerName1: string | undefined;
+       playerName2: string | undefined;
+       teamId: number | string | undefined;
    },
    team2: {
-      readonly player1: string | undefined;
-      readonly player2: string | undefined;
-      readonly teamId: string | undefined;
+       playerName1: string | undefined;
+       playerName2: string | undefined;
+       teamId: string | undefined;
    }
 };
