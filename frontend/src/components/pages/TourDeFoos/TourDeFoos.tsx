@@ -1,14 +1,14 @@
 import React from "react";
-import { Button, Grid, MuiThemeProvider } from "@material-ui/core";
-import { Centered } from "../../atoms/Shared/Centered";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { THEME } from "../../atoms/constants/ThemeMUI";
+import {Button, Grid, MuiThemeProvider} from "@material-ui/core";
+import {Centered} from "../../atoms/Shared/Centered";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {THEME} from "../../atoms/constants/ThemeMUI";
 import Footer from "../../organisms/Footer/Footer";
-import { HomeMenu } from "../HomeMenu/HomeMenu";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import {HomeMenu} from "../HomeMenu/HomeMenu";
+import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
 import Header from "../../organisms/Header/Header";
-import { TournamentRegistrationsRoute } from "../Routes/TournamentRegistrationsRoutes";
-import { StyledBackground } from "../../atoms/Background/StyledBackground";
+import {TournamentRegistrationsRoute} from "../Routes/TournamentRegistrationsRoutes";
+import {StyledBackground} from "../../atoms/Background/StyledBackground";
 import {
   PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
   PATH_FOR_HOME_VIEW,
@@ -19,8 +19,8 @@ import {
   PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
   PATH_FOR_TOURNAMENTS_SELECTION_VIEW
 } from "../../atoms/constants/routerPaths";
-import {MatchesList} from "../../organisms/MatchesList/MatchesList";
 import {MatchesListRoute} from "../Routes/MatchesListRoutes";
+import TournamentsList from "../TournamentsList/TournamentsList";
 
 function TourDeFoos() {
   return (
