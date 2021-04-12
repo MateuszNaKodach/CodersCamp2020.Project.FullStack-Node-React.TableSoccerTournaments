@@ -2,16 +2,16 @@ import axios from "axios";
 import { PATH_BASE_URL } from "../../components/atoms/constants/apiPaths";
 import { MatchesListDto } from "../../components/organisms/MatchesList/MatchesListDto";
 
-export type MatchesListRestApiConfig = {
+export type TeamsListRestApiConfig = {
   readonly baseUrl: string;
 };
 
-const defaultConfig: MatchesListRestApiConfig = {
+const defaultConfig: TeamsListRestApiConfig = {
   baseUrl: PATH_BASE_URL,
 };
 
 export const MatchesListRestApi = (
-  config?: Partial<MatchesListRestApiConfig>
+  config?: Partial<TeamsListRestApiConfig>
 ) => {
   const currentConfig = {
     ...defaultConfig,

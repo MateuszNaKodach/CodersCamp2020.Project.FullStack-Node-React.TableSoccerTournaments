@@ -22,7 +22,7 @@ export const MatchInformationRestApi = (
       defaultConfig.baseUrl,
   };
   return {
-    getMatchesList(matchId: string): Promise<MatchInformationDto> {
+    getMatchInformation(matchId: string): Promise<MatchInformationDto> {
       return axios
         .get<MatchInformationDto>(`${currentConfig.baseUrl}/matches/${matchId}`)
         .then((res) => res.data);
