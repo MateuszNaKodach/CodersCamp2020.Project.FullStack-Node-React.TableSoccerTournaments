@@ -8,6 +8,8 @@ import { InMemoryDomainEventBus } from '../../../../../src/shared/infrastructure
 import { testMatchModule } from '../../../match-module/core/application/TestMatchModule';
 import { TestModuleCore } from '../../../../test-support/shared/core/TestModuleCore';
 import { TournamentMatchWasEnded } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentMatchWasEnded';
+import { EnqueueMatch } from '../../../../../src/modules/doubles-tournament/core/application/command/EnqueueMatch';
+import waitForExpect from 'wait-for-expect';
 
 describe('End tournament match', () => {
   it('When match was ended, then end tournament match', async () => {
@@ -22,6 +24,13 @@ describe('End tournament match', () => {
     const entityIdGen = FromListIdGeneratorStub([team1Id, team2Id]);
     const doublesTournament: TestModuleCore = testDoublesTournamentsModule(currentTime, entityIdGen, commandBus, eventBus);
     const matchModule: TestModuleCore = testMatchModule(currentTime, commandBus, eventBus);
+    const enqueueMatch = new EnqueueMatch({
+      tournamentId: tournamentId,
+      matchNumber: matchNumber,
+      team1Id: team1Id,
+      team2Id: team2Id,
+    });
+    await doublesTournament.executeCommand(enqueueMatch);
 
     //When
     const matchHasEnded = new MatchHasEnded({
@@ -33,13 +42,15 @@ describe('End tournament match', () => {
     matchModule.publishEvent(matchHasEnded);
 
     //Then
-    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
-      new TournamentMatchWasEnded({
-        occurredAt: currentTime,
-        tournamentId: tournamentId,
-        matchNumber: matchNumber,
-        winnerId: team1Id,
-      }),
+    await waitForExpect(() =>
+      expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
+        new TournamentMatchWasEnded({
+          occurredAt: currentTime,
+          tournamentId: tournamentId,
+          matchNumber: matchNumber,
+          winnerId: team1Id,
+        }),
+      ),
     );
   });
 });

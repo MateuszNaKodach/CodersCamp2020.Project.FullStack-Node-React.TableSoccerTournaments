@@ -1,10 +1,7 @@
 import React from "react";
-import {
-  PATH_FOR_PLAYERS_PROFILES_VIEW,
-  PATH_FOR_TOURNAMENTS_SELECTION_VIEW,
-} from "../../atoms/constants/paths";
 import { Menu } from "../../templates/Menu";
-import { APP_NAME } from "../../atoms/constants/names";
+import {PATH_FOR_PLAYERS_PROFILES_VIEW, PATH_FOR_TOURNAMENTS_SELECTION_VIEW} from "../../atoms/constants/routerPaths";
+import {APP_NAME} from "../../atoms/constants/names";
 
 const homeMenuButtonsListProps = [
   {

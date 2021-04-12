@@ -13,8 +13,8 @@ describe('Matches queue | Write Side', () => {
   const matchNumber = 1;
   let doublesTournament: TestModuleCore;
 
-  beforeEach(() => {
-    doublesTournament = createTournamentForTests(tournamentId, currentTime, team1Id, team2Id);
+  beforeEach(async () => {
+    doublesTournament = await createTournamentForTests(tournamentId, currentTime, team1Id, team2Id);
   });
 
   it('when enqueue the match, then event - MatchWasQueued should be called with appropriate parameters', async () => {

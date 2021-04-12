@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { PATH_FOR_IMAGES } from "../constants/paths";
+import {PATH_FOR_IMAGES} from "../constants/imgPaths";
 
 export const StyledBackground = styled("div")({
   backgroundImage: `url("${PATH_FOR_IMAGES}/background.png")`,
