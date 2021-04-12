@@ -1,5 +1,6 @@
 import axios from "axios";
-import { TournamentRegistrationsDto } from "../../components/pages/TournamentRegistrations/TournamentRegistrationsDto";
+import { TournamentRegistrationsDto } from "./TournamentRegistrationsDto";
+import {TournamentRegistrationsListDto} from "./TournamentRegistrationsListDto";
 
 export type TournamentRegistrationsRestApiConfig = {
   readonly baseUrl: string;
@@ -39,5 +40,12 @@ export const TournamentRegistrationsRestApi = (
         body
       );
     },
+    getAllTournamentsRegistrations(): Promise<TournamentRegistrationsListDto> {
+      return axios
+          .get<TournamentRegistrationsListDto>(
+              `${currentConfig.baseUrl}/tournament-registrations/`
+          )
+          .then(res => res.data);
+    }
   };
 };

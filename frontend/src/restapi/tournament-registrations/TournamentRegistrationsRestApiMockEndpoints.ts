@@ -33,3 +33,25 @@ export function getRegisteredPlayersIdsWillReturn(
     )
   );
 }
+
+export function getAllTournamentsRegistrationsWillReturn(
+    tournamentId: string,
+    tournamentName: string,
+    status: string
+) {
+    server.use(
+        rest.get(
+            `*/rest-api/tournament-registrations/`,
+            (req, res, ctx) => {
+                return res(
+                    ctx.status(200),
+                    ctx.json([{
+                        tournamentId: tournamentId,
+                        tournamentName: tournamentName,
+                        status: status,
+                    },])
+                );
+            }
+        )
+    );
+}
