@@ -398,13 +398,17 @@ components:
           type: string
           format: uuid
           example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
+        started:
+          description: Match status
+          type: string
+          enum:
+            - ENQUEUED
+            - STARTED
+            - ENDED
         tableNumber:
           description: Table number
           type: number
           example: 1
-        started:
-          description: Is match started
-          type: boolean
     MatchesQueueDto:
       type: object
       properties:

@@ -46,8 +46,8 @@ export function doublesTournamentRouter(
       matchNumber: match.matchNumber.raw,
       team1Id: match.team1Id.raw,
       team2Id: match.team2Id.raw,
+      status: match.status,
       tableNumber: match.tableNumber,
-      started: match.started,
     }));
     return response.status(StatusCodes.OK).json(new MatchesQueueDto(queryResult.tournamentId.raw, queuedMatchesDto));
   };

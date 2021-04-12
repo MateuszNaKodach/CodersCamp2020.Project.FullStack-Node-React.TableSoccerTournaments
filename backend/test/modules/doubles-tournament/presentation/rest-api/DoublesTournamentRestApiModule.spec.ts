@@ -12,11 +12,11 @@ import { QueuedMatch } from '../../../../../src/modules/doubles-tournament/core/
 import { MatchNumber } from '../../../../../src/modules/doubles-tournament/core/domain/MatchNumber';
 import { MatchesQueue } from '../../../../../src/modules/doubles-tournament/core/domain/MatchesQueue';
 import { TournamentId } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentId';
+import { MatchStatus } from '../../../../../src/modules/doubles-tournament/core/domain/MatchStatus';
 import { FindAllDoublesTournaments } from '../../../../../src/modules/doubles-tournament/core/application/query/FindAllDoublesTournaments';
 import { StartTournament } from '../../../../shared/infrastructure/command/CommandsTestFixtures';
 import { CommandPublisherMock } from '../../../../test-support/shared/core/CommandPublisherMock';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
-import { TournamentRegistrationsRestApiModule } from '../../../../../src/modules/tournaments-registrations/presentation/rest-api/TournamentRegistrationsRestApiModule';
 
 describe('Doubles Tournament REST API', () => {
   it('GET /rest-api/doubles-tournaments/:tournamentId/teams | when tournament with given id found', async () => {
@@ -75,13 +75,14 @@ describe('Doubles Tournament REST API', () => {
         matchNumber: MatchNumber.from(1),
         team1Id: TeamId.from('sampleTeam1'),
         team2Id: TeamId.from('sampleTeam2'),
+        status: MatchStatus.STARTED,
         tableNumber: 3,
-        started: true,
       }),
       new QueuedMatch({
         matchNumber: MatchNumber.from(2),
         team1Id: TeamId.from('sampleTeam3'),
         team2Id: TeamId.from('sampleTeam4'),
+        status: MatchStatus.ENQUEUED,
       }),
     ];
     const matchesQueue = new MatchesQueue({
@@ -105,14 +106,14 @@ describe('Doubles Tournament REST API', () => {
           matchNumber: 1,
           team1Id: 'sampleTeam1',
           team2Id: 'sampleTeam2',
+          status: 'STARTED',
           tableNumber: 3,
-          started: true,
         },
         {
           matchNumber: 2,
           team1Id: 'sampleTeam3',
           team2Id: 'sampleTeam4',
-          started: false,
+          status: 'ENQUEUED',
         },
       ],
     });

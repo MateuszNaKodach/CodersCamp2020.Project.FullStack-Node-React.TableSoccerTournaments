@@ -89,7 +89,7 @@ export function DoublesTournamentModuleCore(
       },
       {
         eventType: MatchHasEnded,
-        handler: new MatchHasEndedImpliesTournamentMatchWasEnded(eventPublisher, currentTimeProvider),
+        handler: new MatchHasEndedImpliesTournamentMatchWasEnded(eventPublisher, currentTimeProvider, matchesQueue),
       },
     ],
     queryHandlers: [
