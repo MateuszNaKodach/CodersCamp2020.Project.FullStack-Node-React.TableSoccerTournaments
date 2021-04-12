@@ -81,7 +81,7 @@ export function changeMatchStatusInMatchesQueue(
   if (!match) {
     throw new Error("Given match doesn't exist in the matches queue.");
   }
-  return matchesQueue.withStatusChangedMatch(matchNumber, status, tableNumber);
+  return matchesQueue.withStatusAndTableChangedMatch(matchNumber, status, tableNumber);
 }
 
 function getMatchFromMatchesQueue(matchNumber: MatchNumber, matchesQueue: MatchesQueue): QueuedMatch | undefined {

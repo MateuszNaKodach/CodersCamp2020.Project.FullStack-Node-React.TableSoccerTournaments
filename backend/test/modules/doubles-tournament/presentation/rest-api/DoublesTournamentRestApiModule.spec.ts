@@ -106,14 +106,14 @@ describe('Doubles Tournament REST API', () => {
           matchNumber: 1,
           team1Id: 'sampleTeam1',
           team2Id: 'sampleTeam2',
-          status: 'started',
+          status: 'STARTED',
           tableNumber: 3,
         },
         {
           matchNumber: 2,
           team1Id: 'sampleTeam3',
           team2Id: 'sampleTeam4',
-          status: 'enqueued',
+          status: 'ENQUEUED',
         },
       ],
     });

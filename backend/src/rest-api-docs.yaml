@@ -402,9 +402,9 @@ components:
           description: Match status
           type: string
           enum:
-            - enqueued
-            - started
-            - ended
+            - ENQUEUED
+            - STARTED
+            - ENDED
         tableNumber:
           description: Table number
           type: number

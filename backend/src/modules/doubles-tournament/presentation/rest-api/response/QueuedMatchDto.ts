@@ -2,14 +2,14 @@ export class QueuedMatchDto {
   readonly matchNumber: number;
   readonly team1Id: string;
   readonly team2Id: string;
-  readonly status: 'enqueued' | 'started' | 'ended';
+  readonly status: 'ENQUEUED' | 'STARTED' | 'ENDED';
   readonly tableNumber: number | undefined;
 
   constructor(
     matchNumber: number,
     team1Id: string,
     team2Id: string,
-    status: 'enqueued' | 'started' | 'ended',
+    status: 'ENQUEUED' | 'STARTED' | 'ENDED',
     tableNumber: number | undefined,
   ) {
     this.matchNumber = matchNumber;
