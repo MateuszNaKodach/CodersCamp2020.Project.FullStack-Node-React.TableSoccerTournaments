@@ -32,11 +32,13 @@ export class MatchesQueue {
 
   withStatusAndTableChangedMatch(matchNumber: MatchNumber, status: MatchStatus, tableNumber?: number): MatchesQueue {
     const queue = this.queuedMatches.map((queuedMatch) =>
-      queuedMatch.matchNumber.raw === matchNumber.raw ? {
-        ...queuedMatch,
-        status,
-        tableNumber: tableNumber ?? queuedMatch.tableNumber,
-      } : queuedMatch,
+      queuedMatch.matchNumber.raw === matchNumber.raw
+        ? {
+            ...queuedMatch,
+            status,
+            tableNumber: tableNumber ?? queuedMatch.tableNumber,
+          }
+        : queuedMatch,
     );
     return new MatchesQueue({
       tournamentId: this.tournamentId,
