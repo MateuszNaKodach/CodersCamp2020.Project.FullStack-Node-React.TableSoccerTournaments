@@ -28,7 +28,7 @@ export class MatchesQueue {
     return [...this.queue];
   }
 
-  withStartedMatch(match: QueuedMatch): MatchesQueue {
+  withStatusChangedMatch(match: QueuedMatch): MatchesQueue {
     const queue = this.queuedMatches.filter((queuedMatch) => queuedMatch.matchNumber.raw !== match.matchNumber.raw);
     return new MatchesQueue({
       tournamentId: this.tournamentId,

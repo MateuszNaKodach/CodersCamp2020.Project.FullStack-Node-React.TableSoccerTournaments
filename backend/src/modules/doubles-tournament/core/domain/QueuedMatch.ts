@@ -84,22 +84,33 @@ export function startMatchInMatchesQueue(
     tableNumber: match.tableNumber,
   });
 
-  return matchesQueue.withStartedMatch(startedMatch);
+  return matchesQueue.withStatusChangedMatch(startedMatch);
 }
 
-export function endMatchInMatchesQueue(tournamentId: TournamentId, matchNumber: MatchNumber, matchesQueue: MatchesQueue | undefined): void {
+export function endMatchInMatchesQueue(
+  tournamentId: TournamentId,
+  matchNumber: MatchNumber,
+  matchesQueue: MatchesQueue | undefined,
+): MatchesQueue {
   if (!tournamentId || !matchesQueue) {
     throw new Error("Queue for this tournament doesn't exists.");
   }
-  /*
-    const endedMatch = new QueuedMatch({
-      matchNumber: match.matchNumber,
-      team1Id: match.team1Id,
-      team2Id: match.team2Id,
-      status: match.status,
-      tableNumber: match.tableNumber,
-    });
+  const match = getMatchFromMatchesQueue(matchNumber, matchesQueue);
+  if (!match) {
+    throw new Error("Given match doesn't exist in the matches queue.");
+  }
 
-    return matchesQueue.withStartedMatch(endedMatch);
-   */
+  const endedMatch = new QueuedMatch({
+    matchNumber: match.matchNumber,
+    team1Id: match.team1Id,
+    team2Id: match.team2Id,
+    status: MatchStatus.ended,
+    tableNumber: match.tableNumber,
+  });
+
+  return matchesQueue.withStatusChangedMatch(endedMatch);
+}
+
+function getMatchFromMatchesQueue(matchNumber: MatchNumber, matchesQueue: MatchesQueue): QueuedMatch | undefined {
+  return matchesQueue.queuedMatches.find((match) => match.matchNumber.raw === matchNumber.raw);
 }
