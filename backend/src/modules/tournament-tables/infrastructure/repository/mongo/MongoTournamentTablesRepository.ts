@@ -18,7 +18,9 @@ export class MongoTournamentTablesRepository implements TournamentTablesReposito
   }
 
   async saveAll(tournamentTables: TournamentTable[]): Promise<void> {
-    Promise.all(tournamentTables.map((table) => this.save(table)));
+    for (const table of tournamentTables) {
+      await this.save(table);
+    }
   }
 
   async findByTournamentIdAndTableNumber(tournamentId: string, tableNumber: number): Promise<TournamentTable | undefined> {
