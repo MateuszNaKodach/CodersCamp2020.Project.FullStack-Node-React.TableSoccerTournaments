@@ -3,8 +3,10 @@ import TextButton from "../../atoms/Shared/TextButton/TextButton";
 import {makeStyles} from "@material-ui/core/styles";
 import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
 import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
+import {PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW} from "../../atoms/constants/paths";
 
 type TournamentCardProps = {
+    readonly tournamentId: string,
     readonly tournamentName: string,
     readonly registrationStatus: string,
 }
@@ -22,7 +24,7 @@ const useStyles = makeStyles({
     }
 });
 
-const TournamentCard = ({tournamentName, registrationStatus}: TournamentCardProps) => {
+const TournamentCard = ({tournamentId, tournamentName, registrationStatus}: TournamentCardProps) => {
     const classes = useStyles();
 
     return (
@@ -44,7 +46,7 @@ const TournamentCard = ({tournamentName, registrationStatus}: TournamentCardProp
                 <>
                 {registrationStatus === "OPENED"
                     ?
-                    <TextButton text={"Zapisy"} onLink={''}/>
+                    <TextButton text={"Zapisy"} onLink={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/${tournamentId}`}/>
                     :
                     <TextButton text={"Mecze i wyniki"} onLink={''}/>
                 }
