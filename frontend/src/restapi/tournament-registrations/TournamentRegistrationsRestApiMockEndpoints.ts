@@ -34,10 +34,14 @@ export function getRegisteredPlayersIdsWillReturn(
   );
 }
 
-export function getAllTournamentsRegistrationsWillReturn(
+export type TournamentMock = {
     tournamentId: string,
     tournamentName: string,
     status: string
+}
+
+export function getAllTournamentsRegistrationsWillReturn(
+    tournamentsList: TournamentMock[]
 ) {
     server.use(
         rest.get(
@@ -45,11 +49,7 @@ export function getAllTournamentsRegistrationsWillReturn(
             (req, res, ctx) => {
                 return res(
                     ctx.status(200),
-                    ctx.json([{
-                        tournamentId: tournamentId,
-                        tournamentName: tournamentName,
-                        status: status,
-                    },])
+                    ctx.json(tournamentsList)
                 );
             }
         )

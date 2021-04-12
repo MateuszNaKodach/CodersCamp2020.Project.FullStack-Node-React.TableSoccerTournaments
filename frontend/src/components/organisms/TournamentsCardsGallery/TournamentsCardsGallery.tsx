@@ -11,35 +11,39 @@ import {TournamentRegistrationsWithDetailsDto} from "../../../restapi/tournament
 
 const loadedTournamentsCards = [
     {
-        id: '1',
+        tournamentId: '1',
         tournamentName: 'Turniej z jajem',
-        tournamentRegistrationsStatus: 'OPENED',
+        status: 'OPENED',
+        registeredPlayersIds: [],
     },
     {
-        id: '2',
+        tournamentId: '2',
         tournamentName: 'Turniej bez jaja',
-        tournamentRegistrationsStatus: 'CLOSED',
+        status: 'CLOSED',
+        registeredPlayersIds: [],
     },
     {
-        id: '3',
+        tournamentId: '3',
         tournamentName: 'Turniej wrocławski',
-        tournamentRegistrationsStatus: 'OPENED',
+        status: 'OPENED',
+        registeredPlayersIds: [],
     },
     {
-        id: '4',
+        tournamentId: '4',
         tournamentName: 'Turniej kaliski',
-        tournamentRegistrationsStatus: 'CLOSED',
+        status: 'CLOSED',
+        registeredPlayersIds: [],
     },
 ]
 
 const tournamentsRegistrationsDetailsList = [
     {
         tournamentId: '2480fc2c-bbd7-427c-9439-02f76583aef5',
-        name: 'Taka na sztywno',
+        tournamentName: 'Taka na sztywno',
     },
     {
         tournamentId: '2480fc2c-bbd7-427c-9439-02f76583aef6',
-        name: 'Taka na luźno',
+        tournamentName: 'Taka na luźno',
     },
 ]
 
@@ -81,8 +85,8 @@ const StyledWrapper = styled("div")({
 })
 
 const TournamentCardsGallery = () => {
-    const [tournamentsRegistrations, setTournamentsRegistrations] = useState<TournamentRegistrationsWithDetailsDto[]>();
-    const [tournamentsDetails, setTournamentsDetails] = useState<TournamentDetailsDto[]>([]);
+    const [tournamentsRegistrations, setTournamentsRegistrations] = useState<TournamentRegistrationsWithDetailsDto[]>(loadedTournamentsCards); // usunąć initial state na produkcję
+    const [tournamentsDetails, setTournamentsDetails] = useState<TournamentDetailsDto[]>(tournamentsRegistrationsDetailsList); // usunąć initial state na produkcję
 
     useEffect(() => {
         TournamentDetailsRestApi()
