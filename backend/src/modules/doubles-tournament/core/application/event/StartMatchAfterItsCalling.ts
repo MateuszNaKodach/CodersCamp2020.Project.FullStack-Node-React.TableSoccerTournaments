@@ -4,9 +4,8 @@ import { CommandPublisher } from '../../../../../shared/core/application/command
 import { StartMatch } from '../../../../match-module/core/application/command/StartMatch';
 import { MatchId } from '../../domain/MatchId';
 import { TournamentId } from '../../domain/TournamentId';
-import { QueuedMatch, startMatchInMatchesQueue } from '../../domain/QueuedMatch';
+import { changeMatchStatusInMatchesQueue } from '../../domain/QueuedMatch';
 import { MatchNumber } from '../../domain/MatchNumber';
-import { TeamId } from '../../domain/TeamId';
 import { MatchesQueueRepository } from '../MatchesQueueRepository';
 import { MatchStatus } from '../../domain/MatchStatus';
 
@@ -21,15 +20,10 @@ export class StartMatchAfterItsCalling implements EventHandler<MatchWasCalled> {
 
   async handle(event: MatchWasCalled): Promise<void> {
     const tournamentId = TournamentId.from(event.tournamentId);
-    const startedMatch = new QueuedMatch({
-      matchNumber: MatchNumber.from(event.calledMatch.matchNumber),
-      team1Id: TeamId.from(event.calledMatch.team1Id),
-      team2Id: TeamId.from(event.calledMatch.team2Id),
-      status: MatchStatus.started,
-      tableNumber: event.tableNumber,
-    });
+    const matchNumber = MatchNumber.from(event.calledMatch.matchNumber);
+    const tableNumber = event.tableNumber;
     const matchesQueue = await this.matchesQueueRepository.findByTournamentId(tournamentId.raw);
-    const queue = startMatchInMatchesQueue(tournamentId, startedMatch, matchesQueue);
+    const queue = changeMatchStatusInMatchesQueue(tournamentId, matchNumber, matchesQueue, MatchStatus.started, tableNumber);
     await this.matchesQueueRepository.save(queue);
 
     const matchId = MatchId.from(event.tournamentId, event.calledMatch.matchNumber);
