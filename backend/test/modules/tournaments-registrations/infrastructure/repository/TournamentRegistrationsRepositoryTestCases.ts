@@ -14,19 +14,25 @@ export function TournamentRegistrationsRepositoryTestCases(props: {
 }): void {
   return describe(props.name, () => {
     const entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator();
-    const tournamentId1 = TournamentId.from(entityIdGenerator.generate());
-    const tournamentId2 = TournamentId.from(entityIdGenerator.generate());
-    const tournamentRegistrations1 = new TournamentRegistrations({ tournamentId: tournamentId1 });
-    const tournamentRegistrations2 = new TournamentRegistrations({
-      tournamentId: tournamentId2,
-      status: RegistrationsStatus.OPENED,
-      registeredPlayers: [PlayerId.from('1'), PlayerId.from('2')],
-    });
+    let tournamentId1: TournamentId;
+    let tournamentId2: TournamentId;
+    let tournamentRegistrations1: TournamentRegistrations;
+    let tournamentRegistrations2: TournamentRegistrations;
     let repository: TournamentRegistrationsRepository;
 
     beforeAll(async () => {
       await props.databaseTestSupport.openConnection();
       repository = props.repositoryFactory();
+    });
+    beforeEach(() => {
+      tournamentId1 = TournamentId.from(entityIdGenerator.generate());
+      tournamentId2 = TournamentId.from(entityIdGenerator.generate());
+      tournamentRegistrations1 = new TournamentRegistrations({ tournamentId: tournamentId1 });
+      tournamentRegistrations2 = new TournamentRegistrations({
+        tournamentId: tournamentId2,
+        status: RegistrationsStatus.OPENED,
+        registeredPlayers: [PlayerId.from('1'), PlayerId.from('2')],
+      });
     });
     afterEach(async () => await props.databaseTestSupport.clearDatabase());
     afterAll(async () => await props.databaseTestSupport.closeConnection());
@@ -39,10 +45,7 @@ export function TournamentRegistrationsRepositoryTestCases(props: {
       await repository.save(tournamentRegistrations1);
       await repository.save(tournamentRegistrations2);
 
-      expect(await repository.findAll()).toStrictEqual([
-        new TournamentRegistrations({ ...tournamentRegistrations1, version: 1 }),
-        new TournamentRegistrations({ ...tournamentRegistrations2, version: 1 }),
-      ]);
+      expect(await repository.findAll()).toStrictEqual([tournamentRegistrations1, tournamentRegistrations2]);
     });
 
     test('findByTournamentId returns undefined when tournament with given id is not saved', async () => {
@@ -57,9 +60,7 @@ export function TournamentRegistrationsRepositoryTestCases(props: {
       await repository.save(tournamentRegistrations1);
       await repository.save(tournamentRegistrations2);
 
-      expect(await repository.findByTournamentId(tournamentId1)).toStrictEqual(
-        new TournamentRegistrations({ ...tournamentRegistrations1, version: 1 }),
-      );
+      expect(await repository.findByTournamentId(tournamentId1)).toStrictEqual(tournamentRegistrations1);
     });
   });
 }
