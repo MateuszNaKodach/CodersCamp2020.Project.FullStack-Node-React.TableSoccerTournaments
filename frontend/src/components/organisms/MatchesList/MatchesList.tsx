@@ -40,26 +40,13 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    useEffect(() => {
       if (!matchesListItems) return;
 
-      async function setMatchesInformationListDtoState(): Promise<void> {
-         if (!matchesListItems) return;
-         const returnedMatchesInformationListDto = await Promise.all(matchesListItems
-            .map(async (matchListItem) => {
-                  const matchId = `${tournamentId}_${matchListItem.matchNumber}`;
-                  return await getMatchInformationDto(matchId)
-               }
-            ))
-         await setMatchesDetailsListDto(returnedMatchesInformationListDto);
-      }
+      Promise.all(matchesListItems
+         .map((matchListItem) => getMatchInformationDto(`${tournamentId}_${matchListItem.matchNumber}`)))
+         .then(matchesDetails => setMatchesDetailsListDto(matchesDetails))
 
-      async function setTeamsListDtoState(): Promise<void> {
-         if (!matchesListItems) return;
-         const teamsListDto = await getTeamsListDto(tournamentId)
-         await setTeamsListDto(teamsListDto);
-      }
-
-      setTeamsListDtoState().then();
-      setMatchesInformationListDtoState().then();
-
+      getTeamsListDto(tournamentId)
+         .then(teamsListDto => setTeamsListDto(teamsListDto))
+ 
    }, [matchesListItems]);
 
    useEffect(() => {
