@@ -7,7 +7,7 @@ import { TournamentRegistrationsWereClosed } from './event/TournamentRegistratio
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
 
-const MIN_TOURNAMENT_PLAYERS = 4;
+export const MIN_TOURNAMENT_PLAYERS = 4;
 
 export class TournamentRegistrations {
   readonly tournamentId: TournamentId;
