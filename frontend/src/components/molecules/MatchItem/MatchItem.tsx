@@ -14,7 +14,7 @@ import MatchWinnerDeterminationDialog from "../MatchWinnerDeterminationDialog/Ma
 import {MatchStatus} from "../../atoms/MatchStatus";
 
 export type MatchItemProps = {
-   onClickTeam: (matchId: string, teamName: string) => void,
+   onClickTeam: (matchId: string, teamId: string) => void,
    matchNumber: number | undefined,
    matchId: string | undefined,
    level: number | undefined,
@@ -85,14 +85,10 @@ export const MatchItem = (props: MatchItemProps,) => {
    const isWinnerTeam1 = props.winnerTeamId === props.team1.teamId;
    const isWinnerTeam2 = props.winnerTeamId === props.team2.teamId;
 
-   const isMatchFinished = Boolean(props.matchStatus === MatchStatus.FINISHED);
-   const isMatchStarted = Boolean(props.matchStatus === MatchStatus.STARTED);
+   const isMatchFinished = props.matchStatus === MatchStatus.FINISHED;
+   const isMatchStarted = props.matchStatus === MatchStatus.STARTED;
 
-   const agreeDialogCallback = (matchId: string, teamName: string): void => {
-      console.log(matchId);
-      console.log(teamName);
-      props.onClickTeam(matchId, teamName)
-   }
+   const agreeDialogCallback = (matchId: string, teamName: string): void => props.onClickTeam(matchId, teamName);
 
 
    const TeamHoverButtonComponent = (p: { matchId: string | undefined, teamId: string | undefined }) => {

@@ -75,11 +75,10 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
    return (
       <StyledMatchesList>
-         {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie.."}
+         {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie..."}
       </StyledMatchesList>
    )
 };
-
 
 const returnMatchItem = (matchItemBase: MatchListItem, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
    <MatchItem
