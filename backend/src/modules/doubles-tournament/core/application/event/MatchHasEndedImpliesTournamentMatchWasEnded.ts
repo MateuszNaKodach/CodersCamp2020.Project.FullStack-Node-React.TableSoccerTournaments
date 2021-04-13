@@ -22,14 +22,14 @@ export class MatchHasEndedImpliesTournamentMatchWasEnded implements EventHandler
     const tournamentId = matchId.tournamentId;
     const matchNumber = matchId.matchNumber;
 
-    const matchesQueue = await this.matchesQueueRepository.findByTournamentId(tournamentId);
+    const {state: matchesQueue, version} = await this.matchesQueueRepository.findByTournamentId(tournamentId);
     const queue = changeMatchStatusInMatchesQueue(
       TournamentId.from(tournamentId),
       MatchNumber.from(matchNumber),
       matchesQueue,
       MatchStatus.ENDED,
     );
-    await this.matchesQueueRepository.save(queue);
+    await this.matchesQueueRepository.save(queue, version);
 
     const tournamentMatchWasEnded = new TournamentMatchWasEnded({
       occurredAt: this.currentTimeProvider(),

@@ -8,17 +8,19 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
 
 //TODO: Ustalić jakie jest minimum. Może 2 graczy i po prostu grają finał?
-const MIN_TOURNAMENT_PLAYERS = 8;
+const MIN_TOURNAMENT_PLAYERS = 0;
 
 export class TournamentRegistrations {
   readonly tournamentId: TournamentId;
+  readonly version: number;
   readonly status: RegistrationsStatus;
   readonly registeredPlayers: PlayerId[] = [];
 
-  constructor(props: { tournamentId: TournamentId; status?: RegistrationsStatus; registeredPlayers?: PlayerId[] }) {
+  constructor(props: { tournamentId: TournamentId; version?: number,  status?: RegistrationsStatus; registeredPlayers?: PlayerId[] }) {
     this.tournamentId = props.tournamentId;
     this.status = props.status ?? RegistrationsStatus.OPENED;
     this.registeredPlayers = props.registeredPlayers ?? [];
+    this.version = props.version ?? 0;
   }
 }
 
