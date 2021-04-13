@@ -46,7 +46,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
       getTeamsListDto(tournamentId)
          .then(teamsListDto => setTeamsListDto(teamsListDto))
- 
+
    }, [matchesListItems]);
 
    useEffect(() => {
@@ -133,38 +133,32 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
 }
 
 
-const getMatchInformationDto = (matchId: string): Promise<MatchInformationDto> => {
-   return MatchInformationRestApi()
-      .getMatchesList(matchId)
-      .then(matchInformationDto => {
-         return {
-            matchId: matchInformationDto.matchId,
-            firstMatchSideId: matchInformationDto.firstMatchSideId,
-            secondMatchSideId: matchInformationDto.secondMatchSideId,
-            winnerId: matchInformationDto.winnerId
-         }
-      });
-}
+const getMatchInformationDto = (matchId: string): Promise<MatchInformationDto> => MatchInformationRestApi()
+   .getMatchesList(matchId)
+   .then(matchInformationDto => ({
+      matchId: matchInformationDto.matchId,
+      firstMatchSideId: matchInformationDto.firstMatchSideId,
+      secondMatchSideId: matchInformationDto.secondMatchSideId,
+      winnerId: matchInformationDto.winnerId
 
-const getPlayerProfileDto = (playerId: string): Promise<PlayerProfileDto> => {
-   return UserProfileRestApi()
-      .getPlayerProfile(playerId)
-      .then(playerProfileDto => {
-         return {
-            playerId: playerProfileDto.playerId,
-            firstName: playerProfileDto.firstName,
-            lastName: playerProfileDto.lastName,
-            phoneNumber: playerProfileDto.phoneNumber,
-            emailAddress: playerProfileDto.emailAddress,
-         }
-      });
-}
+   }));
 
-const getTeamsListDto = (tournamentId: string): Promise<TeamsListDto> => {
-   return TeamsListRestApi()
-      .getMatchesList(tournamentId)
-      .then(teamsList => {
-         return teamsList
-      });
-}
+
+const getPlayerProfileDto = (playerId: string): Promise<PlayerProfileDto> => UserProfileRestApi()
+   .getPlayerProfile(playerId)
+   .then(playerProfileDto => ({
+      playerId: playerProfileDto.playerId,
+      firstName: playerProfileDto.firstName,
+      lastName: playerProfileDto.lastName,
+      phoneNumber: playerProfileDto.phoneNumber,
+      emailAddress: playerProfileDto.emailAddress,
+   }));
+
+
+const getTeamsListDto = (tournamentId: string): Promise<TeamsListDto> => TeamsListRestApi()
+   .getMatchesList(tournamentId)
+   .then(teamsList => {
+      return teamsList
+   });
+
 
