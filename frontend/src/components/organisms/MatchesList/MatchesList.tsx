@@ -10,7 +10,7 @@ import {MatchStatus} from "../../atoms/MatchStatus";
 import {PlayerProfileDto, UserProfileRestApi} from "../../../restapi/players-profiles";
 import {MatchInformationDto} from "./MatchInformationDto";
 import {TeamsListDto} from "./TeamsListDto";
-import {TeamsListRestApi} from "../../../restapi/matches-list/TeamsListRestAPI";
+import {TeamsListRestApi} from "../../../restapi/teams-list/TeamsListRestAPI";
 
 const StyledMatchesList = styled(Card)({
    width: MIN_CARD_COMPONENT_WIDTH,
