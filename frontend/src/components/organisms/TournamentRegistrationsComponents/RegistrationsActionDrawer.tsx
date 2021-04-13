@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Drawer, Grid } from "@material-ui/core";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { TournamentRegistrationsContext } from "./Context";
+import { makeStyles } from "@material-ui/core/styles";
+import useStyles from "../Notification/styles";
 
 export const RegistrationsActionDrawer = (props: {
   openDrawer: boolean;
@@ -23,6 +25,13 @@ export const RegistrationsActionDrawer = (props: {
     setDrawerOpened(open);
   }
 
+  const useStyles = makeStyles(() => ({
+    width: {
+      width: "70%",
+    },
+  }));
+  const classes = useStyles();
+
   return (
     <Drawer
       anchor={"bottom"}
@@ -32,6 +41,7 @@ export const RegistrationsActionDrawer = (props: {
       <Grid container direction={"column"} justify="center" alignItems="center">
         <VerticalSpace height="30px" />
         <Button
+          className={classes.width}
           variant="contained"
           color="primary"
           onClick={() => {
@@ -43,6 +53,7 @@ export const RegistrationsActionDrawer = (props: {
         </Button>
         <VerticalSpace height="20px" />
         <Button
+          className={classes.width}
           variant="contained"
           color="primary"
           onClick={() => console.log("second button")}
