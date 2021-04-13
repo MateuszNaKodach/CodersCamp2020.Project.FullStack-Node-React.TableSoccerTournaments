@@ -5,6 +5,7 @@ import { TournamentRegistrationsContext } from "./Context";
 import { makeStyles } from "@material-ui/core/styles";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import Notification from "../Notification/Notification";
+import { useHistory } from "react-router-dom";
 
 export const RegistrationsActionDrawer = (props: {
   openDrawer: boolean;
@@ -15,6 +16,19 @@ export const RegistrationsActionDrawer = (props: {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [textAlert, setTextAlert] = useState("");
+
+  useEffect(() => {
+    setDrawerOpened(props.openDrawer);
+
+    return () => {
+      setDrawerOpened(false);
+    };
+  }, [props.openDrawer]);
+
+  const history = useHistory();
+  const goBack = () => {
+    history.goBack();
+  };
 
   const onNotificationOpen = (errorMessage: string) => {
     setTextAlert(errorMessage);
@@ -31,14 +45,6 @@ export const RegistrationsActionDrawer = (props: {
     setOpenAlert(false);
   };
 
-  useEffect(() => {
-    setDrawerOpened(props.openDrawer);
-
-    return () => {
-      setDrawerOpened(false);
-    };
-  }, [props.openDrawer]);
-
   function toggleDrawer(open: boolean) {
     props.returnToPrevState(false);
     setDrawerOpened(open);
@@ -50,6 +56,7 @@ export const RegistrationsActionDrawer = (props: {
         props.tournamentId
       );
       toggleDrawer(false);
+      goBack();
     } catch (error) {
       onNotificationOpen(error.response.data.message);
     }
