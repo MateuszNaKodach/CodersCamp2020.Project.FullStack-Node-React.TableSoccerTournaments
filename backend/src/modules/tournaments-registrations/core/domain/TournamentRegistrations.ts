@@ -116,9 +116,7 @@ export function closeTournamentRegistrations(
   };
 }
 
-function onTournamentRegistrationsWasClosed(
-  state: TournamentRegistrations,
-): TournamentRegistrations {
+function onTournamentRegistrationsWasClosed(state: TournamentRegistrations): TournamentRegistrations {
   return new TournamentRegistrations({
     ...state,
     status: RegistrationsStatus.CLOSED,
