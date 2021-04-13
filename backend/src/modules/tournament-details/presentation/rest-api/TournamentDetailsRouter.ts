@@ -24,7 +24,7 @@ export function tournamentDetailsRouter(
         const tournamentName = requestBody.tournamentName;
         const commandResult = await commandPublisher.execute(new AddTournamentDetails({ tournamentId, tournamentName }));
         return commandResult.process(
-            () => response.status(StatusCodes.CREATED).json({ tournamentId }).send(),
+            () => response.status(StatusCodes.CREATED).json(requestBody).send(),
             (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
         );
     };
