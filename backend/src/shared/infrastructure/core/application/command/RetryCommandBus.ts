@@ -9,7 +9,7 @@ export class RetryCommandBus implements CommandBus {
 
   async execute<CommandType extends Command>(command: CommandType): Promise<CommandResult> {
     let result: CommandResult | undefined = undefined;
-    for (let retry = 0; (result === undefined || !result.isSuccess()) && retry <= this.maxRetries; retry++) {
+    for (let retry = 0; (result === undefined || !result.isSuccess()) && retry < this.maxRetries; retry++) {
       result = await this.next.execute(command);
     }
     return result ?? CommandResult.failureDueTo(new Error(`Unknown command result after retries ${this.maxRetries}.`));
