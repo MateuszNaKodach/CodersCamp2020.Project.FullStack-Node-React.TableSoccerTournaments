@@ -33,19 +33,17 @@ export function MatchesQueueRepositoryTestCases(props: {
         status: MatchStatus.ENQUEUED,
       }),
     ];
-    let tournamentId: TournamentId;
-    let matchesQueue: MatchesQueue;
+    const tournamentId = TournamentId.from(entityIdGenerator.generate());
+    const matchesQueue = new MatchesQueue({
+      tournamentId: tournamentId,
+      queuedMatches: queue,
+    });
 
     beforeAll(async () => {
       await props.databaseTestSupport.openConnection();
-      repository = props.repositoryFactory();
     });
     beforeEach(() => {
-      tournamentId = TournamentId.from(entityIdGenerator.generate());
-      matchesQueue = new MatchesQueue({
-        tournamentId: tournamentId,
-        queuedMatches: queue,
-      });
+      repository = props.repositoryFactory();
     });
     afterEach(async () => await props.databaseTestSupport.clearDatabase());
     afterAll(async () => await props.databaseTestSupport.closeConnection());

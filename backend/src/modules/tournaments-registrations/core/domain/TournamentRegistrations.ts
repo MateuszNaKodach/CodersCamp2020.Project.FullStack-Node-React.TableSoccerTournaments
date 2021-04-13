@@ -58,12 +58,12 @@ export function registerTournamentPlayer(
   state: TournamentRegistrations | undefined,
   command: { playerId: PlayerId },
   currentTimeProvider: CurrentTimeProvider,
-  canPlayerTakiePartInTheTournament: boolean,
+  canPlayerTakePartInTheTournament: boolean,
 ): DomainCommandResult<TournamentRegistrations> {
   if (state?.status !== RegistrationsStatus.OPENED) {
     throw new Error('Cannot register player for closed tournament registrations!');
   }
-  if (!canPlayerTakiePartInTheTournament) {
+  if (!canPlayerTakePartInTheTournament) {
     throw new Error(`Player with id = ${command.playerId.raw} cannot take part in the tournament!`);
   }
 
