@@ -54,6 +54,10 @@ import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentat
 import { InMemoryTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryTablesQueueRepository';
 import { MongoTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoTablesQueueRepository';
 import { MongoTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/mongo/MongoTournamentTreeRepository';
+import { MongoTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/mongo/MongoTournamentDetailsRepository';
+import { InMemoryTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/inmemory/InMemoryTournamentDetailsRepository';
+import { TournamentDetailsModuleCore } from './modules/tournament-details/core/TournamentDetailsModuleCore';
+import { TournamentDetailsRestApiModule } from './modules/tournament-details/presentation/rest-api/TournamentDetailsRestApiModule';
 
 config();
 
@@ -126,6 +130,12 @@ export async function TableSoccerTournamentsApplication(
     restApi: TournamentTreeRestApiModule(commandBus, eventBus, queryBus),
   };
 
+  const tournamentDetailsRepository = TournamentDetailsRepository();
+  const tournamentDetailsModule: Module = {
+    core: TournamentDetailsModuleCore(eventBus, commandBus, currentTimeProvider, tournamentDetailsRepository),
+    restApi: TournamentDetailsRestApiModule(commandBus, eventBus, queryBus),
+  };
+
   const modules: Module[] = [
     process.env.TOURNAMENTS_REGISTRATIONS_MODULE === 'ENABLED' ? tournamentsRegistrationsModule : undefined,
     process.env.PLAYERS_MATCHING_MODULE === 'ENABLED' ? playersMatchingModule : undefined,
@@ -135,6 +145,7 @@ export async function TableSoccerTournamentsApplication(
     process.env.TOURNAMENTS_TABLES_MODULE === 'ENABLED' ? tournamentTablesModule : undefined,
     process.env.EMAILS_SENDING_MODULE === 'ENABLED' ? sendingEmailModule : undefined,
     process.env.TOURNAMENT_TREE_MODULE === 'ENABLED' ? eliminationTournamentTree : undefined,
+    process.env.TOURNAMENT_DETAILS_MODULE === 'ENABLED' ? tournamentDetailsModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
@@ -296,4 +307,11 @@ function TournamentTreeRepository() {
     return new MongoTournamentTreeRepository();
   }
   return new InMemoryTournamentTreeRepository();
+}
+
+function TournamentDetailsRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENT_DETAILS_DATABASE === 'MONGO') {
+    return new MongoTournamentDetailsRepository();
+  }
+  return new InMemoryTournamentDetailsRepository();
 }
