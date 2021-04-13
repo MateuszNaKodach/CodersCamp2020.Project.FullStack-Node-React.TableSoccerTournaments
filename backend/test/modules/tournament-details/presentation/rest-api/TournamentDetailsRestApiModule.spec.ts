@@ -25,7 +25,6 @@ describe('Tournament Details REST API', () => {
       new AddTournamentDetails({ tournamentId: 'SampleTournamentId', tournamentName: 'SampleName' }),
     );
     expect(status).toBe(StatusCodes.CREATED);
-    expect(body).toStrictEqual({ tournamentId: 'SampleTournamentId', tournamentName: 'SampleName' });
   });
 
   it('POST /rest-api/tournament-details | when command failure', async () => {
