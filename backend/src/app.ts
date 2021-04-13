@@ -54,6 +54,10 @@ import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentat
 import { InMemoryTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryTablesQueueRepository';
 import { MongoTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoTablesQueueRepository';
 import { MongoTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/mongo/MongoTournamentTreeRepository';
+import {MongoTournamentDetailsRepository} from "./modules/tournament-details/infrastructure/repository/mongo/MongoTournamentDetailsRepository";
+import {InMemoryTournamentDetailsRepository} from "./modules/tournament-details/infrastructure/repository/inmemory/InMemoryTournamentDetailsRepository";
+import {TournamentDetailsModuleCore} from "./modules/tournament-details/core/TournamentDetailsModuleCore";
+import {TournamentDetailsRestApiModule} from "./modules/tournament-details/presentation/rest-api/TournamentDetailsRestApiModule";
 
 config();
 
@@ -124,6 +128,12 @@ export async function TableSoccerTournamentsApplication(
   const eliminationTournamentTree: Module = {
     core: TournamentTreeModuleCore(eventBus, commandBus, currentTimeProvider, entityIdGenerator, tournamentTreeRepository),
     restApi: TournamentTreeRestApiModule(commandBus, eventBus, queryBus),
+  };
+
+  const tournamentDetailsRepository = TournamentDetailsRepository();
+  const tournamentDetailsModule: Module = {
+    core: TournamentDetailsModuleCore(eventBus, commandBus, currentTimeProvider, tournamentDetailsRepository),
+    restApi: TournamentDetailsRestApiModule(commandBus, eventBus, queryBus),
   };
 
   const modules: Module[] = [
@@ -263,4 +273,11 @@ function TournamentTreeRepository() {
     return new MongoTournamentTreeRepository();
   }
   return new InMemoryTournamentTreeRepository();
+}
+
+function TournamentDetailsRepository() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENT_DETAILS_DATABASE === 'MONGO') {
+    return new MongoTournamentDetailsRepository();
+  }
+  return new InMemoryTournamentDetailsRepository();
 }
