@@ -18,6 +18,29 @@ export const PlayersListItem = (props: {
 }) => {
   const { registerPlayer } = useContext(TournamentRegistrationsContext);
 
+  function registeredPlayerIcon() {
+    return (
+      <CheckCircleIcon
+        color="action"
+        aria-label="registered-player"
+        data-testid="registered-player"
+      />
+    );
+  }
+
+  function registerPlayerIcon() {
+    return (
+      <IconButton
+        edge="end"
+        aria-label="register-player"
+        data-testid="register-player"
+        onClick={() => registerPlayer(props.player.playerId)}
+      >
+        <AddCircleOutline />
+      </IconButton>
+    );
+  }
+
   return (
     <ListItem>
       <ListItemAvatar>
@@ -30,22 +53,7 @@ export const PlayersListItem = (props: {
         secondary={props.player.emailAddress}
       />
       <ListItemSecondaryAction>
-        {props.isRegistered ? (
-          <CheckCircleIcon
-            color="action"
-            aria-label="registered-player"
-            data-testid="registered-player"
-          />
-        ) : (
-          <IconButton
-            edge="end"
-            aria-label="register-player"
-            data-testid="register-player"
-            onClick={() => registerPlayer(props.player.playerId)}
-          >
-            <AddCircleOutline />
-          </IconButton>
-        )}
+        {props.isRegistered ? registeredPlayerIcon() : registerPlayerIcon()}
       </ListItemSecondaryAction>
     </ListItem>
   );
