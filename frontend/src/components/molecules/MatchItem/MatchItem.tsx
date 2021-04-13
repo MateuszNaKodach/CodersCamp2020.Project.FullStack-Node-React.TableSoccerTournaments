@@ -14,15 +14,16 @@ import MatchWinnerDeterminationDialog from "../MatchWinnerDeterminationDialog/Ma
 import {MatchStatus} from "../../atoms/MatchStatus";
 
 export type MatchItemProps = {
-   onClickTeam: () => void,
+   onClickTeam: (matchId: string, teamId: string) => void,
    matchNumber: number | undefined,
+   matchId: string | undefined,
    level: number | undefined,
    matchStatus: MatchStatus,
    winnerTeamId: string | undefined;
    team1: {
       readonly player1: string | undefined;
       readonly player2: string | undefined;
-      readonly teamId: number | string | undefined;
+      readonly teamId: string | undefined;
    },
    team2: {
       readonly player1: string | undefined;
@@ -84,8 +85,29 @@ export const MatchItem = (props: MatchItemProps,) => {
    const isWinnerTeam1 = props.winnerTeamId === props.team1.teamId;
    const isWinnerTeam2 = props.winnerTeamId === props.team2.teamId;
 
-   const isMatchFinished = Boolean(props.matchStatus === MatchStatus.FINISHED);
-   const isMatchStarted = Boolean(props.matchStatus === MatchStatus.STARTED);
+   const isMatchFinished = props.matchStatus === MatchStatus.FINISHED;
+   const isMatchStarted = props.matchStatus === MatchStatus.STARTED;
+
+   const agreeDialogCallback = (matchId: string, teamName: string): void => props.onClickTeam(matchId, teamName);
+
+
+   const TeamHoverButtonComponent = (p: { matchId: string | undefined, teamId: string | undefined }) => {
+      const matchId = p.matchId;
+      const teamId = p.teamId;
+
+      if (!matchId || !teamId) return <div/>;
+
+      return (
+         <TeamHoverButton>
+            <AddCircleTwoToneIcon fontSize="inherit"/>
+            <MatchWinnerDeterminationDialog
+               agreeCallback={() => agreeDialogCallback(matchId, teamId)}
+               isOpen={false}
+               teamName={teamId}
+            />
+         </TeamHoverButton>
+      );
+   }
 
    return (
       <MatchItemWrapper elevation={3}>
@@ -131,16 +153,7 @@ export const MatchItem = (props: MatchItemProps,) => {
 
                <MatchTeamWrapper>
 
-                  {!isMatchFinished && isMatchStarted &&
-                  (<TeamHoverButton>
-                     <AddCircleTwoToneIcon fontSize="inherit"/>
-                     <MatchWinnerDeterminationDialog
-                        agreeCallback={() => agreeDialogCallback(props.team1.teamId)}
-                        isOpen={false}
-                        teamName={props.team1.teamId}
-                     />
-                  </TeamHoverButton>)
-                  }
+                  <TeamHoverButtonComponent matchId={props.matchId} teamId={props.team1.teamId}/>
 
                   <MatchTeam
                      isWinnerTeam={isWinnerTeam1}
@@ -153,17 +166,9 @@ export const MatchItem = (props: MatchItemProps,) => {
                </MatchTeamWrapper>
 
                <MatchTeamWrapper>
+                  <TeamHoverButtonComponent matchId={props.matchId} teamId={props.team2.teamId}/>
 
-                  {!isMatchFinished && isMatchStarted &&
-                  (<TeamHoverButton>
-                     <AddCircleTwoToneIcon fontSize="inherit"/>
-                     <MatchWinnerDeterminationDialog
-                        agreeCallback={() => agreeDialogCallback(props.team2.teamId)}
-                        isOpen={false}
-                        teamName={props.team2.teamId}
-                     />
-                  </TeamHoverButton>)
-                  }
+
                   <MatchTeam
                      isWinnerTeam={isWinnerTeam2}
                      matchStatus={props.matchStatus}
@@ -179,6 +184,3 @@ export const MatchItem = (props: MatchItemProps,) => {
    )
 };
 
-const agreeDialogCallback = (teamName: string | number | undefined): void => {
-   console.log(teamName);
-}
