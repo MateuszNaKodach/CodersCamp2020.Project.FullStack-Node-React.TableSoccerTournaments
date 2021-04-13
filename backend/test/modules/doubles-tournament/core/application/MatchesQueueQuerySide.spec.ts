@@ -7,6 +7,7 @@ import { TournamentId } from '../../../../../src/modules/doubles-tournament/core
 import { QueuedMatch } from '../../../../../src/modules/doubles-tournament/core/domain/QueuedMatch';
 import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
 import { MatchNumber } from '../../../../../src/modules/doubles-tournament/core/domain/MatchNumber';
+import { MatchStatus } from '../../../../../src/modules/doubles-tournament/core/domain/MatchStatus';
 
 describe('Matches queue | Query Side', () => {
   const tournamentId = 'TournamentId';
@@ -31,8 +32,8 @@ describe('Matches queue | Query Side', () => {
     team2Id: team2Id_2,
   });
 
-  beforeEach(() => {
-    doublesTournament = createTournamentForTests(tournamentId, currentTime, team1Id, team2Id);
+  beforeEach(async () => {
+    doublesTournament = await createTournamentForTests(tournamentId, currentTime, team1Id, team2Id);
   });
 
   it('FindMatchesQueueByTournamentId | match was added to queue - get the queue', async () => {
@@ -46,7 +47,12 @@ describe('Matches queue | Query Side', () => {
 
     //Then
     const queue: QueuedMatch[] = [
-      new QueuedMatch({ matchNumber: MatchNumber.from(matchNumber), team1Id: TeamId.from(team1Id), team2Id: TeamId.from(team2Id) }),
+      new QueuedMatch({
+        matchNumber: MatchNumber.from(matchNumber),
+        team1Id: TeamId.from(team1Id),
+        team2Id: TeamId.from(team2Id),
+        status: MatchStatus.ENQUEUED,
+      }),
     ];
     const matchesQueue = new MatchesQueue({
       tournamentId: TournamentId.from(tournamentId),
@@ -68,8 +74,18 @@ describe('Matches queue | Query Side', () => {
 
     //Then
     const queue: QueuedMatch[] = [
-      new QueuedMatch({ matchNumber: MatchNumber.from(matchNumber), team1Id: TeamId.from(team1Id), team2Id: TeamId.from(team2Id) }),
-      new QueuedMatch({ matchNumber: MatchNumber.from(matchNumber_2), team1Id: TeamId.from(team1Id_2), team2Id: TeamId.from(team2Id_2) }),
+      new QueuedMatch({
+        matchNumber: MatchNumber.from(matchNumber),
+        team1Id: TeamId.from(team1Id),
+        team2Id: TeamId.from(team2Id),
+        status: MatchStatus.ENQUEUED,
+      }),
+      new QueuedMatch({
+        matchNumber: MatchNumber.from(matchNumber_2),
+        team1Id: TeamId.from(team1Id_2),
+        team2Id: TeamId.from(team2Id_2),
+        status: MatchStatus.ENQUEUED,
+      }),
     ];
     const matchesQueue = new MatchesQueue({
       tournamentId: TournamentId.from(tournamentId),

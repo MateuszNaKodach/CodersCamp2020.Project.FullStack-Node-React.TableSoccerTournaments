@@ -29,8 +29,12 @@ import { TournamentTableWasBooked } from '../../tournament-tables/core/domain/ev
 import { ReleaseTableInQueue } from './application/event/ReleaseTableInQueue';
 import { CallMatchWhenTournamentTableWasReleased } from './application/event/CallMatchWhenTournamentTableWasReleased';
 import { CallMatchWhenMatchWasQueued } from './application/event/CallMatchWhenMatchWasQueued';
+import { StartTournament } from './application/command/StartTournament';
+import { StartTournamentCommandHandler } from './application/command/StartTournamentCommandHandler';
 import { MatchHasEnded } from '../../match-module/core/domain/event/MatchHasEnded';
 import { MatchHasEndedImpliesTournamentMatchWasEnded } from './application/event/MatchHasEndedImpliesTournamentMatchWasEnded';
+import { TournamentMatchWasEnded } from './domain/event/TournamentMatchWasEnded';
+import { ReleaseTournamentTableWhenTournamentMatchWasEnded } from './application/event/ReleaseTournamentTableWhenTournamentMatchWasEnded';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -54,6 +58,10 @@ export function DoublesTournamentModuleCore(
       {
         commandType: CallMatch,
         handler: new CallMatchCommandHandler(eventPublisher, currentTimeProvider, commandPublisher),
+      },
+      {
+        commandType: StartTournament,
+        handler: new StartTournamentCommandHandler(eventPublisher, currentTimeProvider, repository),
       },
     ],
     eventHandlers: [
@@ -83,7 +91,11 @@ export function DoublesTournamentModuleCore(
       },
       {
         eventType: MatchHasEnded,
-        handler: new MatchHasEndedImpliesTournamentMatchWasEnded(eventPublisher, currentTimeProvider),
+        handler: new MatchHasEndedImpliesTournamentMatchWasEnded(eventPublisher, currentTimeProvider, matchesQueue),
+      },
+      {
+        eventType: TournamentMatchWasEnded,
+        handler: new ReleaseTournamentTableWhenTournamentMatchWasEnded(commandPublisher, matchesQueue),
       },
     ],
     queryHandlers: [

@@ -1,5 +1,7 @@
 import { QueuedMatch } from './QueuedMatch';
 import { TournamentId } from './TournamentId';
+import { MatchNumber } from './MatchNumber';
+import { MatchStatus } from './MatchStatus';
 
 export class MatchesQueue {
   readonly tournamentId: TournamentId;
@@ -28,11 +30,19 @@ export class MatchesQueue {
     return [...this.queue];
   }
 
-  withStartedMatch(match: QueuedMatch): MatchesQueue {
-    const queue = this.queuedMatches.filter((queuedMatch) => queuedMatch.matchNumber.raw !== match.matchNumber.raw);
+  withStatusAndTableChangedMatch(matchNumber: MatchNumber, status: MatchStatus, tableNumber?: number): MatchesQueue {
+    const queue = this.queuedMatches.map((queuedMatch) =>
+      queuedMatch.matchNumber.raw === matchNumber.raw
+        ? {
+            ...queuedMatch,
+            status,
+            tableNumber: tableNumber ?? queuedMatch.tableNumber,
+          }
+        : queuedMatch,
+    );
     return new MatchesQueue({
       tournamentId: this.tournamentId,
-      queuedMatches: [...queue, match],
+      queuedMatches: [...queue],
     });
   }
 }

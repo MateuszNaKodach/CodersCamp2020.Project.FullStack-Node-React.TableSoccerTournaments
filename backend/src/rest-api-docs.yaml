@@ -12,9 +12,9 @@ tags:
   - name: Players profiles
     description: Save and get players profiles
   - name: Doubles Tournament
-    description: Get doubles tournament teams
+    description: Get / Start tournaments, Get doubles tournament teams & matches
   - name: Tournament Tables
-    description: Assign and get list of tournament tables 
+    description: Assign and get list of tournament tables
   - name: Match
     description: Start/End match
   - name: Specification
@@ -255,6 +255,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MatchesQueueDto'
+  /doubles-tournaments:
+    get:
+      tags:
+        - Doubles Tournament
+      description: Fetch list of double tournaments
+      responses:
+        200:
+          description: List of double tournaments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DoubleTournamentListDto'
+  /doubles-tournaments/{tournamentId}/start:
+    post:
+      tags:
+        - Doubles Tournament
+      description: Start tournament
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        202:
+          description: Tournament was started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DoubleTournamentDto'
   /tournaments/{tournamentId}/tables:
     post:
       tags:
@@ -322,6 +355,32 @@ components:
       items:
         $ref: '#/components/schemas/TournamentTeamDto'
       uniqueItems: true
+    DoubleTournamentDto:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        tournamentTeams:
+          description: tournament teams
+          type: array
+          items:
+            $ref: '#/components/schemas/TournamentTeamDto'
+          uniqueItems: true
+        status:
+          description: status of the tournament
+          type: string
+          enum:
+            - NOT_STARTED
+            - STARTED
+          example: STARTED
+    DoubleTournamentListDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/DoubleTournamentDto'
+      uniqueItems: true
     QueuedMatchDto:
       type: object
       properties:
@@ -339,13 +398,17 @@ components:
           type: string
           format: uuid
           example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
+        started:
+          description: Match status
+          type: string
+          enum:
+            - ENQUEUED
+            - STARTED
+            - ENDED
         tableNumber:
           description: Table number
           type: number
           example: 1
-        started:
-          description: Is match started
-          type: boolean
     MatchesQueueDto:
       type: object
       properties:

@@ -13,6 +13,10 @@ import {
   FindMatchesQueueByTournamentIdResult,
 } from '../../core/application/query/FindMatchesQueueByTournamentId';
 import { QueuedMatchDto } from './response/QueuedMatchDto';
+import { FindAllDoublesTournaments, FindAllDoublesTournamentsResult } from '../../core/application/query/FindAllDoublesTournaments';
+import { TournamentListDto } from './response/TournamentListDto';
+import { TournamentDto } from './response/TournamentDto';
+import { StartTournament } from '../../core/application/command/StartTournament';
 
 export function doublesTournamentRouter(
   commandPublisher: CommandPublisher,
@@ -42,13 +46,32 @@ export function doublesTournamentRouter(
       matchNumber: match.matchNumber.raw,
       team1Id: match.team1Id.raw,
       team2Id: match.team2Id.raw,
+      status: match.status,
       tableNumber: match.tableNumber,
-      started: match.started,
     }));
     return response.status(StatusCodes.OK).json(new MatchesQueueDto(queryResult.tournamentId.raw, queuedMatchesDto));
   };
 
+  const getAllTournaments = async (request: Request, response: Response) => {
+    const queryResult = await queryPublisher.execute<FindAllDoublesTournamentsResult>(new FindAllDoublesTournaments());
+    if (!queryResult) {
+      return response.status(StatusCodes.NOT_FOUND).json({ message: "There aren't any tournaments ready to start" });
+    }
+    return response.status(StatusCodes.OK).json(new TournamentListDto(queryResult.map(toTournamentDto)));
+  };
+
+  const startTournament = async (request: Request, response: Response) => {
+    const { tournamentId } = request.params;
+    const commandResult = await commandPublisher.execute(new StartTournament({ tournamentId }));
+    return commandResult.process(
+      () => response.status(StatusCodes.ACCEPTED).json({ message: 'Tournament was started.' }).send(),
+      (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
+    );
+  };
+
   const router = express.Router();
+  router.get('', getAllTournaments);
+  router.post('/:tournamentId/start', startTournament);
   router.get('/:tournamentId/teams', getTournamentTeamsByTournamentId);
   router.get('/:tournamentId/matches', getMatchesQueueByTournamentId);
   return router;
@@ -58,4 +81,9 @@ function toTournamentTeamDto(doublesTournament: DoublesTournament): TournamentTe
   return doublesTournament.tournamentTeams.map((team) => {
     return new TournamentTeamDto(team.teamId.raw, team.firstTeamPlayer, team.secondTeamPlayer);
   });
+}
+
+function toTournamentDto(tournament: DoublesTournament): TournamentDto {
+  const tournamentTeams = new TournamentTeamListDto(toTournamentTeamDto(tournament));
+  return new TournamentDto(tournament.tournamentId, tournamentTeams, tournament.status);
 }
