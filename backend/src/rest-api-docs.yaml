@@ -394,7 +394,7 @@ components:
           type: string
           format: uuid
           example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
-        team12d:
+        team2Id:
           description: Second team id
           type: string
           format: uuid
@@ -417,7 +417,7 @@ components:
           description: Identifier of the tournament
           type: string
           format: uuid
-          example: 094469cf-6fcc-4947-a5c0-be1e94f54855
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
         queue:
           description: Matches queue
           type: array
