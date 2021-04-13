@@ -55,13 +55,14 @@ import { InMemoryTablesQueueRepository } from './modules/doubles-tournament/infr
 import { MongoTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoTablesQueueRepository';
 import { MongoTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/mongo/MongoTournamentTreeRepository';
 import {MongoPlayers} from "./modules/tournaments-registrations/infrastructure/repository/mongo/MongoPlayers";
+import {RetryCommandBus} from "./shared/infrastructure/core/application/command/RetryCommandBus";
 
 config();
 
 export type TableSoccerTournamentsApplication = { restApi: Express };
 
 export async function TableSoccerTournamentsApplication(
-  commandBus: CommandBus = new InMemoryCommandBus(),
+  commandBus: CommandBus = new RetryCommandBus(new InMemoryCommandBus(), 10),
   eventBus: DomainEventBus = new LoggingDomainEventBus(new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus())),
   queryBus: QueryBus = new InMemoryQueryBus(),
   currentTimeProvider: CurrentTimeProvider = () => new Date(),
