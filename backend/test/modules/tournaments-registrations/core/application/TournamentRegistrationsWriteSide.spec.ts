@@ -13,11 +13,12 @@ import { registerPlayerForTournament } from './TestHelpers';
 import Failure = CommandResult.Failure;
 
 describe('Tournament Registrations | Write Side', () => {
+  const currentTime = new Date();
+  const tournamentId = 'TournamentId';
+
   it('given not opened tournaments registrations, when open tournament registrations, then tournament registrations was opened', async () => {
     //Given
-    const currentTime = new Date();
     const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
-    const tournamentId = 'TournamentId';
 
     //When
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
@@ -33,9 +34,7 @@ describe('Tournament Registrations | Write Side', () => {
 
   it('given opened tournaments registrations, when try to open tournament registrations, then command should fail', async () => {
     //Given
-    const currentTime = new Date();
     const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
-    const tournamentId = 'TournamentId';
 
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
     await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
@@ -50,9 +49,7 @@ describe('Tournament Registrations | Write Side', () => {
 
   it('given opened tournaments registrations, when try to register player without profile, then command should fail', async () => {
     //Given
-    const currentTime = new Date();
     const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
-    const tournamentId = 'TournamentId';
 
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
     await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
@@ -71,9 +68,7 @@ describe('Tournament Registrations | Write Side', () => {
 
   it('given opened tournaments registrations and player has profile, when register player, then player should be registered for the tournament', async () => {
     //Given
-    const currentTime = new Date();
     const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
-    const tournamentId = 'TournamentId';
 
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
     await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
@@ -95,9 +90,7 @@ describe('Tournament Registrations | Write Side', () => {
 
   it('given opened tournaments registrations with 1 registered player, when try to close registrations, then command should fail', async () => {
     //Given
-    const currentTime = new Date();
     const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
-    const tournamentId = 'TournamentId';
 
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
     await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
@@ -116,9 +109,7 @@ describe('Tournament Registrations | Write Side', () => {
 
   it('given opened tournaments registrations with 8 registered players, when close registrations, then registrations should be closed', async () => {
     //Given
-    const currentTime = new Date();
     const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
-    const tournamentId = 'TournamentId';
 
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
     await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
@@ -149,9 +140,7 @@ describe('Tournament Registrations | Write Side', () => {
 
   it('given opened tournaments registrations with 9 registered players, when close registrations, then command should fail', async () => {
     //Given
-    const currentTime = new Date();
     const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
-    const tournamentId = 'TournamentId';
 
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
     await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
