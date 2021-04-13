@@ -1,6 +1,6 @@
 import {MatchStatus} from "../../atoms/MatchStatus";
 
-export type MatchListItem = {
+export type MatchItemType = {
    onClickTeam: (matchId: string, teamName: string) => void
    matchNumber: number | undefined,
    matchId: string | undefined,
