@@ -33,6 +33,8 @@ import { StartTournament } from './application/command/StartTournament';
 import { StartTournamentCommandHandler } from './application/command/StartTournamentCommandHandler';
 import { MatchHasEnded } from '../../match-module/core/domain/event/MatchHasEnded';
 import { MatchHasEndedImpliesTournamentMatchWasEnded } from './application/event/MatchHasEndedImpliesTournamentMatchWasEnded';
+import { TournamentMatchWasEnded } from './domain/event/TournamentMatchWasEnded';
+import { ReleaseTournamentTableWhenTournamentMatchWasEnded } from './application/event/ReleaseTournamentTableWhenTournamentMatchWasEnded';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -90,6 +92,10 @@ export function DoublesTournamentModuleCore(
       {
         eventType: MatchHasEnded,
         handler: new MatchHasEndedImpliesTournamentMatchWasEnded(eventPublisher, currentTimeProvider, matchesQueue),
+      },
+      {
+        eventType: TournamentMatchWasEnded,
+        handler: new ReleaseTournamentTableWhenTournamentMatchWasEnded(commandPublisher, matchesQueue),
       },
     ],
     queryHandlers: [

@@ -233,7 +233,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TournamentRegistrationsListDto'
+                $ref: '#/components/schemas/TournamentTeamDto'
   /doubles-tournaments/{tournamentId}/matches:
     get:
       tags:
@@ -335,26 +335,27 @@ components:
     TournamentTeamDto:
       type: object
       properties:
-        teamId:
-          description: Identifier of the team
-          type: string
-          format: uuid
-          example: 094469cf-6fcc-4947-a5c0-be1e94f54855
-        firstTeamPlayer:
-          description: First team player
-          type: string
-          format: uuid
-          example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
-        secondTeamPlayer:
-          description: Second team player
-          type: string
-          format: uuid
-          example: 3c09dc91-d82c-4226-9801-4430d3aa48ce
-    TournamentTeamListDto:
-      type: array
-      items:
-        $ref: '#/components/schemas/TournamentTeamDto'
-      uniqueItems: true
+        items:
+          description: List of tournament teams
+          type: array
+          items:
+            type: object
+            properties:
+              teamId:
+                description: Identifier of the team
+                type: string
+                format: uuid
+                example: 094469cf-6fcc-4947-a5c0-be1e94f54855
+              firstTeamPlayer:
+                description: First team player
+                type: string
+                format: uuid
+                example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
+              secondTeamPlayer:
+                description: Second team player
+                type: string
+                format: uuid
+                example: 3c09dc91-d82c-4226-9801-4430d3aa48ce
     DoubleTournamentDto:
       type: object
       properties:
@@ -393,7 +394,7 @@ components:
           type: string
           format: uuid
           example: b8c4c924-a9a5-4296-a319-ebdfbadec6ba
-        team12d:
+        team2Id:
           description: Second team id
           type: string
           format: uuid
@@ -416,7 +417,7 @@ components:
           description: Identifier of the tournament
           type: string
           format: uuid
-          example: 094469cf-6fcc-4947-a5c0-be1e94f54855
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
         queue:
           description: Matches queue
           type: array
@@ -605,4 +606,32 @@ components:
               isFree:
                 description: Is table available for next match
                 type: boolean
+          uniqueItems: true
+    PlayerProfileDto:
+      type: object
+      properties:
+        playerId:
+          description: Identifier of the player profile which should be created
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        firstName:
+          type: string
+          example: Jan
+        lastName:
+          type: string
+          example: Kowalski
+        phoneNumber:
+          type: string
+          example: 123456789
+        emailAddress:
+          type: string
+          example: email@address.com
+    PlayerProfilesListDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerProfileDto'
           uniqueItems: true
