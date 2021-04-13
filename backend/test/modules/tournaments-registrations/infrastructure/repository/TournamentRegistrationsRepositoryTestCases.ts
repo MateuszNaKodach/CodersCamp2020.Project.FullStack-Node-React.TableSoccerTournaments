@@ -40,8 +40,8 @@ export function TournamentRegistrationsRepositoryTestCases(props: {
       await repository.save(tournamentRegistrations2);
 
       expect(await repository.findAll()).toStrictEqual([
-        new TournamentRegistrations({...tournamentRegistrations1, version: 1}),
-        new TournamentRegistrations({...tournamentRegistrations2, version: 1})
+        new TournamentRegistrations({ ...tournamentRegistrations1, version: 1 }),
+        new TournamentRegistrations({ ...tournamentRegistrations2, version: 1 }),
       ]);
     });
 
@@ -58,7 +58,7 @@ export function TournamentRegistrationsRepositoryTestCases(props: {
       await repository.save(tournamentRegistrations2);
 
       expect(await repository.findByTournamentId(tournamentId1)).toStrictEqual(
-        new TournamentRegistrations({...tournamentRegistrations1, version: 1})
+        new TournamentRegistrations({ ...tournamentRegistrations1, version: 1 }),
       );
     });
   });
