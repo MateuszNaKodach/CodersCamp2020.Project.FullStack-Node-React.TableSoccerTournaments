@@ -7,8 +7,7 @@ import { TournamentRegistrationsWereClosed } from './event/TournamentRegistratio
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
 
-//TODO: Ustalić jakie jest minimum. Może 2 graczy i po prostu grają finał?
-const MIN_TOURNAMENT_PLAYERS = 0;
+const MIN_TOURNAMENT_PLAYERS = 4;
 
 export class TournamentRegistrations {
   readonly tournamentId: TournamentId;
@@ -18,9 +17,9 @@ export class TournamentRegistrations {
 
   constructor(props: { tournamentId: TournamentId; version?: number; status?: RegistrationsStatus; registeredPlayers?: PlayerId[] }) {
     this.tournamentId = props.tournamentId;
+    this.version = props.version ?? 0;
     this.status = props.status ?? RegistrationsStatus.OPENED;
     this.registeredPlayers = props.registeredPlayers ?? [];
-    this.version = props.version ?? 0;
   }
 }
 
@@ -109,7 +108,7 @@ export function closeTournamentRegistrations(
     tournamentId: command.tournamentId.raw,
     registeredPlayersIds: state.registeredPlayers.map((playerId) => playerId.raw),
   });
-  const tournamentRegistrations = onTournamentRegistrationsWasClosed(state, tournamentRegistrationsWasClosed);
+  const tournamentRegistrations = onTournamentRegistrationsWasClosed(state);
 
   return {
     state: tournamentRegistrations,
@@ -119,7 +118,6 @@ export function closeTournamentRegistrations(
 
 function onTournamentRegistrationsWasClosed(
   state: TournamentRegistrations,
-  event: TournamentRegistrationsWereClosed,
 ): TournamentRegistrations {
   return new TournamentRegistrations({
     ...state,

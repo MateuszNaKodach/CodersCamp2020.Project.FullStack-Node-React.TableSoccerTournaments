@@ -32,12 +32,14 @@ export class MongoTournamentRegistrationsRepository implements TournamentRegistr
 
 type MongoTournamentRegistrations = {
   readonly _id: string;
+  readonly __v: number;
   readonly status: RegistrationsStatus;
   readonly registeredPlayers: string[];
 } & mongoose.Document;
 
 const TournamentRegistrationsSchema = new mongoose.Schema({
   _id: Schema.Types.String,
+  __v: Schema.Types.Number,
   status: {
     type: Schema.Types.String,
     required: true,
