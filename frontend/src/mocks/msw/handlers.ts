@@ -170,7 +170,7 @@ export const handlers = [
     }
   ),
 
-  rest.get("/matches/:matchId/result", (req, res, ctx) => {
+  rest.post("*/rest-api/matches/:matchId/result", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({}));
   }),
 ];

@@ -65,6 +65,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
       setPlayersProfilesList().then();
    }, [teamsListDto]);
 
+
    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
       setExpanded(isExpanded ? panel : false);
    };
@@ -76,24 +77,22 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    )
 };
 
-const returnMatchItem = (matchItem: MatchListItem, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
+
+const returnMatchItem = (matchItemBase: MatchListItem, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
    <MatchItem
-      level={matchItem.level}
-      matchNumber={matchItem.matchNumber}
-      matchStatus={matchItem.matchStatus}
-      onClickTeam={matchItem.onClickTeam}
-      team1={matchItem.team1}
-      team2={matchItem.team2}
-      winnerTeamId={"aa"}
-      key={matchItem.matchNumber}
+      level={matchItemBase.level}
+      matchNumber={matchItemBase.matchNumber}
+      matchId={matchItemBase.matchId}
+      matchStatus={matchItemBase.matchStatus}
+      onClickTeam={matchItemBase.onClickTeam}
+      team1={matchItemBase.team1}
+      team2={matchItemBase.team2}
+      winnerTeamId={matchItemBase.winnerId}
+      key={matchItemBase.matchNumber}
       expanded={expanded}
       handleChangeExpander={handleChangeExpander}
    />
 )
-
-function callBackFunction() {
-   console.log("AaaBbbCcc")
-}
 
 const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto): MatchListItem[] => {
    return matchesListDto.queue.map((matchesItem) => {
@@ -110,8 +109,10 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
       }
 
       return {
-         onClickTeam: callBackFunction,
+         onClickTeam: setMatchWinner,
          matchNumber: matchesItem.matchNumber,
+         matchId: `${matchesListDto.tournamentId}_${matchesItem.matchNumber}`,
+         winnerId: undefined,
          level: undefined,
          matchStatus: findStatus(),
          team1: {
@@ -131,7 +132,6 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
       }
    })
 }
-
 
 const getMatchInformationDto = (matchId: string): Promise<MatchInformationDto> => MatchInformationRestApi()
    .getMatchesList(matchId)
@@ -161,4 +161,13 @@ const getTeamsListDto = (tournamentId: string): Promise<TeamsListDto> => TeamsLi
       return teamsList
    });
 
+const setMatchWinner = (matchId: string, winnerPlayerId: string) => {
+   console.log("x X x X x X x");
+   console.log(matchId);
+   console.log(winnerPlayerId);
+
+   MatchInformationRestApi()
+      .postMatchWinner(matchId, winnerPlayerId)
+      .then();
+}
 
