@@ -10,7 +10,7 @@ import {MatchStatus} from "../../atoms/MatchStatus";
 export type MatchTeamProps = {
    readonly player1: string | undefined;
    readonly player2: string | undefined;
-   readonly teamId: number | string | undefined;
+   readonly teamId:  string | undefined;
    readonly isWinnerTeam: boolean;
    readonly matchStatus: MatchStatus;
 };
