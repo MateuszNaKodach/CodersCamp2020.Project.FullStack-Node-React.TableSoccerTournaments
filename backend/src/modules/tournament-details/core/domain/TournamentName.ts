@@ -4,8 +4,8 @@ export class TournamentName {
   private constructor(readonly raw: string) {}
 
   static from(tournamentName: string): TournamentName {
-    if (tournamentName.length <= 0) {
-      throw new Error('TournamentName cannot be empty!');
+    if (tournamentName.length < 3) {
+      throw new Error('Tournament name must have at least 3 characters.');
     }
     return new TournamentName(tournamentName);
   }

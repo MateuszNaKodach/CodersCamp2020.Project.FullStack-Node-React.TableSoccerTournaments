@@ -11,9 +11,5 @@ export class TournamentDetails {
 }
 
 export function addTournamentDetails(command: { tournamentId: string; tournamentName: string }): TournamentDetails {
-  if (command.tournamentName.length < 3) {
-    throw new Error('Tournament name must have at least 3 characters.');
-  }
-
   return new TournamentDetails({ tournamentId: command.tournamentId, tournamentName: TournamentName.from(command.tournamentName) });
 }
