@@ -1,11 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Avatar,
   Button,
   Card,
   CardContent,
   CircularProgress,
-  Drawer,
   FormControl,
   IconButton,
   InputLabel,
@@ -15,7 +20,6 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   OutlinedInput,
-  Typography,
 } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import {
@@ -29,15 +33,24 @@ import {
 } from "../../../restapi/players-profiles";
 import { Centered } from "../../atoms/Shared/Centered";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import CreatePlayerProfileForm from "../../organisms/CreatePlayerProfileForm/CreatePlayerProfileForm";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import Notification from "../../organisms/Notification/Notification";
 import useStyles from "./styles";
+import { TopNavBar } from "../../organisms/TournamentRegistrationsComponents/TopNavBar";
+import { CreatePlayerProfileDrawer } from "../../organisms/TournamentRegistrationsComponents/CreatePlayerProfileDrawer";
 
 export type TournamentRegistrationsProps = {
   readonly tournamentId: string;
 };
+
+export const openPlayerProfileForm = {
+  openForm: false,
+  toggleOpenFormState: () => {},
+  refreshInputAndList: () => {},
+};
+
+export const FormContext = createContext(openPlayerProfileForm);
 
 export const TournamentRegistrations = (
   props: TournamentRegistrationsProps
@@ -54,6 +67,13 @@ export const TournamentRegistrations = (
   const [registeredPlayersIds, setRegisteredPlayersIds] = useState<string[]>(
     []
   );
+  const [openForm, setOpenForm] = useState(openPlayerProfileForm.openForm);
+  const toggleOpenFormState = () => {
+    setOpenForm((prevValue) => !prevValue);
+  };
+  const refreshInputAndList = () => {
+    refreshPlayersAndResetInput();
+  };
 
   useEffect(() => {
     UserProfileRestApi()
@@ -142,49 +162,174 @@ export const TournamentRegistrations = (
   const isLoading = availablePlayers === undefined;
   const classes = useStyles();
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Centered>
-          <Typography component="h6" variant="h6">
-            Zapisy na turniej
-          </Typography>
-          <VerticalSpace height="1rem" />
-          {isLoading ? (
-            <CircularProgress data-testid="TournamentRegistrationsLoadingIndicator" />
-          ) : (
-            <>
-              <FormControl variant="outlined">
-                <InputLabel htmlFor="player-search-input">Zawodnik</InputLabel>
-                <OutlinedInput
-                  id="player-search-input"
-                  inputRef={searchInput}
-                  onChange={(event) => onPlayerSearch(event.target.value)}
-                  endAdornment={<Search />}
-                  labelWidth={70}
+    <FormContext.Provider
+      value={{ openForm, toggleOpenFormState, refreshInputAndList }}
+    >
+      <Card className={classes.root}>
+        <CardContent>
+          <Centered>
+            <TopNavBar />
+            <VerticalSpace height="1rem" />
+            {isLoading ? (
+              <CircularProgress data-testid="TournamentRegistrationsLoadingIndicator" />
+            ) : (
+              <>
+                <FormControl variant="outlined">
+                  <InputLabel htmlFor="player-search-input">
+                    Zawodnik
+                  </InputLabel>
+                  <OutlinedInput
+                    id="player-search-input"
+                    inputRef={searchInput}
+                    onChange={(event) => onPlayerSearch(event.target.value)}
+                    endAdornment={<Search />}
+                    labelWidth={70}
+                  />
+                </FormControl>
+                <VerticalSpace height="1rem" />
+                <PlayersList
+                  players={filteredPlayers}
+                  registeredPlayersIds={registeredPlayersIds}
+                  refreshPlayersAndResetInput={refreshPlayersAndResetInput}
+                  registerPlayer={registerPlayer}
+                  tournamentId={props.tournamentId}
+                  notification={onNotificationOpen}
                 />
-              </FormControl>
-              <VerticalSpace height="1rem" />
-              <PlayersList
-                players={filteredPlayers}
-                registeredPlayersIds={registeredPlayersIds}
-                refreshPlayersAndResetInput={refreshPlayersAndResetInput}
-                registerPlayer={registerPlayer}
-                tournamentId={props.tournamentId}
-                notification={onNotificationOpen}
-              />
-            </>
-          )}
+              </>
+            )}
 
-          <Notification
-            text={textAlert}
-            open={openAlert}
-            handleClose={onNotificationClose}
-          />
-        </Centered>
-      </CardContent>
-    </Card>
+            <Notification
+              text={textAlert}
+              open={openAlert}
+              handleClose={onNotificationClose}
+            />
+
+            <CreatePlayerProfileDrawer
+              clearInputCreateAndRegisterPlayer={onNotificationOpen}
+              tournamentId={props.tournamentId}
+            />
+          </Centered>
+        </CardContent>
+      </Card>
+    </FormContext.Provider>
   );
 };
+
+// const TopNavBar = () => {
+//   const [openDrawer, setOpenDrawer] = useState(false);
+//
+//   return (
+//     <>
+//       <Box display="flex" alignItems="center" width="100%">
+//         <Box>
+//           <ArrowBackIosIcon />
+//         </Box>
+//         <Box flexGrow={1} textAlign="center">
+//           <Typography component="h6" variant="h6">
+//             Zapisy na turniej
+//           </Typography>
+//         </Box>
+//         <Box>
+//           <IconButton
+//             style={{ padding: 0 }}
+//             onClick={() => setOpenDrawer(true)}
+//           >
+//             <MenuIcon />
+//           </IconButton>
+//         </Box>
+//       </Box>
+//       <TournamentRegistrationsActionDrawer
+//         openDrawer={openDrawer}
+//         returnToPrevState={setOpenDrawer}
+//       />
+//     </>
+//   );
+// };
+
+// const TournamentRegistrationsDrawer = (props: {
+//   openDrawer: boolean;
+//   returnToPrevState: (prevState: boolean) => void;
+// }) => {
+//   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
+//   const { toggleOpenFormState } = useContext(FormContext);
+//
+//   useEffect(() => {
+//     setDrawerOpened(props.openDrawer);
+//
+//     return () => {
+//       setDrawerOpened(false);
+//     };
+//   }, [props.openDrawer]);
+//
+//   function toggleDrawer(open: boolean) {
+//     props.returnToPrevState(false);
+//     setDrawerOpened(open);
+//   }
+//
+//   return (
+//     <Drawer
+//       anchor={"bottom"}
+//       open={drawerOpened}
+//       onClose={() => toggleDrawer(false)}
+//     >
+//       <Grid container direction={"column"} justify="center" alignItems="center">
+//         <VerticalSpace height="30px" />
+//         <Button
+//           variant="contained"
+//           color="primary"
+//           onClick={() => {
+//             toggleOpenFormState();
+//             toggleDrawer(false);
+//           }}
+//         >
+//           Dodaj i zapisz zawdonika
+//         </Button>
+//         <VerticalSpace height="20px" />
+//         <Button
+//           variant="contained"
+//           color="primary"
+//           onClick={() => console.log("second button")}
+//         >
+//           Zakończ zapisy na turniej
+//         </Button>
+//         <VerticalSpace height="30px" />
+//       </Grid>
+//     </Drawer>
+//   );
+// };
+
+// const CreatePlayerProfileDrawer = (props: {
+//   clearInputCreateAndRegisterPlayer: (name: string, surname: string) => void;
+//   tournamentId: string;
+// }) => {
+//   const { openForm, toggleOpenFormState } = useContext(FormContext);
+//   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
+//
+//   useEffect(() => {
+//     if (openForm) {
+//       setDrawerOpened(true);
+//       toggleOpenFormState();
+//     }
+//   }, [openForm]);
+//
+//   const toggleDrawer = (open: boolean) => () => {
+//     setDrawerOpened(open);
+//   };
+//
+//   const onPlayerProfileCreated = (name: string, surname: string) => {
+//     setDrawerOpened(false);
+//     props.clearInputCreateAndRegisterPlayer(name, surname);
+//   };
+//
+//   return (
+//     <Drawer anchor={"bottom"} open={drawerOpened} onClose={toggleDrawer(false)}>
+//       <CreatePlayerProfileForm
+//         onPlayerProfileCreated={onPlayerProfileCreated}
+//         tournamentId={props.tournamentId}
+//       />
+//     </Drawer>
+//   );
+// };
 
 const PlayersList = (props: {
   players: PlayerProfileDto[];
@@ -233,16 +378,17 @@ const PlayerNotFound = (props: {
   clearInputCreateAndRegisterPlayer: (name: string, surname: string) => void;
   tournamentId: string;
 }) => {
-  const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
+  // const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
+  const { toggleOpenFormState } = useContext(FormContext);
 
-  const toggleDrawer = (open: boolean) => () => {
-    setDrawerOpened(open);
-  };
-
-  const onPlayerProfileCreated = (name: string, surname: string) => {
-    setDrawerOpened(false);
-    props.clearInputCreateAndRegisterPlayer(name, surname);
-  };
+  // const toggleDrawer = (open: boolean) => () => {
+  //   setDrawerOpened(open);
+  // };
+  //
+  // const onPlayerProfileCreated = (name: string, surname: string) => {
+  //   setDrawerOpened(false);
+  //   props.clearInputCreateAndRegisterPlayer(name, surname);
+  // };
 
   return (
     <Centered>
@@ -251,19 +397,27 @@ const PlayerNotFound = (props: {
         Zapisz nowego poniżej.
       </Alert>
       <VerticalSpace height="1rem" />
-      <Button variant="contained" color="primary" onClick={toggleDrawer(true)}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => toggleOpenFormState()}
+      >
         Dodaj i zapisz
       </Button>
-      <Drawer
-        anchor={"bottom"}
-        open={drawerOpened}
-        onClose={toggleDrawer(false)}
-      >
-        <CreatePlayerProfileForm
-          onPlayerProfileCreated={onPlayerProfileCreated}
-          tournamentId={props.tournamentId}
-        />
-      </Drawer>
+      {/*<OpenDrawer*/}
+      {/*  clearInputCreateAndRegisterPlayer={onPlayerProfileCreated}*/}
+      {/*  tournamentId={props.tournamentId}*/}
+      {/*/>*/}
+      {/*<Drawer*/}
+      {/*  anchor={"bottom"}*/}
+      {/*  open={drawerOpened}*/}
+      {/*  onClose={toggleDrawer(false)}*/}
+      {/*>*/}
+      {/*  <CreatePlayerProfileForm*/}
+      {/*    onPlayerProfileCreated={onPlayerProfileCreated}*/}
+      {/*    tournamentId={props.tournamentId}*/}
+      {/*  />*/}
+      {/*</Drawer>*/}
     </Centered>
   );
 };

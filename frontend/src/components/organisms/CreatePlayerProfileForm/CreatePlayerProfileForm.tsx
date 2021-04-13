@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { useFormik } from "formik";
@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { UserProfileRestApi } from "../../../restapi/players-profiles";
 import { EntityIdGenerator } from "../../idGenerator/EntityIdGenerator";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
+import { FormContext } from "../../pages/TournamentRegistrations";
 
 const validationSchema = yup.object({
   name: yup.string().required("To pole jest wymagane."),
@@ -24,6 +25,7 @@ function CreatePlayerProfileForm(props: {
   onPlayerProfileCreated: (name: string, surname: string) => void;
   tournamentId: string;
 }) {
+  const { refreshInputAndList } = useContext(FormContext);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -47,6 +49,7 @@ function CreatePlayerProfileForm(props: {
           playerId: playerId,
         });
         props.onPlayerProfileCreated(values.name, values.surname);
+        refreshInputAndList();
       } catch (error) {
         alert(error.response.data.message);
       }
