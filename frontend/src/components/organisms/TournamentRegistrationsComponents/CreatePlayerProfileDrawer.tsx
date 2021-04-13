@@ -1,35 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Drawer } from "@material-ui/core";
 import CreatePlayerProfileForm from "../CreatePlayerProfileForm/CreatePlayerProfileForm";
-import { FormContext } from "../../pages/TournamentRegistrations";
+import { TournamentRegistrationsContext } from "./Context";
 
-export const CreatePlayerProfileDrawer = (props: {
-  clearInputCreateAndRegisterPlayer: (name: string, surname: string) => void;
-  tournamentId: string;
-}) => {
-  const { openForm, toggleOpenFormState } = useContext(FormContext);
+export const CreatePlayerProfileDrawer = (props: { tournamentId: string }) => {
+  const { openCreatePlayerProfileForm, toggleOpenFormState } = useContext(
+    TournamentRegistrationsContext
+  );
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
 
   useEffect(() => {
-    if (openForm) {
+    if (openCreatePlayerProfileForm) {
       setDrawerOpened(true);
       toggleOpenFormState();
     }
-  }, [openForm]);
+  }, [openCreatePlayerProfileForm]);
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpened(open);
   };
 
-  const onPlayerProfileCreated = (name: string, surname: string) => {
+  const onDrawerClose = () => {
     setDrawerOpened(false);
-    props.clearInputCreateAndRegisterPlayer(name, surname);
   };
 
   return (
     <Drawer anchor={"bottom"} open={drawerOpened} onClose={toggleDrawer(false)}>
       <CreatePlayerProfileForm
-        onPlayerProfileCreated={onPlayerProfileCreated}
+        onDrawerClose={onDrawerClose}
         tournamentId={props.tournamentId}
       />
     </Drawer>

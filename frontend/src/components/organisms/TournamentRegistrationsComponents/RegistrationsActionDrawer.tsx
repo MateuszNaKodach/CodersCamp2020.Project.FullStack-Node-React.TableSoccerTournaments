@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Drawer, Grid } from "@material-ui/core";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import { FormContext } from "../../pages/TournamentRegistrations";
+import { TournamentRegistrationsContext } from "./Context";
 
-export const TournamentRegistrationsActionDrawer = (props: {
+export const RegistrationsActionDrawer = (props: {
   openDrawer: boolean;
   returnToPrevState: (prevState: boolean) => void;
 }) => {
   const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
-  const { toggleOpenFormState } = useContext(FormContext);
+  const { toggleOpenFormState } = useContext(TournamentRegistrationsContext);
 
   useEffect(() => {
     setDrawerOpened(props.openDrawer);

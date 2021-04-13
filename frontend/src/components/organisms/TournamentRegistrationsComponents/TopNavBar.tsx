@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, IconButton, Typography } from "@material-ui/core";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import MenuIcon from "@material-ui/icons/Menu";
-import { TournamentRegistrationsActionDrawer } from "./TournamentRegistrationsActionDrawer";
+import { RegistrationsActionDrawer } from "./RegistrationsActionDrawer";
 
 export const TopNavBar = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -27,7 +27,7 @@ export const TopNavBar = () => {
           </IconButton>
         </Box>
       </Box>
-      <TournamentRegistrationsActionDrawer
+      <RegistrationsActionDrawer
         openDrawer={openDrawer}
         returnToPrevState={setOpenDrawer}
       />

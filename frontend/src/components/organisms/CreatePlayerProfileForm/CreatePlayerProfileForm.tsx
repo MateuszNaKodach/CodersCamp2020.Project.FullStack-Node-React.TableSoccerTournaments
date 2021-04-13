@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { UserProfileRestApi } from "../../../restapi/players-profiles";
 import { EntityIdGenerator } from "../../idGenerator/EntityIdGenerator";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
-import { FormContext } from "../../pages/TournamentRegistrations";
+import { TournamentRegistrationsContext } from "../TournamentRegistrationsComponents/Context";
 
 const validationSchema = yup.object({
   name: yup.string().required("To pole jest wymagane."),
@@ -22,10 +22,10 @@ const validationSchema = yup.object({
 });
 
 function CreatePlayerProfileForm(props: {
-  onPlayerProfileCreated: (name: string, surname: string) => void;
+  onDrawerClose: () => void;
   tournamentId: string;
 }) {
-  const { refreshInputAndList } = useContext(FormContext);
+  const { onPlayerProfileCreated } = useContext(TournamentRegistrationsContext);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -48,8 +48,8 @@ function CreatePlayerProfileForm(props: {
           tournamentId: props.tournamentId,
           playerId: playerId,
         });
-        props.onPlayerProfileCreated(values.name, values.surname);
-        refreshInputAndList();
+        props.onDrawerClose();
+        onPlayerProfileCreated(values.name, values.surname);
       } catch (error) {
         alert(error.response.data.message);
       }
