@@ -145,6 +145,7 @@ export async function TableSoccerTournamentsApplication(
     process.env.TOURNAMENTS_TABLES_MODULE === 'ENABLED' ? tournamentTablesModule : undefined,
     process.env.EMAILS_SENDING_MODULE === 'ENABLED' ? sendingEmailModule : undefined,
     process.env.TOURNAMENT_TREE_MODULE === 'ENABLED' ? eliminationTournamentTree : undefined,
+    process.env.TOURNAMENT_DETAILS_MODULE === 'ENABLED' ? tournamentDetailsModule : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
