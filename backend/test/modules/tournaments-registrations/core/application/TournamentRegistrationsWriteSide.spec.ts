@@ -146,4 +146,34 @@ describe('Tournament Registrations | Write Side', () => {
       }),
     );
   });
+
+  it('given opened tournaments registrations with 9 registered players, when close registrations, then command should fail', async () => {
+    //Given
+    const currentTime = new Date();
+    const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
+    const tournamentId = 'TournamentId';
+
+    const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
+    await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
+
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId1', tournamentId);
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId2', tournamentId);
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId3', tournamentId);
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId4', tournamentId);
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId5', tournamentId);
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId6', tournamentId);
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId7', tournamentId);
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId8', tournamentId);
+    await registerPlayerForTournament(tournamentsRegistrations, 'PlayerId9', tournamentId);
+
+    //When
+    const closeTournamentRegistrations = new CloseTournamentRegistrations({ tournamentId });
+    const commandResult = await tournamentsRegistrations.executeCommand(closeTournamentRegistrations);
+
+    //Then
+    expect(commandResult.isSuccess()).toBeFalsy();
+    expect((commandResult as Failure).reason).toStrictEqual(
+      new Error('There must be even number of players to start tournament! Now is 9'),
+    );
+  });
 });
