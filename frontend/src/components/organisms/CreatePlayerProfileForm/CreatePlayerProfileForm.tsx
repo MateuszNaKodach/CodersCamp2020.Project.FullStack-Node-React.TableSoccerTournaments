@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { useFormik } from "formik";
@@ -7,6 +7,7 @@ import { UserProfileRestApi } from "../../../restapi/players-profiles";
 import { EntityIdGenerator } from "../../idGenerator/EntityIdGenerator";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import { TournamentRegistrationsContext } from "../TournamentRegistrationsComponents/Context";
+import Notification from "../Notification/Notification";
 
 const validationSchema = yup.object({
   name: yup.string().required("To pole jest wymagane."),
@@ -26,6 +27,24 @@ function CreatePlayerProfileForm(props: {
   tournamentId: string;
 }) {
   const { onPlayerProfileCreated } = useContext(TournamentRegistrationsContext);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [textAlert, setTextAlert] = useState("");
+
+  const onNotificationOpen = (errorMessage: string) => {
+    setTextAlert(errorMessage);
+    setOpenAlert(true);
+  };
+
+  const onNotificationClose = (
+    event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
+  };
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -51,7 +70,7 @@ function CreatePlayerProfileForm(props: {
         props.onDrawerClose();
         onPlayerProfileCreated(values.name, values.surname);
       } catch (error) {
-        alert(error.response.data.message);
+        onNotificationOpen(error.response.data.message);
       }
     },
   });
@@ -125,6 +144,12 @@ function CreatePlayerProfileForm(props: {
           <VerticalSpace height="1rem" />
         </Grid>
       </form>
+      <Notification
+        text={textAlert}
+        open={openAlert}
+        handleClose={onNotificationClose}
+        isError={true}
+      />
     </Grid>
   );
 }

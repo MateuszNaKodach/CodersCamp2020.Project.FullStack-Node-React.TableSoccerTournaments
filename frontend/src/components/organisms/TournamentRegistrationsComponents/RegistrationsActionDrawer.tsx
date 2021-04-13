@@ -3,14 +3,33 @@ import { Button, Drawer, Grid } from "@material-ui/core";
 import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { TournamentRegistrationsContext } from "./Context";
 import { makeStyles } from "@material-ui/core/styles";
-import useStyles from "../Notification/styles";
+import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
+import Notification from "../Notification/Notification";
 
 export const RegistrationsActionDrawer = (props: {
   openDrawer: boolean;
   returnToPrevState: (prevState: boolean) => void;
+  tournamentId: string;
 }) => {
-  const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
   const { toggleOpenFormState } = useContext(TournamentRegistrationsContext);
+  const [drawerOpened, setDrawerOpened] = useState<boolean>(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [textAlert, setTextAlert] = useState("");
+
+  const onNotificationOpen = (errorMessage: string) => {
+    setTextAlert(errorMessage);
+    setOpenAlert(true);
+  };
+
+  const onNotificationClose = (
+    event?: React.SyntheticEvent,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
+  };
 
   useEffect(() => {
     setDrawerOpened(props.openDrawer);
@@ -25,6 +44,17 @@ export const RegistrationsActionDrawer = (props: {
     setDrawerOpened(open);
   }
 
+  const startTournament = async () => {
+    try {
+      await TournamentRegistrationsRestApi().closeTournamentRegistration(
+        props.tournamentId
+      );
+      toggleDrawer(false);
+    } catch (error) {
+      onNotificationOpen(error.response.data.message);
+    }
+  };
+
   const useStyles = makeStyles(() => ({
     width: {
       width: "70%",
@@ -33,35 +63,48 @@ export const RegistrationsActionDrawer = (props: {
   const classes = useStyles();
 
   return (
-    <Drawer
-      anchor={"bottom"}
-      open={drawerOpened}
-      onClose={() => toggleDrawer(false)}
-    >
-      <Grid container direction={"column"} justify="center" alignItems="center">
-        <VerticalSpace height="30px" />
-        <Button
-          className={classes.width}
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            toggleOpenFormState();
-            toggleDrawer(false);
-          }}
+    <>
+      <Drawer
+        anchor={"bottom"}
+        open={drawerOpened}
+        onClose={() => toggleDrawer(false)}
+      >
+        <Grid
+          container
+          direction={"column"}
+          justify="center"
+          alignItems="center"
         >
-          Dodaj i zapisz zawdonika
-        </Button>
-        <VerticalSpace height="20px" />
-        <Button
-          className={classes.width}
-          variant="contained"
-          color="primary"
-          onClick={() => console.log("second button")}
-        >
-          Zakończ zapisy na turniej
-        </Button>
-        <VerticalSpace height="30px" />
-      </Grid>
-    </Drawer>
+          <VerticalSpace height="30px" />
+          <Button
+            className={classes.width}
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              toggleOpenFormState();
+              toggleDrawer(false);
+            }}
+          >
+            Dodaj i zapisz zawdonika
+          </Button>
+          <VerticalSpace height="20px" />
+          <Button
+            className={classes.width}
+            variant="contained"
+            color="primary"
+            onClick={startTournament}
+          >
+            Zakończ zapisy na turniej
+          </Button>
+          <VerticalSpace height="30px" />
+        </Grid>
+      </Drawer>
+      <Notification
+        text={textAlert}
+        open={openAlert}
+        handleClose={onNotificationClose}
+        isError={true}
+      />
+    </>
   );
 };

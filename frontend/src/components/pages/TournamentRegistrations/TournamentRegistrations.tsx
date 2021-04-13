@@ -148,7 +148,7 @@ export const TournamentRegistrations = (
       <Card className={classes.root}>
         <CardContent>
           <Centered>
-            <TopNavBar />
+            <TopNavBar tournamentId={props.tournamentId} />
             <VerticalSpace height="1rem" />
 
             {isLoading ? (
@@ -179,6 +179,7 @@ export const TournamentRegistrations = (
               text={textAlert}
               open={openAlert}
               handleClose={onNotificationClose}
+              isError={false}
             />
             <CreatePlayerProfileDrawer tournamentId={props.tournamentId} />
           </Centered>

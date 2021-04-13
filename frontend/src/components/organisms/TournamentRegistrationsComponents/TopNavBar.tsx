@@ -4,15 +4,18 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import MenuIcon from "@material-ui/icons/Menu";
 import { RegistrationsActionDrawer } from "./RegistrationsActionDrawer";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router-dom";
 
-export const TopNavBar = () => {
+export const TopNavBar = (props: { tournamentId: string }) => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  const history = useHistory();
+  const goBack = () => {
+    history.goBack();
+  };
+
   const useStyles = makeStyles(() => ({
-    arrowPadding: {
-      paddingTop: "5px",
-    },
-    hamburgerButton: {
+    padding: {
       padding: 0,
       paddingTop: "2px",
     },
@@ -23,7 +26,9 @@ export const TopNavBar = () => {
     <>
       <Box display="flex" alignItems="center" width="100%">
         <Box>
-          <ArrowBackIosIcon className={classes.arrowPadding} />
+          <IconButton className={classes.padding} onClick={goBack}>
+            <ArrowBackIosIcon />
+          </IconButton>
         </Box>
         <Box flexGrow={1} textAlign="center">
           <Typography component="h6" variant="h6">
@@ -33,7 +38,7 @@ export const TopNavBar = () => {
         <Box>
           <IconButton
             data-testid="hamburgerMenu"
-            className={classes.hamburgerButton}
+            className={classes.padding}
             onClick={() => setOpenDrawer(true)}
           >
             <MenuIcon />
@@ -43,6 +48,7 @@ export const TopNavBar = () => {
       <RegistrationsActionDrawer
         openDrawer={openDrawer}
         returnToPrevState={setOpenDrawer}
+        tournamentId={props.tournamentId}
       />
     </>
   );
