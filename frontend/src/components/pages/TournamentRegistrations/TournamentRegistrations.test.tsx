@@ -6,7 +6,6 @@ import {
 } from "@testing-library/react";
 import { PlayerProfileDto } from "../../../restapi/players-profiles";
 import userEvent from "@testing-library/user-event";
-import { BrowserRouter as Router } from "react-router-dom";
 import {
   getPlayersProfilesIsLoading,
   getPlayersProfilesWillReturn,
@@ -15,7 +14,7 @@ import { getRegisteredPlayersIdsWillReturn } from "../../../restapi/tournament-r
 
 describe("Tournament Registrations", () => {
   const tournamentId = "tournamentId";
-  it(`should show title "Zapisy na turniej"`, () => {
+  it(`should show title "Zapisy na turniej" and hamburger menu`, () => {
     //Given
     getPlayersProfilesIsLoading();
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
@@ -25,6 +24,7 @@ describe("Tournament Registrations", () => {
 
     //Then
     expect(screen.getByText("Zapisy na turniej")).toBeInTheDocument();
+    expect(screen.getByTestId("hamburgerMenu")).toBeInTheDocument();
   });
 
   it("when players profiles are loading, then show loading indicator", async () => {
@@ -121,5 +121,52 @@ describe("Tournament Registrations", () => {
       "Dodaj i zapisz"
     );
     expect(registerNewPlayerForTournamentButton).toBeInTheDocument();
+  });
+
+  it(`when click on hamburger menu, then show action drawer with buttons`, () => {
+    //Given
+    getPlayersProfilesIsLoading();
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
+
+    //When
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
+    const menu = screen.getByTestId("hamburgerMenu");
+    userEvent.click(menu);
+
+    //Then
+    expect(screen.getByText("Dodaj i zapisz zawdonika")).toBeInTheDocument();
+    expect(screen.getByText("Zakończ zapisy na turniej")).toBeInTheDocument();
+  });
+
+  it(`when click on "Dodaj i zapisz zawdonika" button in hamburger menu, then show create plaeyrs profile form`, async () => {
+    //Given
+    getPlayersProfilesIsLoading();
+    getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
+
+    //When
+    render(<TournamentRegistrations tournamentId={tournamentId} />);
+    const menu = screen.getByTestId("hamburgerMenu");
+    userEvent.click(menu);
+    const addPlayerButton = await screen.getByText("Dodaj i zapisz zawdonika");
+    userEvent.click(addPlayerButton);
+
+    //Then
+    const newPlayerText = await screen.findByText("Nowy zawodnik");
+    expect(newPlayerText).toBeInTheDocument();
+
+    const savePlayerButton = await screen.findByText("Zapisz zawodnika");
+    expect(savePlayerButton).toBeInTheDocument();
+
+    const nameInput = await screen.findByLabelText("Imię");
+    expect(nameInput).toBeInTheDocument();
+
+    const surnameInput = await screen.findByLabelText("Nazwisko");
+    expect(surnameInput).toBeInTheDocument();
+
+    const email = await screen.findByLabelText("Adres e-mail");
+    expect(email).toBeInTheDocument();
+
+    const phone = await screen.findByLabelText("Numer telefonu");
+    expect(phone).toBeInTheDocument();
   });
 });

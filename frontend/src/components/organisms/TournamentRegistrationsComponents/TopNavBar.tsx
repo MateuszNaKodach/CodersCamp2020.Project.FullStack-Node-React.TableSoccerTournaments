@@ -32,8 +32,8 @@ export const TopNavBar = () => {
         </Box>
         <Box>
           <IconButton
+            data-testid="hamburgerMenu"
             className={classes.hamburgerButton}
-            // style={{ padding: 0 }}
             onClick={() => setOpenDrawer(true)}
           >
             <MenuIcon />
