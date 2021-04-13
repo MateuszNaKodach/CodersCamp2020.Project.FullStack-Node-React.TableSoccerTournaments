@@ -1,9 +1,9 @@
-import {TournamentDetails} from "../domain/TournamentDetails";
+import { TournamentDetails } from '../domain/TournamentDetails';
 
 export interface TournamentDetailsRepository {
-    save(tournamentDetails: TournamentDetails): Promise<void>;
+  save(tournamentDetails: TournamentDetails): Promise<void>;
 
-    findByTournamentId(tournamentId: string): Promise<TournamentDetails | undefined>;
+  findByTournamentId(tournamentId: string): Promise<TournamentDetails | undefined>;
 
-    findAll(): Promise<TournamentDetails[]>;
+  findAll(): Promise<TournamentDetails[]>;
 }

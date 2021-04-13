@@ -54,10 +54,10 @@ import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentat
 import { InMemoryTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryTablesQueueRepository';
 import { MongoTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoTablesQueueRepository';
 import { MongoTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/mongo/MongoTournamentTreeRepository';
-import {MongoTournamentDetailsRepository} from "./modules/tournament-details/infrastructure/repository/mongo/MongoTournamentDetailsRepository";
-import {InMemoryTournamentDetailsRepository} from "./modules/tournament-details/infrastructure/repository/inmemory/InMemoryTournamentDetailsRepository";
-import {TournamentDetailsModuleCore} from "./modules/tournament-details/core/TournamentDetailsModuleCore";
-import {TournamentDetailsRestApiModule} from "./modules/tournament-details/presentation/rest-api/TournamentDetailsRestApiModule";
+import { MongoTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/mongo/MongoTournamentDetailsRepository';
+import { InMemoryTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/inmemory/InMemoryTournamentDetailsRepository';
+import { TournamentDetailsModuleCore } from './modules/tournament-details/core/TournamentDetailsModuleCore';
+import { TournamentDetailsRestApiModule } from './modules/tournament-details/presentation/rest-api/TournamentDetailsRestApiModule';
 
 config();
 

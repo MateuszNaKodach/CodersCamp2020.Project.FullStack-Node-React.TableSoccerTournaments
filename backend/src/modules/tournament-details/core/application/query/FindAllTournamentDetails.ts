@@ -1,7 +1,7 @@
-import {TournamentDetails} from "../../domain/TournamentDetails";
+import { TournamentDetails } from '../../domain/TournamentDetails';
 
 export class FindAllTournamentDetails {
-    constructor() {}
+  constructor() {}
 }
 
 export type FindAllTournamentDetailsResult = TournamentDetails[];

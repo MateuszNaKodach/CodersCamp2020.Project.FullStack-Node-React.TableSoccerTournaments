@@ -1,4 +1,4 @@
 export class PostTournamentDetailsRequestBody {
-    readonly tournamentId: string;
-    readonly tournamentName: string;
+  readonly tournamentId: string;
+  readonly tournamentName: string;
 }
