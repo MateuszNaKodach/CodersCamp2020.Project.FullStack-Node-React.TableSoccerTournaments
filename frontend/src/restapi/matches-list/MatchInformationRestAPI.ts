@@ -27,5 +27,14 @@ export const MatchInformationRestApi = (
         .get<MatchInformationDto>(`${currentConfig.baseUrl}/matches/${matchId}`)
         .then((res) => res.data);
     },
+
+    async postMatchWinner(
+      matchId: string,
+      winnerPlayerId: string
+    ): Promise<void> {
+      await axios.post(`${currentConfig.baseUrl}/matches/${matchId}/result`, {
+        winnerId: winnerPlayerId,
+      });
+    },
   };
 };

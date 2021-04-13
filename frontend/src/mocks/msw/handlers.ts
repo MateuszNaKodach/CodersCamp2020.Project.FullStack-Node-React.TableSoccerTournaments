@@ -169,4 +169,8 @@ export const handlers = [
       );
     }
   ),
+
+  rest.post("*/rest-api/matches/:matchId/result", (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({}));
+  }),
 ];

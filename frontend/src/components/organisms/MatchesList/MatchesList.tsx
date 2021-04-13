@@ -10,7 +10,7 @@ import {MatchStatus} from "../../atoms/MatchStatus";
 import {PlayerProfileDto, UserProfileRestApi} from "../../../restapi/players-profiles";
 import {MatchInformationDto} from "./MatchInformationDto";
 import {TeamsListDto} from "./TeamsListDto";
-import {TeamsListRestApi} from "../../../restapi/matches-list/TeamsListRestAPI";
+import {TeamsListRestApi} from "../../../restapi/teams-list/TeamsListRestAPI";
 
 const StyledMatchesList = styled(Card)({
    width: MIN_CARD_COMPONENT_WIDTH,
@@ -29,12 +29,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    const [playersProfilesListDto, setPlayersProfilesListDto] = React.useState<PlayerProfileDto[] | undefined>(undefined);
 
    useEffect(() => {
-      MatchesListRestApi()
-         .getMatchesList(tournamentId)
-         .then((matchesListDto) => {
-            const newMatchesListItems = returnMatchListItemsFromMatchesListDto(matchesListDto);
-            setMatchesListItems(newMatchesListItems)
-         });
+      reloadAllList()
    }, [tournamentId]);
 
    useEffect(() => {
@@ -69,33 +64,39 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
       setExpanded(isExpanded ? panel : false);
    };
 
+   function reloadAllList() {
+      MatchesListRestApi()
+         .getMatchesList(tournamentId)
+         .then((matchesListDto) => {
+            const newMatchesListItems = returnMatchListItemsFromMatchesListDto(matchesListDto, reloadAllList);
+            setMatchesListItems(newMatchesListItems)
+         });
+   }
+
    return (
       <StyledMatchesList>
-         {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie"}
+         {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie..."}
       </StyledMatchesList>
    )
 };
 
-const returnMatchItem = (matchItem: MatchListItem, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
+const returnMatchItem = (matchItemBase: MatchListItem, index: number, expanded: string | boolean, handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void) => (
    <MatchItem
-      level={matchItem.level}
-      matchNumber={matchItem.matchNumber}
-      matchStatus={matchItem.matchStatus}
-      onClickTeam={matchItem.onClickTeam}
-      team1={matchItem.team1}
-      team2={matchItem.team2}
-      winnerTeamId={"aa"}
-      key={matchItem.matchNumber}
+      level={matchItemBase.level}
+      matchNumber={matchItemBase.matchNumber}
+      matchId={matchItemBase.matchId}
+      matchStatus={matchItemBase.matchStatus}
+      onClickTeam={matchItemBase.onClickTeam}
+      team1={matchItemBase.team1}
+      team2={matchItemBase.team2}
+      winnerTeamId={matchItemBase.winnerId}
+      key={matchItemBase.matchNumber}
       expanded={expanded}
       handleChangeExpander={handleChangeExpander}
    />
 )
 
-function callBackFunction() {
-   console.log("AaaBbbCcc")
-}
-
-const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto): MatchListItem[] => {
+const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto, reloadAllList: () => void): MatchListItem[] => {
    return matchesListDto.queue.map((matchesItem) => {
 
       function findStatus(): MatchStatus {
@@ -110,8 +111,10 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
       }
 
       return {
-         onClickTeam: callBackFunction,
+         onClickTeam: (matchId: string, winnerPlayerId: string) => setMatchWinner(matchId, winnerPlayerId, reloadAllList),
          matchNumber: matchesItem.matchNumber,
+         matchId: `${matchesListDto.tournamentId}_${matchesItem.matchNumber}`,
+         winnerId: undefined,
          level: undefined,
          matchStatus: findStatus(),
          team1: {
@@ -132,7 +135,6 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
    })
 }
 
-
 const getMatchInformationDto = (matchId: string): Promise<MatchInformationDto> => MatchInformationRestApi()
    .getMatchesList(matchId)
    .then(matchInformationDto => ({
@@ -140,7 +142,6 @@ const getMatchInformationDto = (matchId: string): Promise<MatchInformationDto> =
       firstMatchSideId: matchInformationDto.firstMatchSideId,
       secondMatchSideId: matchInformationDto.secondMatchSideId,
       winnerId: matchInformationDto.winnerId
-
    }));
 
 
@@ -157,8 +158,10 @@ const getPlayerProfileDto = (playerId: string): Promise<PlayerProfileDto> => Use
 
 const getTeamsListDto = (tournamentId: string): Promise<TeamsListDto> => TeamsListRestApi()
    .getMatchesList(tournamentId)
-   .then(teamsList => {
-      return teamsList
-   });
+   .then(teamsList => teamsList);
+
+const setMatchWinner = (matchId: string, winnerPlayerId: string, reloadAllList: () => void) => MatchInformationRestApi()
+   .postMatchWinner(matchId, winnerPlayerId)
+   .then(() => reloadAllList());
 
 
