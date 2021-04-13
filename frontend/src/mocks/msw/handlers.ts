@@ -112,4 +112,61 @@ export const handlers = [
       );
     }
   ),
+
+  rest.get("*/rest-api/matches/:matchId", (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        matchId: "2480fc2c-bbd7-427c-9439-02f76583aef5",
+        firstMatchSideId: "3510fc2c-bbd7-427c-9439-02f76583aef5",
+        secondMatchSideId: "8321fc2c-bbd7-427c-9439-02f76583aef7",
+        winnerId: "3510fc2c-bbd7-427c-9439-02f76583aef5",
+      })
+    );
+  }),
+
+  rest.get("*/rest-api/players-profiles/:playerId", (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        matchId: "2480fc2c-bbd7-427c-9439-02f76583aef5",
+        firstMatchSideId: "3510fc2c-bbd7-427c-9439-02f76583aef5",
+        secondMatchSideId: "8321fc2c-bbd7-427c-9439-02f76583aef7",
+        winnerId: "3510fc2c-bbd7-427c-9439-02f76583aef5",
+      })
+    );
+  }),
+
+  rest.get(
+    "*/rest-api/doubles-tournaments/:tournamentId/teams",
+    (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          items: [
+            {
+              teamId: "b8fba7ff-be40-40a6-a350-3b6f36028f26",
+              firstTeamPlayer: "24a3e792-16fc-48ac-9be2-f50f3ce88529",
+              secondTeamPlayer: "703ec98c-a4fd-4313-9594-de711c744572",
+            },
+            {
+              teamId: "f45a1908-bab5-4667-ae43-1618baaa4071",
+              firstTeamPlayer: "b3c6b0bd-f93c-4b42-b31a-b5733c4a1578",
+              secondTeamPlayer: "7fb8094f-e73e-403e-acc5-fe4f66904f8b",
+            },
+            {
+              teamId: "8d763dd6-cde5-4a45-aabd-df65c20c4add",
+              firstTeamPlayer: "20d82a7f-d19c-4eab-bf2d-222da4011260",
+              secondTeamPlayer: "c3cd56f7-24b9-4092-8233-4125e23f8a56",
+            },
+            {
+              teamId: "fb1b4826-edba-43ba-a238-a3bc7455f7c0",
+              firstTeamPlayer: "8b3a9707-03ee-4af5-865d-93502fcfad21",
+              secondTeamPlayer: "5167831d-706d-4001-8b71-780a1b87a385",
+            },
+          ],
+        })
+      );
+    }
+  ),
 ];

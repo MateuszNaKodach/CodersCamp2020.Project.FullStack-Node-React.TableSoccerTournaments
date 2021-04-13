@@ -10,8 +10,8 @@ export class QueuedMatch {
   readonly matchNumber: MatchNumber;
   readonly team1Id: TeamId;
   readonly team2Id: TeamId;
-  readonly status: MatchStatus;
-  readonly tableNumber: number | undefined;
+  status: MatchStatus;
+  tableNumber: number | undefined;
 
   constructor(props: {
     matchNumber: MatchNumber;
@@ -67,30 +67,12 @@ export function pushMatchToQueue(
   };
 }
 
-export function startMatchInMatchesQueue(
-  tournamentId: TournamentId,
-  match: QueuedMatch,
-  matchesQueue: MatchesQueue | undefined,
-): MatchesQueue {
-  if (!tournamentId || !matchesQueue) {
-    throw new Error("Queue for this tournament doesn't exists.");
-  }
-
-  const startedMatch = new QueuedMatch({
-    matchNumber: match.matchNumber,
-    team1Id: match.team1Id,
-    team2Id: match.team2Id,
-    status: match.status,
-    tableNumber: match.tableNumber,
-  });
-
-  return matchesQueue.withStatusChangedMatch(startedMatch);
-}
-
-export function endMatchInMatchesQueue(
+export function changeMatchStatusInMatchesQueue(
   tournamentId: TournamentId,
   matchNumber: MatchNumber,
   matchesQueue: MatchesQueue | undefined,
+  status: MatchStatus,
+  tableNumber?: number,
 ): MatchesQueue {
   if (!tournamentId || !matchesQueue) {
     throw new Error("Queue for this tournament doesn't exists.");
@@ -99,16 +81,7 @@ export function endMatchInMatchesQueue(
   if (!match) {
     throw new Error("Given match doesn't exist in the matches queue.");
   }
-
-  const endedMatch = new QueuedMatch({
-    matchNumber: match.matchNumber,
-    team1Id: match.team1Id,
-    team2Id: match.team2Id,
-    status: MatchStatus.ended,
-    tableNumber: match.tableNumber,
-  });
-
-  return matchesQueue.withStatusChangedMatch(endedMatch);
+  return matchesQueue.withStatusAndTableChangedMatch(matchNumber, status, tableNumber);
 }
 
 function getMatchFromMatchesQueue(matchNumber: MatchNumber, matchesQueue: MatchesQueue): QueuedMatch | undefined {

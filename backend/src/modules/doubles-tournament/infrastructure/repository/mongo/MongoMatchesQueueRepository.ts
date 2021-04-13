@@ -37,7 +37,7 @@ type MongoMatchesQueue = {
     matchNumber: number;
     team1Id: string;
     team2Id: string;
-    status: 'enqueued' | 'started' | 'ended';
+    status: 'ENQUEUED' | 'STARTED' | 'ENDED';
     tableNumber: number | undefined;
   }[];
 } & mongoose.Document;

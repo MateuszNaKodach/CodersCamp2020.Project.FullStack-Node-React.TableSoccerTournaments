@@ -6,6 +6,7 @@ import { TournamentTableWasReleased } from '../../../../tournament-tables/core/d
 import { CallMatch } from '../command/CallMatch';
 import { QueuedMatch } from '../../domain/QueuedMatch';
 import { MatchesQueue } from '../../domain/MatchesQueue';
+import { MatchStatus } from '../../domain/MatchStatus';
 
 export class CallMatchWhenTournamentTableWasReleased implements EventHandler<TournamentTableWasReleased> {
   private readonly commandPublisher: CommandPublisher;
@@ -42,7 +43,7 @@ export class CallMatchWhenTournamentTableWasReleased implements EventHandler<Tou
   }
 
   private findFirstMatchToCall(matches: MatchesQueue): QueuedMatch {
-    const notStartedMatches = matches.queuedMatches.filter((match) => match.status === 'enqueued');
+    const notStartedMatches = matches.queuedMatches.filter((match) => match.status === MatchStatus.ENQUEUED);
     const lowestMatchNumber = Math.min(...notStartedMatches.map((match) => match.matchNumber.raw));
     return notStartedMatches.filter((match) => match.matchNumber.raw === lowestMatchNumber)[0];
   }

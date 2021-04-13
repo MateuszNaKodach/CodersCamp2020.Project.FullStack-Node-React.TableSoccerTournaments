@@ -4,10 +4,11 @@ import { DomainEventPublisher } from '../../../../../shared/core/application/eve
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 import { TournamentMatchWasEnded } from '../../domain/event/TournamentMatchWasEnded';
 import { MatchId } from '../../domain/MatchId';
-import { endMatchInMatchesQueue } from '../../domain/QueuedMatch';
+import { changeMatchStatusInMatchesQueue } from '../../domain/QueuedMatch';
 import { MatchesQueueRepository } from '../MatchesQueueRepository';
 import { MatchNumber } from '../../domain/MatchNumber';
 import { TournamentId } from '../../domain/TournamentId';
+import { MatchStatus } from '../../domain/MatchStatus';
 
 export class MatchHasEndedImpliesTournamentMatchWasEnded implements EventHandler<MatchHasEnded> {
   constructor(
@@ -22,7 +23,12 @@ export class MatchHasEndedImpliesTournamentMatchWasEnded implements EventHandler
     const matchNumber = matchId.matchNumber;
 
     const matchesQueue = await this.matchesQueueRepository.findByTournamentId(tournamentId);
-    const queue = endMatchInMatchesQueue(TournamentId.from(tournamentId), MatchNumber.from(matchNumber), matchesQueue);
+    const queue = changeMatchStatusInMatchesQueue(
+      TournamentId.from(tournamentId),
+      MatchNumber.from(matchNumber),
+      matchesQueue,
+      MatchStatus.ENDED,
+    );
     await this.matchesQueueRepository.save(queue);
 
     const tournamentMatchWasEnded = new TournamentMatchWasEnded({

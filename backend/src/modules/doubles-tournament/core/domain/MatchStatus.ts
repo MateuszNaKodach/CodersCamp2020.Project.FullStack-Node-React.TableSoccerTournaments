@@ -1,5 +1,5 @@
 export enum MatchStatus {
-  enqueued = 'enqueued',
-  started = 'started',
-  ended = 'ended',
+  ENQUEUED = 'ENQUEUED',
+  STARTED = 'STARTED',
+  ENDED = 'ENDED',
 }
