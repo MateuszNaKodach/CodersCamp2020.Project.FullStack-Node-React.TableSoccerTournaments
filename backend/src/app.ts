@@ -134,6 +134,7 @@ export async function TableSoccerTournamentsApplication(
     process.env.MATCH_MODULE === 'ENABLED' ? matchModule : undefined,
     process.env.TOURNAMENTS_TABLES_MODULE === 'ENABLED' ? tournamentTablesModule : undefined,
     process.env.EMAILS_SENDING_MODULE === 'ENABLED' ? sendingEmailModule : undefined,
+    process.env.TOURNAMENT_TREE_MODULE === 'ENABLED' ? eliminationTournamentTree : undefined,
   ].filter(isDefined);
 
   const modulesCores: ModuleCore[] = modules.map((module) => module.core);
@@ -177,11 +178,43 @@ async function initializeDummyData(commandBus: CommandBus, entityIdGenerator: En
     lastName: 'Ranek',
     phoneNumber: '123321334',
   };
+  const janKowalski2 = {
+    playerId: entityIdGenerator.generate(),
+    firstName: 'Jan',
+    emailAddress: 'jan.kowalski2@test.pl',
+    lastName: 'Kowalski2',
+    phoneNumber: '123321333',
+  };
+  const katarzynaNowak2 = {
+    playerId: entityIdGenerator.generate(),
+    firstName: 'Katarzyna',
+    emailAddress: 'kasia123@test.pl',
+    lastName: 'Nowak2',
+    phoneNumber: '143351333',
+  };
+  const tomekDomek2 = {
+    playerId: entityIdGenerator.generate(),
+    firstName: 'Tomek',
+    emailAddress: 'tomek.domek2@test.pl',
+    lastName: 'Domek2',
+    phoneNumber: '123321335',
+  };
+  const franekPoranek2 = {
+    playerId: entityIdGenerator.generate(),
+    firstName: 'Franek',
+    emailAddress: 'franek.ranek2@test.pl',
+    lastName: 'Ranek2',
+    phoneNumber: '123321334',
+  };
 
   await commandBus.execute(new CreatePlayerProfile({ ...janKowalski }));
   await commandBus.execute(new CreatePlayerProfile({ ...katarzynaNowak }));
   await commandBus.execute(new CreatePlayerProfile({ ...tomekDomek }));
   await commandBus.execute(new CreatePlayerProfile({ ...franekPoranek }));
+  await commandBus.execute(new CreatePlayerProfile({ ...janKowalski2 }));
+  await commandBus.execute(new CreatePlayerProfile({ ...katarzynaNowak2 }));
+  await commandBus.execute(new CreatePlayerProfile({ ...tomekDomek2 }));
+  await commandBus.execute(new CreatePlayerProfile({ ...franekPoranek2 }));
 }
 
 function TournamentRegistrationsRepository() {
@@ -195,7 +228,7 @@ function TournamentRegistrationsRepository() {
 }
 
 function PlayerProfilesRepository() {
-  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO') {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.PLAYER_PROFILES_DATABASE === 'MONGO') {
     return new MongoPlayerProfileRepository();
   }
   return new InMemoryPlayerProfileRepository();
@@ -216,7 +249,7 @@ function MatchRepository() {
 }
 
 function TournamentTablesRepository() {
-  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.MATCH_DATABASE === 'MONGO') {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_TABLES_DATABASE === 'MONGO') {
     return new MongoTournamentTablesRepository();
   }
   return new InMemoryTournamentTablesRepository();
