@@ -9,7 +9,7 @@ export class ReleaseTournamentTableWhenTournamentMatchWasEnded implements EventH
 
   async handle(event: TournamentMatchWasEnded): Promise<void> {
     const tournamentId = event.tournamentId;
-    const {state: matches, version} = await this.matchesQueueRepository.findByTournamentId(tournamentId);
+    const { state: matches, version } = await this.matchesQueueRepository.findByTournamentId(tournamentId);
     const endedMatch = matches?.queuedMatches.find((match) => match.matchNumber.raw === event.matchNumber);
     const tableNumber = endedMatch?.tableNumber;
     if (tableNumber) {

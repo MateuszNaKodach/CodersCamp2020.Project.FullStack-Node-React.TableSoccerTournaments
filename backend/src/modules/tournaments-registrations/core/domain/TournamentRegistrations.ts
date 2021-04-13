@@ -16,7 +16,7 @@ export class TournamentRegistrations {
   readonly status: RegistrationsStatus;
   readonly registeredPlayers: PlayerId[] = [];
 
-  constructor(props: { tournamentId: TournamentId; version?: number,  status?: RegistrationsStatus; registeredPlayers?: PlayerId[] }) {
+  constructor(props: { tournamentId: TournamentId; version?: number; status?: RegistrationsStatus; registeredPlayers?: PlayerId[] }) {
     this.tournamentId = props.tournamentId;
     this.status = props.status ?? RegistrationsStatus.OPENED;
     this.registeredPlayers = props.registeredPlayers ?? [];

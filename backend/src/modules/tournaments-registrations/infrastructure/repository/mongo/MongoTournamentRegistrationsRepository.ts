@@ -16,7 +16,7 @@ export class MongoTournamentRegistrationsRepository implements TournamentRegistr
       { _id: registrations.tournamentId.raw, __v: registrations.version },
       {
         _id: registrations.tournamentId.raw,
-        __v: registrations.version +1,
+        __v: registrations.version + 1,
         status: registrations.status,
         registeredPlayers: registrations.registeredPlayers.map((playerId) => playerId.raw),
       },

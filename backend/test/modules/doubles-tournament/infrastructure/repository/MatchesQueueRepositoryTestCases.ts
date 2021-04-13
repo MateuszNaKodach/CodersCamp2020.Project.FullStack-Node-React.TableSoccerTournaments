@@ -8,7 +8,7 @@ import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domai
 import { MatchesQueue } from '../../../../../src/modules/doubles-tournament/core/domain/MatchesQueue';
 import { TournamentId } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentId';
 import { MatchStatus } from '../../../../../src/modules/doubles-tournament/core/domain/MatchStatus';
-import {OptimisticLockingException} from "../../../../../src/shared/core/application/OptimisticLockingException";
+import { OptimisticLockingException } from '../../../../../src/shared/core/application/OptimisticLockingException';
 
 export function MatchesQueueRepositoryTestCases(props: {
   name: string;
@@ -48,30 +48,29 @@ export function MatchesQueueRepositoryTestCases(props: {
 
     test('findByTournamentId returns matches queue with given tournament id when it was created and saved', async () => {
       await repository.save(matchesQueue, 0);
-      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({state: matchesQueue, version: 1});
+      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({ state: matchesQueue, version: 1 });
     });
 
     test('findByTournamentId returns undefined when given tournament id when it was not found', async () => {
       await repository.save(matchesQueue, 0);
       const notSavedTournamentId = entityIdGenerator.generate();
-      expect(await repository.findByTournamentId(notSavedTournamentId)).toStrictEqual({state: undefined, version: 0});
+      expect(await repository.findByTournamentId(notSavedTournamentId)).toStrictEqual({ state: undefined, version: 0 });
     });
 
     test('optimistic locking | pass', async () => {
       await repository.save(matchesQueue, 0);
-      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({state: matchesQueue, version: 1});
+      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({ state: matchesQueue, version: 1 });
 
       await repository.save(matchesQueue, 1);
-      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({state: matchesQueue, version: 2});
+      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({ state: matchesQueue, version: 2 });
     });
 
     test('optimistic locking | fail', async () => {
       await repository.save(matchesQueue, 0);
-      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({state: matchesQueue, version: 1});
+      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({ state: matchesQueue, version: 1 });
 
       await expect(repository.save(matchesQueue, 0)).rejects.toStrictEqual(new OptimisticLockingException(0));
-      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({state: matchesQueue, version: 1});
+      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({ state: matchesQueue, version: 1 });
     });
-
   });
 }

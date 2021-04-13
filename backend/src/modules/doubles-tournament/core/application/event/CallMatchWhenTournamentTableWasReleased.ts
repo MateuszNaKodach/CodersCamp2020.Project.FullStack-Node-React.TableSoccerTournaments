@@ -25,7 +25,7 @@ export class CallMatchWhenTournamentTableWasReleased implements EventHandler<Tou
 
   async handle(event: TournamentTableWasReleased): Promise<void> {
     const tournamentId = event.tournamentId;
-    const {state: matches, version} = await this.matchesQueueRepository.findByTournamentId(tournamentId);
+    const { state: matches, version } = await this.matchesQueueRepository.findByTournamentId(tournamentId);
     const matchToCall = matches ? this.findFirstMatchToCall(matches) : undefined;
     if (matchToCall) {
       await this.commandPublisher.execute(

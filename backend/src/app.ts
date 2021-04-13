@@ -54,8 +54,8 @@ import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentat
 import { InMemoryTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryTablesQueueRepository';
 import { MongoTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoTablesQueueRepository';
 import { MongoTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/mongo/MongoTournamentTreeRepository';
-import {MongoPlayers} from "./modules/tournaments-registrations/infrastructure/repository/mongo/MongoPlayers";
-import {RetryCommandBus} from "./shared/infrastructure/core/application/command/RetryCommandBus";
+import { MongoPlayers } from './modules/tournaments-registrations/infrastructure/repository/mongo/MongoPlayers';
+import { RetryCommandBus } from './shared/infrastructure/core/application/command/RetryCommandBus';
 
 config();
 
