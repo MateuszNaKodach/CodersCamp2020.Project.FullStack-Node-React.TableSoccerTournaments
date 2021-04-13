@@ -3,7 +3,7 @@ import {Fab} from "@material-ui/core";
 import {Add} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/core/styles";
 
-type PlusButtonProps = {
+type NewTournamentButtonProps = {
     readonly onLink: string;
 }
 
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
     }
 )
 
-const PlusButton = ({onLink}: PlusButtonProps) => {
+const NewTournamentButton = ({onLink}: NewTournamentButtonProps) => {
     const classes = useStyles();
 
     return (
@@ -35,4 +35,4 @@ const PlusButton = ({onLink}: PlusButtonProps) => {
     )
 }
 
-export default PlusButton;
+export default NewTournamentButton;

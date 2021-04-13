@@ -5,10 +5,6 @@ import React from "react";
 import {Centered} from "../../atoms/Shared/Centered";
 import {PATH_FOR_HOME_VIEW} from "../../atoms/constants/routerPaths";
 
-const arrowBackButtonProps = {
-    onLink: PATH_FOR_HOME_VIEW
-}
-
 type cardTitleWithNavButtonProps = {
     readonly title: string;
 }
@@ -17,7 +13,7 @@ const CardTitleWithNavButton = (props: cardTitleWithNavButtonProps) => {
     return (
         <PageTitleBox>
             <Grid item xs={3}>
-                <ArrowBackButton onLink={arrowBackButtonProps.onLink}/>
+                <ArrowBackButton/>
             </Grid>
             <Grid item xs={6}>
                 <Centered>

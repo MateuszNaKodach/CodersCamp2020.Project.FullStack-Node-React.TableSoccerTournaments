@@ -1,24 +1,24 @@
+import {useHistory} from "react-router-dom";
 import {IconButton} from "@material-ui/core";
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import {Link} from "react-router-dom";
-
+import {THEME} from "../../constants/ThemeMUI";
 
 const style = {
-    color: "primary",
+    color: THEME.palette.primary.main,
     fontSize: "2.5rem"
 }
 
-type ArrowBackButtonProps = {
-    readonly onLink: string;
-}
+const ArrowBackButton = () => {
+    let history = useHistory();
 
-const ArrowBackButton = ({onLink}: ArrowBackButtonProps) => {
+    function handleClick() {
+        history.push("/")
+    }
+
     return (
-        <Link to={onLink}>
             <IconButton>
-                <NavigateBeforeIcon style={style}/>
+                <NavigateBeforeIcon style={style} onClick={handleClick}/>
             </IconButton>
-        </Link>
     )
 }
 

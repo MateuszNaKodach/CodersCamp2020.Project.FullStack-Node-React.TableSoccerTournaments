@@ -4,6 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
 import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 import {PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW} from "../../atoms/constants/routerPaths";
+import {PATH_FOR_IMAGES} from "../../atoms/constants/imgPaths";
 
 type TournamentCardProps = {
     readonly tournamentId: string,
@@ -30,7 +31,7 @@ const TournamentCard = ({tournamentId, tournamentName, registrationStatus}: Tour
     return (
         <Card className={classes.root}>
             <CardMedia className={classes.media}
-                       image="https://images.unsplash.com/photo-1593958200942-2c05f0a4e72e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+                       image={`${PATH_FOR_IMAGES}/foosball_tournament.jpg`}
                        title="Tournament Image"
             />
             <CardContent>

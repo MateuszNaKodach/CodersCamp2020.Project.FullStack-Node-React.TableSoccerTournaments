@@ -85,8 +85,8 @@ const StyledWrapper = styled("div")({
 })
 
 const TournamentCardsGallery = () => {
-    const [tournamentsRegistrations, setTournamentsRegistrations] = useState<TournamentRegistrationsWithDetailsDto[]>(loadedTournamentsCards); // usunąć initial state na produkcję
-    const [tournamentsDetails, setTournamentsDetails] = useState<TournamentDetailsDto[]>(tournamentsRegistrationsDetailsList); // usunąć initial state na produkcję
+    const [tournamentsRegistrations, setTournamentsRegistrations] = useState<TournamentRegistrationsWithDetailsDto[]>(loadedTournamentsCards); // TODO usunąć initial state na produkcję
+    const [tournamentsDetails, setTournamentsDetails] = useState<TournamentDetailsDto[]>(tournamentsRegistrationsDetailsList); // TODO usunąć initial state na produkcję
 
     useEffect(() => {
         TournamentDetailsRestApi()
@@ -94,9 +94,7 @@ const TournamentCardsGallery = () => {
             .then((tournamentsDetails) => {
                 setTournamentsDetails(tournamentsDetails);
             })
-    }, []);
 
-    useEffect(() => {
         TournamentRegistrationsRestApi()
             .getAllTournamentsRegistrations()
             .then((tournamentsRegistrations) =>
@@ -104,7 +102,7 @@ const TournamentCardsGallery = () => {
                 const tournamentsWithDetailsList = tournamentsRegistrations.items.map((tournament, i) => Object.assign({}, tournament, tournamentsDetails[i]));
                 setTournamentsRegistrations(tournamentsWithDetailsList);
             })
-        }, []);
+    }, []);
 
     const classes = useStyles();
 

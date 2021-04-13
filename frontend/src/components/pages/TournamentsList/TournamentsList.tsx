@@ -1,7 +1,7 @@
 import CardTitleWithNavButton from "../../molecules/CardTitleWithNavButton/CardTitleWithNavButton";
 import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
 import TournamentCardsGallery from "../../organisms/TournamentsCardsGallery/TournamentsCardsGallery";
-import PlusButton from "../../atoms/Shared/PlusButton/PlusButton";
+import NewTournamentButton from "../../molecules/NewTournamentButton/NewTournamentButton";
 import {styled} from "@material-ui/core";
 
 const StyledWrapper = styled("div")({
@@ -15,7 +15,7 @@ const TournamentsList = () => {
             <VerticalSpace height={30}/>
             <TournamentCardsGallery/>
             <VerticalSpace height={30}/>
-            <PlusButton onLink={''}/>
+            <NewTournamentButton onLink={''}/>
         </StyledWrapper>
     )
 }
