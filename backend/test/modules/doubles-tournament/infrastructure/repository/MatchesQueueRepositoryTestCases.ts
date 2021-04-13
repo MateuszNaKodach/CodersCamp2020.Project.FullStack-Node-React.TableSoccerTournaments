@@ -17,7 +17,6 @@ export function MatchesQueueRepositoryTestCases(props: {
 }): void {
   return describe(props.name, () => {
     const entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator();
-    const tournamentId = TournamentId.from(entityIdGenerator.generate());
     let repository: MatchesQueueRepository;
     const queue: QueuedMatch[] = [
       new QueuedMatch({
@@ -34,14 +33,19 @@ export function MatchesQueueRepositoryTestCases(props: {
         status: MatchStatus.ENQUEUED,
       }),
     ];
-    const matchesQueue = new MatchesQueue({
-      tournamentId: tournamentId,
-      queuedMatches: queue,
-    });
+    let tournamentId: TournamentId;
+    let matchesQueue: MatchesQueue;
 
     beforeAll(async () => {
       await props.databaseTestSupport.openConnection();
       repository = props.repositoryFactory();
+    });
+    beforeEach(() => {
+      tournamentId = TournamentId.from(entityIdGenerator.generate());
+      matchesQueue = new MatchesQueue({
+        tournamentId: tournamentId,
+        queuedMatches: queue,
+      });
     });
     afterEach(async () => await props.databaseTestSupport.clearDatabase());
     afterAll(async () => await props.databaseTestSupport.closeConnection());
