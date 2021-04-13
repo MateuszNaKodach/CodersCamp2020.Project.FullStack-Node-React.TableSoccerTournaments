@@ -26,7 +26,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    const [matchesListItems, setMatchesListItems] = React.useState<MatchListItem[] | undefined>();
    const [matchesInformationListDto, setMatchesInformationListDto] = React.useState<MatchInformationDto[] | undefined>(undefined);
    const [teamsListDto, setTeamsListDto] = React.useState<TeamsListDto | undefined>();
-   const [playersProfilesList, setPlayersProfilesList] = React.useState<PlayerProfileDto[] | undefined>(undefined);
+   const [playersProfilesListDto, setPlayersProfilesListDto] = React.useState<PlayerProfileDto[] | undefined>(undefined);
 
    useEffect(() => {
       MatchesListRestApi()
@@ -63,7 +63,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    }, [matchesListItems]);
 
    useEffect(() => {
-      async function setPlayersProfilesListDto(): Promise<void> {
+      async function setPlayersProfilesList(): Promise<void> {
          if (!teamsListDto) return;
 
          const tournamentPlayersIds = teamsListDto.items
@@ -71,11 +71,11 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
                [firstTeamPlayer, secondTeamPlayer]
             ).reduce((acc, teamPlayers) => acc.concat(teamPlayers))
 
-         const x = await Promise.all(tournamentPlayersIds.map((item) => getPlayerProfileDto(item)));
-         setPlayersProfilesList(x);
+         const playersProfilesList = await Promise.all(tournamentPlayersIds.map((item) => getPlayerProfileDto(item)));
+         setPlayersProfilesListDto(playersProfilesList);
       }
 
-      setPlayersProfilesListDto().then();
+      setPlayersProfilesList().then();
    }, [teamsListDto]);
 
    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
