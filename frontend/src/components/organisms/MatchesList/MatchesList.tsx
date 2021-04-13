@@ -29,12 +29,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    const [playersProfilesListDto, setPlayersProfilesListDto] = React.useState<PlayerProfileDto[] | undefined>(undefined);
 
    useEffect(() => {
-      MatchesListRestApi()
-         .getMatchesList(tournamentId)
-         .then((matchesListDto) => {
-            const newMatchesListItems = returnMatchListItemsFromMatchesListDto(matchesListDto);
-            setMatchesListItems(newMatchesListItems)
-         });
+      reloadAllList()
    }, [tournamentId]);
 
    useEffect(() => {
@@ -65,14 +60,22 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
       setPlayersProfilesList().then();
    }, [teamsListDto]);
 
-
    const handleChangeExpander = (panel: string | boolean) => (event: any, isExpanded: string | boolean) => {
       setExpanded(isExpanded ? panel : false);
    };
 
+   function reloadAllList() {
+      MatchesListRestApi()
+         .getMatchesList(tournamentId)
+         .then((matchesListDto) => {
+            const newMatchesListItems = returnMatchListItemsFromMatchesListDto(matchesListDto, reloadAllList);
+            setMatchesListItems(newMatchesListItems)
+         });
+   }
+
    return (
       <StyledMatchesList>
-         {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie"}
+         {matchesListItems ? matchesListItems.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie.."}
       </StyledMatchesList>
    )
 };
@@ -94,7 +97,7 @@ const returnMatchItem = (matchItemBase: MatchListItem, index: number, expanded: 
    />
 )
 
-const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto): MatchListItem[] => {
+const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto, reloadAllList: () => void): MatchListItem[] => {
    return matchesListDto.queue.map((matchesItem) => {
 
       function findStatus(): MatchStatus {
@@ -109,7 +112,7 @@ const returnMatchListItemsFromMatchesListDto = (matchesListDto: MatchesListDto):
       }
 
       return {
-         onClickTeam: setMatchWinner,
+         onClickTeam: (matchId: string, winnerPlayerId: string) => setMatchWinner(matchId, winnerPlayerId, reloadAllList),
          matchNumber: matchesItem.matchNumber,
          matchId: `${matchesListDto.tournamentId}_${matchesItem.matchNumber}`,
          winnerId: undefined,
@@ -140,7 +143,6 @@ const getMatchInformationDto = (matchId: string): Promise<MatchInformationDto> =
       firstMatchSideId: matchInformationDto.firstMatchSideId,
       secondMatchSideId: matchInformationDto.secondMatchSideId,
       winnerId: matchInformationDto.winnerId
-
    }));
 
 
@@ -157,17 +159,10 @@ const getPlayerProfileDto = (playerId: string): Promise<PlayerProfileDto> => Use
 
 const getTeamsListDto = (tournamentId: string): Promise<TeamsListDto> => TeamsListRestApi()
    .getMatchesList(tournamentId)
-   .then(teamsList => {
-      return teamsList
-   });
+   .then(teamsList => teamsList);
 
-const setMatchWinner = (matchId: string, winnerPlayerId: string) => {
-   console.log("x X x X x X x");
-   console.log(matchId);
-   console.log(winnerPlayerId);
+const setMatchWinner = (matchId: string, winnerPlayerId: string, reloadAllList: () => void) => MatchInformationRestApi()
+   .postMatchWinner(matchId, winnerPlayerId)
+   .then(() => reloadAllList());
 
-   MatchInformationRestApi()
-      .postMatchWinner(matchId, winnerPlayerId)
-      .then();
-}
 
