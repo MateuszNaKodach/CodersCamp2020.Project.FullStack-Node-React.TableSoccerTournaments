@@ -98,8 +98,11 @@ export function closeTournamentRegistrations(
     throw new Error('Only opened registrations can be closed!');
   }
   const registeredPlayersCount = state.registeredPlayers.length;
-  if (state.registeredPlayers.length < MIN_TOURNAMENT_PLAYERS) {
+  if (registeredPlayersCount < MIN_TOURNAMENT_PLAYERS) {
     throw new Error(`Min players for tournament is ${MIN_TOURNAMENT_PLAYERS}, but only ${registeredPlayersCount} players registered!`);
+  }
+  if (registeredPlayersCount % 2 !== 0) {
+    throw new Error(`There must be even number of players to start tournament! Now is ${registeredPlayersCount}`);
   }
 
   const tournamentRegistrationsWasClosed = new TournamentRegistrationsWereClosed({
