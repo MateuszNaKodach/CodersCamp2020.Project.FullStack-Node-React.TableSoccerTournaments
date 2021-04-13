@@ -24,7 +24,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
    const [expanded, setExpanded] = React.useState<string | boolean>(false);
    const [matchesListItems, setMatchesListItems] = React.useState<MatchListItem[] | undefined>();
-   const [matchesInformationListDto, setMatchesInformationListDto] = React.useState<MatchInformationDto[] | undefined>(undefined);
+   const [matchesDetailsListDto, setMatchesDetailsListDto] = React.useState<MatchInformationDto[] | undefined>(undefined);
    const [teamsListDto, setTeamsListDto] = React.useState<TeamsListDto | undefined>();
    const [playersProfilesListDto, setPlayersProfilesListDto] = React.useState<PlayerProfileDto[] | undefined>(undefined);
 
@@ -44,11 +44,11 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
          if (!matchesListItems) return;
          const returnedMatchesInformationListDto = await Promise.all(matchesListItems
             .map(async (matchListItem) => {
-                  const matchId = tournamentId + matchListItem.matchNumber;
+                  const matchId = `${tournamentId}_${matchListItem.matchNumber}`;
                   return await getMatchInformationDto(matchId)
                }
             ))
-         await setMatchesInformationListDto(returnedMatchesInformationListDto);
+         await setMatchesDetailsListDto(returnedMatchesInformationListDto);
       }
 
       async function setTeamsListDtoState(): Promise<void> {
