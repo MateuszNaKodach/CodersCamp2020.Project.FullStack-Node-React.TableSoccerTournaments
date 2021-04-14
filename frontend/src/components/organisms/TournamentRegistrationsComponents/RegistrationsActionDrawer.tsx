@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import Notification from "../Notification/Notification";
 import { useHistory } from "react-router-dom";
+import { TournamentStartRestApi } from "../../../restapi/tournament-start/TournamentStart";
 
 export const RegistrationsActionDrawer = (props: {
   openDrawer: boolean;
@@ -50,11 +51,12 @@ export const RegistrationsActionDrawer = (props: {
     setDrawerOpened(open);
   }
 
-  const startTournament = async () => {
+  const closeRegistrationsAndStartTournament = async () => {
     try {
       await TournamentRegistrationsRestApi().closeTournamentRegistration(
         props.tournamentId
       );
+      await TournamentStartRestApi().startTournament(props.tournamentId);
       toggleDrawer(false);
       goBack();
     } catch (error) {
@@ -99,7 +101,7 @@ export const RegistrationsActionDrawer = (props: {
             className={classes.width}
             variant="contained"
             color="primary"
-            onClick={startTournament}
+            onClick={closeRegistrationsAndStartTournament}
           >
             Zakończ zapisy na turniej
           </Button>
