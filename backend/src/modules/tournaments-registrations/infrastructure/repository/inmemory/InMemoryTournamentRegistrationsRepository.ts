@@ -12,7 +12,7 @@ export class InMemoryTournamentRegistrationsRepository implements TournamentRegi
 
   async save(registrations: TournamentRegistrations): Promise<void> {
     if ((this.entities[registrations.tournamentId.raw]?.version ?? 0) !== registrations.version) {
-      throw new OptimisticLockingException(registrations.version);
+      return Promise.reject(new OptimisticLockingException(registrations.version));
     }
     this.entities[registrations.tournamentId.raw] = new TournamentRegistrations({
       ...registrations,
