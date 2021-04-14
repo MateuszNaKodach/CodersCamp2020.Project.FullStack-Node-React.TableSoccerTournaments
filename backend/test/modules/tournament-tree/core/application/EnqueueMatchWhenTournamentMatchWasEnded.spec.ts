@@ -10,24 +10,25 @@ import { InMemoryCommandBus } from '../../../../../src/shared/infrastructure/cor
 import { StoreAndForwardDomainEventBus } from '../../../../../src/shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus';
 import { InMemoryDomainEventBus } from '../../../../../src/shared/infrastructure/core/application/event/InMemoryDomainEventBus';
 import { TournamentMatchWasEnded } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentMatchWasEnded';
+import waitForExpect from 'wait-for-expect';
 
-describe('Enqueueing next level matches', async () => {
+describe('Enqueueing next level matches',  () => {
   const currentTime = new Date();
   const tournamentId = 'SampleTournamentId';
   const [team1Id, team2Id, team3Id, team4Id, team5Id] = ['team1', 'team2', 'team3', 'team4', 'team5'];
-  const entityIdGenFromList = FromListIdGeneratorStub([team1Id, team2Id, team3Id, team4Id]);
+  const entityIdGenFromList = FromListIdGeneratorStub([team1Id, team2Id, team3Id, team4Id, team5Id]);
   const entityIdGen = NumberIdGeneratorStub(100, 'entityId');
   const commandBus: CommandBus = new InMemoryCommandBus();
   const eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus());
   const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGenFromList, commandBus, eventBus);
   const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen, commandBus, eventBus);
-  await tournamentTree.executeCommand(createTestTournamentTree('SampleTournamentId'));
-  const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: 'SampleTournamentId' });
-  await doublesTournament.publishEvent(startedTournament);
 
   it('When both tournament matches ended, then enqueue next level match', async () => {
     //Given
+    await tournamentTree.executeCommand(createTestTournamentTree(tournamentId));
     const spy = jest.spyOn(commandBus, `execute`);
+    const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: tournamentId });
+    await doublesTournament.publishEvent(startedTournament);
     expect(spy).toBeCalledWith(
       new EnqueueMatch({
         tournamentId: tournamentId,
@@ -55,14 +56,14 @@ describe('Enqueueing next level matches', async () => {
     doublesTournament.publishEvent(tournamentMatchWasEnded);
 
     //Then
-    expect(spy).toBeCalledWith(
+    await waitForExpect(() => expect(spy).toBeCalledWith(
       new EnqueueMatch({
         tournamentId: tournamentId,
         matchNumber: 5,
         team1Id: team1Id,
         team2Id: team5Id,
       }),
-    );
+    ));
   });
 });
 

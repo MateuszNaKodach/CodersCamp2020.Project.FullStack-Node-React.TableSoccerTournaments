@@ -15,7 +15,8 @@ describe('Automated match enqueueing', () => {
   it('When tournament was started, then enqueue all ready to start matches', async () => {
     //Given
     const currentTime = new Date();
-    const entityIdGenFromList = FromListIdGeneratorStub(['team1', 'team2', 'team3', 'team4']);
+    const tournamentId = 'SampleTournamentId';
+    const entityIdGenFromList = FromListIdGeneratorStub(['team1', 'team2', 'team3', 'team4', 'team5']);
     const entityIdGen = NumberIdGeneratorStub(100, 'entityId');
     const commandBus: CommandBus = new InMemoryCommandBus();
     const eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus());
@@ -23,32 +24,33 @@ describe('Automated match enqueueing', () => {
     const spy = jest.spyOn(commandBus, `execute`);
 
     const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGenFromList, commandBus, eventBus);
-    const tournament = new CreateTournamentWithTeams('SampleTournamentId', [
+    const tournament = new CreateTournamentWithTeams(tournamentId, [
       { player1: 'player1', player2: 'player2' },
       { player1: 'player3', player2: 'player4' },
       { player1: 'player5', player2: 'player6' },
       { player1: 'player7', player2: 'player8' },
+      { player1: 'player9', player2: 'player10' },
     ]);
     await doublesTournament.executeCommand(tournament);
 
     const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen, commandBus, eventBus);
-    await tournamentTree.executeCommand(createTestTournamentTreeWithFourTeams('SampleTournamentId'));
+    await tournamentTree.executeCommand(createTestTournamentTreeWithFourTeams(tournamentId));
 
     spy.mockClear();
 
     //When
-    const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: 'SampleTournamentId' });
+    const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: tournamentId });
     await doublesTournament.publishEvent(startedTournament);
 
     //Then
     const firstMatchToEnqueue = new EnqueueMatch({
-      tournamentId: 'SampleTournamentId',
+      tournamentId: tournamentId,
       matchNumber: 2,
       team1Id: 'team5',
       team2Id: 'team4',
     });
     const secondMatchToEnqueue = new EnqueueMatch({
-      tournamentId: 'SampleTournamentId',
+      tournamentId: tournamentId,
       matchNumber: 6,
       team1Id: 'team3',
       team2Id: 'team2',
