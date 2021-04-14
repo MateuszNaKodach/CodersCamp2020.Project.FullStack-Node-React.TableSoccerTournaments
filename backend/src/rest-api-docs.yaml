@@ -34,7 +34,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 2480fc2c-bbd7-427c-9439-02f76583aef5_8
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5_1
       requestBody:
         content:
           application/json:
@@ -55,7 +55,7 @@ paths:
           required: true
           schema:
             type: string
-            example: 2480fc2c-bbd7-427c-9439-02f76583aef5_8
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5_1
       responses:
         200:
           description: Match with given id
@@ -542,7 +542,7 @@ components:
         matchId:
           description: Identifier of the match that is supposed to start ("tournamentId_matchNumber")
           type: string
-          example: 2480fc2c-bbd7-427c-9439-02f76583aef5_8
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5_1
         firstMatchSideId:
           description: Identifier of the match first team
           type: string
@@ -571,7 +571,7 @@ components:
         matchId:
           description: Identifier of the match ("tournamentId_matchNumber")
           type: string
-          example: 2480fc2c-bbd7-427c-9439-02f76583aef5_8
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5_1
         firstMatchSideId:
           description: Identifier of the match first team
           type: string
