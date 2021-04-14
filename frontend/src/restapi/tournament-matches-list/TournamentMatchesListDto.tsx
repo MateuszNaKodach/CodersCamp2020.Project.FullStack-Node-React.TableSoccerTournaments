@@ -1,4 +1,4 @@
-export type MatchesListDto = {
+export type TournamentMatchesListDto = {
    readonly tournamentId: string;
    readonly queue: [
       {

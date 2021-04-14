@@ -1,17 +1,17 @@
 import axios from "axios";
 import { PATH_BASE_URL } from "../../components/atoms/constants/apiPaths";
-import { MatchInformationDto } from "../../components/organisms/MatchesList/MatchInformationDto";
+import { MatchDetailsDto } from "./MatchDetailsDto";
 
-export type MatchInformationRestApiConfig = {
+export type MatchDetailsRestApiConfig = {
   readonly baseUrl: string;
 };
 
-const defaultConfig: MatchInformationRestApiConfig = {
+const defaultConfig: MatchDetailsRestApiConfig = {
   baseUrl: PATH_BASE_URL,
 };
 
-export const MatchInformationRestApi = (
-  config?: Partial<MatchInformationRestApiConfig>
+export const MatchDetailsRestAPI = (
+  config?: Partial<MatchDetailsRestApiConfig>
 ) => {
   const currentConfig = {
     ...defaultConfig,
@@ -22,9 +22,9 @@ export const MatchInformationRestApi = (
       defaultConfig.baseUrl,
   };
   return {
-    getMatchesList(matchId: string): Promise<MatchInformationDto> {
+    getTournamentTeamsList(matchId: string): Promise<MatchDetailsDto> {
       return axios
-        .get<MatchInformationDto>(`${currentConfig.baseUrl}/matches/${matchId}`)
+        .get<MatchDetailsDto>(`${currentConfig.baseUrl}/matches/${matchId}`)
         .then((res) => res.data);
     },
 

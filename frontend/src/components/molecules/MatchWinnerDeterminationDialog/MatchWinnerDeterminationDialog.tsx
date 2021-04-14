@@ -10,73 +10,79 @@ import {TransitionProps} from '@material-ui/core/transitions';
 import {Card, withStyles} from "@material-ui/core";
 
 const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & { children?: React.ReactElement<any, any> },
-    ref: React.Ref<unknown>,
+   props: TransitionProps & { children?: React.ReactElement<any, any> },
+   ref: React.Ref<unknown>,
 ) {
-    return <Slide direction="up" ref={ref} {...props} />;
+   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 type MatchWinnerDeterminationDialogProps = {
-    agreeCallback: (() => void),
-    isOpen: boolean
-    teamName: number | string | undefined;
+   agreeCallback: (() => void),
+   isOpen: boolean
+   teamPlayersNames: number | string | undefined;
 }
 
 const FullParentButton = withStyles({
-    root: {
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        opacity: 0,
+   root: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      opacity: 0,
 
-    }
+   }
 })(Card);
 
-export default function MatchWinnerDeterminationDialog(props: MatchWinnerDeterminationDialogProps) {
-    const [open, setOpen] = React.useState(props.isOpen);
+export default function MatchWinnerDeterminationDialog(
+   {
+      agreeCallback,
+      isOpen,
+      teamPlayersNames
+   }: MatchWinnerDeterminationDialogProps) {
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+   const [open, setOpen] = React.useState(isOpen);
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+   const handleClickOpen = () => {
+      setOpen(true);
+   };
 
-    const handleAgreeAndClose = () => {
-        setOpen(false);
-        props.agreeCallback();
-    };
+   const handleClose = () => {
+      setOpen(false);
+   };
 
-    return (
-        <div>
-            <FullParentButton variant="outlined" color="primary" onClick={handleClickOpen}>
-            </FullParentButton>
-            <Dialog
-                open={open}
-                TransitionComponent={Transition}
-                keepMounted
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-slide-title"
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <DialogTitle id="alert-dialog-slide-title">{"Czy ustawić zwycięzcę meczu?"}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
-                        Czy aby na pewno chcesz ustawić drużynę '{props.teamName || "NN"}' jako zwycięzcę tego meczu?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Odrzuć
-                    </Button>
-                    <Button onClick={handleAgreeAndClose} color="primary">
-                        Zaakceptuj
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
+   const handleAgreeAndClose = () => {
+      setOpen(false);
+      agreeCallback();
+   };
+
+   return (
+      <div>
+         <FullParentButton variant="outlined" color="primary" onClick={handleClickOpen}>
+         </FullParentButton>
+         <Dialog
+            open={open}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+         >
+            <DialogTitle id="alert-dialog-slide-title">{"Czy ustawić zwycięzcę meczu?"}</DialogTitle>
+            <DialogContent>
+               <DialogContentText id="alert-dialog-slide-description">
+                  Czy aby na pewno chcesz ustawić drużynę '{teamPlayersNames || "NN"}' jako zwycięzcę tego meczu?
+               </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+               <Button onClick={handleClose} color="primary">
+                  Odrzuć
+               </Button>
+               <Button onClick={handleAgreeAndClose} color="primary">
+                  Zaakceptuj
+               </Button>
+            </DialogActions>
+         </Dialog>
+      </div>
+   );
 }

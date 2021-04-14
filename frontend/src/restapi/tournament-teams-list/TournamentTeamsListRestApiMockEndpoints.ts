@@ -1,7 +1,7 @@
 import { server } from "../../mocks/msw/server";
 import { rest } from "msw";
 
-export function getMatchesListWillReturn(
+export function getTournamentTeamsListWillReturn(
   tournamentId: string,
   teamId: string,
   firstTeamPlayer: string,
