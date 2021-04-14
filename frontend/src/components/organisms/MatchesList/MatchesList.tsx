@@ -173,11 +173,11 @@ const returnMatchList = (
                   enum PartOfName { FirstName = "firstName", SecondName = "lastName", }
 
                   return [PartOfName.FirstName, PartOfName.FirstName].map((item) =>
-                       playersProfilesList
-                           .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(({teamId}) => teamId === playerTeamId)
-                              ?.[playerInTeam]
-                           )?.[item]
+                     playersProfilesList
+                        .find(({playerId}) => playerId === tournamentTeamsList
+                           .find(({teamId}) => teamId === playerTeamId)
+                           ?.[playerInTeam]
+                        )?.[item]
                   ).reduce((acc, partOfName) => `${acc} ${partOfName}`)
                }
                return ({
