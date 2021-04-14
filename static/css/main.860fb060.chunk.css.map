@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/index.css"],"names":[],"mappings":"AAAA,KACI,iBAAkB,CAClB,gBAAiB,CACjB,QAAS,CACT,SAAU,CACV,QAAS,CAET,kBACJ","file":"main.860fb060.chunk.css","sourcesContent":["body{\n    position: relative;\n    min-height: 100vh;\n    margin: 0;\n    padding: 0;\n    border: 0;\n\n    background: #659fc8;\n}"]}
