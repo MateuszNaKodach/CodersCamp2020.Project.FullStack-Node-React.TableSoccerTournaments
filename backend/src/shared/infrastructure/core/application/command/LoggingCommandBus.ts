@@ -8,7 +8,7 @@ export class LoggingCommandBus implements CommandBus {
   constructor(private readonly next: CommandBus) {}
 
   async execute<CommandType extends Command>(command: CommandType): Promise<CommandResult> {
-    const result =  this.next.execute(command);
+    const result = await this.next.execute(command);
     console.log(`[LoggingCommandBus]: Command executed: `, Object.getPrototypeOf(command).constructor.name, JSON.stringify(command));
     console.log(`[LoggingCommandBus]: Command result: `, result);
     return result;
