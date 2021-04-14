@@ -102,22 +102,22 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
 };
 
 const returnMatchItem = (
-   matchItem: MatchItemType,
+   {level, matchId, matchNumber, matchStatus, onClickTeam, tableNumber, team1, team2, winnerId}: MatchItemType,
    index: number,
    expanded: string | boolean,
    handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void
 ) => (
    <MatchItem
-      key={matchItem.matchNumber}
-      level={matchItem.level}
-      matchNumber={matchItem.matchNumber}
-      matchId={matchItem.matchId}
-      matchStatus={matchItem.matchStatus}
-      onClickTeam={matchItem.onClickTeam}
-      tableNumber={matchItem.tableNumber}
-      winnerTeamId={matchItem.winnerId}
-      team1={matchItem.team1}
-      team2={matchItem.team2}
+      key={matchNumber}
+      level={level}
+      matchNumber={matchNumber}
+      matchId={matchId}
+      matchStatus={matchStatus}
+      onClickTeam={onClickTeam}
+      tableNumber={tableNumber}
+      winnerTeamId={winnerId}
+      team1={team1}
+      team2={team2}
       expanded={expanded}
       handleChangeExpander={handleChangeExpander}
    />
@@ -172,7 +172,7 @@ const returnMatchList = (
                      `${
                         playersProfilesList
                            .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(tournamentTeam => tournamentTeam.teamId === team1Id)
+                              .find(({teamId}) => teamId === team1Id)
                               ?.firstTeamPlayer
                            )?.firstName
                      } ${

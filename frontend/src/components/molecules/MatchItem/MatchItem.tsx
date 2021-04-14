@@ -31,7 +31,6 @@ export type MatchItemProps = {
       readonly secondPlayerName: string | undefined;
       readonly teamId: string | undefined;
    },
-
    expanded: string | boolean,
    handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void,
 };
@@ -81,50 +80,44 @@ const MatchItemWrapper = withStyles({
    }
 })(Card);
 
-export const MatchItem = (props: MatchItemProps,) => {
+export const MatchItem = (
+   {
+      expanded,
+      handleChangeExpander,
+      level,
+      matchId,
+      matchNumber,
+      matchStatus,
+      onClickTeam,
+      team1,
+      team2,
+      winnerTeamId
+   }: MatchItemProps,) => {
 
-   const isWinnerTeam1 = props.winnerTeamId === props.team1.teamId;
-   const isWinnerTeam2 = props.winnerTeamId === props.team2.teamId;
+   const isWinnerTeam1 = winnerTeamId === team1.teamId;
+   const isWinnerTeam2 = winnerTeamId === team2.teamId;
 
-   const isMatchFinished = props.matchStatus === MatchStatus.FINISHED;
-   const isMatchStarted = props.matchStatus === MatchStatus.STARTED;
+   const isMatchFinished = matchStatus === MatchStatus.FINISHED;
+   const isMatchStarted = matchStatus === MatchStatus.STARTED;
 
-   const agreeDialogCallback = (matchId: string, teamName: string): void => props.onClickTeam(matchId, teamName);
+   const agreeDialogCallback = (matchId: string, teamName: string): void => onClickTeam(matchId, teamName);
 
-
-   const TeamHoverButtonComponent = (p: { matchId: string | undefined, teamId: string | undefined }) => {
-      const matchId = p.matchId;
-      const teamId = p.teamId;
-
-      if (!matchId || !teamId) return <div/>;
-
-      return (
-         <TeamHoverButton>
-            <AddCircleTwoToneIcon fontSize="inherit"/>
-            <MatchWinnerDeterminationDialog
-               agreeCallback={() => agreeDialogCallback(matchId, teamId)}
-               isOpen={false}
-               teamName={teamId}
-            />
-         </TeamHoverButton>
-      );
-   }
 
    return (
       <MatchItemWrapper elevation={3}>
-         <Accordion expanded={props.expanded === `panel${props.matchNumber}`}
-                    onChange={props.handleChangeExpander(`panel${props.matchNumber}`)}>
+         <Accordion expanded={expanded === `panel${matchNumber}`}
+                    onChange={handleChangeExpander(`panel${matchNumber}`)}>
             <AccordionSummary
                expandIcon={<ExpandMoreIcon/>}
                aria-controls="panel1bh-content"
                id="panel1bh-header"
             >
                <ListItemAvatar>
-                  <StyledAvatar>{props.matchNumber}</StyledAvatar>
+                  <StyledAvatar>{matchNumber}</StyledAvatar>
                </ListItemAvatar>
 
                <ListItemText
-                  primary={`- ${props.matchStatus} -`}
+                  primary={`- ${matchStatus} -`}
                   secondary={
                      <React.Fragment>
                         <Typography
@@ -135,7 +128,7 @@ export const MatchItem = (props: MatchItemProps,) => {
                         >
                            {`Numer meczu: `}
                         </Typography>
-                        {(props.matchNumber || props.matchNumber === 0) ? props.matchNumber : "-"}
+                        {(matchNumber || matchNumber === 0) ? matchNumber : "-"}
                         <br/>
                         <Typography
                            component="span"
@@ -145,7 +138,7 @@ export const MatchItem = (props: MatchItemProps,) => {
                         >
                            {`Poziom: `}
                         </Typography>
-                        {(props.level || props.level === 0) ? props.level : "-"}
+                        {(level || level === 0) ? level : "-"}
                      </React.Fragment>
                   }
                />
@@ -153,29 +146,36 @@ export const MatchItem = (props: MatchItemProps,) => {
             <StyledAccordionDetails>
 
                <MatchTeamWrapper>
-
-                  <TeamHoverButtonComponent matchId={props.matchId} teamId={props.team1.teamId}/>
-
+                  <TeamHoverButtonComponent
+                     matchId={matchId}
+                     teamId={team1.teamId}
+                     firstPlayerName={team1.firstPlayerName}
+                     secondPlayerName={team1.secondPlayerName}
+                     agreeDialogCallback={agreeDialogCallback}
+                  />
                   <MatchTeam
                      isWinnerTeam={isWinnerTeam1}
-                     matchStatus={props.matchStatus}
-                     teamId={props.team1.teamId}
-                     player1={props.team1.firstPlayerName}
-                     player2={props.team1.secondPlayerName}
+                     matchStatus={matchStatus}
+                     teamId={team1.teamId}
+                     player1={team1.firstPlayerName}
+                     player2={team1.secondPlayerName}
                   />
-
                </MatchTeamWrapper>
 
                <MatchTeamWrapper>
-                  <TeamHoverButtonComponent matchId={props.matchId} teamId={props.team2.teamId}/>
-
-
+                  <TeamHoverButtonComponent
+                     matchId={matchId}
+                     teamId={team2.teamId}
+                     firstPlayerName={team2.firstPlayerName}
+                     secondPlayerName={team2.secondPlayerName}
+                     agreeDialogCallback={agreeDialogCallback}
+                  />
                   <MatchTeam
                      isWinnerTeam={isWinnerTeam2}
-                     matchStatus={props.matchStatus}
-                     teamId={props.team2.teamId}
-                     player1={props.team1.firstPlayerName}
-                     player2={props.team1.secondPlayerName}
+                     matchStatus={matchStatus}
+                     teamId={team2.teamId}
+                     player1={team2.firstPlayerName}
+                     player2={team2.secondPlayerName}
                   />
                </MatchTeamWrapper>
 
@@ -185,3 +185,28 @@ export const MatchItem = (props: MatchItemProps,) => {
    )
 };
 
+const TeamHoverButtonComponent = (props: {
+   matchId: string | undefined,
+   teamId: string | undefined,
+   firstPlayerName: string | undefined,
+   secondPlayerName: string | undefined,
+   agreeDialogCallback: (matchId: string, teamId: string) => void
+}) => {
+   const matchId = props.matchId;
+   const teamId = props.teamId;
+   const firstPlayerName = props.firstPlayerName;
+   const secondPlayerName = props.secondPlayerName;
+
+   if (!matchId || !teamId) return <div/>;
+
+   return (
+      <TeamHoverButton>
+         <AddCircleTwoToneIcon fontSize="inherit"/>
+         <MatchWinnerDeterminationDialog
+            agreeCallback={() => props.agreeDialogCallback(matchId, teamId)}
+            isOpen={false}
+            teamPlayersNames={`"${firstPlayerName} & ${secondPlayerName}"`}
+         />
+      </TeamHoverButton>
+   );
+}
