@@ -19,6 +19,8 @@ tags:
     description: Start/End match
   - name: Tournament Details
     description: Add and fetch tournament details
+  - name: Tournament Tree
+    description: Fetch tournament tree
   - name: Specification
     description: The Open API specification
 paths:
@@ -354,6 +356,27 @@ paths:
       responses:
         201:
           description: Tournament details successfully added
+  /doubles-tournament/{tournamentId}/tree:
+    get:
+      tags:
+        - Tournament Tree
+      description: Fetch tournament tree for given tournament ID
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Tournament Tree
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentTreeDto'
 components:
   schemas:
     TournamentTeamDto:
@@ -689,3 +712,38 @@ components:
           description: Name of the tournament
           type: string
           example: WrocLove Tournament
+    TournamentTreeDto:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        tournamentTeams:
+          description: tournament teams
+          type: array
+          items:
+            properties:
+              tournamentTeamId:
+                type: string
+          uniqueItems: true
+        tournamentTreeArray:
+          description: Tournament tree as an array
+          type: array
+          items:
+            properties:
+              fightingTeamsGroupId:
+                type: string
+              firstTeam:
+                type: string
+              secondTeam:
+                type: string
+              fightingTeamsGroupLevel:
+                type: number
+              nextMatchId:
+                type: string
+              matchNumberInSequence:
+                type: number
+              isMatchFinished:
+                type: boolean
