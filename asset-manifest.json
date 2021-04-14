@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "./static/css/main.860fb060.chunk.css",
-    "main.js": "./static/js/main.81e74fcc.chunk.js",
-    "main.js.map": "./static/js/main.81e74fcc.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.82661b5d.js",
-    "runtime-main.js.map": "./static/js/runtime-main.82661b5d.js.map",
-    "static/js/2.7c14f062.chunk.js": "./static/js/2.7c14f062.chunk.js",
-    "static/js/2.7c14f062.chunk.js.map": "./static/js/2.7c14f062.chunk.js.map",
-    "index.html": "./index.html",
-    "static/css/main.860fb060.chunk.css.map": "./static/css/main.860fb060.chunk.css.map",
-    "static/js/2.7c14f062.chunk.js.LICENSE.txt": "./static/js/2.7c14f062.chunk.js.LICENSE.txt"
+    "main.css": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/css/main.860fb060.chunk.css",
+    "main.js": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/js/main.70285b4a.chunk.js",
+    "main.js.map": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/js/main.70285b4a.chunk.js.map",
+    "runtime-main.js": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/js/runtime-main.fcedf323.js",
+    "runtime-main.js.map": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/js/runtime-main.fcedf323.js.map",
+    "static/js/2.8bd9621d.chunk.js": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/js/2.8bd9621d.chunk.js",
+    "static/js/2.8bd9621d.chunk.js.map": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/js/2.8bd9621d.chunk.js.map",
+    "index.html": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/index.html",
+    "static/css/main.860fb060.chunk.css.map": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/css/main.860fb060.chunk.css.map",
+    "static/js/2.8bd9621d.chunk.js.LICENSE.txt": "/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/static/js/2.8bd9621d.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.82661b5d.js",
-    "static/js/2.7c14f062.chunk.js",
+    "static/js/runtime-main.fcedf323.js",
+    "static/js/2.8bd9621d.chunk.js",
     "static/css/main.860fb060.chunk.css",
-    "static/js/main.81e74fcc.chunk.js"
+    "static/js/main.70285b4a.chunk.js"
   ]
 }
