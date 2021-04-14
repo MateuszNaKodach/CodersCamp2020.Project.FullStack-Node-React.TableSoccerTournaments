@@ -261,27 +261,21 @@ const returnMatchList = (
             }
          }
       )
-
 }
 
 const getMatchDetailsDto = (matchId: string): Promise<MatchDetailsDto> => MatchDetailsRestAPI()
    .getTournamentTeamsList(matchId)
-   .then(matchInformationDto => ({
-      matchId: matchInformationDto.matchId,
-      firstMatchSideId: matchInformationDto.firstMatchSideId,
-      secondMatchSideId: matchInformationDto.secondMatchSideId,
-      winnerId: matchInformationDto.winnerId
+   .then(({firstMatchSideId, matchId, secondMatchSideId, winnerId}) => ({
+      matchId: matchId,
+      firstMatchSideId: firstMatchSideId,
+      secondMatchSideId: secondMatchSideId,
+      winnerId: winnerId
    }));
 
 const getPlayerProfileDto = (playerId: string): Promise<PlayerProfileDto> => UserProfileRestApi()
    .getPlayerProfile(playerId)
-   .then(playerProfileDto => ({
-      playerId: playerProfileDto.playerId,
-      firstName: playerProfileDto.firstName,
-      lastName: playerProfileDto.lastName,
-      phoneNumber: playerProfileDto.phoneNumber,
-      emailAddress: playerProfileDto.emailAddress,
-   }));
+   .then(({emailAddress, firstName, lastName, phoneNumber, playerId}) => (
+      {playerId, firstName, lastName, phoneNumber, emailAddress,}));
 
 const getTournamentTeamsListDto = (tournamentId: string): Promise<TournamentTeamsListDto> => TournamentTeamsListRestApi()
    .getTournamentTeamsList(tournamentId)
