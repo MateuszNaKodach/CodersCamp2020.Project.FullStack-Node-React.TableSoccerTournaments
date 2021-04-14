@@ -1,17 +1,17 @@
 import axios from "axios";
 import { PATH_BASE_URL } from "../../components/atoms/constants/apiPaths";
-import { MatchesListDto } from "../../components/organisms/MatchesList/MatchesListDto";
+import { TournamentMatchesListDto } from "./TournamentMatchesListDto";
 
-export type MatchesListRestApiConfig = {
+export type TournamentMatchesListRestApiConfig = {
   readonly baseUrl: string;
 };
 
-const defaultConfig: MatchesListRestApiConfig = {
+const defaultConfig: TournamentMatchesListRestApiConfig = {
   baseUrl: PATH_BASE_URL,
 };
 
-export const MatchesListRestApi = (
-  config?: Partial<MatchesListRestApiConfig>
+export const TournamentMatchesListRestAPI = (
+  config?: Partial<TournamentMatchesListRestApiConfig>
 ) => {
   const currentConfig = {
     ...defaultConfig,
@@ -22,9 +22,11 @@ export const MatchesListRestApi = (
       defaultConfig.baseUrl,
   };
   return {
-    getMatchesList(tournamentId: string): Promise<MatchesListDto> {
+    getTournamentTeamsList(
+      tournamentId: string
+    ): Promise<TournamentMatchesListDto> {
       return axios
-        .get<MatchesListDto>(
+        .get<TournamentMatchesListDto>(
           `${currentConfig.baseUrl}/doubles-tournaments/${tournamentId}/matches`
         )
         .then((res) => res.data);
