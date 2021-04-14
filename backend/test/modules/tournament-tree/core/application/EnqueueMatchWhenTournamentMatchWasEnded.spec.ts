@@ -12,7 +12,7 @@ import { InMemoryDomainEventBus } from '../../../../../src/shared/infrastructure
 import { TournamentMatchWasEnded } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentMatchWasEnded';
 import waitForExpect from 'wait-for-expect';
 
-describe('Enqueueing next level matches',  () => {
+describe('Enqueueing next level matches', () => {
   const currentTime = new Date();
   const tournamentId = 'SampleTournamentId';
   const [team1Id, team2Id, team3Id, team4Id, team5Id] = ['team1', 'team2', 'team3', 'team4', 'team5'];
@@ -56,14 +56,16 @@ describe('Enqueueing next level matches',  () => {
     doublesTournament.publishEvent(tournamentMatchWasEnded);
 
     //Then
-    await waitForExpect(() => expect(spy).toBeCalledWith(
-      new EnqueueMatch({
-        tournamentId: tournamentId,
-        matchNumber: 5,
-        team1Id: team1Id,
-        team2Id: team5Id,
-      }),
-    ));
+    await waitForExpect(() =>
+      expect(spy).toBeCalledWith(
+        new EnqueueMatch({
+          tournamentId: tournamentId,
+          matchNumber: 5,
+          team1Id: team1Id,
+          team2Id: team5Id,
+        }),
+      ),
+    );
   });
 });
 
