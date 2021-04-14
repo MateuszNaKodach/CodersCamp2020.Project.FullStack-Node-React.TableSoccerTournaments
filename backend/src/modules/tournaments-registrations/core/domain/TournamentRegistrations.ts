@@ -7,16 +7,17 @@ import { TournamentRegistrationsWereClosed } from './event/TournamentRegistratio
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { CurrentTimeProvider } from '../../../../shared/core/CurrentTimeProvider';
 
-//TODO: Ustalić jakie jest minimum. Może 2 graczy i po prostu grają finał?
-const MIN_TOURNAMENT_PLAYERS = 8;
+export const MIN_TOURNAMENT_PLAYERS = 4;
 
 export class TournamentRegistrations {
   readonly tournamentId: TournamentId;
+  readonly version: number;
   readonly status: RegistrationsStatus;
   readonly registeredPlayers: PlayerId[] = [];
 
-  constructor(props: { tournamentId: TournamentId; status?: RegistrationsStatus; registeredPlayers?: PlayerId[] }) {
+  constructor(props: { tournamentId: TournamentId; version?: number; status?: RegistrationsStatus; registeredPlayers?: PlayerId[] }) {
     this.tournamentId = props.tournamentId;
+    this.version = props.version ?? 0;
     this.status = props.status ?? RegistrationsStatus.OPENED;
     this.registeredPlayers = props.registeredPlayers ?? [];
   }
@@ -57,12 +58,12 @@ export function registerTournamentPlayer(
   state: TournamentRegistrations | undefined,
   command: { playerId: PlayerId },
   currentTimeProvider: CurrentTimeProvider,
-  canPlayerTakiePartInTheTournament: boolean,
+  canPlayerTakePartInTheTournament: boolean,
 ): DomainCommandResult<TournamentRegistrations> {
   if (state?.status !== RegistrationsStatus.OPENED) {
     throw new Error('Cannot register player for closed tournament registrations!');
   }
-  if (!canPlayerTakiePartInTheTournament) {
+  if (!canPlayerTakePartInTheTournament) {
     throw new Error(`Player with id = ${command.playerId.raw} cannot take part in the tournament!`);
   }
 
@@ -110,7 +111,7 @@ export function closeTournamentRegistrations(
     tournamentId: command.tournamentId.raw,
     registeredPlayersIds: state.registeredPlayers.map((playerId) => playerId.raw),
   });
-  const tournamentRegistrations = onTournamentRegistrationsWasClosed(state, tournamentRegistrationsWasClosed);
+  const tournamentRegistrations = onTournamentRegistrationsWasClosed(state);
 
   return {
     state: tournamentRegistrations,
@@ -118,10 +119,7 @@ export function closeTournamentRegistrations(
   };
 }
 
-function onTournamentRegistrationsWasClosed(
-  state: TournamentRegistrations,
-  event: TournamentRegistrationsWereClosed,
-): TournamentRegistrations {
+function onTournamentRegistrationsWasClosed(state: TournamentRegistrations): TournamentRegistrations {
   return new TournamentRegistrations({
     ...state,
     status: RegistrationsStatus.CLOSED,

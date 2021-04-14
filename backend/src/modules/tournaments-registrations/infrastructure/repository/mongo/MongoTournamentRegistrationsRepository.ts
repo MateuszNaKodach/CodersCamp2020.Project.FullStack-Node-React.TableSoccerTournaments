@@ -12,10 +12,11 @@ export class MongoTournamentRegistrationsRepository implements TournamentRegistr
   }
 
   async save(registrations: TournamentRegistrations): Promise<void> {
-    await MongoTournamentRegistrations.findByIdAndUpdate(
-      { _id: registrations.tournamentId.raw },
+    await MongoTournamentRegistrations.findOneAndUpdate(
+      { _id: registrations.tournamentId.raw, __v: registrations.version },
       {
         _id: registrations.tournamentId.raw,
+        __v: registrations.version + 1,
         status: registrations.status,
         registeredPlayers: registrations.registeredPlayers.map((playerId) => playerId.raw),
       },
@@ -31,12 +32,14 @@ export class MongoTournamentRegistrationsRepository implements TournamentRegistr
 
 type MongoTournamentRegistrations = {
   readonly _id: string;
+  readonly __v: number;
   readonly status: RegistrationsStatus;
   readonly registeredPlayers: string[];
 } & mongoose.Document;
 
 const TournamentRegistrationsSchema = new mongoose.Schema({
   _id: Schema.Types.String,
+  __v: Schema.Types.Number,
   status: {
     type: Schema.Types.String,
     required: true,
@@ -56,6 +59,7 @@ const MongoTournamentRegistrations = mongoose.model<MongoTournamentRegistrations
 function mongoDocumentToDomain(mongoDocument: MongoTournamentRegistrations): TournamentRegistrations {
   return new TournamentRegistrations({
     tournamentId: TournamentId.from(mongoDocument._id),
+    version: mongoDocument.__v,
     status: mongoDocument.status,
     registeredPlayers: [...mongoDocument.registeredPlayers.map((playerId) => PlayerId.from(playerId))],
   });
