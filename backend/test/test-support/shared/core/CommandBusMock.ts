@@ -15,3 +15,16 @@ export function CommandBusMock(alwaysReturn: CommandResult = CommandResult.succe
     executeCalls,
   };
 }
+
+export function CommandBusResultsMock(results: CommandResult[]): CommandBus & { executeCalls: jest.Mock } {
+  const executeCalls: jest.Mock = jest.fn();
+  return {
+    async execute<CommandType extends Command>(command: CommandType): Promise<CommandResult> {
+      const result = results[executeCalls.mock.calls.length];
+      executeCalls(command);
+      return result;
+    },
+    registerHandler<CommandType>(commandType: HasConstructor<CommandType>, handler: CommandHandler<CommandType>): void {},
+    executeCalls,
+  };
+}
