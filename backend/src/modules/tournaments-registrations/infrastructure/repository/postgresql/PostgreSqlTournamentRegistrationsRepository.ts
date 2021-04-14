@@ -1,7 +1,7 @@
 import { TournamentRegistrationsRepository } from '../../../core/application/TournamentRegistrationsRepository';
 import { TournamentRegistrations } from '../../../core/domain/TournamentRegistrations';
 import { TournamentId } from '../../../core/domain/TournamentId';
-import { Connection, getConnection, Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { TournamentRegistrationsEntity } from './TournamentRegistrationsEntity';
 import { PlayerId } from '../../../../../shared/core/domain/PlayerId';
 
@@ -14,6 +14,7 @@ export class PostgreSqlTournamentRegistrationsRepository implements TournamentRe
   async save(registrations: TournamentRegistrations): Promise<void> {
     const entity = new TournamentRegistrationsEntity(
       registrations.tournamentId.raw,
+      registrations.version + 1,
       registrations.status,
       registrations.registeredPlayers.map((playerId) => playerId.raw),
     );
@@ -33,6 +34,7 @@ export class PostgreSqlTournamentRegistrationsRepository implements TournamentRe
 function databaseEntityToDomain(databaseEntity: TournamentRegistrationsEntity): TournamentRegistrations {
   return new TournamentRegistrations({
     tournamentId: TournamentId.from(databaseEntity.id),
+    version: databaseEntity.version,
     status: databaseEntity.status,
     registeredPlayers: [...databaseEntity.registeredPlayersIds.map((playerId) => PlayerId.from(playerId))],
   });

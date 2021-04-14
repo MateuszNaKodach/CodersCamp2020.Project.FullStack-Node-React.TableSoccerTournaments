@@ -39,5 +39,12 @@ export const TournamentRegistrationsRestApi = (
         body
       );
     },
+    async closeTournamentRegistration(tournamentId: string): Promise<void> {
+      await axios.post(
+        `${currentConfig.baseUrl}/tournament-registrations/${tournamentId}/close`,
+        null,
+        { params: { tournamentId } }
+      );
+    },
   };
 };

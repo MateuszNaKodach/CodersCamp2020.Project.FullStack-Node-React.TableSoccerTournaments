@@ -54,6 +54,8 @@ import { TournamentTreeRestApiModule } from './modules/tournament-tree/presentat
 import { InMemoryTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/inmemory/InMemoryTablesQueueRepository';
 import { MongoTablesQueueRepository } from './modules/doubles-tournament/infrastructure/repository/mongo/MongoTablesQueueRepository';
 import { MongoTournamentTreeRepository } from './modules/tournament-tree/infrastructure/repository/mongo/MongoTournamentTreeRepository';
+import { MongoPlayers } from './modules/tournaments-registrations/infrastructure/repository/mongo/MongoPlayers';
+import { RetryCommandBus } from './shared/infrastructure/core/application/command/RetryCommandBus';
 import { MongoTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/mongo/MongoTournamentDetailsRepository';
 import { InMemoryTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/inmemory/InMemoryTournamentDetailsRepository';
 import { TournamentDetailsModuleCore } from './modules/tournament-details/core/TournamentDetailsModuleCore';
@@ -64,7 +66,7 @@ config();
 export type TableSoccerTournamentsApplication = { restApi: Express };
 
 export async function TableSoccerTournamentsApplication(
-  commandBus: CommandBus = new InMemoryCommandBus(),
+  commandBus: CommandBus = new RetryCommandBus(new InMemoryCommandBus(), 10),
   eventBus: DomainEventBus = new LoggingDomainEventBus(new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus())),
   queryBus: QueryBus = new InMemoryQueryBus(),
   currentTimeProvider: CurrentTimeProvider = () => new Date(),
@@ -78,7 +80,7 @@ export async function TableSoccerTournamentsApplication(
   }
 
   const tournamentRegistrationsRepository = TournamentRegistrationsRepository();
-  const players = new InMemoryPlayers();
+  const players = TournamentRegistrationsPlayers();
   const tournamentsRegistrationsModule: Module = {
     core: TournamentsRegistrationsModuleCore(eventBus, currentTimeProvider, tournamentRegistrationsRepository, players, players),
     restApi: TournamentRegistrationsRestApiModule(commandBus, eventBus, queryBus),
@@ -236,6 +238,13 @@ function TournamentRegistrationsRepository() {
     return new PostgreSqlTournamentRegistrationsRepository();
   }
   return new InMemoryTournamentRegistrationsRepository();
+}
+
+function TournamentRegistrationsPlayers() {
+  if (process.env.MONGO_REPOSITORIES === 'ENABLED' && process.env.TOURNAMENTS_REGISTRATIONS_DATABASE === 'MONGO') {
+    return new MongoPlayers();
+  }
+  return new InMemoryPlayers();
 }
 
 function PlayerProfilesRepository() {

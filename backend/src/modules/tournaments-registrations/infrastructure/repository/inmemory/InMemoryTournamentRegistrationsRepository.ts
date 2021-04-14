@@ -1,6 +1,7 @@
 import { TournamentRegistrationsRepository } from '../../../core/application/TournamentRegistrationsRepository';
 import { TournamentRegistrations } from '../../../core/domain/TournamentRegistrations';
 import { TournamentId } from '../../../core/domain/TournamentId';
+import { OptimisticLockingException } from '../../../../../shared/core/application/OptimisticLockingException';
 
 export class InMemoryTournamentRegistrationsRepository implements TournamentRegistrationsRepository {
   private readonly entities: { [id: string]: TournamentRegistrations } = {};
@@ -10,7 +11,13 @@ export class InMemoryTournamentRegistrationsRepository implements TournamentRegi
   }
 
   async save(registrations: TournamentRegistrations): Promise<void> {
-    this.entities[registrations.tournamentId.raw] = registrations;
+    if ((this.entities[registrations.tournamentId.raw]?.version ?? 0) !== registrations.version) {
+      throw new OptimisticLockingException(registrations.version);
+    }
+    this.entities[registrations.tournamentId.raw] = new TournamentRegistrations({
+      ...registrations,
+      version: registrations.version + 1,
+    });
   }
 
   findAll(): Promise<TournamentRegistrations[]> {

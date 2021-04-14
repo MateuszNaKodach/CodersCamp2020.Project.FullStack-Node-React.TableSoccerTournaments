@@ -11,6 +11,7 @@ import { TournamentRegistrationsWereClosed } from '../../../../../src/modules/to
 import { testTournamentsRegistrationsModule } from './TestTournamentsRegistrationsModule';
 import { registerPlayerForTournament } from './TestHelpers';
 import Failure = CommandResult.Failure;
+import { MIN_TOURNAMENT_PLAYERS } from '../../../../../src/modules/tournaments-registrations/core/domain/TournamentRegistrations';
 
 describe('Tournament Registrations | Write Side', () => {
   const currentTime = new Date();
@@ -104,7 +105,9 @@ describe('Tournament Registrations | Write Side', () => {
 
     //Then
     expect(commandResult.isSuccess()).toBeFalsy();
-    expect((commandResult as Failure).reason).toStrictEqual(new Error('Min players for tournament is 8, but only 2 players registered!'));
+    expect((commandResult as Failure).reason).toStrictEqual(
+      new Error(`Min players for tournament is ${MIN_TOURNAMENT_PLAYERS}, but only 2 players registered!`),
+    );
   });
 
   it('given opened tournaments registrations with 8 registered players, when close registrations, then registrations should be closed', async () => {

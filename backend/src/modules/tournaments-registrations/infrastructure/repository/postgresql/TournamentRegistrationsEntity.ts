@@ -6,6 +6,9 @@ export class TournamentRegistrationsEntity {
   @PrimaryColumn('uuid')
   readonly id: string;
 
+  @Column('number')
+  readonly version: number;
+
   @Column({
     type: 'enum',
     enum: RegistrationsStatus,
@@ -16,8 +19,9 @@ export class TournamentRegistrationsEntity {
   @Column('text', { array: true })
   readonly registeredPlayersIds: string[];
 
-  constructor(id: string, status: RegistrationsStatus, registeredPlayersIds: string[]) {
+  constructor(id: string, version: number, status: RegistrationsStatus, registeredPlayersIds: string[]) {
     this.id = id;
+    this.version = version;
     this.status = status;
     this.registeredPlayersIds = registeredPlayersIds;
   }
