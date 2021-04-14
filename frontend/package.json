@@ -2,7 +2,7 @@
   "name": "table-soccer-tournaments-frontend",
   "version": "0.1.0",
   "description": "Table Soccer Tournaments React Web App",
-  "homepage": ".",
+  "homepage": "https://nowakprojects.github.io/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
@@ -26,12 +26,14 @@
     "yup": "^0.32.9"
   },
   "scripts": {
+    "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.ts\"",
-    "format:ci": "prettier -c \"src/**/*.ts\"",
-    "start": "react-scripts start",
-    "test": "react-scripts test"
+    "format:ci": "prettier -c \"src/**/*.ts\""
   },
   "eslintConfig": {
     "extends": [
@@ -59,6 +61,7 @@
     "@types/styled-components": "^5.1.9",
     "@types/testing-library__jest-dom": "^5.9.5",
     "@types/uuid": "^8.3.0",
+    "gh-pages": "^3.1.0",
     "msw": "^0.27.2",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0"
