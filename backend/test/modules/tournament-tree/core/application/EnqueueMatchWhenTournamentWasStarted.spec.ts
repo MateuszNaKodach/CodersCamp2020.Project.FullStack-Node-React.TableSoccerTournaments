@@ -43,13 +43,13 @@ describe('Automated match enqueueing', () => {
     //Then
     const firstMatchToEnqueue = new EnqueueMatch({
       tournamentId: 'SampleTournamentId',
-      matchNumber: 1,
-      team1Id: 'team1',
+      matchNumber: 2,
+      team1Id: 'team5',
       team2Id: 'team4',
     });
     const secondMatchToEnqueue = new EnqueueMatch({
       tournamentId: 'SampleTournamentId',
-      matchNumber: 2,
+      matchNumber: 6,
       team1Id: 'team3',
       team2Id: 'team2',
     });
@@ -83,6 +83,11 @@ function createTestTournamentTreeWithFourTeams(sampleTournamentTreeId: string) {
         teamId: 'team4',
         firstTeamPlayer: 'player7',
         secondTeamPlayer: 'player8',
+      },
+      {
+        teamId: 'team5',
+        firstTeamPlayer: 'player9',
+        secondTeamPlayer: 'player10',
       },
     ],
   });
