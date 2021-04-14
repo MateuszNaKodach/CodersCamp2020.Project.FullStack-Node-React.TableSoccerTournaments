@@ -1,4 +1,4 @@
-export type TeamsListDto =
+export type TournamentTeamsListDto =
    {
       items: [
          {

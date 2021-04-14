@@ -33,3 +33,25 @@ export function getRegisteredPlayersIdsWillReturn(
     )
   );
 }
+
+export type TournamentMock = {
+    tournamentId: string,
+    tournamentName: string,
+    status: string
+}
+
+export function getAllTournamentsRegistrationsWillReturn(
+    tournamentsList: TournamentMock[]
+) {
+    server.use(
+        rest.get(
+            `*/rest-api/tournament-registrations/`,
+            (req, res, ctx) => {
+                return res(
+                    ctx.status(200),
+                    ctx.json(tournamentsList)
+                );
+            }
+        )
+    );
+}
