@@ -35,7 +35,7 @@ export class MongoMatchesQueueRepository implements MatchesQueueRepository {
       );
     } catch (e) {
       if (e.message.includes('E11000')) {
-        return Promise.reject(new OptimisticLockingException(expectedVersion));
+        throw new OptimisticLockingException(expectedVersion);
       }
       throw e;
     }
