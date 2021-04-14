@@ -17,7 +17,6 @@ describe('Tournament Registrations | Query Side', () => {
     //Given
     const currentTime = new Date();
     const tournamentsRegistrations = testTournamentsRegistrationsModule(currentTime);
-    const tournamentId = 'TournamentId';
 
     //When
     const findAllTournamentRegistrationsResult = await tournamentsRegistrations.executeQuery<FindAllTournamentRegistrationsResult>(
@@ -35,7 +34,7 @@ describe('Tournament Registrations | Query Side', () => {
     const tournamentId = 'TournamentId';
 
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
-    const commandResult = await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
+    await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
 
     //When
     const findAllTournamentRegistrationsResult = await tournamentsRegistrations.executeQuery<FindAllTournamentRegistrationsResult>(
@@ -46,6 +45,7 @@ describe('Tournament Registrations | Query Side', () => {
     expect(findAllTournamentRegistrationsResult).toIncludeSameMembers([
       new TournamentRegistrations({
         tournamentId: TournamentId.from(tournamentId),
+        version: 1,
         status: RegistrationsStatus.OPENED,
         registeredPlayers: [],
       }),
@@ -77,11 +77,13 @@ describe('Tournament Registrations | Query Side', () => {
     expect(findAllTournamentRegistrationsResult).toIncludeSameMembers([
       new TournamentRegistrations({
         tournamentId: TournamentId.from(tournamentId1),
+        version: 1,
         status: RegistrationsStatus.OPENED,
         registeredPlayers: [],
       }),
       new TournamentRegistrations({
         tournamentId: TournamentId.from(tournamentId2),
+        version: 2,
         status: RegistrationsStatus.OPENED,
         registeredPlayers: [PlayerId.from(playerIdRegisteredForTournament2)],
       }),
@@ -95,7 +97,7 @@ describe('Tournament Registrations | Query Side', () => {
     const tournamentId = 'TournamentId';
 
     const openTournamentRegistrations = new OpenTournamentRegistrations({ tournamentId });
-    const commandResult = await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
+    await tournamentsRegistrations.executeCommand(openTournamentRegistrations);
 
     //When
     const findTournamentRegistrationsByIdResult = await tournamentsRegistrations.executeQuery<FindTournamentRegistrationsById>(
@@ -106,6 +108,7 @@ describe('Tournament Registrations | Query Side', () => {
     expect(findTournamentRegistrationsByIdResult).toStrictEqual(
       new TournamentRegistrations({
         tournamentId: TournamentId.from(tournamentId),
+        version: 1,
         status: RegistrationsStatus.OPENED,
         registeredPlayers: [],
       }),

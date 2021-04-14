@@ -7,6 +7,6 @@ export class FindMatchesQueueByTournamentIdQueryHandler
   constructor(private readonly repository: MatchesQueueRepository) {}
 
   execute(query: FindMatchesQueueByTournamentId): Promise<FindMatchesQueueByTournamentIdResult> {
-    return this.repository.findByTournamentId(query.tournamentId);
+    return this.repository.findByTournamentId(query.tournamentId).then((result) => result.state);
   }
 }
