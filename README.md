@@ -1,14 +1,24 @@
 # TourDeFoos - CodersCamp final project
 
 
-### Backend Test Coverage
+### Frontend
+
+#### Netlify Deployment
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8b1e040a-66a9-4aa9-be7c-0c5e002105df/deploy-status)](https://app.netlify.com/sites/wkps/deploys)
+
+
+### Backend
+
+[Swagger URL](https://coderscamp2020-tablesoccer.herokuapp.com/rest-api-docs/)
+
+#### Swagger REST API
+
+#### Test Coverage
 [![codecov](https://codecov.io/gh/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/branch/develop/graph/badge.svg?token=CZ2VUMUK29)](https://codecov.io/gh/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments)
 
+#### Mutation Test Coverage
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fnowakprojects%2FCodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments%2Fdevelop)](https://dashboard.stryker-mutator.io/reports/github.com/nowakprojects/CodersCamp2020.Project.FullStack-Node-React.TableSoccerTournaments/develop)
-
-### Frontend Test Coverage
-
-
 
 ## Overview
 
