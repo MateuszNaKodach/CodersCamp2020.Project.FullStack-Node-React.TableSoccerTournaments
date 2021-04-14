@@ -22,7 +22,7 @@ export const TournamentMatchesListRestAPI = (
       defaultConfig.baseUrl,
   };
   return {
-    getTournamentTeamsList(
+    getTournamentMatch(
       tournamentId: string
     ): Promise<TournamentMatchesListDto> {
       return axios
