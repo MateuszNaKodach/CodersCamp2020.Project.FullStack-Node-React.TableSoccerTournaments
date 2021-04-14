@@ -134,11 +134,11 @@ describe("Tournament Registrations", () => {
     userEvent.click(menu);
 
     //Then
-    expect(screen.getByText("Dodaj i zapisz zawdonika")).toBeInTheDocument();
+    expect(screen.getByText("Dodaj i zapisz zawodnika")).toBeInTheDocument();
     expect(screen.getByText("Zakończ zapisy na turniej")).toBeInTheDocument();
   });
 
-  it(`when click on "Dodaj i zapisz zawdonika" button in hamburger menu, then show create plaeyrs profile form`, async () => {
+  it(`when click on "Dodaj i zapisz zawodnika" button in hamburger menu, then show create players profile form`, async () => {
     //Given
     getPlayersProfilesIsLoading();
     getRegisteredPlayersIdsWillReturn(tournamentId, "open", []);
@@ -147,7 +147,7 @@ describe("Tournament Registrations", () => {
     render(<TournamentRegistrations tournamentId={tournamentId} />);
     const menu = screen.getByTestId("hamburgerMenu");
     userEvent.click(menu);
-    const addPlayerButton = await screen.getByText("Dodaj i zapisz zawdonika");
+    const addPlayerButton = await screen.getByText("Dodaj i zapisz zawodnika");
     userEvent.click(addPlayerButton);
 
     //Then

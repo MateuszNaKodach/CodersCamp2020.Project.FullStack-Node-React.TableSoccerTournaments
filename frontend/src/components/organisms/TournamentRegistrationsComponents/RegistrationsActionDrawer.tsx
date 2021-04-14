@@ -92,7 +92,7 @@ export const RegistrationsActionDrawer = (props: {
               toggleDrawer(false);
             }}
           >
-            Dodaj i zapisz zawdonika
+            Dodaj i zapisz zawodnika
           </Button>
           <VerticalSpace height="20px" />
           <Button
