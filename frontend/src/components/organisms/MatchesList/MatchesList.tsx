@@ -43,9 +43,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
       getTournamentTeamsListDto(tournamentId)
          .then(tournamentTeamsListDto => setTournamentTeamsListDto(tournamentTeamsListDto))
-
    }, [tournamentMatchesListDto]);
-
 
    useEffect(() => {
       async function setPlayersProfilesListDtoIntoState(): Promise<void> {
@@ -56,7 +54,9 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
                [firstTeamPlayer, secondTeamPlayer]
             ).reduce((acc, teamPlayers) => acc.concat(teamPlayers))
 
-         const playersProfilesList = await Promise.all(tournamentPlayersIds.map((item) => getPlayerProfileDto(item)));
+         const playersProfilesList = await Promise.all(tournamentPlayersIds
+            .map((item) => getPlayerProfileDto(item)));
+
          setPlayersProfilesListDto(playersProfilesList);
       }
 
@@ -93,7 +93,10 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
    return (
       <StyledMatchesList>
-         {matchesList ? matchesList.map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander)) : "Oczekiwanie na pobranie..."}
+         {matchesList
+            ? matchesList
+               .map((item, index) => returnMatchItem(item, index, expanded, handleChangeExpander))
+            : "Oczekiwanie na pobranie..."}
       </StyledMatchesList>
    )
 };
@@ -105,15 +108,16 @@ const returnMatchItem = (
    handleChangeExpander: (panel: string | boolean) => (event: any, isExpanded: string | boolean) => void
 ) => (
    <MatchItem
+      key={matchItem.matchNumber}
       level={matchItem.level}
       matchNumber={matchItem.matchNumber}
       matchId={matchItem.matchId}
       matchStatus={matchItem.matchStatus}
       onClickTeam={matchItem.onClickTeam}
+      tableNumber={matchItem.tableNumber}
+      winnerTeamId={matchItem.winnerId}
       team1={matchItem.team1}
       team2={matchItem.team2}
-      winnerTeamId={matchItem.winnerId}
-      key={matchItem.matchNumber}
       expanded={expanded}
       handleChangeExpander={handleChangeExpander}
    />
@@ -127,42 +131,137 @@ const returnMatchList = (
    reloadAllList: () => void
 ): MatchItemType[] => {
 
-   return tournamentMatchesListDto.queue.map((tournamentMatchDto) => {
+   const tournamentId = tournamentMatchesListDto.tournamentId;
+   const tournamentMatchesList = {...tournamentMatchesListDto}.queue;
+   const matchesDetailsList = [...matchesDetailsListDto];
+   const tournamentTeamsList = {...tournamentTeamsListDto}.items;
+   const playersProfilesList = [...playersProfilesListDto];
 
-      function findStatus(): MatchStatus {
-         if (tournamentMatchDto.status === "started") return MatchStatus.STARTED;
-         if (tournamentMatchDto.status === "ended") return MatchStatus.FINISHED;
-         if (tournamentMatchDto.status === "enqueued") return MatchStatus.NO_TABLE;
-         if (tournamentMatchDto.status === "noTeams") {
-            if (tournamentMatchDto.team1Id || tournamentMatchDto.team1Id) return MatchStatus.NO_ONE_TEAM;
-            else return MatchStatus.NO_TEAMS;
-         }
-         return MatchStatus.STATUS_NOT_EXIST;
-      }
+   return tournamentMatchesList
+      .map(
+         ({
+             matchNumber,
+             status,
+             tableNumber,
+             team1Id,
+             team2Id
+          }) => {
 
-      return {
-         onClickTeam: (matchId: string, winnerPlayerId: string) => setMatchWinner(matchId, winnerPlayerId, reloadAllList),
-         matchNumber: tournamentMatchDto.matchNumber,
-         matchId: `${tournamentMatchesListDto.tournamentId}_${tournamentMatchDto.matchNumber}`,
-         winnerId: undefined,
-         level: undefined,
-         matchStatus: findStatus(),
-         team1: {
-            player1: undefined,
-            player2: undefined,
-            teamId: tournamentMatchDto.team1Id,
-            currentPlayerLevel: undefined,
-            currentMatchNumber: undefined,
-         },
-         team2: {
-            player1: undefined,
-            player2: undefined,
-            teamId: tournamentMatchDto.team2Id,
-            currentPlayerLevel: undefined,
-            currentMatchNumber: undefined,
+            const findMatchId = (): string => `${tournamentId}_${matchNumber}`;
+
+            const findWinnerId = (): string | undefined => matchesDetailsList
+               .find(matchDetails => matchDetails.matchId === findMatchId())
+               ?.winnerId;
+
+            const findLevel = (): number | undefined => undefined;
+
+            type TeamPlayersNames = {
+               firstTeam: {
+                  firstPlayerName: string | undefined,
+                  secondPlayerName: string | undefined
+               },
+               secondTeam: {
+                  firstPlayerName: string | undefined,
+                  secondPlayerName: string | undefined
+               }
+            };
+
+            const findTeamPlayersNames = (): TeamPlayersNames => ({
+               firstTeam: {
+                  firstPlayerName:
+                     `${
+                        playersProfilesList
+                           .find(({playerId}) => playerId === tournamentTeamsList
+                              .find(tournamentTeam => tournamentTeam.teamId === team1Id)
+                              ?.firstTeamPlayer
+                           )?.firstName
+                     } ${
+                        playersProfilesList
+                           .find(({playerId}) => playerId === tournamentTeamsList
+                              .find(({teamId}) => teamId === team1Id)
+                              ?.firstTeamPlayer
+                           )?.lastName
+                     }`,
+                  secondPlayerName:
+                     `${
+                        playersProfilesList
+                           .find(({playerId}) => playerId === tournamentTeamsList
+                              .find(({teamId}) => teamId === team1Id)
+                              ?.secondTeamPlayer
+                           )?.firstName
+                     } ${
+                        playersProfilesList
+                           .find(({playerId}) => playerId === tournamentTeamsList
+                              .find(({teamId}) => teamId === team1Id)
+                              ?.secondTeamPlayer
+                           )?.lastName
+                     }`,
+               },
+               secondTeam: {
+                  firstPlayerName:
+                     `${
+                        playersProfilesList
+                           .find(({playerId}) => playerId === tournamentTeamsList
+                              .find(tournamentTeam => tournamentTeam.teamId === team2Id)
+                              ?.firstTeamPlayer
+                           )?.firstName
+                     } ${
+                        playersProfilesList
+                           .find(({playerId}) => playerId === tournamentTeamsList
+                              .find(({teamId}) => teamId === team2Id)
+                              ?.firstTeamPlayer
+                           )?.lastName
+                     }`,
+                  secondPlayerName:
+                     `${
+                        playersProfilesList
+                           .find(({playerId}) => playerId === tournamentTeamsList
+                              .find(({teamId}) => teamId === team2Id)
+                              ?.secondTeamPlayer
+                           )?.firstName
+                     } ${
+                        playersProfilesList
+                           .find(({playerId}) => playerId === tournamentTeamsList
+                              .find(({teamId}) => teamId === team2Id)
+                              ?.secondTeamPlayer
+                           )?.lastName
+                     }`,
+               },
+            });
+
+            function findStatus(): MatchStatus {
+               if (status === "started") return MatchStatus.STARTED;
+               if (status === "ended") return MatchStatus.FINISHED;
+               if (status === "enqueued") return MatchStatus.NO_TABLE;
+               if (status === "noTeams") {
+                  if (team1Id || team1Id) return MatchStatus.NO_ONE_TEAM;
+                  else return MatchStatus.NO_TEAMS;
+               }
+               return MatchStatus.STATUS_NOT_EXIST;
+            }
+
+            return {
+               level: findLevel(),
+               matchId: findMatchId(),
+               matchNumber: matchNumber,
+               matchStatus: findStatus(),
+               onClickTeam: (matchId: string, winnerPlayerId: string) => setMatchWinner(matchId, winnerPlayerId, reloadAllList),
+               tableNumber: tableNumber,
+               winnerId: findWinnerId(),
+               team1: {
+                  firstPlayerName: findTeamPlayersNames().firstTeam.firstPlayerName,
+                  secondPlayerName: findTeamPlayersNames().firstTeam.secondPlayerName,
+                  teamId: team1Id,
+               },
+               team2: {
+                  firstPlayerName: findTeamPlayersNames().secondTeam.firstPlayerName,
+                  secondPlayerName: findTeamPlayersNames().secondTeam.secondPlayerName,
+                  teamId: team2Id,
+               }
+            }
          }
-      }
-   })
+      )
+
 }
 
 const getMatchDetailsDto = (matchId: string): Promise<MatchDetailsDto> => MatchDetailsRestAPI()

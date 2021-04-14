@@ -14,20 +14,21 @@ import MatchWinnerDeterminationDialog from "../MatchWinnerDeterminationDialog/Ma
 import {MatchStatus} from "../../atoms/MatchStatus";
 
 export type MatchItemProps = {
-   onClickTeam: (matchId: string, teamId: string) => void,
-   matchNumber: number | undefined,
-   matchId: string | undefined,
    level: number | undefined,
+   matchId: string | undefined,
+   matchNumber: number | undefined,
    matchStatus: MatchStatus,
+   onClickTeam: (matchId: string, teamId: string) => void,
+   tableNumber: number | undefined,
    winnerTeamId: string | undefined;
    team1: {
-      readonly player1: string | undefined;
-      readonly player2: string | undefined;
+      readonly firstPlayerName: string | undefined;
+      readonly secondPlayerName: string | undefined;
       readonly teamId: string | undefined;
    },
    team2: {
-      readonly player1: string | undefined;
-      readonly player2: string | undefined;
+      readonly firstPlayerName: string | undefined;
+      readonly secondPlayerName: string | undefined;
       readonly teamId: string | undefined;
    },
 
@@ -159,8 +160,8 @@ export const MatchItem = (props: MatchItemProps,) => {
                      isWinnerTeam={isWinnerTeam1}
                      matchStatus={props.matchStatus}
                      teamId={props.team1.teamId}
-                     player1={props.team1.player1}
-                     player2={props.team1.player2}
+                     player1={props.team1.firstPlayerName}
+                     player2={props.team1.secondPlayerName}
                   />
 
                </MatchTeamWrapper>
@@ -173,8 +174,8 @@ export const MatchItem = (props: MatchItemProps,) => {
                      isWinnerTeam={isWinnerTeam2}
                      matchStatus={props.matchStatus}
                      teamId={props.team2.teamId}
-                     player1={props.team1.player1}
-                     player2={props.team1.player2}
+                     player1={props.team1.firstPlayerName}
+                     player2={props.team1.secondPlayerName}
                   />
                </MatchTeamWrapper>
 

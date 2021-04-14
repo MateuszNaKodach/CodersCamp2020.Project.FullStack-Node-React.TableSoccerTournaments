@@ -22,7 +22,9 @@ export const TournamentMatchesListRestAPI = (
       defaultConfig.baseUrl,
   };
   return {
-    getTournamentTeamsList(tournamentId: string): Promise<TournamentMatchesListDto> {
+    getTournamentTeamsList(
+      tournamentId: string
+    ): Promise<TournamentMatchesListDto> {
       return axios
         .get<TournamentMatchesListDto>(
           `${currentConfig.baseUrl}/doubles-tournaments/${tournamentId}/matches`

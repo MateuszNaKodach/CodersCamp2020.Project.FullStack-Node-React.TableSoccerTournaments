@@ -10,7 +10,9 @@ const defaultConfig: TeamsListRestApiConfig = {
   baseUrl: PATH_BASE_URL,
 };
 
-export const TournamentTeamsListRestApi = (config?: Partial<TeamsListRestApiConfig>) => {
+export const TournamentTeamsListRestApi = (
+  config?: Partial<TeamsListRestApiConfig>
+) => {
   const currentConfig = {
     ...defaultConfig,
     config,
@@ -20,7 +22,9 @@ export const TournamentTeamsListRestApi = (config?: Partial<TeamsListRestApiConf
       defaultConfig.baseUrl,
   };
   return {
-    getTournamentTeamsList(tournamentId: string): Promise<TournamentTeamsListDto> {
+    getTournamentTeamsList(
+      tournamentId: string
+    ): Promise<TournamentTeamsListDto> {
       return axios
         .get<TournamentTeamsListDto>(
           `${currentConfig.baseUrl}/doubles-tournaments/${tournamentId}/teams`
