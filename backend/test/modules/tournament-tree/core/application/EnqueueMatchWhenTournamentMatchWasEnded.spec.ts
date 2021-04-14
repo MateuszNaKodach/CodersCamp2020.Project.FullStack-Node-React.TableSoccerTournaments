@@ -26,7 +26,7 @@ describe('Enqueueing next level matches', () => {
   it('When both tournament matches ended, then enqueue next level match', async () => {
     //Given
     await tournamentTree.executeCommand(createTestTournamentTree(tournamentId));
-    const spy = jest.spyOn(commandBus, `execute`);
+    const spy = jest.spyOn(commandBus, 'execute');
     const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: tournamentId });
     await doublesTournament.publishEvent(startedTournament);
     expect(spy).toBeCalledWith(
