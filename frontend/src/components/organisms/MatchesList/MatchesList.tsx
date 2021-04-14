@@ -166,68 +166,31 @@ const returnMatchList = (
                }
             };
 
-            const findTeamPlayersNames = (): TeamPlayersNames => ({
-               firstTeam: {
-                  firstPlayerName:
-                     `${
-                        playersProfilesList
+            const findTeamPlayersNames = (): TeamPlayersNames => {
+               enum PlayerInTeam { First = "firstTeamPlayer", Second = "secondTeamPlayer", }
+
+               const returnPlayerName = (playerTeamId: string | undefined, playerInTeam: PlayerInTeam): string | undefined => {
+                  enum PartOfName { FirstName = "firstName", SecondName = "lastName", }
+
+                  return [PartOfName.FirstName, PartOfName.FirstName].map((item) =>
+                       playersProfilesList
                            .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(({teamId}) => teamId === team1Id)
-                              ?.firstTeamPlayer
-                           )?.firstName
-                     } ${
-                        playersProfilesList
-                           .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(({teamId}) => teamId === team1Id)
-                              ?.firstTeamPlayer
-                           )?.lastName
-                     }`,
-                  secondPlayerName:
-                     `${
-                        playersProfilesList
-                           .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(({teamId}) => teamId === team1Id)
-                              ?.secondTeamPlayer
-                           )?.firstName
-                     } ${
-                        playersProfilesList
-                           .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(({teamId}) => teamId === team1Id)
-                              ?.secondTeamPlayer
-                           )?.lastName
-                     }`,
-               },
-               secondTeam: {
-                  firstPlayerName:
-                     `${
-                        playersProfilesList
-                           .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(tournamentTeam => tournamentTeam.teamId === team2Id)
-                              ?.firstTeamPlayer
-                           )?.firstName
-                     } ${
-                        playersProfilesList
-                           .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(({teamId}) => teamId === team2Id)
-                              ?.firstTeamPlayer
-                           )?.lastName
-                     }`,
-                  secondPlayerName:
-                     `${
-                        playersProfilesList
-                           .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(({teamId}) => teamId === team2Id)
-                              ?.secondTeamPlayer
-                           )?.firstName
-                     } ${
-                        playersProfilesList
-                           .find(({playerId}) => playerId === tournamentTeamsList
-                              .find(({teamId}) => teamId === team2Id)
-                              ?.secondTeamPlayer
-                           )?.lastName
-                     }`,
-               },
-            });
+                              .find(({teamId}) => teamId === playerTeamId)
+                              ?.[playerInTeam]
+                           )?.[item]
+                  ).reduce((acc, partOfName) => `${acc} ${partOfName}`)
+               }
+               return ({
+                  firstTeam: {
+                     firstPlayerName: returnPlayerName(team1Id, PlayerInTeam.First),
+                     secondPlayerName: returnPlayerName(team1Id, PlayerInTeam.Second),
+                  },
+                  secondTeam: {
+                     firstPlayerName: returnPlayerName(team2Id, PlayerInTeam.First),
+                     secondPlayerName: returnPlayerName(team2Id, PlayerInTeam.Second),
+                  },
+               })
+            };
 
             function findStatus(): MatchStatus {
                if (status === "started") return MatchStatus.STARTED;
