@@ -22,11 +22,12 @@ describe('Enqueueing next level matches', () => {
   const eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus());
   const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGenFromList, commandBus, eventBus);
   const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen, commandBus, eventBus);
+  const spy = jest.spyOn(commandBus, `execute`);
 
   it('When both tournament matches ended, then enqueue next level match', async () => {
     //Given
     await tournamentTree.executeCommand(createTestTournamentTree(tournamentId));
-    const spy = jest.spyOn(commandBus, `execute`);
+    spy.mockClear();
     const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: tournamentId });
     await doublesTournament.publishEvent(startedTournament);
     expect(spy).toBeCalledWith(
@@ -58,6 +59,27 @@ describe('Enqueueing next level matches', () => {
     //Then
     await waitForExpect(() =>
       expect(spy).toBeCalledWith(
+        new EnqueueMatch({
+          tournamentId: tournamentId,
+          matchNumber: 5,
+          team1Id: team1Id,
+          team2Id: team5Id,
+        }),
+      ),
+    );
+
+    //When
+    const tournamentMatchWasEnded2 = new TournamentMatchWasEnded({
+      occurredAt: currentTime,
+      tournamentId: tournamentId,
+      matchNumber: 5,
+      winnerId: team5Id,
+    });
+    doublesTournament.publishEvent(tournamentMatchWasEnded2);
+
+    //Then
+    await waitForExpect(() =>
+      expect(spy).toHaveBeenLastCalledWith(
         new EnqueueMatch({
           tournamentId: tournamentId,
           matchNumber: 5,
