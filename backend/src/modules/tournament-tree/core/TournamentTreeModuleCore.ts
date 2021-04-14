@@ -12,6 +12,8 @@ import { CreateTournamentTree } from './application/command/CreateTournamentTree
 import { DomainEventPublisher } from '../../../shared/core/application/event/DomainEventBus';
 import { EnqueueMatchWhenTournamentWasStarted } from './application/event/EnqueueMatchWhenTournamentWasStarted';
 import { TournamentWasStarted } from '../../doubles-tournament/core/domain/event/TournamentWasStarted';
+import { TournamentMatchWasEnded } from '../../doubles-tournament/core/domain/event/TournamentMatchWasEnded';
+import { EnqueueMatchWhenTournamentMatchWasEnded } from './application/event/EnqueueMatchWhenTournamentMatchWasEnded';
 
 export function TournamentTreeModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -35,6 +37,10 @@ export function TournamentTreeModuleCore(
       {
         eventType: TournamentWasStarted,
         handler: new EnqueueMatchWhenTournamentWasStarted(commandPublisher, repository),
+      },
+      {
+        eventType: TournamentMatchWasEnded,
+        handler: new EnqueueMatchWhenTournamentMatchWasEnded(commandPublisher, repository),
       },
     ],
 
