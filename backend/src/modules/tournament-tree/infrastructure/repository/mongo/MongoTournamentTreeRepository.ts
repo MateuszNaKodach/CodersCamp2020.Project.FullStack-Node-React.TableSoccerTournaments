@@ -35,8 +35,9 @@ export class MongoTournamentTreeRepository implements TournamentTreeRepository {
     );
   }
 
-  findByTournamentTreeId(tournamentTreeId: string): Promise<TournamentTree | undefined> {
-    return Promise.resolve(undefined);
+  async findByTournamentTreeId(tournamentTreeId: string): Promise<TournamentTree | undefined> {
+    const mongoResult = await MongoTournamentTree.findById({ _id: tournamentTreeId });
+    return !mongoResult ? undefined : mongoDocumentToDomain(mongoResult);
   }
 }
 

@@ -7,6 +7,7 @@ import { TournamentWasStarted } from '../../../../doubles-tournament/core/domain
 export class EnqueueMatchWhenTournamentWasStarted implements EventHandler<TournamentWasStarted> {
   constructor(private readonly commandPublisher: CommandPublisher, private readonly repository: TournamentTreeRepository) {}
 
+  //TODO: Consider TournamentTreeWasCreated
   async handle(event: TournamentWasStarted): Promise<void> {
     const tournamentTree = await this.repository.findByTournamentTreeId(event.tournamentId);
 

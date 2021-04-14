@@ -29,14 +29,18 @@ export class MatchHasEndedImpliesTournamentMatchWasEnded implements EventHandler
       matchesQueue,
       MatchStatus.ENDED,
     );
-    await this.matchesQueueRepository.save(queue, version);
+    try {
+      await this.matchesQueueRepository.save(queue, version);
 
-    const tournamentMatchWasEnded = new TournamentMatchWasEnded({
-      occurredAt: this.currentTimeProvider(),
-      tournamentId: tournamentId,
-      matchNumber: matchNumber,
-      winnerId: event.winnerId,
-    });
-    this.eventPublisher.publish(tournamentMatchWasEnded);
+      const tournamentMatchWasEnded = new TournamentMatchWasEnded({
+        occurredAt: this.currentTimeProvider(),
+        tournamentId: tournamentId,
+        matchNumber: matchNumber,
+        winnerId: event.winnerId,
+      });
+      this.eventPublisher.publish(tournamentMatchWasEnded);
+    } catch (e) {
+      console.log('Event processing failed due to:', e.message);
+    }
   }
 }
