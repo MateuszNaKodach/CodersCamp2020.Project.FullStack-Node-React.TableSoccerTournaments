@@ -169,56 +169,56 @@ async function initializeDummyData(commandBus: CommandBus, entityIdGenerator: En
     firstName: 'Jan',
     emailAddress: 'jan.kowalski@test.pl',
     lastName: 'Kowalski',
-    phoneNumber: '123123123',
+    phoneNumber: '123321333',
   };
   const katarzynaNowak = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Katarzyna',
     emailAddress: 'kasia12@test.pl',
     lastName: 'Nowak',
-    phoneNumber: '231231231',
+    phoneNumber: '143351333',
   };
   const tomekDomek = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Tomek',
     emailAddress: 'tomek.domek@test.pl',
     lastName: 'Domek',
-    phoneNumber: '543543543',
+    phoneNumber: '123321335',
   };
   const franekPoranek = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Franek',
     emailAddress: 'franek.ranek@test.pl',
     lastName: 'Ranek',
-    phoneNumber: '999444999',
+    phoneNumber: '123321334',
   };
   const janKowalski2 = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Jan',
     emailAddress: 'jan.kowalski2@test.pl',
     lastName: 'Kowalski2',
-    phoneNumber: '133455444',
+    phoneNumber: '123321333',
   };
   const katarzynaNowak2 = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Katarzyna',
     emailAddress: 'kasia123@test.pl',
     lastName: 'Nowak2',
-    phoneNumber: '123432544',
+    phoneNumber: '143351333',
   };
   const tomekDomek2 = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Tomek',
     emailAddress: 'tomek.domek2@test.pl',
     lastName: 'Domek2',
-    phoneNumber: '999412333',
+    phoneNumber: '123321335',
   };
   const franekPoranek2 = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Franek',
     emailAddress: 'franek.ranek2@test.pl',
     lastName: 'Ranek2',
-    phoneNumber: '444444444',
+    phoneNumber: '123321334',
   };
 
   await commandBus.execute(new CreatePlayerProfile({ ...janKowalski }));
