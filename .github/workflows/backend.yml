@@ -58,8 +58,8 @@ jobs:
         run: npx stryker run --logLevel error
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-      - name: Deploy on Heroku from main branch
-        if: github.ref == 'refs/heads/main'
+      - name: Deploy on Heroku from develop branch
+        if: github.ref == 'refs/heads/develop'
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
