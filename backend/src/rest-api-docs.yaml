@@ -17,6 +17,8 @@ tags:
     description: Assign and get list of tournament tables
   - name: Match
     description: Start/End match
+  - name: Tournament Details
+    description: Add and fetch tournament details
   - name: Specification
     description: The Open API specification
 paths:
@@ -28,12 +30,11 @@ paths:
       parameters:
         - name: matchId
           in: path
-          description: Match Id
+          description: Match Id ("tournamentId_matchNumber")
           required: true
           schema:
             type: string
-            format: uuid
-            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5_1
       requestBody:
         content:
           application/json:
@@ -50,12 +51,11 @@ paths:
       parameters:
         - name: matchId
           in: path
-          description: Match Id
+          description: Match Id ("tournamentId_matchNumber")
           required: true
           schema:
             type: string
-            format: uuid
-            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5_1
       responses:
         200:
           description: Match with given id
@@ -330,6 +330,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TournamentTablesDto'
+  /tournament-details:
+    get:
+      tags:
+        - Tournament Details
+      description: Fetch all tournaments details
+      responses:
+        200:
+          description: All existing tournaments details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentDetailsListDto'
+    post:
+      tags:
+        - Tournament Details
+      description: Add tournament details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostTournamentDetailsRequestBody'
+      responses:
+        201:
+          description: Tournament details successfully added
 components:
   schemas:
     TournamentTeamDto:
@@ -516,10 +540,9 @@ components:
       type: object
       properties:
         matchId:
-          description: Identifier of the match that is supposed to start
+          description: Identifier of the match that is supposed to start ("tournamentId_matchNumber")
           type: string
-          format: uuid
-          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5_1
         firstMatchSideId:
           description: Identifier of the match first team
           type: string
@@ -546,10 +569,9 @@ components:
       type: object
       properties:
         matchId:
-          description: Identifier of the match
+          description: Identifier of the match ("tournamentId_matchNumber")
           type: string
-          format: uuid
-          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5_1
         firstMatchSideId:
           description: Identifier of the match first team
           type: string
@@ -635,3 +657,35 @@ components:
           items:
             $ref: '#/components/schemas/PlayerProfileDto'
           uniqueItems: true
+    PostTournamentDetailsRequestBody:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament for which details should be added
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        tournamentName:
+          description: Name of the tournament
+          type: string
+          example: WrocLove Tournament
+      required:
+        - tournamentId
+        - tournamentName
+    TournamentDetailsListDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/TournamentDetailsDto'
+      uniqueItems: true
+    TournamentDetailsDto:
+      type: object
+      properties:
+        tournamentId:
+          description: Identifier of the tournament
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        tournamentName:
+          description: Name of the tournament
+          type: string
+          example: WrocLove Tournament

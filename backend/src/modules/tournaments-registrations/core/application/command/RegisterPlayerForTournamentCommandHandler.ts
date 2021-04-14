@@ -22,12 +22,12 @@ export class RegisterPlayerForTournamentCommandHandler implements CommandHandler
     const playerId = PlayerId.from(command.playerId);
     const tournamentRegistrations = await this.repository.findByTournamentId(tournamentId);
 
-    const canPlayerTakiePartInTheTournament = await this.availablePlayersForTournament.canPlay(playerId);
+    const canPlayerTakePartInTheTournament = await this.availablePlayersForTournament.canPlay(playerId);
     const { state, events } = registerTournamentPlayer(
       tournamentRegistrations,
       { playerId },
       this.currentTimeProvider,
-      canPlayerTakiePartInTheTournament,
+      canPlayerTakePartInTheTournament,
     );
 
     await this.repository.save(state);

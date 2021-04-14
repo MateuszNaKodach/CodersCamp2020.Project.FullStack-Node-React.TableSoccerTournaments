@@ -24,7 +24,7 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
     const matchNumber = MatchNumber.from(command.matchNumber);
     const team1Id = TeamId.from(command.team1Id);
     const team2Id = TeamId.from(command.team2Id);
-    const matchesQueue = await this.matchesQueueRepository.findByTournamentId(command.tournamentId);
+    const { state: matchesQueue, version } = await this.matchesQueueRepository.findByTournamentId(command.tournamentId);
     const newCommand = {
       tournamentId: tournamentId,
       matchNumber: matchNumber,
@@ -35,7 +35,7 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
 
     const { state, events } = pushMatchToQueue(matchesQueue, newCommand, this.currentTimeProvider());
 
-    await this.matchesQueueRepository.save(state);
+    await this.matchesQueueRepository.save(state, version);
     this.eventPublisher.publishAll(events);
     return CommandResult.success();
   }
