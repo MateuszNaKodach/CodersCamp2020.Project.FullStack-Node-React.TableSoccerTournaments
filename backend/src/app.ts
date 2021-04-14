@@ -60,7 +60,7 @@ import { MongoTournamentDetailsRepository } from './modules/tournament-details/i
 import { InMemoryTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/inmemory/InMemoryTournamentDetailsRepository';
 import { TournamentDetailsModuleCore } from './modules/tournament-details/core/TournamentDetailsModuleCore';
 import { TournamentDetailsRestApiModule } from './modules/tournament-details/presentation/rest-api/TournamentDetailsRestApiModule';
-import { LoggingCommandBus } from './shared/infrastructure/core/application/command/LoggingCommandBus';
+import {LoggingCommandBus} from "./shared/infrastructure/core/application/command/LoggingCommandBus";
 
 config();
 

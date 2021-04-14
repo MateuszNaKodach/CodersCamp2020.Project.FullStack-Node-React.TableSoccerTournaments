@@ -24,20 +24,15 @@ export class StartMatchAfterItsCalling implements EventHandler<MatchWasCalled> {
     const tableNumber = event.tableNumber;
     const { state: matchesQueue, version } = await this.matchesQueueRepository.findByTournamentId(tournamentId.raw);
     const queue = changeMatchStatusInMatchesQueue(tournamentId, matchNumber, matchesQueue, MatchStatus.STARTED, tableNumber);
+    await this.matchesQueueRepository.save(queue, version);
 
-    try {
-      await this.matchesQueueRepository.save(queue, version);
-
-      const matchId = MatchId.from(event.tournamentId, event.calledMatch.matchNumber);
-      await this.commandPublisher.execute(
-        new StartMatch({
-          matchId: matchId.raw,
-          firstMatchSideId: event.calledMatch.team1Id,
-          secondMatchSideId: event.calledMatch.team2Id,
-        }),
-      );
-    } catch (e) {
-      console.log('Event processing failed due to:', e.message);
-    }
+    const matchId = MatchId.from(event.tournamentId, event.calledMatch.matchNumber);
+    await this.commandPublisher.execute(
+      new StartMatch({
+        matchId: matchId.raw,
+        firstMatchSideId: event.calledMatch.team1Id,
+        secondMatchSideId: event.calledMatch.team2Id,
+      }),
+    );
   }
 }

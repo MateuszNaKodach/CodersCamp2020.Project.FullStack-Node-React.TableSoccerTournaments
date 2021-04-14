@@ -35,11 +35,7 @@ export class EnqueueMatchCommandHandler implements CommandHandler<EnqueueMatch> 
 
     const { state, events } = pushMatchToQueue(matchesQueue, newCommand, this.currentTimeProvider());
 
-    try {
-      await this.matchesQueueRepository.save(state, version);
-    } catch (e) {
-      return CommandResult.failureDueTo(e.message);
-    }
+    await this.matchesQueueRepository.save(state, version);
     this.eventPublisher.publishAll(events);
     return CommandResult.success();
   }
