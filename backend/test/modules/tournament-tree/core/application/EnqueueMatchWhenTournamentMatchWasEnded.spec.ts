@@ -22,12 +22,11 @@ describe('Enqueueing next level matches', () => {
   const eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus());
   const doublesTournament = testDoublesTournamentsModule(currentTime, entityIdGenFromList, commandBus, eventBus);
   const tournamentTree = testTournamentTreeModule(currentTime, entityIdGen, commandBus, eventBus);
-  const spy = jest.spyOn(commandBus, `execute`);
 
   it('When both tournament matches ended, then enqueue next level match', async () => {
     //Given
     await tournamentTree.executeCommand(createTestTournamentTree(tournamentId));
-    spy.mockClear();
+    const spy = jest.spyOn(commandBus, `execute`);
     const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: tournamentId });
     await doublesTournament.publishEvent(startedTournament);
     expect(spy).toBeCalledWith(
