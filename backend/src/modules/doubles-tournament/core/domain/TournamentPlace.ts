@@ -1,4 +1,4 @@
-import {TeamId} from "./TeamId";
+import { TeamId } from './TeamId';
 
 export class TournamentPlace {
   readonly placeNumber: number;
