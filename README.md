@@ -71,11 +71,12 @@ Our backend application follows the **TDD approach** and is almost **fully cover
 #### Frontend:
 - React
 - React-DOM
+- Router
 - Hooks (useState, useEffect, useContext,useHistory)
 - Material-UI
 - Axios
 
-The architecture has been designed according to the **Atomic Design approach**.
+The architecture has been designed according to the **Atomic Design approach**. Application follows th **Mobile First Design.**
 
 #### Other:
 - Code Review in every Pull Request (and 2 Approve to merge)
