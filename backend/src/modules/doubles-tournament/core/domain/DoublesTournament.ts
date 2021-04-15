@@ -1,29 +1,32 @@
-import { TournamentTeam } from './TournamentTeam';
-import { TournamentWithTeamsWasCreated } from './event/TournamentWithTeamsWasCreated';
-import { EntityIdGenerator } from '../../../../shared/core/application/EntityIdGenerator';
-import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
-import { TeamId } from './TeamId';
-import { TournamentWasStarted } from './event/TournamentWasStarted';
-import { TournamentStatus } from './TournamentStatus';
-import { TournamentWasEnded } from './event/TournamentWasEnded';
+import {TournamentTeam} from './TournamentTeam';
+import {TournamentWithTeamsWasCreated} from './event/TournamentWithTeamsWasCreated';
+import {EntityIdGenerator} from '../../../../shared/core/application/EntityIdGenerator';
+import {DomainCommandResult} from '../../../../shared/core/domain/DomainCommandResult';
+import {TeamId} from './TeamId';
+import {TournamentWasStarted} from './event/TournamentWasStarted';
+import {TournamentStatus} from './TournamentStatus';
+import {TournamentWasEnded} from './event/TournamentWasEnded';
+import {TournamentPlace} from "./TournamentPlace";
 
 export class DoublesTournament {
   readonly tournamentId: string;
   readonly tournamentTeams: TournamentTeam[];
   readonly status: TournamentStatus;
+  readonly places: TournamentPlace[]
 
-  constructor(props: { tournamentId: string; tournamentTeams: TournamentTeam[]; status?: TournamentStatus }) {
+  constructor(props: { tournamentId: string; tournamentTeams: TournamentTeam[]; status?: TournamentStatus; places?: TournamentPlace[] }) {
     this.tournamentId = props.tournamentId;
     this.tournamentTeams = props.tournamentTeams;
     this.status = props.status ?? TournamentStatus.NOT_STARTED;
+    this.places = props.places ?? []
   }
 }
 
 export function createTournamentWithTeams(
-  state: DoublesTournament | undefined,
-  command: { tournamentId: string; tournamentPairs: { player1: string; player2: string }[] },
-  currentTime: Date,
-  entityIdGenerator: EntityIdGenerator,
+    state: DoublesTournament | undefined,
+    command: { tournamentId: string; tournamentPairs: { player1: string; player2: string }[] },
+    currentTime: Date,
+    entityIdGenerator: EntityIdGenerator,
 ): DomainCommandResult<DoublesTournament> {
   if (state !== undefined) {
     throw new Error('This tournament already exists.');
@@ -59,12 +62,12 @@ function onTournamentWithTeamsWasCreated(state: DoublesTournament | undefined, e
   return new DoublesTournament({
     tournamentId: event.tournamentId,
     tournamentTeams: event.tournamentTeams.map(
-      (team) =>
-        new TournamentTeam({
-          teamId: TeamId.from(team.teamId),
-          firstTeamPlayer: team.firstTeamPlayerId,
-          secondTeamPlayer: team.secondTeamPlayerId,
-        }),
+        (team) =>
+            new TournamentTeam({
+              teamId: TeamId.from(team.teamId),
+              firstTeamPlayer: team.firstTeamPlayerId,
+              secondTeamPlayer: team.secondTeamPlayerId,
+            }),
     ),
   });
 }
@@ -103,9 +106,9 @@ export function startTournament(tournament: DoublesTournament | undefined, curre
 }
 
 export function endTournament(
-  tournament: DoublesTournament | undefined,
-  winner: TeamId,
-  currentTime: Date,
+    tournament: DoublesTournament | undefined,
+    winner: TeamId,
+    currentTime: Date,
 ): DomainCommandResult<DoublesTournament> {
   if (tournament === undefined) {
     throw new Error('Such tournament does not exists.');
@@ -118,6 +121,7 @@ export function endTournament(
     tournamentId: tournament.tournamentId,
     tournamentTeams: tournament.tournamentTeams,
     status: TournamentStatus.ENDED,
+    places: [new TournamentPlace(1, winner)]
   });
 
   const tournamentWasEnded = new TournamentWasEnded({
