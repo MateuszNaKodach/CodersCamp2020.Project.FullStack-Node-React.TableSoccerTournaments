@@ -12,7 +12,8 @@ import {StyledBackground} from "../../atoms/Background/StyledBackground";
 import {
   PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
   PATH_FOR_HOME_VIEW,
-  PATH_FOR_LOGIN_VIEW, PATH_FOR_MATCHES_AND_RESULTS,
+  PATH_FOR_LOGIN_VIEW,
+  PATH_FOR_MATCHES_AND_RESULTS,
   PATH_FOR_PLAYER_MATCHES_VIEW,
   PATH_FOR_PLAYER_PROFILE_CREATION_VIEW,
   PATH_FOR_PLAYERS_PROFILES_VIEW,
@@ -21,7 +22,7 @@ import {
 } from "../../atoms/constants/routerPaths";
 import {MatchesListRoute} from "../Routes/MatchesListRoutes";
 import TournamentsList from "../TournamentsList/TournamentsList";
-import {MatchesAndResults} from "../MatchesAndResults/MatchesAndResults";
+import {MatchesAndResultsRoute} from "../Routes/MatchesAndResultsRoute";
 
 function TourDeFoos() {
   return (
@@ -68,7 +69,7 @@ function TourDeFoos() {
                 </Centered>
               </Route>
               <Route path={PATH_FOR_MATCHES_AND_RESULTS} exact>
-                <MatchesAndResults tournamentId={'asd'}/>
+                <MatchesAndResultsRoute/>
               </Route>
 
               <Route path={PATH_FOR_HOME_VIEW} exact>

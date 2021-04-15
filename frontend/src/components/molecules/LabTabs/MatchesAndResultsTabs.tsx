@@ -9,6 +9,7 @@ import {Alert, AlertTitle} from "@material-ui/lab";
 import {Centered} from "../../atoms/Shared/Centered";
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
 import {Box, Tabs, Typography} from "@material-ui/core";
+import {MatchesList} from "../../organisms/MatchesList/MatchesList";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -21,7 +22,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-export default function LabTabs() {
+type LabTabsProps = {
+    readonly tournamentId: string;
+}
+
+export default function MatchesAndResultsTabs(props: LabTabsProps) {
     const classes = useStyles();
     const [value, setValue] = React.useState('1');
 
@@ -40,7 +45,9 @@ export default function LabTabs() {
                         </TabList>
                     </Centered>
                 </AppBar>
-                <TabPanel value="1">Mecze</TabPanel>
+                <TabPanel value="1">
+                    <MatchesList tournamentId={props.tournamentId}/>
+                </TabPanel>
                 <TabPanel value="2">
                     <Alert severity="info">
                         <AlertTitle><strong>Turniej w trakcie</strong></AlertTitle>
@@ -53,6 +60,7 @@ export default function LabTabs() {
                             <Typography variant={"h5"} component={"h5"}>Zwycięzca</Typography>
                             <Box>
                                 <Tabs
+                                    value={0}
                                     orientation="vertical"
                                     variant="scrollable"
                                     aria-label="Vertical tabs example"

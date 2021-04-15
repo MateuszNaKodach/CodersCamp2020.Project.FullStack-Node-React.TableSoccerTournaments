@@ -6,5 +6,5 @@ export  const PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW : string = "/tournament-reg
 export  const PATH_FOR_PLAYERS_PROFILES_VIEW : string = "/players-profiles";
 export  const PATH_FOR_PLAYER_PROFILE_CREATION_VIEW : string = "/new-player-profiles";
 export  const PATH_FOR_PLAYER_MATCHES_VIEW : string = "/tournament/:tournamentId/matches";
-export  const PATH_FOR_MATCHES_AND_RESULTS : string = "/tournament/matches-and-results";
+export  const PATH_FOR_MATCHES_AND_RESULTS : string = "/tournament/:tournamentId/matches-and-results";
 

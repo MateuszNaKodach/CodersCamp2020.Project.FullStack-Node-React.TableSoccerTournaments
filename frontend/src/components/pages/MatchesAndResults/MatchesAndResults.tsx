@@ -5,7 +5,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {useHistory} from "react-router-dom";
 import {Centered} from "../../atoms/Shared/Centered";
 import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
-import LabTabs from "../../molecules/LabTabs/LabTabs";
+import MatchesAndResultsTabs from "../../molecules/LabTabs/MatchesAndResultsTabs";
 import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 
 export const MatchesAndResults = (props: { tournamentId: string }) => {
@@ -23,6 +23,7 @@ export const MatchesAndResults = (props: { tournamentId: string }) => {
         card: {
             minWidth: MIN_CARD_COMPONENT_WIDTH,
             width: MIN_CARD_COMPONENT_WIDTH,
+            padding: 0,
         },
     }));
     const classes = useStyles();
@@ -45,7 +46,7 @@ export const MatchesAndResults = (props: { tournamentId: string }) => {
                     </Box>
                     <VerticalSpace height={30}/>
                     <Box>
-                        <LabTabs/>
+                        <MatchesAndResultsTabs tournamentId={props.tournamentId}/>
                     </Box>
                 </Centered>
             </CardContent>
