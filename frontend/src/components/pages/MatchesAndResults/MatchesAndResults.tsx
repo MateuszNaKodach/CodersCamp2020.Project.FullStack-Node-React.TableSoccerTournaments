@@ -3,10 +3,11 @@ import {Box, Card, CardContent, IconButton, Typography} from "@material-ui/core"
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import {makeStyles} from "@material-ui/core/styles";
 import {useHistory} from "react-router-dom";
-import {Centered} from "../../atoms/Shared/Centered";
-import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
+
 import MatchesAndResultsTabs from "../../molecules/LabTabs/MatchesAndResultsTabs";
 import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
+import {VerticalSpace} from "../../atoms/VerticalSpace";
+import {Centered} from "../../atoms/Centered";
 
 export const MatchesAndResults = (props: { tournamentId: string }) => {
 
