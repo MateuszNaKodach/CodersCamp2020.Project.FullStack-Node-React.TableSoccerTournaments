@@ -32,12 +32,14 @@ describe('Tournament Tables | Query Side', function () {
         tableNumber: TableNumber.from(5),
         tableName: 'Bonzini',
         isFree: true,
+        version: 1,
       }),
       new TournamentTable({
         tournamentId,
         tableNumber: TableNumber.from(8),
         tableName: 'P4P',
         isFree: false,
+        version: 1,
       }),
     ]);
   });

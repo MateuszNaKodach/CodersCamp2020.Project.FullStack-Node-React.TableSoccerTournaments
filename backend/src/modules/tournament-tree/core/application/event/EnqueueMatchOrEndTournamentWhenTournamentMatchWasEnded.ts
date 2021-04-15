@@ -3,8 +3,9 @@ import { CommandPublisher } from '../../../../../shared/core/application/command
 import { EnqueueMatch } from '../../../../doubles-tournament/core/application/command/EnqueueMatch';
 import { TournamentTreeRepository } from '../TournamentTreeRepository';
 import { TournamentMatchWasEnded } from '../../../../doubles-tournament/core/domain/event/TournamentMatchWasEnded';
+import { EndTournament } from '../../../../doubles-tournament/core/application/command/EndTournament';
 
-export class EnqueueMatchWhenTournamentMatchWasEnded implements EventHandler<TournamentMatchWasEnded> {
+export class EnqueueMatchOrEndTournamentWhenTournamentMatchWasEnded implements EventHandler<TournamentMatchWasEnded> {
   constructor(private readonly commandPublisher: CommandPublisher, private readonly repository: TournamentTreeRepository) {}
 
   async handle(event: TournamentMatchWasEnded): Promise<void> {
@@ -15,7 +16,10 @@ export class EnqueueMatchWhenTournamentMatchWasEnded implements EventHandler<Tou
     if (tournamentTree) {
       const { treeWithFinishedMatch, matchToEnqueue } = tournamentTree?.finishMatchInTreeAndGetNextOne(matchNumber, winnerId);
       await this.repository.save(treeWithFinishedMatch);
-      if (matchToEnqueue && matchToEnqueue.firstTeam && matchToEnqueue.secondTeam) {
+
+      if (!matchToEnqueue) {
+        await this.commandPublisher.execute(new EndTournament({ tournamentId: event.tournamentId, winner: winnerId }));
+      } else if (matchToEnqueue.firstTeam && matchToEnqueue.secondTeam) {
         await this.commandPublisher.execute(
           new EnqueueMatch({
             tournamentId: event.tournamentId,
