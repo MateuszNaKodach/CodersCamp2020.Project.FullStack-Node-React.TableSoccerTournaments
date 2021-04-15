@@ -94,13 +94,15 @@ describe('Calling Enqueued Matches', () => {
     await doublesTournament.executeCommand(enqueueMatch2);
 
     //Then
-    await waitForExpect(() => expect(spy).toHaveBeenCalledWith(
-      new CallMatch({
-        tournamentId: tournamentId,
-        calledMatch: { matchNumber: matchNumber2, team1Id: team1Id2, team2Id: team2Id2 },
-        tableNumber: tableNumber2,
-      }),
-    ));
+    await waitForExpect(() =>
+      expect(spy).toHaveBeenCalledWith(
+        new CallMatch({
+          tournamentId: tournamentId,
+          calledMatch: { matchNumber: matchNumber2, team1Id: team1Id2, team2Id: team2Id2 },
+          tableNumber: tableNumber2,
+        }),
+      ),
+    );
 
     //When
     await doublesTournament.publishEvent(

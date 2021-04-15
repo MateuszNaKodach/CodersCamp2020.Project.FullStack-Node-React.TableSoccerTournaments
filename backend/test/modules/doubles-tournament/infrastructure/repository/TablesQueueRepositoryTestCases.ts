@@ -42,7 +42,7 @@ export function TablesQueueRepositoryTestCases(props: {
       await repository.save(tablesQueue, 0);
 
       //Then
-      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({state: tablesQueue, version: 1});
+      expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({ state: tablesQueue, version: 1 });
     });
 
     test('findByTournamentId returns undefined when given tournament id when it was not found', async () => {
@@ -51,9 +51,9 @@ export function TablesQueueRepositoryTestCases(props: {
 
       //Then
       const notSavedTournamentId = entityIdGenerator.generate();
-      expect(await repository.findByTournamentId(notSavedTournamentId)).toStrictEqual({state: undefined, version: 0});
+      expect(await repository.findByTournamentId(notSavedTournamentId)).toStrictEqual({ state: undefined, version: 0 });
     });
-    
+
     test('optimistic locking | pass', async () => {
       await repository.save(tablesQueue, 0);
       expect(await repository.findByTournamentId(tournamentId.raw)).toStrictEqual({ state: tablesQueue, version: 1 });
