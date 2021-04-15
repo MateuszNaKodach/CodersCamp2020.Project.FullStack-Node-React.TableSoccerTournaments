@@ -18,7 +18,10 @@ const TournamentsList = () => {
     <StyledWrapper>
       <CardTitleWithNavButton title={"Turnieje"} />
       <VerticalSpace height={30} />
-      <TournamentCardsGallery shouldReload={reloadData} />
+      <TournamentCardsGallery
+        shouldReload={reloadData}
+        openForm={setOpenDrawer}
+      />
       <VerticalSpace height={30} />
       <NewTournamentButton openForm={setOpenDrawer} />
       <CreateTournamentForm

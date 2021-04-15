@@ -1,5 +1,7 @@
 import {
+  Button,
   createStyles,
+  Grid,
   GridList,
   GridListTile,
   styled,
@@ -8,11 +10,15 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import TournamentCard from "../../molecules/TournamentCard/TournamentCard";
 import { MIN_CARD_COMPONENT_WIDTH } from "../../atoms/constants/sizes";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import { TournamentDetailsRestApi } from "../../../restapi/tournament-details/TournamentDetailsRestApi";
 import { TournamentDetailsListDto } from "../../../restapi/tournament-details/TournamentDetailsDto";
 import { TournamentRegistrationsWithDetailsDto } from "../../../restapi/tournament-registrations/TournamentRegistrationsWithDetailsDto";
+import { Centered } from "../../atoms/Shared/Centered";
+import { Alert, AlertTitle } from "@material-ui/lab";
+import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import { TournamentNotFound } from "./TournamentNotFound";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,7 +56,10 @@ const StyledWrapper = styled("div")({
   width: MIN_CARD_COMPONENT_WIDTH,
 });
 
-const TournamentCardsGallery = (props: { shouldReload: boolean }) => {
+const TournamentCardsGallery = (props: {
+  shouldReload: boolean;
+  openForm: (open: boolean) => void;
+}) => {
   const [tournamentsRegistrations, setTournamentsRegistrations] = useState<
     TournamentRegistrationsWithDetailsDto[]
   >([]);
@@ -80,8 +89,15 @@ const TournamentCardsGallery = (props: { shouldReload: boolean }) => {
       );
   }, [props.shouldReload]);
 
+  function openAddTournamentForm(open: boolean) {
+    props.openForm(open);
+  }
+
   const classes = useStyles();
 
+  if (tournamentsRegistrations.length === 0) {
+    return <TournamentNotFound openForm={openAddTournamentForm} />;
+  }
   return (
     <StyledWrapper>
       <GridList
@@ -108,5 +124,4 @@ const TournamentCardsGallery = (props: { shouldReload: boolean }) => {
     </StyledWrapper>
   );
 };
-
 export default TournamentCardsGallery;
