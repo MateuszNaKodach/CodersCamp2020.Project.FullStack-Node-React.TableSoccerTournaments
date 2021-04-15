@@ -14,11 +14,14 @@ export class MongoTablesQueueRepository implements TablesQueueRepository {
 
   async save(tablesQueue: TablesQueue, expectedVersion: number): Promise<void> {
     try {
-      await MongoTablesQueue.findByIdAndUpdate(
+      await MongoTablesQueue.findOneAndUpdate(
         { _id: tablesQueue.tournamentId.raw, __v: expectedVersion },
         {
           _id: tablesQueue.tournamentId.raw,
-          queuedTables: tablesQueue.queuedTables,
+          queuedTables: tablesQueue.queuedTables.map((queuedTable) => ({
+            tableNumber: queuedTable.tableNumber,
+            isFree: queuedTable.isFree,
+          })),
           __v: expectedVersion + 1,
         },
         { upsert: true, useFindAndModify: true },
