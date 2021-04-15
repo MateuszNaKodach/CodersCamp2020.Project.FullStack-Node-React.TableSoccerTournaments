@@ -6,7 +6,6 @@ import { QueuedMatch } from '../../../core/domain/QueuedMatch';
 import { TeamId } from '../../../core/domain/TeamId';
 import { MatchNumber } from '../../../core/domain/MatchNumber';
 import { MatchStatus } from '../../../core/domain/MatchStatus';
-import { MongoError } from 'typeorm';
 import { OptimisticLockingException } from '../../../../../shared/core/application/OptimisticLockingException';
 
 export class MongoMatchesQueueRepository implements MatchesQueueRepository {

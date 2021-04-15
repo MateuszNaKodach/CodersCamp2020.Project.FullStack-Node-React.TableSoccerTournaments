@@ -3,23 +3,35 @@ import { TournamentId } from '../../../core/domain/TournamentId';
 import { TablesQueue } from '../../../core/domain/TablesQueue';
 import { TablesQueueRepository } from '../../../core/application/TablesQueueRepository';
 import { QueuedTable } from '../../../core/domain/QueuedTable';
+import { OptimisticLockingException } from '../../../../../shared/core/application/OptimisticLockingException';
 
 export class MongoTablesQueueRepository implements TablesQueueRepository {
-  async findByTournamentId(tournamentId: string): Promise<TablesQueue | undefined> {
+  async findByTournamentId(tournamentId: string): Promise<{ state: TablesQueue | undefined; version: number }> {
     const mongoFindResult = await MongoTablesQueue.findById(tournamentId);
-    return mongoFindResult ? mongoDocumentToDomain(mongoFindResult) : undefined;
+    const state = mongoFindResult ? mongoDocumentToDomain(mongoFindResult) : undefined;
+    return { state, version: mongoFindResult?.__v ?? 0 };
   }
 
-  async save(tablesQueue: TablesQueue): Promise<void> {
-    console.log(tablesQueue);
-    await MongoTablesQueue.findByIdAndUpdate(
-      { _id: tablesQueue.tournamentId.raw },
-      {
-        _id: tablesQueue.tournamentId.raw,
-        queuedTables: tablesQueue.queuedTables,
-      },
-      { upsert: true, useFindAndModify: true },
-    );
+  async save(tablesQueue: TablesQueue, expectedVersion: number): Promise<void> {
+    try {
+      await MongoTablesQueue.findOneAndUpdate(
+        { _id: tablesQueue.tournamentId.raw, __v: expectedVersion },
+        {
+          _id: tablesQueue.tournamentId.raw,
+          queuedTables: tablesQueue.queuedTables.map((queuedTable) => ({
+            tableNumber: queuedTable.tableNumber,
+            isFree: queuedTable.isFree,
+          })),
+          __v: expectedVersion + 1,
+        },
+        { upsert: true, useFindAndModify: true },
+      );
+    } catch (e) {
+      if (e.message.includes('E11000')) {
+        throw new OptimisticLockingException(expectedVersion);
+      }
+      throw e;
+    }
   }
 }
 

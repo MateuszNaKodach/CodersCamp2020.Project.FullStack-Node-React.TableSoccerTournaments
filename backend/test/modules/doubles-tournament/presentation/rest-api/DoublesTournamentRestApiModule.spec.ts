@@ -17,6 +17,7 @@ import { FindAllDoublesTournaments } from '../../../../../src/modules/doubles-to
 import { StartTournament } from '../../../../shared/infrastructure/command/CommandsTestFixtures';
 import { CommandPublisherMock } from '../../../../test-support/shared/core/CommandPublisherMock';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import { TournamentStatus } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentStatus';
 
 describe('Doubles Tournament REST API', () => {
   it('GET /rest-api/doubles-tournaments/:tournamentId/teams | when tournament with given id found', async () => {
@@ -151,7 +152,7 @@ describe('Doubles Tournament REST API', () => {
     });
   });
 
-  it('GET /rest-api/doubles-tournaments | return array with tournaments when there are some existing tournaments ready to start | Happy path', async () => {
+  it('GET /rest-api/doubles-tournaments | return array with tournaments | Happy path', async () => {
     //Given
     const queryPublisher = QueryPublisherMock([
       new DoublesTournament({
@@ -183,6 +184,7 @@ describe('Doubles Tournament REST API', () => {
             secondTeamPlayer: 'samplePlayer4',
           }),
         ],
+        status: TournamentStatus.ENDED,
       }),
     ]);
     const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
@@ -229,7 +231,7 @@ describe('Doubles Tournament REST API', () => {
               },
             ],
           },
-          status: 'NOT_STARTED',
+          status: 'ENDED',
         },
       ],
     });

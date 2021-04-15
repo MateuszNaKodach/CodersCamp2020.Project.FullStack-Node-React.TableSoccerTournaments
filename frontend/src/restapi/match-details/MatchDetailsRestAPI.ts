@@ -25,7 +25,7 @@ export const MatchDetailsRestAPI = (
     getTournamentMatch(matchId: string): Promise<MatchDetailsDto> {
       return axios
         .get<MatchDetailsDto>(`${currentConfig.baseUrl}/matches/${matchId}`)
-        .then((res) => res.data)
+        .then((res) => res.data);
     },
 
     async postMatchWinner(

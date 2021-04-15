@@ -1,10 +1,10 @@
-import {MatchStatus} from "../../atoms/MatchStatus";
+import {MatchStatusTexts} from "../../atoms/constants/MatchStatusTexts";
 
 export type MatchItemType = {
    readonly  level: number | undefined,
    readonly  matchId: string | undefined,
    readonly  matchNumber: number | undefined,
-   readonly  matchStatus: MatchStatus
+   readonly  matchStatus: MatchStatusTexts
    readonly  onClickTeam: (matchId: string, teamName: string) => void
    readonly  tableNumber: number | undefined;
    readonly  winnerId: string | undefined
