@@ -13,7 +13,7 @@ import { DomainEventPublisher } from '../../../shared/core/application/event/Dom
 import { EnqueueMatchWhenTournamentWasStarted } from './application/event/EnqueueMatchWhenTournamentWasStarted';
 import { TournamentWasStarted } from '../../doubles-tournament/core/domain/event/TournamentWasStarted';
 import { TournamentMatchWasEnded } from '../../doubles-tournament/core/domain/event/TournamentMatchWasEnded';
-import { EnqueueMatchWhenTournamentMatchWasEnded } from './application/event/EnqueueMatchWhenTournamentMatchWasEnded';
+import { EnqueueMatchOrEndTournamentWhenTournamentMatchWasEnded } from './application/event/EnqueueMatchOrEndTournamentWhenTournamentMatchWasEnded';
 
 export function TournamentTreeModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -40,10 +40,9 @@ export function TournamentTreeModuleCore(
       },
       {
         eventType: TournamentMatchWasEnded,
-        handler: new EnqueueMatchWhenTournamentMatchWasEnded(commandPublisher, repository),
+        handler: new EnqueueMatchOrEndTournamentWhenTournamentMatchWasEnded(commandPublisher, repository),
       },
     ],
-
     queryHandlers: [
       {
         queryType: FindTournamentTreeByTournamentId,
