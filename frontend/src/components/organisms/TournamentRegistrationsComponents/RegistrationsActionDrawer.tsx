@@ -7,6 +7,7 @@ import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-regi
 import Notification from "../Notification/Notification";
 import { TournamentStartRestApi } from "../../../restapi/tournament-start/TournamentStart";
 import { PATH_FOR_TOURNAMENTS_SELECTION_VIEW } from "../../atoms/constants/routerPaths";
+import { useHistory } from "react-router-dom";
 
 export const RegistrationsActionDrawer = (props: {
   openDrawer: boolean;
