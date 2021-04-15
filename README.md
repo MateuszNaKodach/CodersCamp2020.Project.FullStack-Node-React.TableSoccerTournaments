@@ -93,9 +93,9 @@ The architecture has been designed according to the **Atomic Design approach**. 
 
 ## Event Modeling
 
-During this project we tried to use event modeling to model our application flow and for task division.
+During this project used EventStorming, followed by Event Modeling to model our application flow and for task division.
 We used for it miro web app.
-[Link to Miro Board](https://github.com/Szambelan)https://miro.com/app/board/o9J_lOEebqI=/?moveToWidget=3074457356075616433&cot=14).
+[Link to Miro Board](https://miro.com/app/board/o9J_lOEebqI=/?moveToWidget=3074457356075616433&cot=14).
 
 ![image](https://user-images.githubusercontent.com/31566345/111337374-537e9680-8676-11eb-861e-b1b358bfc0ab.png)
 
