@@ -2,7 +2,7 @@
   "name": "table-soccer-tournaments-frontend",
   "version": "0.1.0",
   "description": "Table Soccer Tournaments React Web App",
-  "homepage": ".",
+  "homepage": "https://wkps.netlify.app",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",

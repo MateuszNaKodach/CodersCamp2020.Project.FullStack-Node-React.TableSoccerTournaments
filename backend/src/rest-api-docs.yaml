@@ -257,6 +257,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MatchesQueueDto'
+  /doubles-tournaments/{tournamentId}/places:
+    get:
+      tags:
+        - Doubles Tournament
+      description: Fetch places which are already known.
+      parameters:
+        - name: tournamentId
+          in: path
+          description: Tournament ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+      responses:
+        200:
+          description: Tournament places
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TournamentPlaceListDto'
   /doubles-tournaments:
     get:
       tags:
@@ -269,6 +290,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DoubleTournamentListDto'
+  /doubles-tournaments/{tournamentId}:
+    get:
+      tags:
+        - Doubles Tournament
+      description: Fetch single doubles tournament
+      responses:
+        200:
+          description: Doubles tournament
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DoubleTournamentDto'
   /doubles-tournaments/{tournamentId}/start:
     post:
       tags:
@@ -423,6 +456,7 @@ components:
           enum:
             - NOT_STARTED
             - STARTED
+            - ENDED
           example: STARTED
     DoubleTournamentListDto:
       type: array
@@ -747,3 +781,20 @@ components:
                 type: number
               isMatchFinished:
                 type: boolean
+    TournamentPlaceListDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/TournamentPlaceDto'
+      uniqueItems: true
+    TournamentPlaceDto:
+      type: object
+      properties:
+        teamId:
+          description: Identifier of the team
+          type: string
+          format: uuid
+          example: 2480fc2c-bbd7-427c-9439-02f76583aef5
+        placeNumber:
+          description: Place number
+          type: number
+          example: 1

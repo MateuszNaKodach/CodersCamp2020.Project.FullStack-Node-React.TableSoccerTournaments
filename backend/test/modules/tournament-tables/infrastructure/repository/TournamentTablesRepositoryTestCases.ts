@@ -16,8 +16,8 @@ export function TournamentTablesRepositoryTestCases(props: {
 
     beforeAll(async () => {
       await props.databaseTestSupport.openConnection();
-      repository = props.repositoryFactory();
     });
+    beforeEach(() => (repository = props.repositoryFactory()));
     afterEach(async () => await props.databaseTestSupport.clearDatabase());
     afterAll(async () => await props.databaseTestSupport.closeConnection());
 
@@ -62,7 +62,9 @@ export function TournamentTablesRepositoryTestCases(props: {
 
       await repository.saveAll(tournamentTables);
 
-      expect(await repository.findByTournamentIdAndTableNumber(tournamentId, 2)).toStrictEqual(tournamentTables[1]);
+      expect(await repository.findByTournamentIdAndTableNumber(tournamentId, 2)).toStrictEqual(
+        new TournamentTable({ ...tournamentTables[1], version: 1 }),
+      );
     });
 
     test('When no table is saved for given tournamentId then findAllByTournamentId returns empty array', async () => {
@@ -105,7 +107,10 @@ export function TournamentTablesRepositoryTestCases(props: {
 
       await repository.saveAll(tournamentTables);
 
-      expect(await repository.findAllByTournamentId(tournamentId)).toStrictEqual(tournamentTables);
+      expect(await repository.findAllByTournamentId(tournamentId)).toStrictEqual([
+        new TournamentTable({ ...tournamentTables[0], version: 1 }),
+        new TournamentTable({ ...tournamentTables[1], version: 1 }),
+      ]);
     });
   });
 }

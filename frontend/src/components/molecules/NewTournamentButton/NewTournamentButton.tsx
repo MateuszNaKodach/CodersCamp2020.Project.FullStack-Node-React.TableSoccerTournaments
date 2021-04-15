@@ -1,38 +1,36 @@
-import {Link} from "react-router-dom";
-import {Fab} from "@material-ui/core";
-import {Add} from "@material-ui/icons";
-import {makeStyles} from "@material-ui/core/styles";
-
-type NewTournamentButtonProps = {
-    readonly onLink: string;
-}
+import { Fab } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
-        link: {
-            textDecoration: "none"
-        },
-        fab: {
-            padding: 10,
-            position: 'absolute',
-            right: 0,
-        },
-        icon: {
-            paddingRight: 7
-        },
-    }
-)
+  link: {
+    textDecoration: "none",
+  },
+  fab: {
+    padding: 10,
+    position: "absolute",
+    right: 0,
+  },
+  icon: {
+    paddingRight: 7,
+  },
+});
 
-const NewTournamentButton = ({onLink}: NewTournamentButtonProps) => {
-    const classes = useStyles();
+const NewTournamentButton = (props: { openForm: (open: boolean) => void }) => {
+  const classes = useStyles();
 
-    return (
-        <Link to={onLink} className={classes.link}>
-            <Fab variant="extended" color="secondary" aria-label="add" className={classes.fab}>
-                <Add className={classes.icon}/>
-                Turniej
-            </Fab>
-        </Link>
-    )
-}
+  return (
+    <Fab
+      variant="extended"
+      color="secondary"
+      aria-label="add"
+      className={classes.fab}
+      onClick={() => props.openForm(true)}
+    >
+      <Add className={classes.icon} />
+      Turniej
+    </Fab>
+  );
+};
 
 export default NewTournamentButton;

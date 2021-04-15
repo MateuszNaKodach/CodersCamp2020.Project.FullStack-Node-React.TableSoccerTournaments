@@ -1,4 +1,4 @@
-export enum MatchStatus {
+export enum MatchStatusTexts {
    FINISHED = "Zakończony",
    STARTED = "ROZPOCZĘTY",
    NO_TABLE = "Oczekujący",

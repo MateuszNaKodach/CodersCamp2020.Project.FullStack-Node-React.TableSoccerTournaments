@@ -17,6 +17,7 @@ import { FindAllDoublesTournaments, FindAllDoublesTournamentsResult } from '../.
 import { TournamentListDto } from './response/TournamentListDto';
 import { TournamentDto } from './response/TournamentDto';
 import { StartTournament } from '../../core/application/command/StartTournament';
+import { TournamentPlaceDto, TournamentPlaceListDto } from './response/TournamentPlacesListDto';
 
 export function doublesTournamentRouter(
   commandPublisher: CommandPublisher,
@@ -54,10 +55,16 @@ export function doublesTournamentRouter(
 
   const getAllTournaments = async (request: Request, response: Response) => {
     const queryResult = await queryPublisher.execute<FindAllDoublesTournamentsResult>(new FindAllDoublesTournaments());
-    if (!queryResult) {
-      return response.status(StatusCodes.NOT_FOUND).json({ message: "There aren't any tournaments ready to start" });
-    }
     return response.status(StatusCodes.OK).json(new TournamentListDto(queryResult.map(toTournamentDto)));
+  };
+
+  const getTournamentByTournamentId = async (request: Request, response: Response) => {
+    const { tournamentId } = request.params;
+    const queryResult = await queryPublisher.execute<FindDoublesTournamentByIdResult>(new FindDoublesTournamentById({ tournamentId }));
+    if (!queryResult) {
+      return response.status(StatusCodes.NOT_FOUND).json({ message: `Doubles tournament with id = ${tournamentId} not found!` });
+    }
+    return response.status(StatusCodes.OK).json(toTournamentDto(queryResult));
   };
 
   const startTournament = async (request: Request, response: Response) => {
@@ -69,17 +76,34 @@ export function doublesTournamentRouter(
     );
   };
 
+  const getTournamentPlacesByTournamentId = async (request: Request, response: Response) => {
+    const { tournamentId } = request.params;
+    const queryResult = await queryPublisher.execute<FindDoublesTournamentByIdResult>(new FindDoublesTournamentById({ tournamentId }));
+    if (!queryResult) {
+      return response.status(StatusCodes.NOT_FOUND).json({ message: `Doubles tournament with id = ${tournamentId} not found!` });
+    }
+    return response.status(StatusCodes.OK).json(new TournamentPlaceListDto(toTournamentPlaceDto(queryResult)));
+  };
+
   const router = express.Router();
   router.get('', getAllTournaments);
+  router.get('/:tournamentId', getTournamentByTournamentId);
   router.post('/:tournamentId/start', startTournament);
   router.get('/:tournamentId/teams', getTournamentTeamsByTournamentId);
   router.get('/:tournamentId/matches', getMatchesQueueByTournamentId);
+  router.get('/:tournamentId/places', getTournamentPlacesByTournamentId);
   return router;
 }
 
 function toTournamentTeamDto(doublesTournament: DoublesTournament): TournamentTeamDto[] {
   return doublesTournament.tournamentTeams.map((team) => {
     return new TournamentTeamDto(team.teamId.raw, team.firstTeamPlayer, team.secondTeamPlayer);
+  });
+}
+
+function toTournamentPlaceDto(doublesTournament: DoublesTournament): TournamentPlaceDto[] {
+  return doublesTournament.places.map((place) => {
+    return new TournamentPlaceDto(place.placeNumber, place.teamId.raw);
   });
 }
 

@@ -17,6 +17,8 @@ import { FindAllDoublesTournaments } from '../../../../../src/modules/doubles-to
 import { StartTournament } from '../../../../shared/infrastructure/command/CommandsTestFixtures';
 import { CommandPublisherMock } from '../../../../test-support/shared/core/CommandPublisherMock';
 import { CommandResult } from '../../../../../src/shared/core/application/command/CommandResult';
+import { TournamentStatus } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentStatus';
+import { TournamentPlace } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentPlace';
 
 describe('Doubles Tournament REST API', () => {
   it('GET /rest-api/doubles-tournaments/:tournamentId/teams | when tournament with given id found', async () => {
@@ -135,23 +137,7 @@ describe('Doubles Tournament REST API', () => {
     });
   });
 
-  it('GET /rest-api/doubles-tournaments | return message when there are not any existing tournaments ready to start', async () => {
-    //Given
-    const queryPublisher = QueryPublisherMock(undefined);
-    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
-
-    //When
-    const { body, status } = await agent.get('/rest-api/doubles-tournaments').send();
-
-    //Then
-    expect(queryPublisher.executeCalls).toBeCalledWith(new FindAllDoublesTournaments());
-    expect(status).toBe(StatusCodes.NOT_FOUND);
-    expect(body).toStrictEqual({
-      message: "There aren't any tournaments ready to start",
-    });
-  });
-
-  it('GET /rest-api/doubles-tournaments | return array with tournaments when there are some existing tournaments ready to start | Happy path', async () => {
+  it('GET /rest-api/doubles-tournaments | return array with tournaments | Happy path', async () => {
     //Given
     const queryPublisher = QueryPublisherMock([
       new DoublesTournament({
@@ -183,6 +169,7 @@ describe('Doubles Tournament REST API', () => {
             secondTeamPlayer: 'samplePlayer4',
           }),
         ],
+        status: TournamentStatus.ENDED,
       }),
     ]);
     const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
@@ -229,7 +216,7 @@ describe('Doubles Tournament REST API', () => {
               },
             ],
           },
-          status: 'NOT_STARTED',
+          status: 'ENDED',
         },
       ],
     });
@@ -249,5 +236,100 @@ describe('Doubles Tournament REST API', () => {
     expect(commandPublisher.executeCalls).toBeCalledWith(new StartTournament({ tournamentId: tournamentId }));
     expect(status).toBe(StatusCodes.ACCEPTED);
     expect(body).toStrictEqual({ message: 'Tournament was started.' });
+  });
+
+  it('GET /rest-api/doubles-tournaments/:tournamentId/places | when tournament with given id not found', async () => {
+    //Given
+    const queryPublisher = QueryPublisherMock(undefined);
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+
+    //When
+    const { body, status } = await agent.get('/rest-api/doubles-tournaments/sampleTournamentId/places').send();
+
+    //Then
+    expect(status).toBe(StatusCodes.NOT_FOUND);
+    expect(body).toStrictEqual({ message: 'Doubles tournament with id = sampleTournamentId not found!' });
+  });
+
+  it('GET /rest-api/doubles-tournaments/{tournamentId} | return tournament with given id | Happy path', async () => {
+    //Given
+    const queryPublisher = QueryPublisherMock(
+      new DoublesTournament({
+        tournamentId: 'sampleTournament1Id',
+        tournamentTeams: [
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId1'),
+            firstTeamPlayer: 'samplePlayer1',
+            secondTeamPlayer: 'samplePlayer2',
+          }),
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId2'),
+            firstTeamPlayer: 'samplePlayer3',
+            secondTeamPlayer: 'samplePlayer4',
+          }),
+        ],
+      }),
+    );
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+
+    //When
+    const { body, status } = await agent.get('/rest-api/doubles-tournaments/sampleTournament1Id').send();
+
+    //Then
+    expect(status).toBe(StatusCodes.OK);
+    expect(body).toStrictEqual({
+      tournamentId: 'sampleTournament1Id',
+      tournamentTeams: {
+        items: [
+          {
+            teamId: 'sampleTeamId1',
+            firstTeamPlayer: 'samplePlayer1',
+            secondTeamPlayer: 'samplePlayer2',
+          },
+          {
+            teamId: 'sampleTeamId2',
+            firstTeamPlayer: 'samplePlayer3',
+            secondTeamPlayer: 'samplePlayer4',
+          },
+        ],
+      },
+      status: 'NOT_STARTED',
+    });
+  });
+
+  it('GET /rest-api/doubles-tournaments/{tournamentId}/places | return places for tournament with given id | Happy path', async () => {
+    //Given
+    const queryPublisher = QueryPublisherMock(
+      new DoublesTournament({
+        tournamentId: 'sampleTournament1Id',
+        tournamentTeams: [
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId1'),
+            firstTeamPlayer: 'samplePlayer1',
+            secondTeamPlayer: 'samplePlayer2',
+          }),
+          new TournamentTeam({
+            teamId: TeamId.from('sampleTeamId2'),
+            firstTeamPlayer: 'samplePlayer3',
+            secondTeamPlayer: 'samplePlayer4',
+          }),
+        ],
+        status: TournamentStatus.ENDED,
+        places: [new TournamentPlace(1, TeamId.from('sampleTeamId2')), new TournamentPlace(2, TeamId.from('sampleTeamId1'))],
+      }),
+    );
+    const { agent } = testModuleRestApi(DoublesTournamentRestApiModule, { queryPublisher });
+
+    //When
+    const { body, status } = await agent.get('/rest-api/doubles-tournaments/sampleTournament1Id/places').send();
+
+    //Then
+    expect(status).toBe(StatusCodes.OK);
+    expect(body).toStrictEqual({
+      items: [
+        { placeNumber: 1, teamId: 'sampleTeamId2' },
+        { placeNumber: 2, teamId: 'sampleTeamId1' },
+      ],
+    });
   });
 });

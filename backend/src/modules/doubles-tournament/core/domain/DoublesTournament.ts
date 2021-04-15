@@ -5,16 +5,20 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 import { TeamId } from './TeamId';
 import { TournamentWasStarted } from './event/TournamentWasStarted';
 import { TournamentStatus } from './TournamentStatus';
+import { TournamentWasEnded } from './event/TournamentWasEnded';
+import { TournamentPlace } from './TournamentPlace';
 
 export class DoublesTournament {
   readonly tournamentId: string;
   readonly tournamentTeams: TournamentTeam[];
   readonly status: TournamentStatus;
+  readonly places: TournamentPlace[];
 
-  constructor(props: { tournamentId: string; tournamentTeams: TournamentTeam[]; status?: TournamentStatus }) {
+  constructor(props: { tournamentId: string; tournamentTeams: TournamentTeam[]; status?: TournamentStatus; places?: TournamentPlace[] }) {
     this.tournamentId = props.tournamentId;
     this.tournamentTeams = props.tournamentTeams;
     this.status = props.status ?? TournamentStatus.NOT_STARTED;
+    this.places = props.places ?? [];
   }
 }
 
@@ -98,5 +102,36 @@ export function startTournament(tournament: DoublesTournament | undefined, curre
   return {
     state: startedTournament,
     events: [tournamentWasStarted],
+  };
+}
+
+export function endTournament(
+  tournament: DoublesTournament | undefined,
+  winner: TeamId,
+  currentTime: Date,
+): DomainCommandResult<DoublesTournament> {
+  if (tournament === undefined) {
+    throw new Error('Such tournament does not exists.');
+  }
+  if (tournament.status === 'ENDED') {
+    throw new Error('Such tournament has been already ended');
+  }
+
+  const endedTournament = new DoublesTournament({
+    tournamentId: tournament.tournamentId,
+    tournamentTeams: tournament.tournamentTeams,
+    status: TournamentStatus.ENDED,
+    places: [new TournamentPlace(1, winner)],
+  });
+
+  const tournamentWasEnded = new TournamentWasEnded({
+    occurredAt: currentTime,
+    tournamentId: tournament.tournamentId,
+    winner: winner.raw,
+  });
+
+  return {
+    state: endedTournament,
+    events: [tournamentWasEnded],
   };
 }

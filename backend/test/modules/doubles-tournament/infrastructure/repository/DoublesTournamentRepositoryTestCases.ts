@@ -5,6 +5,8 @@ import { UuidEntityIdGenerator } from '../../../../../src/shared/infrastructure/
 import { DoublesTournament } from '../../../../../src/modules/doubles-tournament/core/domain/DoublesTournament';
 import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
 import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
+import { TournamentStatus } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentStatus';
+import { TournamentPlace } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentPlace';
 
 export function DoublesTournamentRepositoryTestCases(props: {
   name: string;
@@ -43,6 +45,8 @@ export function DoublesTournamentRepositoryTestCases(props: {
       const doublesTournament1 = new DoublesTournament({
         tournamentId: tournamentId1,
         tournamentTeams: tournamentTeams1,
+        status: TournamentStatus.NOT_STARTED,
+        places: [],
       });
 
       const tournamentId2 = entityIdGenerator.generate();
@@ -55,6 +59,8 @@ export function DoublesTournamentRepositoryTestCases(props: {
       const doublesTournament2 = new DoublesTournament({
         tournamentId: tournamentId2,
         tournamentTeams: tournamentTeams2,
+        status: TournamentStatus.ENDED,
+        places: [new TournamentPlace(1, TeamId.from('TeamId1'))],
       });
 
       await repository.save(doublesTournament1);
