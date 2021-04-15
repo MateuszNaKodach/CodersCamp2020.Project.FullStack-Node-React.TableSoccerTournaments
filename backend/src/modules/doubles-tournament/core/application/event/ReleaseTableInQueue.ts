@@ -17,9 +17,9 @@ export class ReleaseTableInQueue implements EventHandler<TournamentTableWasRelea
       tableNumber: event.tableNumber,
       isFree: true,
     };
-    const tablesQueue = await this.tablesQueueRepository.findByTournamentId(tournamentId.raw);
+    const { state: tablesQueue, version } = await this.tablesQueueRepository.findByTournamentId(tournamentId.raw);
     const queue = pushTableToQueue(tournamentId, tournamentTable, tablesQueue);
 
-    await this.tablesQueueRepository.save(queue);
+    await this.tablesQueueRepository.save(queue, version);
   }
 }

@@ -14,6 +14,7 @@ import { TestModuleCore } from '../../../../test-support/shared/core/TestModuleC
 import { testTournamentTablesModule } from '../../../tournament-tables/core/application/TestTournamentTablesModule';
 import { StoreAndForwardDomainEventBus } from '../../../../../src/shared/infrastructure/core/application/event/StoreAndForwardDomainEventBus';
 import { InMemoryDomainEventBus } from '../../../../../src/shared/infrastructure/core/application/event/InMemoryDomainEventBus';
+import waitForExpect from 'wait-for-expect';
 
 describe('Calling Enqueued Matches', () => {
   const currentTime = new Date();
@@ -93,13 +94,13 @@ describe('Calling Enqueued Matches', () => {
     await doublesTournament.executeCommand(enqueueMatch2);
 
     //Then
-    expect(spy).toHaveBeenCalledWith(
+    await waitForExpect(() => expect(spy).toHaveBeenCalledWith(
       new CallMatch({
         tournamentId: tournamentId,
         calledMatch: { matchNumber: matchNumber2, team1Id: team1Id2, team2Id: team2Id2 },
         tableNumber: tableNumber2,
       }),
-    );
+    ));
 
     //When
     await doublesTournament.publishEvent(
