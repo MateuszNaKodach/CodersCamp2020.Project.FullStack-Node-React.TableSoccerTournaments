@@ -356,7 +356,7 @@ paths:
       responses:
         201:
           description: Tournament details successfully added
-  /doubles-tournament/{tournamentId}/tree:
+  /doubles-tournaments/{tournamentId}/tree:
     get:
       tags:
         - Tournament Tree

@@ -15,7 +15,7 @@ export class EnqueueMatchWhenTournamentMatchWasEnded implements EventHandler<Tou
     if (tournamentTree) {
       const { treeWithFinishedMatch, matchToEnqueue } = tournamentTree?.finishMatchInTreeAndGetNextOne(matchNumber, winnerId);
       await this.repository.save(treeWithFinishedMatch);
-      if (matchToEnqueue) {
+      if (matchToEnqueue && matchToEnqueue.firstTeam && matchToEnqueue.secondTeam) {
         await this.commandPublisher.execute(
           new EnqueueMatch({
             tournamentId: event.tournamentId,
