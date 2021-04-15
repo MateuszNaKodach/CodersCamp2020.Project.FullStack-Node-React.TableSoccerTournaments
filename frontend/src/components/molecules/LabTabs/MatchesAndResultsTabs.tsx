@@ -5,11 +5,8 @@ import Tab from '@material-ui/core/Tab';
 import TabContext from '@material-ui/lab/TabContext';
 import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
-import {Alert, AlertTitle} from "@material-ui/lab";
-import {Centered} from "../../atoms/Shared/Centered";
-import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
-import {Box, Tabs, Typography} from "@material-ui/core";
 import {MatchesList} from "../../organisms/MatchesList/MatchesList";
+import {Centered} from "../../atoms/Centered";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
