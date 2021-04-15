@@ -1,6 +1,6 @@
 import { Typography, Box, Toolbar, AppBar } from "@material-ui/core";
 import useStyles from "./styles";
-import { Centered } from "../../atoms/Shared/Centered";
+import { Centered } from "../../atoms/Centered";
 import React from "react";
 import {PATH_FOR_IMAGES} from "../../atoms/constants/imgPaths";
 

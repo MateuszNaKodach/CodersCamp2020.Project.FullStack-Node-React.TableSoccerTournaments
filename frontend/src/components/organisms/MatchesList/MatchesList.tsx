@@ -31,6 +31,8 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    const [playersProfilesListDto, setPlayersProfilesListDto] = React.useState<PlayerProfileDto[] | undefined>(undefined);
    const [matchesList, setMatchesList] = React.useState<MatchItemType[] | undefined>();
 
+   console.log(matchesList);
+   console.log(matchesList);
 
    console.log("tuuuu");
    console.log(expanded);
@@ -183,13 +185,13 @@ const returnMatchList = (
                const returnPlayerName = (playerTeamId: string | undefined, playerInTeam: PlayerInTeam): string | undefined => {
                   enum PartOfName { FirstName = "firstName", SecondName = "lastName", }
 
-                  return [PartOfName.FirstName, PartOfName.FirstName].map((item) =>
+                  return [PartOfName.FirstName, PartOfName.SecondName].map((item) =>
                      playersProfilesList
                         .find(({playerId}) => playerId === tournamentTeamsList
                            .find(({teamId}) => teamId === playerTeamId)
                            ?.[playerInTeam]
                         )?.[item]
-                  ).reduce((acc, partOfName) => `${acc} ${partOfName}`)
+                  ).reduce((acc, partOfName) => `${partOfName} ${acc}`)
                }
                return ({
                   firstTeam: {
