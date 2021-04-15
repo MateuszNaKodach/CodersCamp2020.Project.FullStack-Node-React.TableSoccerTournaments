@@ -30,6 +30,16 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    const [playersProfilesListDto, setPlayersProfilesListDto] = React.useState<PlayerProfileDto[] | undefined>(undefined);
    const [matchesList, setMatchesList] = React.useState<MatchItemType[] | undefined>();
 
+
+   console.log("tuuuu");
+   console.log(expanded);
+   console.log(tournamentMatchesListDto);
+   console.log(matchesDetailsListDto);
+   console.log(tournamentTeamsListDto);
+   console.log(playersProfilesListDto);
+   console.log(matchesList);
+
+
    useEffect(() => {
       reloadAllList()
    }, [tournamentId]);
@@ -38,7 +48,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
       if (!tournamentMatchesListDto) return;
 
       Promise.all(tournamentMatchesListDto.queue
-         .map((tournamentMatchesItem) => getMatchDetailsDto(`${tournamentId}_${tournamentMatchesItem.matchNumber}`)))
+         .map((tournamentMatchesItem) => getMatchDetailsDto(`${tournamentId}_${tournamentMatchesItem.matchNumber}`, tournamentMatchesItem.team1Id, tournamentMatchesItem.team2Id)))
          .then(matchesDetailsDto => setMatchesDetailsListDto(matchesDetailsDto))
 
       getTournamentTeamsListDto(tournamentId)
@@ -87,7 +97,7 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
 
    function reloadAllList() {
       TournamentMatchesListRestAPI()
-         .getTournamentTeamsList(tournamentId)
+         .getTournamentMatch(tournamentId)
          .then((tournamentMatchesListDto) => setTournamentMatchesListDto(tournamentMatchesListDto));
    }
 
@@ -193,10 +203,10 @@ const returnMatchList = (
             };
 
             function findStatus(): MatchStatus {
-               if (status === "started") return MatchStatus.STARTED;
-               if (status === "ended") return MatchStatus.FINISHED;
-               if (status === "enqueued") return MatchStatus.NO_TABLE;
-               if (status === "noTeams") {
+               if (status.toLowerCase() === "started") return MatchStatus.STARTED;
+               if (status.toLowerCase() === "ended") return MatchStatus.FINISHED;
+               if (status.toLowerCase() === "enqueued") return MatchStatus.NO_TABLE;
+               if (status.toLowerCase() === "noTeams") {
                   if (team1Id || team1Id) return MatchStatus.NO_ONE_TEAM;
                   else return MatchStatus.NO_TEAMS;
                }
@@ -226,14 +236,21 @@ const returnMatchList = (
       )
 }
 
-const getMatchDetailsDto = (matchId: string): Promise<MatchDetailsDto> => MatchDetailsRestAPI()
-   .getTournamentTeamsList(matchId)
+const getMatchDetailsDto = (matchId: string, team1: string | undefined, team2: string | undefined): Promise<MatchDetailsDto> => MatchDetailsRestAPI()
+   .getTournamentMatch(matchId)
    .then(({firstMatchSideId, matchId, secondMatchSideId, winnerId}) => ({
       matchId: matchId,
       firstMatchSideId: firstMatchSideId,
       secondMatchSideId: secondMatchSideId,
       winnerId: winnerId
-   }));
+   }))
+   .catch(() => ({
+      matchId: matchId,
+      firstMatchSideId: team1,
+      secondMatchSideId: team2,
+      winnerId: undefined
+   })
+)
 
 const getPlayerProfileDto = (playerId: string): Promise<PlayerProfileDto> => UserProfileRestApi()
    .getPlayerProfile(playerId)
@@ -241,7 +258,7 @@ const getPlayerProfileDto = (playerId: string): Promise<PlayerProfileDto> => Use
       {playerId, firstName, lastName, phoneNumber, emailAddress,}));
 
 const getTournamentTeamsListDto = (tournamentId: string): Promise<TournamentTeamsListDto> => TournamentTeamsListRestApi()
-   .getTournamentTeamsList(tournamentId)
+   .getTournamentMatch(tournamentId)
    .then(teamsList => teamsList);
 
 const setMatchWinner = (matchId: string, winnerPlayerId: string, reloadAllList: () => void) => MatchDetailsRestAPI()

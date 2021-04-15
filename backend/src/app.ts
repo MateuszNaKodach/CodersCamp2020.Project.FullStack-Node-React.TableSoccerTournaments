@@ -60,13 +60,14 @@ import { MongoTournamentDetailsRepository } from './modules/tournament-details/i
 import { InMemoryTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/inmemory/InMemoryTournamentDetailsRepository';
 import { TournamentDetailsModuleCore } from './modules/tournament-details/core/TournamentDetailsModuleCore';
 import { TournamentDetailsRestApiModule } from './modules/tournament-details/presentation/rest-api/TournamentDetailsRestApiModule';
+import { LoggingCommandBus } from './shared/infrastructure/core/application/command/LoggingCommandBus';
 
 config();
 
 export type TableSoccerTournamentsApplication = { restApi: Express };
 
 export async function TableSoccerTournamentsApplication(
-  commandBus: CommandBus = new RetryCommandBus(new InMemoryCommandBus(), 10),
+  commandBus: CommandBus = new RetryCommandBus(new LoggingCommandBus(new InMemoryCommandBus()), 10),
   eventBus: DomainEventBus = new LoggingDomainEventBus(new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus())),
   queryBus: QueryBus = new InMemoryQueryBus(),
   currentTimeProvider: CurrentTimeProvider = () => new Date(),
@@ -168,56 +169,56 @@ async function initializeDummyData(commandBus: CommandBus, entityIdGenerator: En
     firstName: 'Jan',
     emailAddress: 'jan.kowalski@test.pl',
     lastName: 'Kowalski',
-    phoneNumber: '123321333',
+    phoneNumber: '123123123',
   };
   const katarzynaNowak = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Katarzyna',
     emailAddress: 'kasia12@test.pl',
     lastName: 'Nowak',
-    phoneNumber: '143351333',
+    phoneNumber: '231231231',
   };
   const tomekDomek = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Tomek',
     emailAddress: 'tomek.domek@test.pl',
     lastName: 'Domek',
-    phoneNumber: '123321335',
+    phoneNumber: '543543543',
   };
   const franekPoranek = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Franek',
     emailAddress: 'franek.ranek@test.pl',
     lastName: 'Ranek',
-    phoneNumber: '123321334',
+    phoneNumber: '999444999',
   };
   const janKowalski2 = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Jan',
     emailAddress: 'jan.kowalski2@test.pl',
     lastName: 'Kowalski2',
-    phoneNumber: '123321333',
+    phoneNumber: '133455444',
   };
   const katarzynaNowak2 = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Katarzyna',
     emailAddress: 'kasia123@test.pl',
     lastName: 'Nowak2',
-    phoneNumber: '143351333',
+    phoneNumber: '123432544',
   };
   const tomekDomek2 = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Tomek',
     emailAddress: 'tomek.domek2@test.pl',
     lastName: 'Domek2',
-    phoneNumber: '123321335',
+    phoneNumber: '999412333',
   };
   const franekPoranek2 = {
     playerId: entityIdGenerator.generate(),
     firstName: 'Franek',
     emailAddress: 'franek.ranek2@test.pl',
     lastName: 'Ranek2',
-    phoneNumber: '123321334',
+    phoneNumber: '444444444',
   };
 
   await commandBus.execute(new CreatePlayerProfile({ ...janKowalski }));
