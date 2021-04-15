@@ -6,8 +6,8 @@ import Notification from "../Notification/Notification";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import { TournamentDetailsRestApi } from "../../../restapi/tournament-details/TournamentDetailsRestApi";
 import { TournamentTablesRestApi } from "../../../restapi/tournament-tables/TournamentTablesRestApi";
-import {EntityIdGenerator} from "../../atoms/idGenerator/EntityIdGenerator";
-import {VerticalSpace} from "../../atoms/VerticalSpace";
+import { EntityIdGenerator } from "../../atoms/idGenerator/EntityIdGenerator";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 
 const validationSchema = yup.object({
   name: yup.string().required("To pole jest wymagane."),

@@ -5,15 +5,15 @@ import {
   CardMedia,
   Typography,
 } from "@material-ui/core";
-import TextButton from "../../atoms/Shared/TextButton/TextButton";
 import { makeStyles } from "@material-ui/core/styles";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { MIN_CARD_COMPONENT_WIDTH } from "../../atoms/constants/sizes";
 import {
   PATH_FOR_MATCHES_AND_RESULTS,
   PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
 } from "../../atoms/constants/routerPaths";
 import { PATH_FOR_IMAGES } from "../../atoms/constants/imgPaths";
+import TextButton from "../../atoms/TextButton/TextButton";
+import {VerticalSpace} from "../../atoms/VerticalSpace";
 
 type TournamentCardProps = {
   readonly tournamentId: string;
