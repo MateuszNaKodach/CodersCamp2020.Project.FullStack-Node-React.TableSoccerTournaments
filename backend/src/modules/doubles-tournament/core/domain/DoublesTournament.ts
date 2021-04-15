@@ -5,6 +5,7 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 import { TeamId } from './TeamId';
 import { TournamentWasStarted } from './event/TournamentWasStarted';
 import { TournamentStatus } from './TournamentStatus';
+import { TournamentWasEnded } from './event/TournamentWasEnded';
 
 export class DoublesTournament {
   readonly tournamentId: string;
@@ -98,5 +99,35 @@ export function startTournament(tournament: DoublesTournament | undefined, curre
   return {
     state: startedTournament,
     events: [tournamentWasStarted],
+  };
+}
+
+export function endTournament(
+  tournament: DoublesTournament | undefined,
+  winner: TeamId,
+  currentTime: Date,
+): DomainCommandResult<DoublesTournament> {
+  if (tournament === undefined) {
+    throw new Error('Such tournament does not exists.');
+  }
+  if (tournament.status === 'ENDED') {
+    throw new Error('Such tournament has been already ended');
+  }
+
+  const endedTournament = new DoublesTournament({
+    tournamentId: tournament.tournamentId,
+    tournamentTeams: tournament.tournamentTeams,
+    status: TournamentStatus.ENDED,
+  });
+
+  const tournamentWasEnded = new TournamentWasEnded({
+    occurredAt: currentTime,
+    tournamentId: tournament.tournamentId,
+    winner: winner.raw,
+  });
+
+  return {
+    state: endedTournament,
+    events: [tournamentWasEnded],
   };
 }

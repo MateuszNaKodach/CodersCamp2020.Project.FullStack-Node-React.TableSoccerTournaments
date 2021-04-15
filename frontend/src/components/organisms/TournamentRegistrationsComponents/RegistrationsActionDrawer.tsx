@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Drawer, Grid } from "@material-ui/core";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 import { TournamentRegistrationsContext } from "./Context";
 import { makeStyles } from "@material-ui/core/styles";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";

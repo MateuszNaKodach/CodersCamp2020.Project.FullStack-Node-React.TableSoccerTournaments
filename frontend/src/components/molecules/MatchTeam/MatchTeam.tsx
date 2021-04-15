@@ -3,16 +3,15 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import {makeStyles} from "@material-ui/core/styles";
-import {Typography} from "@material-ui/core";
-import {Card} from '@material-ui/core';
-import {MatchStatus} from "../../atoms/MatchStatus";
+import {Card, Typography} from "@material-ui/core";
+import {MatchStatusTexts} from "../../atoms/constants/MatchStatusTexts";
 
 export type MatchTeamProps = {
    readonly player1: string | undefined;
    readonly player2: string | undefined;
-   readonly teamId:  string | undefined;
+   readonly teamId: string | undefined;
    readonly isWinnerTeam: boolean;
-   readonly matchStatus: MatchStatus;
+   readonly matchStatus: MatchStatusTexts;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -48,29 +47,34 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export const MatchTeam = ({
-                             player1,
-                             player2,
-                             isWinnerTeam,
-                             teamId,
-                             matchStatus
-                          }: MatchTeamProps) => {
+export const MatchTeam = (
+   {
+      player1,
+      player2,
+      isWinnerTeam,
+      teamId,
+      matchStatus
+   }: MatchTeamProps) => {
    const classes = useStyles();
 
-   const isMatchWaitingForPlayers = Boolean(matchStatus === MatchStatus.NO_ONE_TEAM);
-
+   const isStartedMatch = matchStatus === MatchStatusTexts.STARTED;
+   const isFinishedMatch = matchStatus === MatchStatusTexts.FINISHED;
+   const isWaitingForOneTeam = matchStatus === MatchStatusTexts.NO_ONE_TEAM;
+   const isWaitingForBothTeams = matchStatus === MatchStatusTexts.NO_TEAMS;
+   const isWaitingForTable = matchStatus === MatchStatusTexts.NO_TABLE
    const isWaitingForThisTeam = !(teamId);
+   const isWaitingForEnemyTeam = isWaitingForOneTeam && !isWaitingForThisTeam;
+
+   const player1Text = player1 || "NoNamePlayer1";
+   const player2Text = player2 || "NoNamePlayer2";
+
    const WaitingForTeam = <span className={classes.waitingForTeam}>"Oczekiwanie na drużynę"</span>;
+   const playersNameText = <><span className={classes.inline}>{player1Text}</span>
+      <br/><span className={classes.inline}> & {player2Text} </span></>;
 
-   const player1Text = player1 || "player1";
-   const player2Text = player2 || "player2";
-
-   const playersNameText = <><span className={classes.inline}>{player1Text}</span><br/><span
-      className={classes.inline}> & {player2Text} </span></>;
    const avatarSymbol = (player1Text[0].toUpperCase() + player2Text[0].toUpperCase())
    const playersTitle = isWaitingForThisTeam ? WaitingForTeam : playersNameText;
 
-   const isWaitingForEnemyTeamDescription = (matchStatus === MatchStatus.NO_ONE_TEAM) && !isWaitingForThisTeam;
    const WaitingForEnemyTeamDescription = (
       <>
          "Oczekiwanie na
@@ -80,30 +84,25 @@ export const MatchTeam = ({
             className={classes.inline}
             color="textPrimary"
          >
-            {isMatchWaitingForPlayers ? ` przeciwnika` : ` stół`}
-
+            {` przeciwnika`}
          </Typography>
          ".
       </>
    )
 
-   const isStartedMatchDescription = matchStatus === MatchStatus.STARTED;
+   const WaitingForTableDescription = (
+      <span>"W oczekiwaniu na wolne stoły..."</span>
+   )
+
    const ReadyToStartMatchDescription = (
       <>
          Aby ustawić zwycięzcę -
-         <Typography
-            component="span"
-
-            variant="body2"
-            className={classes.inline}
-            color="textPrimary"
-         >
+         <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
             Kliknij tu!
          </Typography>
       </>
    )
 
-   const isFinishedMatchDescription = matchStatus === MatchStatus.FINISHED;
    const FinishedMatchDescription = (
       <Typography
          component="span"
@@ -126,9 +125,10 @@ export const MatchTeam = ({
             primary={playersTitle}
             secondary=
                {<>
-                  {isFinishedMatchDescription && FinishedMatchDescription}
-                  {isStartedMatchDescription && ReadyToStartMatchDescription}
-                  {isWaitingForEnemyTeamDescription && WaitingForEnemyTeamDescription}
+                  {isFinishedMatch && FinishedMatchDescription}
+                  {isStartedMatch && ReadyToStartMatchDescription}
+                  {isWaitingForEnemyTeam && WaitingForEnemyTeamDescription}
+                  {isWaitingForTable && WaitingForTableDescription}
                </>}
          />
       </Card>
