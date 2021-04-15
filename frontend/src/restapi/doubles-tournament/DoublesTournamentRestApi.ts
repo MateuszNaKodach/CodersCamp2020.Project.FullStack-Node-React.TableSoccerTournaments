@@ -1,6 +1,7 @@
 import axios from "axios";
 import {PATH_BASE_URL} from "../../components/atoms/constants/apiPaths";
 import {TournamentPlaceListDto} from "./TournamentPlaceListDto";
+import {DoublesTournamentDto} from "./DoublesTournamentDto";
 
 export type DoublesTournamentRestApiConfig = {
     readonly baseUrl: string;
@@ -27,5 +28,10 @@ export const DoublesTournamentRestAPI = (
                 .get<TournamentPlaceListDto>(`${currentConfig.baseUrl}/doubles-tournament/${tournamentId}/places`)
                 .then((res) => res.data)
         },
+        getDoublesTournament(tournamentId: string): Promise<DoublesTournamentDto> {
+            return axios
+                .get<DoublesTournamentDto>(`${currentConfig.baseUrl}/doubles-tournament/${tournamentId}`)
+                .then((res) => res.data)
+        }
     };
 };

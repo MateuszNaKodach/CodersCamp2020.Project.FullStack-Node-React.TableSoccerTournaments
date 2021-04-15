@@ -7,6 +7,7 @@ import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
 import {MatchesList} from "../../organisms/MatchesList/MatchesList";
 import {Centered} from "../../atoms/Centered";
+import TournamentsResults from "../TournamentResults/TournamentsResults";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -19,11 +20,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }));
 
-type LabTabsProps = {
+type MatchesAndResultsTabsProps = {
     readonly tournamentId: string;
 }
 
-export default function MatchesAndResultsTabs(props: LabTabsProps) {
+export default function MatchesAndResultsTabs(props: MatchesAndResultsTabsProps) {
     const classes = useStyles();
     const [value, setValue] = React.useState('1');
 
@@ -46,7 +47,7 @@ export default function MatchesAndResultsTabs(props: LabTabsProps) {
                     <MatchesList tournamentId={props.tournamentId}/>
                 </TabPanel>
                 <TabPanel value="2">
-
+                    <TournamentsResults tournamentId={props.tournamentId}/>
                 </TabPanel>
             </TabContext>
         </div>

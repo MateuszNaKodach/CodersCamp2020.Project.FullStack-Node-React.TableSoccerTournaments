@@ -1,4 +1,4 @@
 export type TournamentPlaceDto = {
-    readonly tournamentId: string;
+    readonly teamId: string;
     readonly placeNumber: number;
 }
