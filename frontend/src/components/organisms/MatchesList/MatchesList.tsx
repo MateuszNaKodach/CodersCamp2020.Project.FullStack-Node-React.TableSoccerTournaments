@@ -165,42 +165,19 @@ const returnMatchList = (
 
             const findLevel = (): number | undefined => undefined;
 
-            type TeamPlayersNames = {
-               firstTeam: {
-                  firstPlayerName: string | undefined,
-                  secondPlayerName: string | undefined
-               },
-               secondTeam: {
-                  firstPlayerName: string | undefined,
-                  secondPlayerName: string | undefined
+            const teamPlayersNames = (teamId: string | undefined): string[] => {
+               if(!teamId){
+                  return []
                }
-            };
-
-            const findTeamPlayersNames = (): TeamPlayersNames => {
-               enum PlayerInTeam { First = "firstTeamPlayer", Second = "secondTeamPlayer", }
-
-               const returnPlayerName = (playerTeamId: string | undefined, playerInTeam: PlayerInTeam): string | undefined => {
-                  enum PartOfName { FirstName = "firstName", SecondName = "lastName", }
-
-                  return [PartOfName.FirstName, PartOfName.FirstName].map((item) =>
-                     playersProfilesList
-                        .find(({playerId}) => playerId === tournamentTeamsList
-                           .find(({teamId}) => teamId === playerTeamId)
-                           ?.[playerInTeam]
-                        )?.[item]
-                  ).reduce((acc, partOfName) => `${acc} ${partOfName}`)
+               const playersTeam = tournamentTeamsList.find(team => team.teamId === teamId)
+               if(!playersTeam){
+                  return [];
                }
-               return ({
-                  firstTeam: {
-                     firstPlayerName: returnPlayerName(team1Id, PlayerInTeam.First),
-                     secondPlayerName: returnPlayerName(team1Id, PlayerInTeam.Second),
-                  },
-                  secondTeam: {
-                     firstPlayerName: returnPlayerName(team2Id, PlayerInTeam.First),
-                     secondPlayerName: returnPlayerName(team2Id, PlayerInTeam.Second),
-                  },
-               })
-            };
+               const playersIdsInTeam = [playersTeam.firstTeamPlayer, playersTeam.secondTeamPlayer]
+               return playersProfilesList
+                   .filter(playerProfile => playersIdsInTeam.includes(playerProfile.playerId))
+                   .map(playerProfile => `${playerProfile.firstName} ${playerProfile.lastName}`);
+            }
 
             function findStatus(): MatchStatus {
                if (status.toLowerCase() === "started") return MatchStatus.STARTED;
@@ -213,6 +190,8 @@ const returnMatchList = (
                return MatchStatus.STATUS_NOT_EXIST;
             }
 
+            const team1Players = teamPlayersNames(team1Id)
+            const team2Players = teamPlayersNames(team2Id)
             return {
                level: findLevel(),
                matchId: findMatchId(),
@@ -222,13 +201,13 @@ const returnMatchList = (
                tableNumber: tableNumber,
                winnerId: findWinnerId(),
                team1: {
-                  firstPlayerName: findTeamPlayersNames().firstTeam.firstPlayerName,
-                  secondPlayerName: findTeamPlayersNames().firstTeam.secondPlayerName,
+                  firstPlayerName: team1Players[0],
+                  secondPlayerName: team1Players[1],
                   teamId: team1Id,
                },
                team2: {
-                  firstPlayerName: findTeamPlayersNames().secondTeam.firstPlayerName,
-                  secondPlayerName: findTeamPlayersNames().secondTeam.secondPlayerName,
+                  firstPlayerName: team2Players[0],
+                  secondPlayerName: team2Players[1],
                   teamId: team2Id,
                }
             }
