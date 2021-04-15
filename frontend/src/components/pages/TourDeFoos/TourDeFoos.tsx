@@ -1,14 +1,12 @@
 import React from "react";
-import {Button, Grid, MuiThemeProvider} from "@material-ui/core";
-import {Centered} from "../../atoms/Centered";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {THEME} from "../../atoms/constants/ThemeMUI";
+import { Button, Grid, MuiThemeProvider } from "@material-ui/core";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { THEME } from "../../atoms/constants/ThemeMUI";
 import Footer from "../../organisms/Footer/Footer";
-import {HomeMenu} from "../HomeMenu/HomeMenu";
-import {VerticalSpace} from "../../atoms/VerticalSpace";
+import { HomeMenu } from "../HomeMenu/HomeMenu";
 import Header from "../../organisms/Header/Header";
-import {TournamentRegistrationsRoute} from "../Routes/TournamentRegistrationsRoutes";
-import {StyledBackground} from "../../atoms/Background/StyledBackground";
+import { TournamentRegistrationsRoute } from "../Routes/TournamentRegistrationsRoutes";
+import { StyledBackground } from "../../atoms/Background/StyledBackground";
 import {
   PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
   PATH_FOR_HOME_VIEW,
@@ -17,11 +15,13 @@ import {
   PATH_FOR_PLAYER_MATCHES_VIEW,
   PATH_FOR_PLAYER_PROFILE_CREATION_VIEW,
   PATH_FOR_PLAYERS_PROFILES_VIEW,
-  PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
-  PATH_FOR_TOURNAMENTS_SELECTION_VIEW
+  PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW_WITHOUT_ID,
+  PATH_FOR_TOURNAMENTS_SELECTION_VIEW,
 } from "../../atoms/constants/routerPaths";
-import {MatchesListRoute} from "../Routes/MatchesListRoutes";
+import { MatchesListRoute } from "../Routes/MatchesListRoutes";
 import TournamentsList from "../TournamentsList/TournamentsList";
+import { Centered } from "../../atoms/Centered";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 import {MatchesAndResultsRoute} from "../Routes/MatchesAndResultsRoute";
 
 function TourDeFoos() {
@@ -45,14 +45,12 @@ function TourDeFoos() {
                 <Button>PATH_FOR_LOGIN_VIEW</Button>
               </Route>
               <Route path={PATH_FOR_TOURNAMENTS_SELECTION_VIEW} exact>
-                <TournamentsList/>
+                <TournamentsList />
               </Route>
               <Route path={PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW} exact>
                 PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW
               </Route>
-              <Route
-                path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/:tournamentId`}
-              >
+              <Route path={PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW_WITHOUT_ID}>
                 <Centered>
                   <TournamentRegistrationsRoute />
                 </Centered>

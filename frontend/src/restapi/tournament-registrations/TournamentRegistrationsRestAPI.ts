@@ -54,5 +54,11 @@ export const TournamentRegistrationsRestApi = (
         )
         .then((res) => res.data);
     },
+    async createTournament(body: { tournamentId: string }): Promise<void> {
+      await axios.post(
+        `${currentConfig.baseUrl}/tournament-registrations`,
+        body
+      );
+    },
   };
 };
