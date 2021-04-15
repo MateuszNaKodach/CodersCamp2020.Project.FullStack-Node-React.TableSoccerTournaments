@@ -11,13 +11,13 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {THEME} from "../../atoms/constants/ThemeMUI";
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import MatchWinnerDeterminationDialog from "../MatchWinnerDeterminationDialog/MatchWinnerDeterminationDialog";
-import {MatchStatus} from "../../atoms/MatchStatus";
+import {MatchStatusTexts} from "../../atoms/constants/MatchStatusTexts";
 
 export type MatchItemProps = {
    level: number | undefined,
    matchId: string | undefined,
    matchNumber: number | undefined,
-   matchStatus: MatchStatus,
+   matchStatus: MatchStatusTexts,
    onClickTeam: (matchId: string, teamId: string) => void,
    tableNumber: number | undefined,
    winnerTeamId: string | undefined;
@@ -97,8 +97,8 @@ export const MatchItem = (
    const isWinnerTeam1 = winnerTeamId === team1.teamId;
    const isWinnerTeam2 = winnerTeamId === team2.teamId;
 
-   const isMatchFinished = matchStatus === MatchStatus.FINISHED;
-   const isMatchStarted = matchStatus === MatchStatus.STARTED;
+   const isMatchFinished = matchStatus === MatchStatusTexts.FINISHED;
+   const isMatchStarted = matchStatus === MatchStatusTexts.STARTED;
 
    const agreeDialogCallback = (matchId: string, teamName: string): void => onClickTeam(matchId, teamName);
 
@@ -152,6 +152,7 @@ export const MatchItem = (
                      firstPlayerName={team1.firstPlayerName}
                      secondPlayerName={team1.secondPlayerName}
                      agreeDialogCallback={agreeDialogCallback}
+                     isMatchStarted ={isMatchStarted}
                   />
                   <MatchTeam
                      isWinnerTeam={isWinnerTeam1}
@@ -159,6 +160,7 @@ export const MatchItem = (
                      teamId={team1.teamId}
                      player1={team1.firstPlayerName}
                      player2={team1.secondPlayerName}
+
                   />
                </MatchTeamWrapper>
 
@@ -169,6 +171,7 @@ export const MatchItem = (
                      firstPlayerName={team2.firstPlayerName}
                      secondPlayerName={team2.secondPlayerName}
                      agreeDialogCallback={agreeDialogCallback}
+                     isMatchStarted ={isMatchStarted}
                   />
                   <MatchTeam
                      isWinnerTeam={isWinnerTeam2}
@@ -188,6 +191,7 @@ export const MatchItem = (
 const TeamHoverButtonComponent = (props: {
    matchId: string | undefined,
    teamId: string | undefined,
+   isMatchStarted: boolean,
    firstPlayerName: string | undefined,
    secondPlayerName: string | undefined,
    agreeDialogCallback: (matchId: string, teamId: string) => void
@@ -196,8 +200,9 @@ const TeamHoverButtonComponent = (props: {
    const teamId = props.teamId;
    const firstPlayerName = props.firstPlayerName;
    const secondPlayerName = props.secondPlayerName;
+   const isMatchStarted = props.isMatchStarted;
 
-   if (!matchId || !teamId) return <div/>;
+   if (!isMatchStarted || !matchId || !teamId) return <div/>;
 
    return (
       <TeamHoverButton>

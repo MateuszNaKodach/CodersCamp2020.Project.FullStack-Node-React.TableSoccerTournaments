@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Button, Grid, TextField, Typography } from "@material-ui/core";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { UserProfileRestApi } from "../../../restapi/players-profiles";
-import { EntityIdGenerator } from "../../idGenerator/EntityIdGenerator";
+import { EntityIdGenerator } from "../../atoms/idGenerator/EntityIdGenerator";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import { TournamentRegistrationsContext } from "../TournamentRegistrationsComponents/Context";
 import Notification from "../Notification/Notification";

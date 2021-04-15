@@ -12,8 +12,8 @@ import {
   PlayerProfileDto,
   UserProfileRestApi,
 } from "../../../restapi/players-profiles";
-import { Centered } from "../../atoms/Shared/Centered";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import { Centered } from "../../atoms/Centered";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import Notification from "../../organisms/Notification/Notification";
 import useStyles from "./styles";
