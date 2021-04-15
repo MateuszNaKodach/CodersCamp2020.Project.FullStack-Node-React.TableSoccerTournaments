@@ -16,5 +16,14 @@ export function restApiExpressServer(modules: ModuleRestApi[] = []): Express {
   });
 
   server.use(process.env.API_DOCS_ENDPOINT_URL || '/rest-api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+  process.on('uncaughtException', function (err) {
+    console.error('[RestApi] Global exception handler (uncaughtException):', err.message);
+  });
+
+  process.on('unhandledRejection', function (reason: any, promise: Promise<any>) {
+    console.error('[RestApi] Global exception handler (unhandledRejection):', reason.message || reason);
+  });
+
   return server;
 }
