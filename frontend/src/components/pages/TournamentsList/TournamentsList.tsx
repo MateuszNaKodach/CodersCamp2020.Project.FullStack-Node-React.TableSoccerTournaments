@@ -16,7 +16,7 @@ const TournamentsList = () => {
 
   return (
     <StyledWrapper>
-      <CardTitleWithNavButton title={"Turnieje"} />
+      <CardTitleWithNavButton title="Turnieje" />
       <VerticalSpace height={30} />
       <TournamentCardsGallery
         shouldReload={reloadData}

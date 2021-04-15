@@ -3,11 +3,11 @@ import { Button, Drawer, Grid, TextField, Typography } from "@material-ui/core";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import Notification from "../Notification/Notification";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
-import { EntityIdGenerator } from "../../idGenerator/EntityIdGenerator";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import { TournamentDetailsRestApi } from "../../../restapi/tournament-details/TournamentDetailsRestApi";
 import { TournamentTablesRestApi } from "../../../restapi/tournament-tables/TournamentTablesRestApi";
+import {EntityIdGenerator} from "../../atoms/idGenerator/EntityIdGenerator";
+import {VerticalSpace} from "../../atoms/VerticalSpace";
 
 const validationSchema = yup.object({
   name: yup.string().required("To pole jest wymagane."),
