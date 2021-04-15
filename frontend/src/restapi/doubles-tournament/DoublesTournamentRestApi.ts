@@ -1,6 +1,6 @@
 import axios from "axios";
-import { PATH_BASE_URL } from "../../components/atoms/constants/apiPaths";
-import { MatchDetailsDto } from "./MatchDetailsDto";
+import {PATH_BASE_URL} from "../../components/atoms/constants/apiPaths";
+import {MatchDetailsDto} from "./MatchDetailsDto";
 
 export type DoublesTournamentRestApiConfig = {
     readonly baseUrl: string;
@@ -10,7 +10,7 @@ const defaultConfig: DoublesTournamentRestApiConfig = {
     baseUrl: PATH_BASE_URL,
 };
 
-export const MatchDetailsRestAPI = (
+export const DoublesTournamentRestAPI = (
     config?: Partial<DoublesTournamentRestApiConfig>
 ) => {
     const currentConfig = {
@@ -22,19 +22,10 @@ export const MatchDetailsRestAPI = (
             defaultConfig.baseUrl,
     };
     return {
-        getTournamentMatch(matchId: string): Promise<MatchDetailsDto> {
+        getTournamentResult(tournamentId: string): Promise<MatchDetailsDto> {
             return axios
-                .get<MatchDetailsDto>(`${currentConfig.baseUrl}/matches/${matchId}`)
+                .get<MatchDetailsDto>(`${currentConfig.baseUrl}/doubles-tournament/${tournamentId}/places`)
                 .then((res) => res.data)
-        },
-
-        async postMatchWinner(
-            matchId: string,
-            winnerPlayerId: string
-        ): Promise<void> {
-            await axios.post(`${currentConfig.baseUrl}/matches/${matchId}/result`, {
-                winnerId: winnerPlayerId,
-            });
         },
     };
 };
