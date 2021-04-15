@@ -4,6 +4,7 @@ import mongoose, { Schema } from 'mongoose';
 import { TeamId } from '../../../core/domain/TeamId';
 import { TournamentTeam } from '../../../core/domain/TournamentTeam';
 import { TournamentStatus } from '../../../core/domain/TournamentStatus';
+import { TournamentPlace } from '../../../core/domain/TournamentPlace';
 
 export class MongoDoublesTournamentRepository implements DoublesTournamentRepository {
   async findByTournamentId(tournamentId: string): Promise<DoublesTournament | undefined> {
@@ -22,6 +23,7 @@ export class MongoDoublesTournamentRepository implements DoublesTournamentReposi
           secondTeamPlayer: team.secondTeamPlayer,
         })),
         status: doublesTournament.status,
+        places: doublesTournament.places.map((place) => ({ placeNumber: place.placeNumber, teamId: place.teamId.raw })),
       },
       { upsert: true, useFindAndModify: true },
     );
@@ -37,12 +39,14 @@ type MongoDoublesTournament = {
   readonly _id: string;
   readonly tournamentTeams: { teamId: string; firstTeamPlayer: string; secondTeamPlayer: string }[];
   readonly status: string;
+  readonly places: { placeNumber: number; teamId: string }[];
 } & mongoose.Document;
 
 const DoublesTournamentSchema = new mongoose.Schema({
   _id: Schema.Types.String,
-  tournamentTeams: [{ teamId: String, firstTeamPlayer: String, secondTeamPlayer: String }],
+  tournamentTeams: [{ teamId: Schema.Types.String, firstTeamPlayer: Schema.Types.String, secondTeamPlayer: Schema.Types.String }],
   status: Schema.Types.String,
+  places: [{ placeNumber: Schema.Types.Number, teamId: Schema.Types.String }],
 });
 
 const MongoDoublesTournament = mongoose.model<MongoDoublesTournament>('DoublesTournament', DoublesTournamentSchema);
@@ -61,5 +65,6 @@ function mongoDocumentToDomain(mongoDocument: MongoDoublesTournament): DoublesTo
       ),
     ],
     status: mongoDocument.status as TournamentStatus,
+    places: [...mongoDocument.places.map((place) => new TournamentPlace(place.placeNumber, TeamId.from(place.teamId)))],
   });
 }
