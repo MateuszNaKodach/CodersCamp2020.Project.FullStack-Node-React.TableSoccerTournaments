@@ -7,7 +7,7 @@ export class InMemoryTablesQueueRepository implements TablesQueueRepository {
 
   async save(tablesQueue: TablesQueue, expectedVersion: number): Promise<void> {
     if ((this.entities[tablesQueue.tournamentId.raw]?.version ?? 0) !== expectedVersion) {
-      throw new OptimisticLockingException(expectedVersion);
+      return Promise.reject(new OptimisticLockingException(expectedVersion));
     }
     this.entities[tablesQueue.tournamentId.raw] = { state: tablesQueue, version: expectedVersion + 1 };
   }
