@@ -6,12 +6,13 @@ import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 import {MatchItemType} from "./MatchItemType";
 import {TournamentMatchesListRestAPI} from "../../../restapi/tournament-matches-list";
 import {TournamentMatchesListDto} from "../../../restapi/tournament-matches-list/TournamentMatchesListDto";
-import {MatchStatus} from "../../atoms/MatchStatus";
 import {PlayerProfileDto, UserProfileRestApi} from "../../../restapi/players-profiles";
 import {MatchDetailsDto} from "../../../restapi/match-details/MatchDetailsDto";
 import {TournamentTeamsListDto} from "../../../restapi/tournament-teams-list/TournamentTeamsListDto";
 import {TournamentTeamsListRestApi} from "../../../restapi/tournament-teams-list/TournamentTeamsListRestApi";
 import {MatchDetailsRestAPI} from "../../../restapi/match-details";
+import {ApiMatchStatus} from "../../atoms/constants/ApiMatchStatus";
+import {MatchStatusTexts} from "../../atoms/constants/MatchStatusTexts";
 
 const StyledMatchesList = styled(Card)({
    width: MIN_CARD_COMPONENT_WIDTH,
@@ -30,6 +31,8 @@ export const MatchesList = ({tournamentId}: MatchesListProps) => {
    const [playersProfilesListDto, setPlayersProfilesListDto] = React.useState<PlayerProfileDto[] | undefined>(undefined);
    const [matchesList, setMatchesList] = React.useState<MatchItemType[] | undefined>();
 
+   console.log(matchesList);
+   console.log(matchesList);
 
    console.log("tuuuu");
    console.log(expanded);
@@ -182,13 +185,13 @@ const returnMatchList = (
                const returnPlayerName = (playerTeamId: string | undefined, playerInTeam: PlayerInTeam): string | undefined => {
                   enum PartOfName { FirstName = "firstName", SecondName = "lastName", }
 
-                  return [PartOfName.FirstName, PartOfName.FirstName].map((item) =>
+                  return [PartOfName.FirstName, PartOfName.SecondName].map((item) =>
                      playersProfilesList
                         .find(({playerId}) => playerId === tournamentTeamsList
                            .find(({teamId}) => teamId === playerTeamId)
                            ?.[playerInTeam]
                         )?.[item]
-                  ).reduce((acc, partOfName) => `${acc} ${partOfName}`)
+                  ).reduce((acc, partOfName) => `${partOfName} ${acc}`)
                }
                return ({
                   firstTeam: {
@@ -202,15 +205,15 @@ const returnMatchList = (
                })
             };
 
-            function findStatus(): MatchStatus {
-               if (status.toLowerCase() === "started") return MatchStatus.STARTED;
-               if (status.toLowerCase() === "ended") return MatchStatus.FINISHED;
-               if (status.toLowerCase() === "enqueued") return MatchStatus.NO_TABLE;
-               if (status.toLowerCase() === "noTeams") {
-                  if (team1Id || team1Id) return MatchStatus.NO_ONE_TEAM;
-                  else return MatchStatus.NO_TEAMS;
+            function findStatus(): MatchStatusTexts {
+               if (status.toLowerCase() === ApiMatchStatus.STARTED) return MatchStatusTexts.STARTED;
+               if (status.toLowerCase() === ApiMatchStatus.FINISHED) return MatchStatusTexts.FINISHED;
+               if (status.toLowerCase() ===ApiMatchStatus.NO_TABLE) return MatchStatusTexts.NO_TABLE;
+               if (status.toLowerCase() === ApiMatchStatus.NO_TEAMS) {
+                  if (team1Id || team1Id) return MatchStatusTexts.NO_ONE_TEAM;
+                  else return MatchStatusTexts.NO_TEAMS;
                }
-               return MatchStatus.STATUS_NOT_EXIST;
+               return MatchStatusTexts.STATUS_NOT_EXIST;
             }
 
             return {

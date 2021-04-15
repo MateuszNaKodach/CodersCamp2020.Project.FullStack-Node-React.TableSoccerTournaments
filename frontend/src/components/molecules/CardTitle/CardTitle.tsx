@@ -1,7 +1,7 @@
 import React from 'react';
 import {Typography,} from "@material-ui/core";
-import {VerticalSpace} from "../../atoms/Shared/VerticalSpace"
-import {Centered} from "../../atoms/Shared/Centered";
+import {VerticalSpace} from "../../atoms/VerticalSpace"
+import {Centered} from "../../atoms/Centered";
 import styled from "styled-components";
 
 export type CardTitleProps = {

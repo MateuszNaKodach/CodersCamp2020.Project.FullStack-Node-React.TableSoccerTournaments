@@ -2,8 +2,8 @@ import React from 'react';
 import {Button, Card, CardContent, List, makeStyles,} from "@material-ui/core";
 import styled from "styled-components";
 import CardTitle from "../../molecules/CardTitle/CardTitle";
-import {VerticalSpace} from "../../atoms/Shared/VerticalSpace";
-import {Centered} from "../../atoms/Shared/Centered";
+import {VerticalSpace} from "../../atoms/VerticalSpace";
+import {Centered} from "../../atoms/Centered";
 import {Link} from "react-router-dom";
 import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 

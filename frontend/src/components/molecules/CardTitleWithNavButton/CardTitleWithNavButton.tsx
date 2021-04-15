@@ -1,9 +1,8 @@
-import ArrowBackButton from "../../atoms/Shared/ArrowBack/ArrowBackButton";
+import ArrowBackButton from "../../atoms/ArrowBack/ArrowBackButton";
 import {Card, Grid, Typography} from "@material-ui/core";
 import styled from "styled-components";
 import React from "react";
-import {Centered} from "../../atoms/Shared/Centered";
-import {PATH_FOR_HOME_VIEW} from "../../atoms/constants/routerPaths";
+import {Centered} from "../../atoms/Centered";
 
 type cardTitleWithNavButtonProps = {
     readonly title: string;

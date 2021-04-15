@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { Centered } from "../../atoms/Shared/Centered";
+import { Centered } from "../../atoms/Centered";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 import { Button } from "@material-ui/core";
 import { TournamentRegistrationsContext } from "./Context";
 
