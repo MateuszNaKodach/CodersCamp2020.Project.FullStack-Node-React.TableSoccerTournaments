@@ -76,10 +76,13 @@ export const CreateTournamentForm = (props: {
     return tablesList;
   }
 
-  const formik = useFormik({
+  const formik = useFormik<{
+    name: string;
+    tablesQuantity: number | undefined;
+  }>({
     initialValues: {
       name: "",
-      tablesQuantity: "",
+      tablesQuantity: undefined,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -93,7 +96,7 @@ export const CreateTournamentForm = (props: {
           tournamentName: values.name,
         });
         const addTablesPostBody: TablesList = createTablesPostBody(
-          Number(values.tablesQuantity)
+          values.tablesQuantity!
         );
         await TournamentTablesRestApi().addTournamentsTables({
           tournamentId: tournamentId,
@@ -150,6 +153,7 @@ export const CreateTournamentForm = (props: {
                 value={formik.values.tablesQuantity}
                 label="Liczba stołów"
                 name="tablesQuantity"
+                type="number"
                 variant="outlined"
                 onChange={formik.handleChange}
                 error={
