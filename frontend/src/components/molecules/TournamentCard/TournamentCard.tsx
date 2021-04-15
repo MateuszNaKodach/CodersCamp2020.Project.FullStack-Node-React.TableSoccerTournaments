@@ -12,7 +12,7 @@ import {
   PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW,
 } from "../../atoms/constants/routerPaths";
 import { PATH_FOR_IMAGES } from "../../atoms/constants/imgPaths";
-import TextButton from "../../atoms/TextButton/TextButton";
+import LinkButton from "../../atoms/TextButton/LinkButton";
 import { VerticalSpace } from "../../atoms/VerticalSpace";
 
 type TournamentCardProps = {
@@ -59,14 +59,14 @@ const TournamentCard = ({
       <CardActions disableSpacing={true} className={classes.cardActions}>
         <>
           {registrationStatus === "OPENED" ? (
-            <TextButton
+            <LinkButton
               text={"Zapisy"}
               onLink={
                 PATH_FOR_TOURNAMENT_REGISTRATIONS_VIEW + `/${tournamentId}`
               }
             />
           ) : (
-            <TextButton
+            <LinkButton
               text={"Mecze i wyniki"}
               onLink={
                 PATH_FOR_MATCHES_AND_RESULTS +
