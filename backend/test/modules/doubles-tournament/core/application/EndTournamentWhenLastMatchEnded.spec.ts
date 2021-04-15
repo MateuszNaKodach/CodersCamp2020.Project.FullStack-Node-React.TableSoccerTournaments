@@ -14,6 +14,12 @@ import { TournamentWasEnded } from '../../../../../src/modules/doubles-tournamen
 import { testTournamentTreeModule } from '../../../tournament-tree/core/application/TestTournamentTreeModule';
 import { testDoublesTournamentsModule } from './TestDoublesTournamentsModule';
 import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
+import { FindDoublesTournamentById } from '../../../../../src/modules/doubles-tournament/core/application/query/FindDoublesTournamentById';
+import { DoublesTournament } from '../../../../../src/modules/doubles-tournament/core/domain/DoublesTournament';
+import { TournamentTeam } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentTeam';
+import { TeamId } from '../../../../../src/modules/doubles-tournament/core/domain/TeamId';
+import { TournamentStatus } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentStatus';
+import { TournamentPlace } from '../../../../../src/modules/doubles-tournament/core/domain/TournamentPlace';
 
 describe('Ending tournament', () => {
   const currentTime = new Date();
@@ -32,9 +38,32 @@ describe('Ending tournament', () => {
       { player1: 'player1', player2: 'player2' },
       { player1: 'player3', player2: 'player4' },
       { player1: 'player5', player2: 'player6' },
+      { player1: 'player7', player2: 'player8' },
     ]);
     await doublesTournament.executeCommand(tournament);
-    await tournamentTree.executeCommand(createTestTournamentTree(tournamentId));
+    const tournamentTeams = [
+      {
+        teamId: 'team1',
+        firstTeamPlayer: 'player1',
+        secondTeamPlayer: 'player2',
+      },
+      {
+        teamId: 'team2',
+        firstTeamPlayer: 'player3',
+        secondTeamPlayer: 'player4',
+      },
+      {
+        teamId: 'team3',
+        firstTeamPlayer: 'player5',
+        secondTeamPlayer: 'player6',
+      },
+      {
+        teamId: 'team4',
+        firstTeamPlayer: 'player7',
+        secondTeamPlayer: 'player8',
+      },
+    ];
+    await tournamentTree.executeCommand(createTestTournamentTree(tournamentId, tournamentTeams));
     const spy = jest.spyOn(commandBus, `execute`);
     const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: tournamentId });
     await doublesTournament.publishEvent(startedTournament);
@@ -91,33 +120,35 @@ describe('Ending tournament', () => {
         }),
       ),
     );
+
+    //Then
+    const findDoublesTournamentByIdResult = await doublesTournament.executeQuery<FindDoublesTournamentById>(
+      new FindDoublesTournamentById({ tournamentId }),
+    );
+    expect(findDoublesTournamentByIdResult).toStrictEqual(
+      new DoublesTournament({
+        tournamentId: tournamentId,
+        tournamentTeams: tournamentTeams.map(
+          (it) =>
+            new TournamentTeam({
+              teamId: TeamId.from(it.teamId),
+              firstTeamPlayer: it.firstTeamPlayer,
+              secondTeamPlayer: it.secondTeamPlayer,
+            }),
+        ),
+        status: TournamentStatus.ENDED,
+        places: [new TournamentPlace(1, TeamId.from(team2Id))],
+      }),
+    );
   });
 });
 
-function createTestTournamentTree(sampleTournamentTreeId: string) {
+function createTestTournamentTree(
+  sampleTournamentTreeId: string,
+  tournamentTeams: { teamId: string; firstTeamPlayer: string; secondTeamPlayer: string }[],
+) {
   return new CreateTournamentTree({
     tournamentId: sampleTournamentTreeId,
-    tournamentTeams: [
-      {
-        teamId: 'team1',
-        firstTeamPlayer: 'player1',
-        secondTeamPlayer: 'player2',
-      },
-      {
-        teamId: 'team2',
-        firstTeamPlayer: 'player3',
-        secondTeamPlayer: 'player4',
-      },
-      {
-        teamId: 'team3',
-        firstTeamPlayer: 'player5',
-        secondTeamPlayer: 'player6',
-      },
-      {
-        teamId: 'team4',
-        firstTeamPlayer: 'player7',
-        secondTeamPlayer: 'player8',
-      },
-    ],
+    tournamentTeams,
   });
 }
