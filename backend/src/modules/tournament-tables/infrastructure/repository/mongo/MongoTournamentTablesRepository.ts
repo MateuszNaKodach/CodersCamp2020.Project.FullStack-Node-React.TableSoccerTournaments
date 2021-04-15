@@ -6,12 +6,13 @@ import { TableNumber } from '../../../core/domain/TableNumber';
 export class MongoTournamentTablesRepository implements TournamentTablesRepository {
   async save(tournamentTable: TournamentTable): Promise<void> {
     await MongoTournamentTables.findByIdAndUpdate(
-      { _id: `${tournamentTable.tournamentId}_${tournamentTable.tableNumber.raw}` },
+      { _id: `${tournamentTable.tournamentId}_${tournamentTable.tableNumber.raw}`, __v: tournamentTable.version },
       {
         tournamentId: tournamentTable.tournamentId,
         tableNumber: tournamentTable.tableNumber.raw,
         tableName: tournamentTable.tableName,
         isFree: tournamentTable.isFree,
+        __v: tournamentTable.version + 1,
       },
       { upsert: true, useFindAndModify: true },
     );
@@ -36,6 +37,7 @@ export class MongoTournamentTablesRepository implements TournamentTablesReposito
 
 type MongoTournamentTables = {
   readonly _id: string;
+  readonly __v: number;
   readonly tournamentId: string;
   readonly tableNumber: number;
   readonly tableName: string;
@@ -44,6 +46,7 @@ type MongoTournamentTables = {
 
 const TournamentTablesSchema = new mongoose.Schema({
   _id: Schema.Types.String,
+  __v: Schema.Types.Number,
   tournamentId: Schema.Types.String,
   tableNumber: {
     type: Schema.Types.Number,
@@ -62,5 +65,6 @@ function mongoDocumentToDomain(mongoDocument: MongoTournamentTables): Tournament
     tableNumber: TableNumber.from(mongoDocument.tableNumber),
     tableName: mongoDocument.tableName,
     isFree: mongoDocument.isFree,
+    version: mongoDocument.__v,
   });
 }

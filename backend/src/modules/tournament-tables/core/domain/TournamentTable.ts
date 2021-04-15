@@ -10,12 +10,14 @@ export class TournamentTable {
   readonly tableNumber: TableNumber;
   readonly tableName: string;
   readonly isFree: boolean;
+  readonly version: number;
 
-  constructor(props: { tournamentId: string; tableNumber: TableNumber; tableName: string; isFree?: boolean }) {
+  constructor(props: { tournamentId: string; tableNumber: TableNumber; tableName: string; isFree?: boolean; version?: number }) {
     this.tournamentId = props.tournamentId;
     this.tableNumber = props.tableNumber;
     this.tableName = props.tableName;
     this.isFree = isDefined(props.isFree) ? props.isFree : true;
+    this.version = props.version ?? 0;
   }
 }
 
