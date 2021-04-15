@@ -21,7 +21,7 @@ import {
 } from "../../atoms/constants/routerPaths";
 import {MatchesListRoute} from "../Routes/MatchesListRoutes";
 import TournamentsList from "../TournamentsList/TournamentsList";
-import {MatchesAndResults} from "../../organisms/MatchesAndResults/MatchesAndResults";
+import {MatchesAndResults} from "../MatchesAndResults/MatchesAndResults";
 
 function TourDeFoos() {
   return (

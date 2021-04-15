@@ -8,7 +8,7 @@ import TabPanel from '@material-ui/lab/TabPanel';
 import {Alert, AlertTitle} from "@material-ui/lab";
 import {Centered} from "../../atoms/Shared/Centered";
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents';
-import {Typography} from "@material-ui/core";
+import {Box, Tabs, Typography} from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -51,10 +51,18 @@ export default function LabTabs() {
                         <Centered>
                             <EmojiEventsIcon color={"primary"} style={{fontSize: '3rem'}}/>
                             <Typography variant={"h5"} component={"h5"}>Zwycięzca</Typography>
+                            <Box>
+                                <Tabs
+                                    orientation="vertical"
+                                    variant="scrollable"
+                                    aria-label="Vertical tabs example"
+                                >
+                                    <Tab label="Gracz1"/>
+                                    <Tab label="Gracz2"/>
+                                </Tabs>
+                            </Box>
                         </Centered>
-
                     </div>
-
                 </TabPanel>
             </TabContext>
         </div>
