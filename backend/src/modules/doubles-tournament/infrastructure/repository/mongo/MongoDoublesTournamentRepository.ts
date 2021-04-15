@@ -65,6 +65,6 @@ function mongoDocumentToDomain(mongoDocument: MongoDoublesTournament): DoublesTo
       ),
     ],
     status: mongoDocument.status as TournamentStatus,
-    places: mongoDocument.places.map((place) => new TournamentPlace(place.placeNumber, TeamId.from(place.teamId))),
+    places: [...mongoDocument.places.map((place) => new TournamentPlace(place.placeNumber, TeamId.from(place.teamId)))],
   });
 }
