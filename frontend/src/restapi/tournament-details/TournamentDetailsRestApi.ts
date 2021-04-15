@@ -1,8 +1,5 @@
 import axios from "axios";
-import {
-  TournamentDetailsDto,
-  TournamentDetailsListDto,
-} from "./TournamentDetailsDto";
+import { TournamentDetailsListDto } from "./TournamentDetailsDto";
 
 export type TournamentDetailsRestApiConfig = {
   readonly baseUrl: string;

@@ -15,9 +15,6 @@ import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-regi
 import { TournamentDetailsRestApi } from "../../../restapi/tournament-details/TournamentDetailsRestApi";
 import { TournamentDetailsListDto } from "../../../restapi/tournament-details/TournamentDetailsDto";
 import { TournamentRegistrationsWithDetailsDto } from "../../../restapi/tournament-registrations/TournamentRegistrationsWithDetailsDto";
-import { Centered } from "../../atoms/Shared/Centered";
-import { Alert, AlertTitle } from "@material-ui/lab";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { TournamentNotFound } from "./TournamentNotFound";
 
 const useStyles = makeStyles((theme: Theme) =>
