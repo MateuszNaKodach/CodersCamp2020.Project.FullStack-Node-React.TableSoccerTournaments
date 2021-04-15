@@ -5,8 +5,9 @@ import { TournamentRegistrationsContext } from "./Context";
 import { makeStyles } from "@material-ui/core/styles";
 import { TournamentRegistrationsRestApi } from "../../../restapi/tournament-registrations";
 import Notification from "../Notification/Notification";
-import { useHistory } from "react-router-dom";
 import { TournamentStartRestApi } from "../../../restapi/tournament-start/TournamentStart";
+import { PATH_FOR_TOURNAMENTS_SELECTION_VIEW } from "../../atoms/constants/routerPaths";
+import { useHistory } from "react-router-dom";
 
 export const RegistrationsActionDrawer = (props: {
   openDrawer: boolean;
@@ -27,8 +28,8 @@ export const RegistrationsActionDrawer = (props: {
   }, [props.openDrawer]);
 
   const history = useHistory();
-  const goBack = () => {
-    history.goBack();
+  const goTo = (path: string) => {
+    history.push(path);
   };
 
   const onNotificationOpen = (errorMessage: string) => {
@@ -58,7 +59,7 @@ export const RegistrationsActionDrawer = (props: {
       );
       await TournamentStartRestApi().startTournament(props.tournamentId);
       toggleDrawer(false);
-      goBack();
+      goTo(PATH_FOR_TOURNAMENTS_SELECTION_VIEW);
     } catch (error) {
       onNotificationOpen(error.response.data.message);
     }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TournamentDetailsDto } from "./TournamentDetailsDto";
+import { TournamentDetailsListDto } from "./TournamentDetailsDto";
 
 export type TournamentDetailsRestApiConfig = {
   readonly baseUrl: string;
@@ -21,12 +21,18 @@ export const TournamentDetailsRestApi = (
       defaultConfig.baseUrl,
   };
   return {
-    getAllTournamentsDetails(): Promise<TournamentDetailsDto[]> {
+    getAllTournamentsDetails(): Promise<TournamentDetailsListDto> {
       return axios
-        .get<TournamentDetailsDto[]>(
+        .get<TournamentDetailsListDto>(
           `${currentConfig.baseUrl}/tournament-details/`
         )
         .then((res) => res.data);
+    },
+    async addTournamentName(body: {
+      tournamentId: string;
+      tournamentName: string;
+    }): Promise<void> {
+      await axios.post(`${currentConfig.baseUrl}/tournament-details/`, body);
     },
   };
 };
