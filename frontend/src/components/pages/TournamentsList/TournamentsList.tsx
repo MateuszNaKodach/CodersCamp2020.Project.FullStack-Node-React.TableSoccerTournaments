@@ -1,10 +1,10 @@
 import CardTitleWithNavButton from "../../molecules/CardTitleWithNavButton/CardTitleWithNavButton";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import TournamentCardsGallery from "../../organisms/TournamentsCardsGallery/TournamentsCardsGallery";
 import NewTournamentButton from "../../molecules/NewTournamentButton/NewTournamentButton";
 import { styled } from "@material-ui/core";
 import { CreateTournamentForm } from "../../organisms/CreateTournamentForm/CreateTournamentForm";
 import React, { useState } from "react";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 
 const StyledWrapper = styled("div")({
   position: "relative",
