@@ -36,7 +36,7 @@ export class CallMatchWhenMatchWasQueued implements EventHandler<MatchWasQueued>
   }
 
   private async findFreeTables(tournamentId: string): Promise<QueuedTable | undefined> {
-    const tournamentTables = await this.tablesQueueRepository.findByTournamentId(tournamentId);
-    return tournamentTables?.queuedTables.filter((table) => table.isFree)[0];
+    const { state: tablesQueue } = await this.tablesQueueRepository.findByTournamentId(tournamentId);
+    return tablesQueue?.queuedTables.filter((table) => table.isFree)[0];
   }
 }
