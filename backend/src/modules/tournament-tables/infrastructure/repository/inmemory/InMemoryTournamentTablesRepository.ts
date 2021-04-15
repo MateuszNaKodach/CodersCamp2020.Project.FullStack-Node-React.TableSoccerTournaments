@@ -8,7 +8,7 @@ export class InMemoryTournamentTablesRepository implements TournamentTablesRepos
   async save(tournamentTable: TournamentTable): Promise<void> {
     const tableId = `${tournamentTable.tournamentId}_${tournamentTable.tableNumber.raw}`;
     if ((this.entities[tableId]?.version ?? 0) !== tournamentTable.version) {
-      throw new OptimisticLockingException(tournamentTable.version);
+      return Promise.reject(new OptimisticLockingException(tournamentTable.version));
     }
     this.entities[tableId] = new TournamentTable({
       ...tournamentTable,

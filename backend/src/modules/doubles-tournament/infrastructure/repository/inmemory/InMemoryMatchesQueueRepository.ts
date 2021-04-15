@@ -7,7 +7,7 @@ export class InMemoryMatchesQueueRepository implements MatchesQueueRepository {
 
   async save(matchesQueue: MatchesQueue, expectedVersion: number): Promise<void> {
     if ((this.entities[matchesQueue.tournamentId.raw]?.version ?? 0) !== expectedVersion) {
-      throw new OptimisticLockingException(expectedVersion);
+      return Promise.reject(new OptimisticLockingException(expectedVersion));
     }
     this.entities[matchesQueue.tournamentId.raw] = { state: matchesQueue, version: expectedVersion + 1 };
   }
