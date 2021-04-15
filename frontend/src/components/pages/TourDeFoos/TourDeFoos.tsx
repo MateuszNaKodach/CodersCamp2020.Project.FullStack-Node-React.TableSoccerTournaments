@@ -1,11 +1,9 @@
 import React from "react";
 import { Button, Grid, MuiThemeProvider } from "@material-ui/core";
-import { Centered } from "../../atoms/Shared/Centered";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { THEME } from "../../atoms/constants/ThemeMUI";
 import Footer from "../../organisms/Footer/Footer";
 import { HomeMenu } from "../HomeMenu/HomeMenu";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import Header from "../../organisms/Header/Header";
 import { TournamentRegistrationsRoute } from "../Routes/TournamentRegistrationsRoutes";
 import { StyledBackground } from "../../atoms/Background/StyledBackground";
@@ -21,6 +19,8 @@ import {
 } from "../../atoms/constants/routerPaths";
 import { MatchesListRoute } from "../Routes/MatchesListRoutes";
 import TournamentsList from "../TournamentsList/TournamentsList";
+import { Centered } from "../../atoms/Centered";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 
 function TourDeFoos() {
   return (

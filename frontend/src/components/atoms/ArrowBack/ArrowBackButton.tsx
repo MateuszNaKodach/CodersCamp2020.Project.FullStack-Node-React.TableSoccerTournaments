@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { IconButton } from "@material-ui/core";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
-import { THEME } from "../../constants/ThemeMUI";
+import { THEME } from "../constants/ThemeMUI";
 
 const style = {
   color: THEME.palette.primary.main,

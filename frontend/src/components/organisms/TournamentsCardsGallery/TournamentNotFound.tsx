@@ -1,9 +1,9 @@
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { VerticalSpace } from "../../atoms/Shared/VerticalSpace";
 import { Button, createStyles, Theme } from "@material-ui/core";
-import { Centered } from "../../atoms/Shared/Centered";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Centered } from "../../atoms/Centered";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
