@@ -9,26 +9,26 @@ import { TournamentTeamId } from './TournamentTeamId';
 import { MatchReadyToStart } from './MatchReadyToStart';
 
 export class TournamentTree {
-  readonly tournamentTeams: TournamentTeam[];
-  readonly tournamentTreeArray: FightingTeamsGroup[];
   readonly tournamentId: string;
+  readonly tournamentTreeArray: FightingTeamsGroup[];
+  readonly tournamentTeams: TournamentTeam[];
   firstPlaceTeamId: string | undefined = undefined;
 
   private constructor(props: { tournamentId: string; tournamentTreeArray: FightingTeamsGroup[]; tournamentTeams: TournamentTeam[] }) {
-    this.tournamentTeams = props.tournamentTeams;
-    this.tournamentTreeArray = props.tournamentTreeArray;
     this.tournamentId = props.tournamentId;
+    this.tournamentTreeArray = props.tournamentTreeArray;
+    this.tournamentTeams = props.tournamentTeams;
   }
 
   private finishMatchesFromLevelZeroWhereIsOnlyOneTeam(): void {
     this.tournamentTreeArray
       .filter((match) => match.fightingTeamsGroupLevel === 0 && (!match.firstTeam || !match.secondTeam))
       .map((match) => {
-        if (match.firstTeam) {
-          this.finishMatch(match.fightingTeamsGroupId.raw, match.firstTeam.teamId.raw);
+        if (match.firstTeam && match.matchNumberInSequence) {
+          this.finishMatchInTreeAndGetNextOne(match.matchNumberInSequence, match.firstTeam.teamId.raw);
         }
-        if (match.secondTeam) {
-          this.finishMatch(match.fightingTeamsGroupId.raw, match.secondTeam.teamId.raw);
+        if (match.secondTeam && match.matchNumberInSequence) {
+          this.finishMatchInTreeAndGetNextOne(match.matchNumberInSequence, match.secondTeam.teamId.raw);
         }
       });
   }
@@ -97,18 +97,22 @@ export class TournamentTree {
     return this.tournamentTreeArray.find((match) => match.matchNumberInSequence === matchNumberInSequence)?.fightingTeamsGroupId.raw;
   }
 
-  public finishMatch(finishedMatchId: string, winnerTeamId: string): void {
-    const finishedMatch = this.tournamentTreeArray.find((match) => finishedMatchId == match.fightingTeamsGroupId.raw);
-    if (!finishedMatch) return;
+  public finishMatchInTreeAndGetNextOne(
+    finishedMatchNumber: number,
+    winnerTeamId: string,
+  ): { treeWithFinishedMatch: TournamentTree; matchToEnqueue: MatchReadyToStart | undefined } {
+    const finishedMatch = this.tournamentTreeArray.find((match) => finishedMatchNumber == match.matchNumberInSequence);
+    if (!finishedMatch) {
+      throw new Error("Such match doesn't exist.");
+    }
     const nextMatchIdForWinner = finishedMatch.nextMatchId?.raw;
 
     if (!nextMatchIdForWinner) {
       this.firstPlaceTeamId = winnerTeamId;
       finishedMatch.isMatchFinished = true;
-      return;
     }
 
-    this.tournamentTreeArray.find((match) => {
+    const nextMatch = this.tournamentTreeArray.find((match) => {
       const nextMatchNotExist = match.fightingTeamsGroupId.raw !== nextMatchIdForWinner;
       if (nextMatchNotExist) return;
       if (!match.firstTeam) {
@@ -117,7 +121,23 @@ export class TournamentTree {
         match.secondTeam = new TournamentTeam({ teamId: TournamentTeamId.from(winnerTeamId) });
       }
       finishedMatch.isMatchFinished = true;
+      return true;
     });
+    const matchToEnqueue = nextMatch
+      ? new MatchReadyToStart({
+          firstTeam: nextMatch.firstTeam as TournamentTeam,
+          secondTeam: nextMatch.secondTeam as TournamentTeam,
+          matchNumber: nextMatch.matchNumberInSequence as number,
+        })
+      : undefined;
+    return {
+      treeWithFinishedMatch: new TournamentTree({
+        tournamentId: this.tournamentId,
+        tournamentTreeArray: this.tournamentTreeArray,
+        tournamentTeams: this.tournamentTeams,
+      }),
+      matchToEnqueue: matchToEnqueue,
+    };
   }
 }
 

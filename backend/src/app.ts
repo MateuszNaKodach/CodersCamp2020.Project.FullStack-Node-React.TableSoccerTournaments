@@ -60,13 +60,14 @@ import { MongoTournamentDetailsRepository } from './modules/tournament-details/i
 import { InMemoryTournamentDetailsRepository } from './modules/tournament-details/infrastructure/repository/inmemory/InMemoryTournamentDetailsRepository';
 import { TournamentDetailsModuleCore } from './modules/tournament-details/core/TournamentDetailsModuleCore';
 import { TournamentDetailsRestApiModule } from './modules/tournament-details/presentation/rest-api/TournamentDetailsRestApiModule';
+import { LoggingCommandBus } from './shared/infrastructure/core/application/command/LoggingCommandBus';
 
 config();
 
 export type TableSoccerTournamentsApplication = { restApi: Express };
 
 export async function TableSoccerTournamentsApplication(
-  commandBus: CommandBus = new RetryCommandBus(new InMemoryCommandBus(), 10),
+  commandBus: CommandBus = new RetryCommandBus(new LoggingCommandBus(new InMemoryCommandBus()), 10),
   eventBus: DomainEventBus = new LoggingDomainEventBus(new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus())),
   queryBus: QueryBus = new InMemoryQueryBus(),
   currentTimeProvider: CurrentTimeProvider = () => new Date(),

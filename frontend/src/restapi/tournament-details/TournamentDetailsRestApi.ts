@@ -21,12 +21,12 @@ export const TournamentDetailsRestApi = (
             defaultConfig.baseUrl,
     };
     return {
-        getAllTournamentsDetails(): Promise<TournamentDetailsDto[]> {
+        getAllTournamentsDetails(): Promise<TournamentDetailsDto[] > {
             return axios
                 .get<TournamentDetailsDto[]>(
                     `${currentConfig.baseUrl}/tournament-details/`
                 )
-                .then(res => res.data);
+                .then(res => res.data)
         }
     };
 };
