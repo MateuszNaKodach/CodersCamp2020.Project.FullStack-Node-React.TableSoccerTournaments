@@ -1,19 +1,13 @@
 import {Alert, AlertTitle} from "@material-ui/lab";
-import {Centered} from "../../atoms/Shared/Centered";
 import EmojiEventsIcon from "@material-ui/icons/EmojiEvents";
 import {Box, Tabs, Typography} from "@material-ui/core";
 import Tab from "@material-ui/core/Tab";
 import React, {useState} from "react";
+import {Centered} from "../../atoms/Centered";
 
 function TournamentsResults() {
     const [tournamentStatus, setTournamentStatus] = useState(undefined);
 
-    useEffect(() => {
-        return () => {
-            effect
-        };
-    }, [input]);
-    
 
     return (
         <>
