@@ -13,12 +13,13 @@ import { EndTournament } from '../../../../../src/modules/doubles-tournament/cor
 import { TournamentWasEnded } from '../../../../../src/modules/doubles-tournament/core/domain/event/TournamentWasEnded';
 import { testTournamentTreeModule } from '../../../tournament-tree/core/application/TestTournamentTreeModule';
 import { testDoublesTournamentsModule } from './TestDoublesTournamentsModule';
+import { CreateTournamentWithTeams } from '../../../../../src/modules/doubles-tournament/core/application/command/CreateTournamentWithTeams';
 
 describe('Ending tournament', () => {
   const currentTime = new Date();
   const tournamentId = 'SampleTournamentId';
-  const [team1Id, team2Id] = ['team1', 'team2'];
-  const entityIdGenFromList = FromListIdGeneratorStub([team1Id, team2Id]);
+  const [team1Id, team2Id, team3Id, team4Id] = ['team1', 'team2', 'team3', 'team4'];
+  const entityIdGenFromList = FromListIdGeneratorStub([team1Id, team2Id, team3Id, team4Id]);
   const entityIdGen = NumberIdGeneratorStub(100, 'entityId');
   const commandBus: CommandBus = new InMemoryCommandBus();
   const eventBus: StoreAndForwardDomainEventBus = new StoreAndForwardDomainEventBus(new InMemoryDomainEventBus());
@@ -27,27 +28,50 @@ describe('Ending tournament', () => {
 
   it('When last tournament match ended, then end tournament', async () => {
     //Given
+    const tournament = new CreateTournamentWithTeams(tournamentId, [
+      { player1: 'player1', player2: 'player2' },
+      { player1: 'player3', player2: 'player4' },
+      { player1: 'player5', player2: 'player6' },
+    ]);
+    await doublesTournament.executeCommand(tournament);
     await tournamentTree.executeCommand(createTestTournamentTree(tournamentId));
     const spy = jest.spyOn(commandBus, `execute`);
     const startedTournament = new TournamentWasStarted({ occurredAt: currentTime, tournamentId: tournamentId });
     await doublesTournament.publishEvent(startedTournament);
-    expect(spy).toBeCalledWith(
-      new EnqueueMatch({
-        tournamentId: tournamentId,
-        matchNumber: 1,
-        team1Id: team1Id,
-        team2Id: team2Id,
-      }),
-    );
-
-    //When
+    spy.mockClear();
     const tournamentMatchWasEnded = new TournamentMatchWasEnded({
       occurredAt: currentTime,
       tournamentId: tournamentId,
       matchNumber: 1,
+      winnerId: team1Id,
+    });
+    await doublesTournament.publishEvent(tournamentMatchWasEnded);
+    const tournamentMatchWasEnded2 = new TournamentMatchWasEnded({
+      occurredAt: currentTime,
+      tournamentId: tournamentId,
+      matchNumber: 2,
       winnerId: team2Id,
     });
-    doublesTournament.publishEvent(tournamentMatchWasEnded);
+    await doublesTournament.publishEvent(tournamentMatchWasEnded2);
+    await waitForExpect(() =>
+      expect(spy).toBeCalledWith(
+        new EnqueueMatch({
+          tournamentId: tournamentId,
+          matchNumber: 3,
+          team1Id: team1Id,
+          team2Id: team2Id,
+        }),
+      ),
+    );
+
+    //When
+    const tournamentMatchWasEnded3 = new TournamentMatchWasEnded({
+      occurredAt: currentTime,
+      tournamentId: tournamentId,
+      matchNumber: 3,
+      winnerId: team2Id,
+    });
+    await doublesTournament.publishEvent(tournamentMatchWasEnded3);
 
     //Then
     await waitForExpect(() =>
@@ -58,12 +82,14 @@ describe('Ending tournament', () => {
         }),
       ),
     );
-    expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
-      new TournamentWasEnded({
-        occurredAt: currentTime,
-        tournamentId: tournamentId,
-        winner: team2Id,
-      }),
+    await waitForExpect(() =>
+      expect(doublesTournament.lastPublishedEvent()).toStrictEqual(
+        new TournamentWasEnded({
+          occurredAt: currentTime,
+          tournamentId: tournamentId,
+          winner: team2Id,
+        }),
+      ),
     );
   });
 });
@@ -81,6 +107,16 @@ function createTestTournamentTree(sampleTournamentTreeId: string) {
         teamId: 'team2',
         firstTeamPlayer: 'player3',
         secondTeamPlayer: 'player4',
+      },
+      {
+        teamId: 'team3',
+        firstTeamPlayer: 'player5',
+        secondTeamPlayer: 'player6',
+      },
+      {
+        teamId: 'team4',
+        firstTeamPlayer: 'player7',
+        secondTeamPlayer: 'player8',
       },
     ],
   });

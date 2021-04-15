@@ -35,6 +35,8 @@ import { MatchHasEnded } from '../../match-module/core/domain/event/MatchHasEnde
 import { MatchHasEndedImpliesTournamentMatchWasEnded } from './application/event/MatchHasEndedImpliesTournamentMatchWasEnded';
 import { TournamentMatchWasEnded } from './domain/event/TournamentMatchWasEnded';
 import { ReleaseTournamentTableWhenTournamentMatchWasEnded } from './application/event/ReleaseTournamentTableWhenTournamentMatchWasEnded';
+import { EndTournament } from './application/command/EndTournament';
+import { EndTournamentCommandHandler } from './application/command/EndTournamentCommandHandler';
 
 export function DoublesTournamentModuleCore(
   eventPublisher: DomainEventPublisher,
@@ -62,6 +64,10 @@ export function DoublesTournamentModuleCore(
       {
         commandType: StartTournament,
         handler: new StartTournamentCommandHandler(eventPublisher, currentTimeProvider, repository),
+      },
+      {
+        commandType: EndTournament,
+        handler: new EndTournamentCommandHandler(eventPublisher, currentTimeProvider, repository),
       },
     ],
     eventHandlers: [
