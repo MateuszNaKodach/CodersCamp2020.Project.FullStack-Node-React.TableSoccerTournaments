@@ -203,10 +203,10 @@ const returnMatchList = (
             };
 
             function findStatus(): MatchStatus {
-               if (status === "started") return MatchStatus.STARTED;
-               if (status === "ended") return MatchStatus.FINISHED;
-               if (status === "enqueued") return MatchStatus.NO_TABLE;
-               if (status === "noTeams") {
+               if (status.toLowerCase() === "started") return MatchStatus.STARTED;
+               if (status.toLowerCase() === "ended") return MatchStatus.FINISHED;
+               if (status.toLowerCase() === "enqueued") return MatchStatus.NO_TABLE;
+               if (status.toLowerCase() === "noTeams") {
                   if (team1Id || team1Id) return MatchStatus.NO_ONE_TEAM;
                   else return MatchStatus.NO_TEAMS;
                }
