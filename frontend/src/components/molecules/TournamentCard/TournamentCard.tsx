@@ -13,7 +13,7 @@ import {
 } from "../../atoms/constants/routerPaths";
 import { PATH_FOR_IMAGES } from "../../atoms/constants/imgPaths";
 import TextButton from "../../atoms/TextButton/TextButton";
-import {VerticalSpace} from "../../atoms/VerticalSpace";
+import { VerticalSpace } from "../../atoms/VerticalSpace";
 
 type TournamentCardProps = {
   readonly tournamentId: string;
