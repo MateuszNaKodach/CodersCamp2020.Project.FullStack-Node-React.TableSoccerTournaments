@@ -165,7 +165,7 @@ const returnMatchList = (
 
             const findLevel = (): number | undefined => undefined;
 
-            const teamPlayersNames = (teamId: string | undefined): string[] => {
+            const teamPlayersFullNames = (teamId: string | undefined): string[] => {
                if(!teamId){
                   return []
                }
@@ -174,9 +174,9 @@ const returnMatchList = (
                   return [];
                }
                const playersIdsInTeam = [playersTeam.firstTeamPlayer, playersTeam.secondTeamPlayer]
-               return playersProfilesList
-                   .filter(playerProfile => playersIdsInTeam.includes(playerProfile.playerId))
-                   .map(playerProfile => `${playerProfile.firstName} ${playerProfile.lastName}`);
+               return playersIdsInTeam
+                   .map(playerId => playersProfilesList.find(playerProfile => playerProfile.playerId === playerId))
+                   ?.map(playerProfile => !playerProfile ? `Unknown` : `${playerProfile.firstName} ${playerProfile.lastName}`)
             }
 
             function findStatus(): MatchStatus {
@@ -190,8 +190,8 @@ const returnMatchList = (
                return MatchStatus.STATUS_NOT_EXIST;
             }
 
-            const team1Players = teamPlayersNames(team1Id)
-            const team2Players = teamPlayersNames(team2Id)
+            const team1Players = teamPlayersFullNames(team1Id)
+            const team2Players = teamPlayersFullNames(team2Id)
             return {
                level: findLevel(),
                matchId: findMatchId(),
