@@ -1,11 +1,10 @@
 import React from "react";
-import { Button, Card, CardContent, List, makeStyles } from "@material-ui/core";
-import styled from "styled-components";
+import { Button, CardContent, List, makeStyles } from "@material-ui/core";
 import CardTitle from "../../molecules/CardTitle/CardTitle";
 import { VerticalSpace } from "../../atoms/VerticalSpace";
 import { Centered } from "../../atoms/Centered";
 import { Link } from "react-router-dom";
-import { MIN_CARD_COMPONENT_WIDTH } from "../../atoms/constants/sizes";
+import {StyledCard} from "../../atoms/StyledCard/StyledCard";
 
 type MenuButtonsProps = {
   readonly textName: string;
@@ -19,23 +18,15 @@ type MenuComponentProps = {
 };
 
 export const Menu = (props: MenuComponentProps) => (
-  <StartMenuCard>
+  <StyledCard>
     <CardContent>
       <Centered>
         <CardTitle title={props.title} />
         {MenuButtonsList(props.menuButtonsList)}
       </Centered>
     </CardContent>
-  </StartMenuCard>
+  </StyledCard>
 );
-
-const StartMenuCard = styled(Card)({
-  display: "block",
-  boxSizing: "border-box",
-  minWidth: MIN_CARD_COMPONENT_WIDTH,
-  paddingTop: "40px",
-  paddingBottom: "40px",
-});
 
 const MenuButtonsList = (props: MenuButtonsProps[]) => (
   <List>
