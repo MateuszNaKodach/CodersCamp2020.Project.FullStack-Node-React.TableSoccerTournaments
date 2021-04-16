@@ -6,6 +6,8 @@ export const StyledCard = styled(Card)({
    display: "block",
    boxSizing: "border-box",
    minWidth: MIN_CARD_COMPONENT_WIDTH,
+   width: MIN_CARD_COMPONENT_WIDTH,
    paddingTop: "40px",
    paddingBottom: "40px",
+   margin: "2px",
 });

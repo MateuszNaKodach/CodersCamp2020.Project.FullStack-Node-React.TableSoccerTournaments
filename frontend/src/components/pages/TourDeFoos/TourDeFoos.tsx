@@ -21,6 +21,7 @@ import { MatchesListRoute } from "../Routes/MatchesListRoutes";
 import TournamentsList from "../TournamentsList/TournamentsList";
 import { Centered } from "../../atoms/Centered";
 import { VerticalSpace } from "../../atoms/VerticalSpace";
+import LoginRegisterView from "../LoginRegisterView/LoginRegisterView";
 
 function TourDeFoos() {
   return (
@@ -38,6 +39,9 @@ function TourDeFoos() {
             justify="center"
             style={{ minHeight: "75vh" }}
           >
+
+            <LoginRegisterView/>
+
             <Switch>
               <Route path={PATH_FOR_LOGIN_VIEW} exact>
                 <Button>PATH_FOR_LOGIN_VIEW</Button>
