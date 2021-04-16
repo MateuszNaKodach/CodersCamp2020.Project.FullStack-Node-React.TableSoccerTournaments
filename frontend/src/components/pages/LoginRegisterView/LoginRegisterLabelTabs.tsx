@@ -35,7 +35,7 @@ export default function LoginRegisterLabelTabs() {
             aria-label="icon label tabs example"
          >
             <Tab icon={<PermIdentityIcon/>} label="Login"/>
-            <Tab icon={<PersonAddIcon/>} label="FAVORITES"/>
+            <Tab icon={<PersonAddIcon/>} label="register"/>
          </Tabs>
       </StyledTabCard>
    );

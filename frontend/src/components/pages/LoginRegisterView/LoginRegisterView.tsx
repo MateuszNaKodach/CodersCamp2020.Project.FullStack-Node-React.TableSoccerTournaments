@@ -12,7 +12,6 @@ export default function IconLabelTabs() {
          <LoginRegisterLabelTabs/>
          <StyledCard >
          </StyledCard>
-
       </>
    );
 }
