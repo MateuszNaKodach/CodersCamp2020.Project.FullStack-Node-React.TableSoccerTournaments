@@ -80,6 +80,9 @@ The architecture has been designed according to the **Atomic Design approach**. 
 
 #### Other:
 - Code Review in every Pull Request (and 2 Approve to merge)
+- We used to daily every day and remote-meeting every week!
+- **Event Storming**
+- **Domain-Driven Design (DDD)**
 - Git
 - GitHub
 - IntelliJ
@@ -88,7 +91,7 @@ The architecture has been designed according to the **Atomic Design approach**. 
 - Swagger
 - Docker
 - EasyRetro
-- We used to daily every day and remote-meeting every week!
+
 
 
 ## Event Modeling
