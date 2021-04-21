@@ -5,23 +5,29 @@ import Tab from "@material-ui/core/Tab";
 import React, {useEffect, useState} from "react";
 import {Centered} from "../../atoms/Centered";
 import {DoublesTournamentRestAPI} from "../../../restapi/doubles-tournament/DoublesTournamentRestApi";
-import {TournamentPlaceDto} from "../../../restapi/doubles-tournament/TournamentPlaceDto";
+import {TournamentTeamPlaceDto} from "../../../restapi/doubles-tournament/TournamentTeamPlaceDto";
+import {PlayerProfileDto, UserProfileRestApi} from "../../../restapi/players-profiles";
 
 type TournamentResultsProps = {
     tournamentId: string;
 }
 
 function TournamentsResults(props: TournamentResultsProps) {
-    const [tournamentStatus, setTournamentStatus] = useState(undefined);
-    const [tournamentPlaces, setTournamentPlaces] = useState<TournamentPlaceDto>();
+    const [tournamentStatus, setTournamentStatus] = useState<string | undefined>(undefined);
+    const [tournamentFirstPlaceTeam, setTournamentFirstPlaceTeam] = useState<TournamentTeamPlaceDto>();
+    const [firstWinnerPlayerId, setFirstWinnerPlayerId] = useState<string>();
+    const [secondWinnerPlayerId, setSecondWinnerPlayerId] = useState<string>();
+    const [firstWinnerPlayerDetails, setFirstWinnerPlayerDetails] = useState<PlayerProfileDto>();
+    const [secondWinnerPlayerDetails, setSecondWinnerPlayerDetails] = useState<PlayerProfileDto>();
+
 
     useEffect(() => {
         return () => {
             DoublesTournamentRestAPI()
                 .getDoublesTournament(props.tournamentId)
                 .then((doublesTournament) => {
-
-                })
+                    setTournamentStatus(doublesTournament.status)
+                });
         };
     }, []);
 
@@ -31,24 +37,54 @@ function TournamentsResults(props: TournamentResultsProps) {
             DoublesTournamentRestAPI()
                 .getTournamentPlaces(props.tournamentId)
                 .then((tournamentPlaces) => {
-                    const firstPlace = tournamentPlaces.items.find((tournamentPlace) => tournamentPlace.placeNumber === 1);
-                    setTournamentPlaces(firstPlace)
+                    const firstPlaceTeam = tournamentPlaces.items.find((tournamentPlace) => tournamentPlace.placeNumber === 1);
+                    setTournamentFirstPlaceTeam(firstPlaceTeam)
                 });
         };
     }, []);
-    
-    
+
+    useEffect(() => {
+        return () => {
+            DoublesTournamentRestAPI()
+                .getTournamentTeams(props.tournamentId)
+                .then((tournamentTeams) => {
+                    const winnerTeamMembers = tournamentTeams.items.find((tournamentTeam) => tournamentTeam.teamId === tournamentFirstPlaceTeam?.teamId);
+                    setFirstWinnerPlayerId(winnerTeamMembers?.firstTeamPlayer);
+                    setSecondWinnerPlayerId(winnerTeamMembers?.secondTeamPlayer);
+                    return winnerTeamMembers;
+                });
+        };
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            UserProfileRestApi()
+                .getPlayerProfile(firstWinnerPlayerId!)
+                .then((playerDetails) => {
+                    setFirstWinnerPlayerDetails(playerDetails);
+                });
+        };
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            UserProfileRestApi()
+                .getPlayerProfile(secondWinnerPlayerId!)
+                .then((playerDetails) => {
+                    setSecondWinnerPlayerDetails(playerDetails);
+                });
+        };
+    }, []);
+
     return (
-        <>
+        <>{tournamentStatus === undefined
+            ?
             <Centered>
                 <CircularProgress/>
             </Centered>
-            <>
-                <Alert severity="info">
-                    <AlertTitle><strong>Turniej w trakcie</strong></AlertTitle>
-                    Wyniki będą dostępne po zakończeniu wszystkich meczy
-                </Alert>
-
+            :
+            <>{tournamentStatus === 'ENDED'
+                ?
                 <div style={{display: "flex", justifyContent: "center"}}>
                     <Centered>
                         <EmojiEventsIcon color={"primary"} style={{fontSize: '3rem'}}/>
@@ -60,15 +96,20 @@ function TournamentsResults(props: TournamentResultsProps) {
                                 variant="scrollable"
                                 aria-label="Vertical tabs example"
                             >
-                                <Tab label="Gracz1"/>
-                                <Tab label="Gracz2"/>
+                                <Tab label={`${firstWinnerPlayerDetails?.firstName} ${firstWinnerPlayerDetails?.lastName}`}/>
+                                <Tab label={`${secondWinnerPlayerDetails?.firstName} ${secondWinnerPlayerDetails?.lastName}`}/>
                             </Tabs>
                         </Box>
                     </Centered>
                 </div>
-            </>
+                :
+                <Alert severity="info">
+                    <AlertTitle><strong>Turniej w trakcie</strong></AlertTitle>
+                    Wyniki będą dostępne po zakończeniu wszystkich meczy
+                </Alert>
+            }</>
 
-        </>
+        }</>
     );
 }
 
