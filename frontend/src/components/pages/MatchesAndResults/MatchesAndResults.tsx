@@ -4,7 +4,7 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import {makeStyles} from "@material-ui/core/styles";
 import {useHistory} from "react-router-dom";
 
-import MatchesAndResultsTabs from "../../molecules/LabTabs/MatchesAndResultsTabs";
+import MatchesAndResultsTabs from "../../molecules/MatchesAndResultsTabs/MatchesAndResultsTabs";
 import {MIN_CARD_COMPONENT_WIDTH} from "../../atoms/constants/sizes";
 import {VerticalSpace} from "../../atoms/VerticalSpace";
 import {Centered} from "../../atoms/Centered";
