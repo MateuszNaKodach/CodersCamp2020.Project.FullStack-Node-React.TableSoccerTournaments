@@ -1,7 +1,5 @@
 import {
-  Button,
   createStyles,
-  Grid,
   GridList,
   GridListTile,
   styled,
