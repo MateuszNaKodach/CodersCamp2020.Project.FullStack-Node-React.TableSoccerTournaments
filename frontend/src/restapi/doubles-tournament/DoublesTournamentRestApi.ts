@@ -26,17 +26,17 @@ export const DoublesTournamentRestAPI = (
     return {
         getTournamentPlaces(tournamentId: string): Promise<TournamentPlaceListDto> {
             return axios
-                .get<TournamentPlaceListDto>(`${currentConfig.baseUrl}/doubles-tournament/${tournamentId}/places`)
+                .get<TournamentPlaceListDto>(`${currentConfig.baseUrl}/doubles-tournaments/${tournamentId}/places`)
                 .then((res) => res.data)
         },
         getDoublesTournament(tournamentId: string): Promise<DoublesTournamentDto> {
             return axios
-                .get<DoublesTournamentDto>(`${currentConfig.baseUrl}/doubles-tournament/${tournamentId}`)
+                .get<DoublesTournamentDto>(`${currentConfig.baseUrl}/doubles-tournaments/${tournamentId}`)
                 .then((res) => res.data)
         },
         getTournamentTeams(tournamentId: string): Promise<TournamentTeamsListDto> {
             return axios
-                .get<TournamentTeamsListDto>(`${currentConfig.baseUrl}/doubles-tournament/${tournamentId}/teams`)
+                .get<TournamentTeamsListDto>(`${currentConfig.baseUrl}/doubles-tournaments/${tournamentId}/teams`)
                 .then((res) => res.data);
         }
     };
