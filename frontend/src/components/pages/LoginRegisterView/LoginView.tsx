@@ -16,6 +16,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import Notification from "../../organisms/Notification/Notification";
 import { RegisterUserForm } from "../../organisms/RegisterUserForm.tsx/RegisterUserForm";
+import { Login } from "../../atoms/GoogleAuthentication/Login";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -120,13 +121,16 @@ export function LoginView() {
                 helperText={formik.touched.password && formik.errors.password}
               />
 
-              <VerticalSpace height="1rem" />
+              <VerticalSpace height="10px" />
               <Button type="submit" variant="contained" color="primary">
                 Zaloguj się
               </Button>
-              <VerticalSpace height="1rem" />
+              <VerticalSpace height="10px" />
             </Grid>
           </form>
+          <Login />
+          <VerticalSpace height="20px" />
+
           <Button
             variant="contained"
             color="primary"

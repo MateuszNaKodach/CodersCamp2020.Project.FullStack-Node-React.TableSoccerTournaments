@@ -1,7 +1,11 @@
 import React from "react";
 import { Menu } from "../../templates/Menu";
-import {PATH_FOR_PLAYERS_PROFILES_VIEW, PATH_FOR_TOURNAMENTS_SELECTION_VIEW} from "../../atoms/constants/routerPaths";
-import {APP_NAME} from "../../atoms/constants/names";
+import {
+  PATH_FOR_PLAYERS_PROFILES_VIEW,
+  PATH_FOR_TOURNAMENTS_SELECTION_VIEW,
+} from "../../atoms/constants/routerPaths";
+import { APP_NAME } from "../../atoms/constants/names";
+import { Logout } from "../../atoms/GoogleAuthentication/Logout";
 
 const homeMenuButtonsListProps = [
   {
@@ -23,5 +27,6 @@ const homeMenuButtonsListProps = [
 export const HomeMenu = () => (
   <>
     <Menu title={APP_NAME} menuButtonsList={homeMenuButtonsListProps} />
+    <Logout />
   </>
 );

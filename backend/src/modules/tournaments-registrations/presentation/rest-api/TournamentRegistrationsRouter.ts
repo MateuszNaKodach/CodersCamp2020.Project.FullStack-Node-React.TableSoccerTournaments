@@ -19,6 +19,7 @@ import {
   FindTournamentRegistrationsByIdResult,
 } from '../../core/application/query/FindTournamentRegistrationsById';
 import { PostTournamentRegistrationsRequestBody } from './request/PostTournamentRegistrationsRequestBody';
+import { googleAuth } from '../../../../shared/GoogleAuthentication';
 
 export function tournamentRegistrationsRouter(
   commandPublisher: CommandPublisher,
@@ -28,6 +29,8 @@ export function tournamentRegistrationsRouter(
   const postOpenTournamentRegistrations = async (request: Request, response: Response) => {
     const requestBody: PostTournamentRegistrationsRequestBody = request.body;
     const tournamentId = requestBody.tournamentId;
+    const googleTokenId: string | undefined = request.headers.authorization;
+    await googleAuth(googleTokenId);
     const commandResult = await commandPublisher.execute(new OpenTournamentRegistrations({ tournamentId }));
     return commandResult.process(
       () => response.status(StatusCodes.CREATED).json({ tournamentId }).send(),
