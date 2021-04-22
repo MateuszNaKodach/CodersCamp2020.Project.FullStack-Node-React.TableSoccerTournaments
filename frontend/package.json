@@ -31,7 +31,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "format:ci": "prettier -c \"src/**/*.ts\"",
     "start": "react-scripts start",
-    "test": "react-scripts test"
+    "test": "react-scripts test -- --coverage"
   },
   "eslintConfig": {
     "extends": [
