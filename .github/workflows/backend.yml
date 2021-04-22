@@ -68,3 +68,6 @@ jobs:
           usedocker: true
           branch: MongoDB_connection
           appdir: backend
+          env_file: ".env.heroku"
+        env:
+          HD_MONGO_CONNECTION_STRING: ${{secrets.HEROKU_MONGO_CONNECTION_STRING}}
