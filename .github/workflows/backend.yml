@@ -59,14 +59,14 @@ jobs:
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
       - name: Deploy on Heroku from develop branch
-        if: github.ref == 'refs/heads/MongoDB_connection'
+        if: github.ref == 'refs/heads/develop'
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "coderscamp2020-tablesoccer"
           heroku_email: "mateusz.nowak@coderscrew.pl"
           usedocker: true
-          branch: MongoDB_connection
+          branch: develop
           appdir: backend
           env_file: ".env.heroku"
         env:
