@@ -1,8 +1,7 @@
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 
-
-export const googleAuth: (token: (string | undefined)) => Promise<void> = async (token: string | undefined) => {
-  if(process.env.GOOGLE_CLIENT_ID === undefined){
+export const googleAuth: (token: string | undefined) => Promise<void> = async (token: string | undefined) => {
+  if (process.env.GOOGLE_CLIENT_ID === undefined) {
     return;
   }
   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
