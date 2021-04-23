@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
-export function Logout() {
+export function Logout(): JSX.Element {
   const history = useHistory();
 
   const onSuccess = () => {
