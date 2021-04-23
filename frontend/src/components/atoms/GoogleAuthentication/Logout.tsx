@@ -17,7 +17,7 @@ export function Logout() {
   };
 
   if(!clientId){
-    return;
+    return <div/>;
   }
 
   return (
