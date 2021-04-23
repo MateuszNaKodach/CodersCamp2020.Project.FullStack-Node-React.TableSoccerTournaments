@@ -80,6 +80,8 @@ The architecture has been designed according to the **Atomic Design approach**. 
 
 #### Other:
 - Code Review in every Pull Request (and 2 Approve to merge)
+- Event Storming & Event Modeling
+- Domain-Driven Design (DDD)
 - Git
 - GitHub
 - IntelliJ
