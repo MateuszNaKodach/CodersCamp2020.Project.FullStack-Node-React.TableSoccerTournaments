@@ -3,8 +3,7 @@ import { GoogleLogin } from "react-google-login";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 
-const clientId =
-  "1052788207529-fjnskiqrsm09i9kbujp3gmtasnp21su7.apps.googleusercontent.com";
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 export function Login() {
   const history = useHistory();
@@ -26,6 +25,10 @@ export function Login() {
     console.log("Login failed: res:", res);
     alert(`Failed to login. 😢`);
   };
+
+  if(!clientId){
+    return;
+  }
 
   return (
     <div>

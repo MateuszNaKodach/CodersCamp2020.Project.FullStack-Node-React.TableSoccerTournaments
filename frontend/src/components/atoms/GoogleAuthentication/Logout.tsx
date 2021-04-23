@@ -3,8 +3,7 @@ import { GoogleLogout } from "react-google-login";
 import { useHistory } from "react-router-dom";
 import Cookies from "universal-cookie";
 
-const clientId =
-  "1052788207529-fjnskiqrsm09i9kbujp3gmtasnp21su7.apps.googleusercontent.com";
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 export function Logout() {
   const history = useHistory();
@@ -16,6 +15,10 @@ export function Logout() {
     const cookies = new Cookies();
     cookies.remove('googleTokenId');
   };
+
+  if(!clientId){
+    return;
+  }
 
   return (
     <div>
