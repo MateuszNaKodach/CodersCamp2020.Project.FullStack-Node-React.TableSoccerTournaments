@@ -1,6 +1,7 @@
 import axios from "axios";
 import { TournamentRegistrationsDto } from "./TournamentRegistrationsDto";
 import { TournamentRegistrationsListDto } from "./TournamentRegistrationsListDto";
+import Cookies from "universal-cookie";
 
 export type TournamentRegistrationsRestApiConfig = {
   readonly baseUrl: string;
@@ -55,9 +56,15 @@ export const TournamentRegistrationsRestApi = (
         .then((res) => res.data);
     },
     async createTournament(body: { tournamentId: string }): Promise<void> {
+      const cookies = new Cookies();
       await axios.post(
         `${currentConfig.baseUrl}/tournament-registrations`,
-        body
+        body,
+        {
+          headers: {
+            Authorization: `${cookies.get("googleTokenId")}`,
+          },
+        }
       );
     },
   };
