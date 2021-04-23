@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 
 export async function connectToMongoDb(): Promise<void> {
-  const connectionString = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}`;
+  const connectionString = process.env.MONGO_CONNECTION_STRING;
+  if (!connectionString) {
+    throw new Error('Connection string to MongoDB is not defined!');
+  }
   await mongoose
     .connect(connectionString, {
-      user: process.env.MONGO_USER,
-      pass: process.env.MONGO_PASSWORD,
-      dbName: process.env.MONGO_DB,
       useUnifiedTopology: true,
       useNewUrlParser: true,
     })
