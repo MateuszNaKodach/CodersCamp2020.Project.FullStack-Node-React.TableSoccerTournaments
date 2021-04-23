@@ -30,7 +30,7 @@ export function tournamentRegistrationsRouter(
     const requestBody: PostTournamentRegistrationsRequestBody = request.body;
     const tournamentId = requestBody.tournamentId;
     const googleTokenId: string | undefined = request.headers.authorization;
-    await googleAuth(googleTokenId);
+    //await googleAuth(googleTokenId);
     const commandResult = await commandPublisher.execute(new OpenTournamentRegistrations({ tournamentId }));
     return commandResult.process(
       () => response.status(StatusCodes.CREATED).json({ tournamentId }).send(),
