@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
-export function Login() {
+export function Login(): JSX.Element {
   const history = useHistory();
 
   const onSuccess = (res: any) => {
@@ -27,7 +27,7 @@ export function Login() {
   };
 
   if(!clientId){
-    return;
+    return <div/>;
   }
 
   return (
