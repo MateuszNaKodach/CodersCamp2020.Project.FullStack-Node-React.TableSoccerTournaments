@@ -11,6 +11,7 @@ import {
   PATH_FOR_CREATING_NEW_TOURNAMENT_VIEW,
   PATH_FOR_HOME_VIEW,
   PATH_FOR_LOGIN_VIEW,
+  PATH_FOR_MATCHES_AND_RESULTS,
   PATH_FOR_PLAYER_MATCHES_VIEW,
   PATH_FOR_PLAYER_PROFILE_CREATION_VIEW,
   PATH_FOR_PLAYERS_PROFILES_VIEW,
@@ -21,6 +22,7 @@ import { MatchesListRoute } from "../Routes/MatchesListRoutes";
 import TournamentsList from "../TournamentsList/TournamentsList";
 import { Centered } from "../../atoms/Centered";
 import { VerticalSpace } from "../../atoms/VerticalSpace";
+import {MatchesAndResultsRoute} from "../Routes/MatchesAndResultsRoute";
 import { LoginView } from "../LoginRegisterView/LoginView";
 
 function TourDeFoos() {
@@ -64,6 +66,9 @@ function TourDeFoos() {
                 <Centered>
                   <MatchesListRoute />
                 </Centered>
+              </Route>
+              <Route path={PATH_FOR_MATCHES_AND_RESULTS} exact>
+                <MatchesAndResultsRoute/>
               </Route>
 
               <Route path={PATH_FOR_HOME_VIEW} exact>

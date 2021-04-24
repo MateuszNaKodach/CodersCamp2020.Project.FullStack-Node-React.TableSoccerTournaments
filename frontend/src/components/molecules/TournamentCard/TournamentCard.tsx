@@ -68,7 +68,7 @@ const TournamentCard = ({
           ) : (
             <LinkButton
               text={"Mecze i wyniki"}
-              onLink={PATH_FOR_TOURNAMENT + `/${tournamentId}/matches`}
+              onLink={PATH_FOR_TOURNAMENT + `/${tournamentId}/matches-and-results`}
             />
           )}
         </>

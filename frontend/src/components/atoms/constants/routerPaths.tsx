@@ -13,3 +13,4 @@ export const PATH_FOR_PLAYER_PROFILE_CREATION_VIEW: string =
 export const PATH_FOR_PLAYER_MATCHES_VIEW: string =
   "/tournament/:tournamentId/matches";
 export const PATH_FOR_TOURNAMENT: string = "/tournament";
+export const PATH_FOR_MATCHES_AND_RESULTS: string = PATH_FOR_TOURNAMENT + "/:tournamentId/matches-and-results";
