@@ -23,6 +23,7 @@ import TournamentsList from "../TournamentsList/TournamentsList";
 import { Centered } from "../../atoms/Centered";
 import { VerticalSpace } from "../../atoms/VerticalSpace";
 import {MatchesAndResultsRoute} from "../Routes/MatchesAndResultsRoute";
+import { LoginView } from "../LoginRegisterView/LoginView";
 
 function TourDeFoos() {
   return (
@@ -42,7 +43,7 @@ function TourDeFoos() {
           >
             <Switch>
               <Route path={PATH_FOR_LOGIN_VIEW} exact>
-                <Button>PATH_FOR_LOGIN_VIEW</Button>
+                <LoginView />
               </Route>
               <Route path={PATH_FOR_TOURNAMENTS_SELECTION_VIEW} exact>
                 <TournamentsList />

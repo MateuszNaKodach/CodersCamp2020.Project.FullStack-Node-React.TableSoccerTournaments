@@ -66,5 +66,8 @@ jobs:
           heroku_app_name: "coderscamp2020-tablesoccer"
           heroku_email: "mateusz.nowak@coderscrew.pl"
           usedocker: true
-          branch: main
+          branch: develop
           appdir: backend
+          env_file: ".env.heroku"
+        env:
+          HD_MONGO_CONNECTION_STRING: ${{secrets.HEROKU_MONGO_CONNECTION_STRING}}
