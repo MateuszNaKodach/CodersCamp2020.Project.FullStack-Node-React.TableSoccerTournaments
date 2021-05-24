@@ -4,6 +4,7 @@ import { testModuleRestApi } from '../../../../test-support/shared/presentation/
 import { StatusCodes } from 'http-status-codes';
 import { authenticationRestApiModule } from '../../../../../src/modules/authentication/presentation/rest-api/AuthenticationRestApiModule';
 import { SetPassword } from '../../../../../src/modules/authentication/core/application/command/SetPassword';
+import { AuthenticateUser } from '../../../../../src/modules/authentication/core/application/command/AuthenticateUser';
 
 describe('Authentication REST API', () => {
   it('POST /rest-api/auth/passwords | when command success', async () => {
@@ -36,5 +37,37 @@ describe('Authentication REST API', () => {
     expect(commandPublisher.executeCalls).toBeCalledWith(new SetPassword(email, password));
     expect(status).toBe(StatusCodes.BAD_REQUEST);
     expect(body).toStrictEqual({ message: 'Account with this email address already exists.' });
+  });
+
+  it('POST /rest/api/auth/token | when command success', async () => {
+    //Given
+    const email = 'jan@kowalski.pl';
+    const password = 'veryDifficultPassword';
+    const commandPublisher = CommandPublisherMock(CommandResult.success());
+    const { agent } = testModuleRestApi(authenticationRestApiModule, { commandPublisher });
+
+    //When
+    const { body, status } = await agent.post('/rest-api/auth/token').send({ email, password });
+
+    //Then
+    expect(commandPublisher.executeCalls).toBeCalledWith(new AuthenticateUser(email, password));
+    expect(status).toBe(StatusCodes.OK);
+    expect(body).not.toBeEmpty(); // <--- body should contain token!
+  });
+
+  it('POST /rest/api/auth/token | when command failure', async () => {
+    //Given
+    const email = 'jan@kowalski.pl';
+    const password = 'veryDifficultPassword';
+    const commandPublisher = CommandPublisherMock(CommandResult.failureDueTo(new Error('Such email address does not exists.')));
+    const { agent } = testModuleRestApi(authenticationRestApiModule, { commandPublisher });
+
+    //When
+    const { body, status } = await agent.post('/rest-api/auth/token').send({ email, password });
+
+    //Then
+    expect(commandPublisher.executeCalls).toBeCalledWith(new AuthenticateUser(email, password));
+    expect(status).toBe(StatusCodes.BAD_REQUEST);
+    expect(body).toStrictEqual({ message: 'Such email address does not exists.' });
   });
 });

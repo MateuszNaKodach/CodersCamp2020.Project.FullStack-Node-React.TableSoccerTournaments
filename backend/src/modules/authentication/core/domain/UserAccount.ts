@@ -1,5 +1,7 @@
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { PasswordWasSet } from './event/PasswordWasSet';
+import jwt from 'jsonwebtoken';
+import { UserAuthenticated } from './event/UserAuthenticated';
 
 export class UserAccount {
   readonly email: string;
@@ -39,4 +41,34 @@ function onPasswordWasSet(state: UserAccount | undefined, event: PasswordWasSet)
     email: event.email,
     password: event.password,
   });
+}
+
+export function authenticateUser(
+  state: UserAccount | undefined,
+  command: { email: string; password: string },
+  currentTime: Date,
+): DomainCommandResult<string> {
+  if (!state) {
+    throw new Error('Such email address does not exists.');
+  }
+
+  // when password will be salted
+  // const isPasswordCorrect = await bcrypt.compare(command.password, state.password);
+  const isPasswordCorrect = command.password === state.password;
+  if (!isPasswordCorrect) {
+    throw new Error('Wrong password.');
+  }
+
+  // const token: Token = jwt.sign( { email: command.email, userId: state.userId }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1h' });
+  const token: string = jwt.sign({ email: command.email }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1h' });
+
+  const userAuthenticated: UserAuthenticated = new UserAuthenticated({
+    occurredAt: currentTime,
+    email: command.email,
+  });
+
+  return {
+    state: token,
+    events: [userAuthenticated],
+  };
 }
