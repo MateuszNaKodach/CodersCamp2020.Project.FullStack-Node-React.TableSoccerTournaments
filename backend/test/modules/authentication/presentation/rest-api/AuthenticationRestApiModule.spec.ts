@@ -43,7 +43,8 @@ describe('Authentication REST API', () => {
     //Given
     const email = 'jan@kowalski.pl';
     const password = 'veryDifficultPassword';
-    const commandPublisher = CommandPublisherMock(CommandResult.success());
+    const token = 'test_token';
+    const commandPublisher = CommandPublisherMock(CommandResult.success(token));
     const { agent } = testModuleRestApi(authenticationRestApiModule, { commandPublisher });
 
     //When
