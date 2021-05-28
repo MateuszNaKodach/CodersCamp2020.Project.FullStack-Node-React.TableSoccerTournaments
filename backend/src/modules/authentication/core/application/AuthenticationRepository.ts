@@ -5,5 +5,5 @@ export interface AuthenticationRepository {
 
   findById(userId: string): Promise<UserAccount>;
 
-  findByEmail(email: string): Promise<UserAccount>;
+  findByEmail(email: string): Promise<UserAccount | undefined>;
 }
