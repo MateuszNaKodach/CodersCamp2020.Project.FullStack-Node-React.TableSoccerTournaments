@@ -64,10 +64,15 @@ export function AuthenticationRepositoryTestCases(props: {
         password: undefined,
       });
 
+      //TODO here we already have 2 users accounts in database, so
+      // afterEach(async () => await props.databaseTestSupport.clearDatabase());
+      // doesn't work - need t obe implemented
       await repository.save(userAccount1);
       await repository.save(userAccount2);
 
       expect(await repository.findByEmail(testEmail)).toStrictEqual(userAccount1);
     });
+
+    //TODO add test for sav()
   });
 }
