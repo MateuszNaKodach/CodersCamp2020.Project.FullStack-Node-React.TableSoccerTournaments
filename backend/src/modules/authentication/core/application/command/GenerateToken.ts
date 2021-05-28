@@ -1,4 +1,4 @@
-export class AuthenticateUser {
+export class GenerateToken {
   readonly email: string;
   readonly password: string;
 

@@ -4,7 +4,7 @@ import { testModuleRestApi } from '../../../../test-support/shared/presentation/
 import { StatusCodes } from 'http-status-codes';
 import { authenticationRestApiModule } from '../../../../../src/modules/authentication/presentation/rest-api/AuthenticationRestApiModule';
 import { SetPassword } from '../../../../../src/modules/authentication/core/application/command/SetPassword';
-import { AuthenticateUser } from '../../../../../src/modules/authentication/core/application/command/AuthenticateUser';
+import { GenerateToken } from '../../../../../src/modules/authentication/core/application/command/GenerateToken';
 
 describe('Authentication REST API', () => {
   it('POST /rest-api/auth/passwords | when command success', async () => {
@@ -51,7 +51,7 @@ describe('Authentication REST API', () => {
     const { body, status } = await agent.post('/rest-api/auth/token').send({ email, password });
 
     //Then
-    expect(commandPublisher.executeCalls).toBeCalledWith(new AuthenticateUser(email, password));
+    expect(commandPublisher.executeCalls).toBeCalledWith(new GenerateToken(email, password));
     expect(status).toBe(StatusCodes.OK);
     expect(body).toStrictEqual({ token: 'test_token' });
   });
@@ -67,7 +67,7 @@ describe('Authentication REST API', () => {
     const { body, status } = await agent.post('/rest-api/auth/token').send({ email, password });
 
     //Then
-    expect(commandPublisher.executeCalls).toBeCalledWith(new AuthenticateUser(email, password));
+    expect(commandPublisher.executeCalls).toBeCalledWith(new GenerateToken(email, password));
     expect(status).toBe(StatusCodes.BAD_REQUEST);
     expect(body).toStrictEqual({ message: 'Such email address does not exists.' });
   });

@@ -3,17 +3,17 @@ import { DomainEventPublisher } from '../../../../../shared/core/application/eve
 import { CurrentTimeProvider } from '../../../../../shared/core/CurrentTimeProvider';
 import { AuthenticationRepository } from '../AuthenticationRepository';
 import { CommandResult } from '../../../../../shared/core/application/command/CommandResult';
-import { AuthenticateUser } from './AuthenticateUser';
+import { GenerateToken } from './GenerateToken';
 import { authenticateUser } from '../../domain/UserAccount';
 
-export class AuthencticateUserCommandHandler implements CommandHandler<AuthenticateUser> {
+export class GenerateTokenCommandHandler implements CommandHandler<GenerateToken> {
   constructor(
     private readonly eventPublisher: DomainEventPublisher,
     private readonly currentTimeProvider: CurrentTimeProvider,
     private readonly repository: AuthenticationRepository,
   ) {}
 
-  async execute(command: AuthenticateUser): Promise<CommandResult> {
+  async execute(command: GenerateToken): Promise<CommandResult> {
     const userAccount = await this.repository.findByEmail(command.email);
     const { state, events } = await authenticateUser(userAccount, command, this.currentTimeProvider());
     this.eventPublisher.publishAll(events);

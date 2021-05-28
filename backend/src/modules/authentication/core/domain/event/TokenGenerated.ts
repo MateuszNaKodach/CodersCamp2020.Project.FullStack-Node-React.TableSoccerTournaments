@@ -1,6 +1,6 @@
 import { DomainEvent } from '../../../../../shared/domain/event/DomainEvent';
 
-export class UserAuthenticationFailed implements DomainEvent {
+export class TokenGenerated implements DomainEvent {
   readonly occurredAt: Date;
   readonly email: string;
 

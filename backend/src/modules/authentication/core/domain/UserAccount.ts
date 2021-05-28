@@ -2,7 +2,7 @@ import { DomainCommandResult } from '../../../../shared/core/domain/DomainComman
 import { PasswordWasSet } from './event/PasswordWasSet';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { UserAuthenticated } from './event/UserAuthenticated';
+import { TokenGenerated } from './event/TokenGenerated';
 
 export class UserAccount {
   readonly userId: string;
@@ -65,7 +65,7 @@ export async function authenticateUser(
 
   const token: string = jwt.sign({ email: command.email, userId: state.userId }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1h' });
 
-  const userAuthenticated: UserAuthenticated = new UserAuthenticated({
+  const userAuthenticated: TokenGenerated = new TokenGenerated({
     occurredAt: currentTime,
     email: command.email,
   });
