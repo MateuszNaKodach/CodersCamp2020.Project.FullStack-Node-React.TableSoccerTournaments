@@ -1,4 +1,4 @@
 export class PostSetPasswordRequestBody {
-  email: string;
+  userId: string;
   password: string;
 }

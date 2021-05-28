@@ -1,31 +1,36 @@
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { PasswordWasSet } from './event/PasswordWasSet';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import { UserAuthenticated } from './event/UserAuthenticated';
 
 export class UserAccount {
-  readonly email: string;
-  readonly password: string;
+  readonly userId: string;
+  readonly email: string | undefined;
+  readonly password: string | undefined;
 
-  constructor(props: { email: string; password: string }) {
+  constructor(props: { userId: string; email: string | undefined; password: string | undefined }) {
+    this.userId = props.userId;
     this.email = props.email;
     this.password = props.password;
   }
 }
 
-export function setPasswordForUserAccount(
+export async function setPasswordForUserAccount(
   state: UserAccount | undefined,
-  command: { email: string; password: string },
+  command: { userId: string; password: string },
   currentTime: Date,
-): DomainCommandResult<UserAccount> {
-  if (state) {
-    throw new Error('Account with this email address already exists.');
+): Promise<DomainCommandResult<UserAccount>> {
+  if (!state) {
+    throw new Error('Account with this id does not exists.');
   }
+
+  const hashedPassword = await bcrypt.hash(command.password, 12);
 
   const passwordWasSet = new PasswordWasSet({
     occurredAt: currentTime,
-    email: command.email,
-    password: command.password,
+    userId: command.userId,
+    password: hashedPassword,
   });
 
   const accountWithPasswordSet = onPasswordWasSet(state, passwordWasSet);
@@ -36,31 +41,29 @@ export function setPasswordForUserAccount(
   };
 }
 
-function onPasswordWasSet(state: UserAccount | undefined, event: PasswordWasSet): UserAccount {
+function onPasswordWasSet(state: UserAccount, event: PasswordWasSet): UserAccount {
   return new UserAccount({
-    email: event.email,
+    userId: event.userId,
+    email: state.email,
     password: event.password,
   });
 }
 
-export function authenticateUser(
+export async function authenticateUser(
   state: UserAccount | undefined,
   command: { email: string; password: string },
   currentTime: Date,
-): DomainCommandResult<string> {
+): Promise<DomainCommandResult<string | undefined>> {
   if (!state) {
     throw new Error('Such email address does not exists.');
   }
 
-  // when password will be salted
-  // const isPasswordCorrect = await bcrypt.compare(command.password, state.password);
-  const isPasswordCorrect = command.password === state.password;
+  const isPasswordCorrect = await bcrypt.compare(command.password, state.password!);
   if (!isPasswordCorrect) {
     throw new Error('Wrong password.');
   }
 
-  // const token: Token = jwt.sign( { email: command.email, userId: state.userId }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1h' });
-  const token: string = jwt.sign({ email: command.email }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1h' });
+  const token: string = jwt.sign({ email: command.email, userId: state.userId }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1h' });
 
   const userAuthenticated: UserAuthenticated = new UserAuthenticated({
     occurredAt: currentTime,

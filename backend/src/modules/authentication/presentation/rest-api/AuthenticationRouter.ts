@@ -9,8 +9,8 @@ import { AuthenticateUser } from '../../core/application/command/AuthenticateUse
 export function authenticationRouter(commandPublisher: CommandPublisher): express.Router {
   const postSetPassword = async (request: Request, response: Response) => {
     const requestBody: PostSetPasswordRequestBody = request.body;
-    const { email, password } = requestBody;
-    const commandResult = await commandPublisher.execute(new SetPassword(email, password));
+    const { userId, password } = requestBody;
+    const commandResult = await commandPublisher.execute(new SetPassword(userId, password));
     return commandResult.process(
       () => response.status(StatusCodes.OK).send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),

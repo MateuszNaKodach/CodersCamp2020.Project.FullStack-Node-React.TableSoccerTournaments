@@ -15,7 +15,7 @@ export class AuthencticateUserCommandHandler implements CommandHandler<Authentic
 
   async execute(command: AuthenticateUser): Promise<CommandResult> {
     const userAccount = await this.repository.findByEmail(command.email);
-    const { state, events } = authenticateUser(userAccount, command, this.currentTimeProvider());
+    const { state, events } = await authenticateUser(userAccount, command, this.currentTimeProvider());
     this.eventPublisher.publishAll(events);
     return CommandResult.success(state);
   }
