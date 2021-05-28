@@ -22,7 +22,7 @@ export function authenticationRouter(commandPublisher: CommandPublisher): expres
     const { email, password } = requestBody;
     const commandResult = await commandPublisher.execute(new AuthenticateUser(email, password));
     return commandResult.process(
-      (token: string) => response.status(StatusCodes.OK).send(token),
+      (token: string) => response.status(StatusCodes.OK).json({ token: token }).send(),
       (failureReason) => response.status(StatusCodes.BAD_REQUEST).json({ message: failureReason.message }),
     );
   };

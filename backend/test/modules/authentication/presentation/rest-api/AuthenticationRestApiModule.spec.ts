@@ -53,7 +53,7 @@ describe('Authentication REST API', () => {
     //Then
     expect(commandPublisher.executeCalls).toBeCalledWith(new AuthenticateUser(email, password));
     expect(status).toBe(StatusCodes.OK);
-    expect(body).not.toBeEmpty(); // <--- body should contain token!
+    expect(body).toStrictEqual({ token: 'test_token' });
   });
 
   it('POST /rest/api/auth/token | when command failure', async () => {
