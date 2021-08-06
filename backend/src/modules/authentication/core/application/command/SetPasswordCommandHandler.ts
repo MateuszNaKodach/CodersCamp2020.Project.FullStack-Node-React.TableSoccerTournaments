@@ -5,7 +5,6 @@ import { CommandResult } from '../../../../../shared/core/application/command/Co
 import { SetPassword } from './SetPassword';
 import { AuthenticationRepository } from '../AuthenticationRepository';
 import { setPasswordForUserAccount } from '../../domain/UserAccount';
-import bcrypt from 'bcrypt';
 
 export class SetPasswordCommandHandler implements CommandHandler<SetPassword> {
   constructor(
