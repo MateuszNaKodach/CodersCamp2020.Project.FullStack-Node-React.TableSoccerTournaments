@@ -13,7 +13,7 @@ export function AuthenticationRepositoryTestCases(props: {
     const entityIdGenerator: EntityIdGenerator = new UuidEntityIdGenerator();
     let repository: AuthenticationRepository;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       await props.databaseTestSupport.openConnection();
       repository = props.repositoryFactory();
     });
@@ -48,6 +48,7 @@ export function AuthenticationRepositoryTestCases(props: {
       await repository.save(userAccount2);
 
       expect(await repository.findById(testId)).toStrictEqual(userAccount1);
+      expect(await repository.findById('id1')).toStrictEqual(userAccount2);
     });
 
     test('findByEmail returns userAccount when such email exists in database', async () => {
@@ -64,13 +65,11 @@ export function AuthenticationRepositoryTestCases(props: {
         password: undefined,
       });
 
-      //TODO here we already have 2 users accounts in database, so
-      // afterEach(async () => await props.databaseTestSupport.clearDatabase());
-      // doesn't work - need t obe implemented
       await repository.save(userAccount1);
       await repository.save(userAccount2);
 
       expect(await repository.findByEmail(testEmail)).toStrictEqual(userAccount1);
+      expect(await repository.findByEmail('email1')).toStrictEqual(userAccount2);
     });
 
     //TODO add test for sav()
