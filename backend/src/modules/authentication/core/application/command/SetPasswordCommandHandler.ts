@@ -5,17 +5,20 @@ import { CommandResult } from '../../../../../shared/core/application/command/Co
 import { SetPassword } from './SetPassword';
 import { AuthenticationRepository } from '../AuthenticationRepository';
 import { setPasswordForUserAccount } from '../../domain/UserAccount';
+import { IPasswordEncryptor } from '../../../infrastructure/password/IPasswordEncryptor';
 
 export class SetPasswordCommandHandler implements CommandHandler<SetPassword> {
   constructor(
     private readonly eventPublisher: DomainEventPublisher,
     private readonly currentTimeProvider: CurrentTimeProvider,
     private readonly repository: AuthenticationRepository,
+    private readonly passwordEncryptor: IPasswordEncryptor,
   ) {}
 
   async execute(command: SetPassword): Promise<CommandResult> {
-    const userAccount = await this.repository.findByEmail(command.email);
-    const { state, events } = setPasswordForUserAccount(userAccount, command, this.currentTimeProvider());
+    const userAccount = await this.repository.findById(command.userId);
+    const hashedPassword = await this.passwordEncryptor.encryptPassword(command.password);
+    const { state, events } = await setPasswordForUserAccount(userAccount, command, hashedPassword, this.currentTimeProvider());
     await this.repository.save(state);
     this.eventPublisher.publishAll(events);
     return CommandResult.success();

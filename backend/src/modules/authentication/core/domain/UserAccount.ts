@@ -1,29 +1,36 @@
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { PasswordWasSet } from './event/PasswordWasSet';
+import { TokenGenerated } from './event/TokenGenerated';
+import { UserId } from './UserId';
+import { Email } from './Email';
+import { Password } from './Password';
 
 export class UserAccount {
-  readonly email: string;
-  readonly password: string;
+  readonly userId: UserId;
+  readonly email: Email;
+  readonly password: Password;
 
-  constructor(props: { email: string; password: string }) {
+  constructor(props: { userId: UserId; email: Email; password: Password }) {
+    this.userId = props.userId;
     this.email = props.email;
     this.password = props.password;
   }
 }
 
-export function setPasswordForUserAccount(
+export async function setPasswordForUserAccount(
   state: UserAccount | undefined,
-  command: { email: string; password: string },
+  command: { userId: string; password: string },
+  hashedPassword: string,
   currentTime: Date,
-): DomainCommandResult<UserAccount> {
-  if (state) {
-    throw new Error('Account with this email address already exists.');
+): Promise<DomainCommandResult<UserAccount>> {
+  if (!state) {
+    throw new Error('Account with this id does not exists.');
   }
 
   const passwordWasSet = new PasswordWasSet({
     occurredAt: currentTime,
-    email: command.email,
-    password: command.password,
+    userId: command.userId,
+    password: hashedPassword,
   });
 
   const accountWithPasswordSet = onPasswordWasSet(state, passwordWasSet);
@@ -34,9 +41,40 @@ export function setPasswordForUserAccount(
   };
 }
 
-function onPasswordWasSet(state: UserAccount | undefined, event: PasswordWasSet): UserAccount {
+function onPasswordWasSet(state: UserAccount, event: PasswordWasSet): UserAccount {
   return new UserAccount({
-    email: event.email,
-    password: event.password,
+    userId: UserId.from(event.userId),
+    email: state.email,
+    password: Password.from(event.password),
   });
+}
+
+export async function authenticateUser(
+  state: UserAccount | undefined,
+  command: { email: string; password: string },
+  isPasswordCorrect: boolean,
+  token: string,
+  currentTime: Date,
+): Promise<DomainCommandResult<string>> {
+  if (!state) {
+    throw new Error('Such email address does not exists.');
+  }
+
+  if (!isPasswordCorrect) {
+    throw new Error('Wrong password.');
+  }
+
+  if (token.length == 0) {
+    throw new Error('Empty token.');
+  }
+
+  const tokenWasGenerated: TokenGenerated = new TokenGenerated({
+    occurredAt: currentTime,
+    email: command.email,
+  });
+
+  return {
+    state: token,
+    events: [tokenWasGenerated],
+  };
 }

@@ -71,3 +71,5 @@ jobs:
           env_file: ".env.heroku"
         env:
           HD_MONGO_CONNECTION_STRING: ${{secrets.HEROKU_MONGO_CONNECTION_STRING}}
+          HD_JWT_SECRET_KEY: ${{secrets.JWT_SECRET_KEY}}
+          HD_GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}

@@ -1,9 +1,9 @@
 export class SetPassword {
-  readonly email: string;
+  readonly userId: string;
   readonly password: string;
 
-  constructor(email: string, password: string) {
-    this.email = email;
+  constructor(userId: string, password: string) {
+    this.userId = userId;
     this.password = password;
   }
 }

@@ -72,7 +72,7 @@ Our backend application follows the **TDD approach** and is almost **fully cover
 - React
 - React-DOM
 - Router
-- Hooks (useState, useEffect, useContext,useHistory)
+- Hooks (useState, useEffect, useHistory)
 - Material-UI
 - Axios
 

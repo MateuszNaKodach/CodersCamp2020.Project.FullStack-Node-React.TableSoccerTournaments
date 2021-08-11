@@ -5,18 +5,20 @@ import { ModuleCore } from '../../../shared/core/ModuleCore';
 import { SetPassword } from './application/command/SetPassword';
 import { SetPasswordCommandHandler } from './application/command/SetPasswordCommandHandler';
 import { AuthenticationRepository } from './application/AuthenticationRepository';
+import { IPasswordEncryptor } from '../infrastructure/password/IPasswordEncryptor';
 
 export function AuthenticationModuleCore(
   eventPublisher: DomainEventPublisher,
   commandPublisher: CommandPublisher,
   currentTimeProvider: CurrentTimeProvider,
   repository: AuthenticationRepository,
+  passwordEncryptor: IPasswordEncryptor,
 ): ModuleCore {
   return {
     commandHandlers: [
       {
         commandType: SetPassword,
-        handler: new SetPasswordCommandHandler(eventPublisher, currentTimeProvider, repository),
+        handler: new SetPasswordCommandHandler(eventPublisher, currentTimeProvider, repository, passwordEncryptor),
       },
     ],
     eventHandlers: [],
