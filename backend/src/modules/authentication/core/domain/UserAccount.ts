@@ -1,7 +1,5 @@
 import { DomainCommandResult } from '../../../../shared/core/domain/DomainCommandResult';
 import { PasswordWasSet } from './event/PasswordWasSet';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
 import { TokenGenerated } from './event/TokenGenerated';
 import { UserId } from './UserId';
 import { Email } from './Email';
@@ -22,13 +20,12 @@ export class UserAccount {
 export async function setPasswordForUserAccount(
   state: UserAccount | undefined,
   command: { userId: string; password: string },
+  hashedPassword: string,
   currentTime: Date,
 ): Promise<DomainCommandResult<UserAccount>> {
   if (!state) {
     throw new Error('Account with this id does not exists.');
   }
-
-  const hashedPassword = await bcrypt.hash(command.password, 12);
 
   const passwordWasSet = new PasswordWasSet({
     occurredAt: currentTime,
@@ -55,18 +52,21 @@ function onPasswordWasSet(state: UserAccount, event: PasswordWasSet): UserAccoun
 export async function authenticateUser(
   state: UserAccount | undefined,
   command: { email: string; password: string },
+  isPasswordCorrect: boolean,
+  token: string,
   currentTime: Date,
 ): Promise<DomainCommandResult<string>> {
   if (!state) {
     throw new Error('Such email address does not exists.');
   }
 
-  const isPasswordCorrect = await bcrypt.compare(command.password, state.password.raw);
   if (!isPasswordCorrect) {
     throw new Error('Wrong password.');
   }
 
-  const token: string = jwt.sign({ email: command.email, userId: state.userId }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1h' });
+  if (token.length == 0) {
+    throw new Error('Empty token.');
+  }
 
   const tokenWasGenerated: TokenGenerated = new TokenGenerated({
     occurredAt: currentTime,

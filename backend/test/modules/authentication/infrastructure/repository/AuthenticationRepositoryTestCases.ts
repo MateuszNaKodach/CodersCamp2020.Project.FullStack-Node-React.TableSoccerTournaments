@@ -5,7 +5,6 @@ import { UuidEntityIdGenerator } from '../../../../../src/shared/infrastructure/
 import { UserAccount } from '../../../../../src/modules/authentication/core/domain/UserAccount';
 import { UserId } from '../../../../../src/modules/authentication/core/domain/UserId';
 import { Email } from '../../../../../src/modules/authentication/core/domain/Email';
-import { PasswordWasSet } from '../../../../../src/modules/authentication/core/domain/event/PasswordWasSet';
 import { Password } from '../../../../../src/modules/authentication/core/domain/Password';
 
 export function AuthenticationRepositoryTestCases(props: {
@@ -75,7 +74,5 @@ export function AuthenticationRepositoryTestCases(props: {
       expect(await repository.findByEmail(testEmail)).toStrictEqual(userAccount1);
       expect(await repository.findByEmail('testEmail555@gmail.com')).toStrictEqual(userAccount2);
     });
-
-    //TODO add test for sav()
   });
 }
