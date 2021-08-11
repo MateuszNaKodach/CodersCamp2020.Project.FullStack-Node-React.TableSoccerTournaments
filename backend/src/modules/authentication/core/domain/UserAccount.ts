@@ -3,13 +3,16 @@ import { PasswordWasSet } from './event/PasswordWasSet';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { TokenGenerated } from './event/TokenGenerated';
+import { UserId } from './UserId';
+import { Email } from './Email';
+import { Password } from './Password';
 
 export class UserAccount {
-  readonly userId: string;
-  readonly email: string;
-  readonly password: string | undefined;
+  readonly userId: UserId;
+  readonly email: Email;
+  readonly password: Password;
 
-  constructor(props: { userId: string; email: string; password: string | undefined }) {
+  constructor(props: { userId: UserId; email: Email; password: Password }) {
     this.userId = props.userId;
     this.email = props.email;
     this.password = props.password;
@@ -43,9 +46,9 @@ export async function setPasswordForUserAccount(
 
 function onPasswordWasSet(state: UserAccount, event: PasswordWasSet): UserAccount {
   return new UserAccount({
-    userId: event.userId,
+    userId: UserId.from(event.userId),
     email: state.email,
-    password: event.password,
+    password: Password.from(event.password),
   });
 }
 
@@ -58,20 +61,20 @@ export async function authenticateUser(
     throw new Error('Such email address does not exists.');
   }
 
-  const isPasswordCorrect = await bcrypt.compare(command.password, state.password!);
+  const isPasswordCorrect = await bcrypt.compare(command.password, state.password.raw);
   if (!isPasswordCorrect) {
     throw new Error('Wrong password.');
   }
 
   const token: string = jwt.sign({ email: command.email, userId: state.userId }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1h' });
 
-  const userAuthenticated: TokenGenerated = new TokenGenerated({
+  const tokenWasGenerated: TokenGenerated = new TokenGenerated({
     occurredAt: currentTime,
     email: command.email,
   });
 
   return {
     state: token,
-    events: [userAuthenticated],
+    events: [tokenWasGenerated],
   };
 }
