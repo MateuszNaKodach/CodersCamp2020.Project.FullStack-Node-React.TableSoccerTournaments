@@ -56,7 +56,7 @@ export async function authenticateUser(
   state: UserAccount | undefined,
   command: { email: string; password: string },
   currentTime: Date,
-): Promise<DomainCommandResult<string | undefined>> {
+): Promise<DomainCommandResult<string>> {
   if (!state) {
     throw new Error('Such email address does not exists.');
   }
