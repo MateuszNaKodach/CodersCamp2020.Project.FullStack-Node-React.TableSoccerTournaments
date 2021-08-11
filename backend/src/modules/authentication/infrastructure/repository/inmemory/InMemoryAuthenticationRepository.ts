@@ -5,7 +5,7 @@ export class InMemoryAuthenticationRepository implements AuthenticationRepositor
   private readonly entities: { [id: string]: UserAccount } = {};
 
   findByEmail(email: string): Promise<UserAccount | undefined> {
-    return Promise.resolve(Object.values(this.entities).find((userAccount) => userAccount.email === email));
+    return Promise.resolve(Object.values(this.entities).find((userAccount) => userAccount.email.raw === email));
   }
 
   findById(userId: string): Promise<UserAccount> {
@@ -13,6 +13,6 @@ export class InMemoryAuthenticationRepository implements AuthenticationRepositor
   }
 
   async save(userAccount: UserAccount): Promise<void> {
-    this.entities[userAccount.userId] = userAccount;
+    this.entities[userAccount.userId.raw] = userAccount;
   }
 }

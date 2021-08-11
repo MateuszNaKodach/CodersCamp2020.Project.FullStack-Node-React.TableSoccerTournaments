@@ -3,6 +3,10 @@ import { DatabaseTestSupport } from '../../../../test-support/shared/infrastruct
 import { EntityIdGenerator } from '../../../../../src/shared/core/application/EntityIdGenerator';
 import { UuidEntityIdGenerator } from '../../../../../src/shared/infrastructure/core/application/UuidEntityIdGenerator';
 import { UserAccount } from '../../../../../src/modules/authentication/core/domain/UserAccount';
+import { UserId } from '../../../../../src/modules/authentication/core/domain/UserId';
+import { Email } from '../../../../../src/modules/authentication/core/domain/Email';
+import { PasswordWasSet } from '../../../../../src/modules/authentication/core/domain/event/PasswordWasSet';
+import { Password } from '../../../../../src/modules/authentication/core/domain/Password';
 
 export function AuthenticationRepositoryTestCases(props: {
   name: string;
@@ -32,16 +36,16 @@ export function AuthenticationRepositoryTestCases(props: {
 
     test('findById returns userAccount when such id exists in database', async () => {
       const testId = entityIdGenerator.generate();
-      const testEmail = 'testEmail';
+      const testEmail = 'testEmail@gmail.com';
       const userAccount1 = new UserAccount({
-        userId: testId,
-        email: testEmail,
-        password: 'testPassword',
+        userId: UserId.from(testId),
+        email: Email.from(testEmail),
+        password: Password.from('testPassword'),
       });
       const userAccount2 = new UserAccount({
-        userId: 'id1',
-        email: 'email1',
-        password: undefined,
+        userId: UserId.from('id1'),
+        email: Email.from('testEmail555@gmail.com'),
+        password: Password.from('testPassword'),
       });
 
       await repository.save(userAccount1);
@@ -53,23 +57,23 @@ export function AuthenticationRepositoryTestCases(props: {
 
     test('findByEmail returns userAccount when such email exists in database', async () => {
       const testId = entityIdGenerator.generate();
-      const testEmail = 'testEmail';
+      const testEmail = 'testEmail@gmail.com';
       const userAccount1 = new UserAccount({
-        userId: testId,
-        email: testEmail,
-        password: 'testPassword',
+        userId: UserId.from(testId),
+        email: Email.from(testEmail),
+        password: Password.from('testPassword'),
       });
       const userAccount2 = new UserAccount({
-        userId: 'id1',
-        email: 'email1',
-        password: undefined,
+        userId: UserId.from('id1'),
+        email: Email.from('testEmail555@gmail.com'),
+        password: Password.from('testPassword'),
       });
 
       await repository.save(userAccount1);
       await repository.save(userAccount2);
 
       expect(await repository.findByEmail(testEmail)).toStrictEqual(userAccount1);
-      expect(await repository.findByEmail('email1')).toStrictEqual(userAccount2);
+      expect(await repository.findByEmail('testEmail555@gmail.com')).toStrictEqual(userAccount2);
     });
 
     //TODO add test for sav()
